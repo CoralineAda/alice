@@ -14,7 +14,7 @@ module Alice
 
     def set_bio(m, text)
       Alice::User.set_bio(m.user.nick, text)
-      m.reply("Your bio is set! I'll respond with it whenever someone asks 'Who is #{m.user.nick}.'")
+      m.reply("Your bio is set! I'll respond with it whenever someone asks 'Who is #{m.user.nick}?'")
     end
 
     def get_bio(m, who)
