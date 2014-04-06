@@ -19,7 +19,7 @@ module Alice
 
     def get_bio(m, who)
       if bio = Alice::User.get_bio(who)
-        m.reply "#{who} is #{bio}.#{twitter_}"
+        m.reply "#{who} is #{bio}"
       end
     end
 

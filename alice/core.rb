@@ -8,6 +8,8 @@ module Alice
 
     match /[hi|hello|] alicebot/i, method: :greet, use_prefix: false
     match /\!cookie (.+)/, method: :cookie, use_prefix: false
+    match /\!fruitcake (.+)/, method: :fruitcake, use_prefix: false
+    match /\!pants (.+)/, method: :pants, use_prefix: false
     match /\!help/, method: :help, use_prefix: false
 
     def greet(m)
@@ -16,6 +18,21 @@ module Alice
 
     def cookie(m, who)
       m.action_reply "gives #{who} a cookie."
+    end
+
+    def fruitcake(m, who)
+      giver = Alice::User.find_or_create(m.user.nick)
+      recipient = Alice::User.find_or_create(who)
+      if user.has_fruitcake?
+        m.action_reply "passes #{who} the fruitcake."
+      else
+        user = Alice::User.where(has_fruitcake: true)
+        m.reply("Only #{user.primary_nick} can pass the sacred fruitcake.")
+      end
+    end
+
+    def pants(m)
+      m.action_reply "giggles."
     end
 
     def help(m)
