@@ -9,7 +9,7 @@ module Alice
     match /[hi|hello|] alicebot/i, method: :greet, use_prefix: false
     match /\!cookie (.+)/, method: :cookie, use_prefix: false
     match /\!fruitcake (.+)/, method: :fruitcake, use_prefix: false
-    match /\!pants (.+)/, method: :pants, use_prefix: false
+    match /\!pants/, method: :pants, use_prefix: false
     match /\!help/, method: :help, use_prefix: false
 
     def greet(m)
