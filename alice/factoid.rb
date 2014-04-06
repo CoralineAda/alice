@@ -10,7 +10,7 @@ class Alice::Factoid
     sanitized = self.text
     sanitized = sanitized.gsub(/^I/i, '')
     sanitized = sanitized.gsub(/^am/i, 'is')
-    sanitized = sanitized.gsub(/[\.\!\?]$/, '.'
+    sanitized = sanitized.gsub(/[\.\!\?]$/, '.')
     sanitized
   end
 
