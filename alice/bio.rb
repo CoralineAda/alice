@@ -29,7 +29,7 @@ module Alice
 
     def get_factoid(m, who)
       factoid = Alice::User.get_factoid(who) 
-      factoid && m.reply(factoid.sanitized)
+      factoid && m.reply(factoid.formatted)
     end
 
     def clear_bio(m, who)

@@ -34,24 +34,4 @@ class Alice::User
     self.primary_nick.capitalize
   end
 
-  def formatted_factoid(factoid)
-    prefix = [
-      "",
-      "True story:",
-      "I seem to recall that",
-      "Rumor has it that",
-      "Some believe that",
-      "Some say",
-      "It's been said that",
-      "Legend says",
-      "According to my notes,",
-      "If the rumors are to be believed,",
-      "Word on the street is that"
-    ].sample
-    "#{prefix} #{formatted_name} #{factoid.text}".gsub(/[\.\!\?]$/, '.')
-  end
-
-  def self.factiod_prefix
-  end
-
 end
