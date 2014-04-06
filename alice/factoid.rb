@@ -15,7 +15,7 @@ class Alice::Factoid
   end
 
   def formatted
-    "#{prefix} #{self.user.formatted_name} #{sanitized}")
+    "#{prefix} #{self.user.formatted_name} #{sanitized}"
   end
 
   def prefix
