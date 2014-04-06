@@ -4,11 +4,16 @@ class Alice::User
 
   field :primary_nick
   field :bio
+  field :twitter_handle
 
   has_many :factoids
 
   def self.find_or_create(nick)
-    user = where(primary_nick: nick.downcase).first || create(primary_nick: nick.downcase)
+    where(primary_nick: nick.downcase).first || create(primary_nick: nick.downcase)
+  end
+
+  def self.set_tiwtter(nick, bio)
+    find_or_create(nick).update_attributes(bio: bio)
   end
 
   def self.set_bio(nick, bio)
@@ -26,7 +31,7 @@ class Alice::User
 
   def self.get_factoid(nick)
     user = find_or_create(nick)  
-    factoid = user && user.factoids.sample
+    factoid = user.factoids.sample
     return factoid && factoid.formatted
   end
 
