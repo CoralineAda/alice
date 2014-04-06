@@ -27,7 +27,7 @@ module Alice
         m.action_reply "passes #{who} the fruitcake."
       else
         user = Alice::User.where(has_fruitcake: true)
-        m.reply("Only #{user.primary_nick} can pass the sacred fruitcake.")
+        m.reply("Only #{user.primary_nickname} can pass the sacred fruitcake.")
       end
     end
 
