@@ -24,8 +24,12 @@ module Alice
     end
 
     def set_factoid(m, text)
-      Alice::User.set_factoid(m.user.nick, text)
-      m.action_reply("makes a note.")
+      if text.split(' ').count > 1
+        Alice::User.set_factoid(m.user.nick, text)
+        m.action_reply("makes a note.")
+      else
+        m.action_reply("calls BS on #{m.user.nick}.")
+      end
     end
 
     def get_factoid(m, who)
