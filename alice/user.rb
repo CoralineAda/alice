@@ -27,7 +27,7 @@ class Alice::User
   def self.get_factoid(nick)
     user = find_or_create(nick)  
     factoid = user && user.factoids.sample
-    return factoid && user.formatted_factoid(factoid)
+    return factoid && factoid.formatted
   end
 
   def formatted_name
