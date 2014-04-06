@@ -18,8 +18,7 @@ module Alice
 
     def get_bio(m, who)
       if bio = Alice::User.get_bio(who)
-        m.reply "#{who} is #{bio}"
-        get_factoid(m, who)
+        m.reply "#{who} is #{bio}. #{get_factoid(m, who)}"
       end
     end
 
@@ -30,7 +29,7 @@ module Alice
 
     def get_factoid(m, who)
       factoid = Alice::User.get_factoid(who) 
-      factoid && m.reply(factoid)
+      factoid && m.reply(factoid.sanitized)
     end
 
     def clear_bio(m, who)
