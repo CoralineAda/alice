@@ -8,6 +8,7 @@ module Alice
 
     match /[hi|hello|] alicebot/i, method: :greet, use_prefix: false
     match /\!cookie (.+)/, method: :cookie, use_prefix: false
+    match /\!help/, method: :help, use_prefix: false
 
     def greet(m)
       m.action_reply "greets fellow hacker #{m.user.nick}."
@@ -15,6 +16,12 @@ module Alice
 
     def cookie(m, who)
       m.action_reply "gives #{who} a cookie."
+    end
+
+    def help(m)
+      m.reply("!bio sets your bio, !fact sets a fact about yoursef.")
+      m.reply("Learn more about your fellow hackers by asking who they are or for me to tell you about them.")
+      m.reply("I know lots of stuff. Use !facts to prove it.")
     end
 
     def sender_is_self?(sender, who)
