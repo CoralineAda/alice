@@ -21,7 +21,7 @@ module Alice
     end
 
     def fruitcake(m, who)
-      m.reply("Nice try, #{m}.") and return if who =~ /alicebot/i
+      m.reply("Nice try, #{m.user.nick}.") and return if who =~ /alicebot/i
       giver = Alice::User.find_or_create(m.user.nick)
       recipient = Alice::User.find_or_create(who)
       if giver.has_fruitcake?
@@ -29,8 +29,11 @@ module Alice
         giver.update_attribute(:has_fruitcake, false)
         recipient.update_attribute(:has_fruitcake, true)
       else
-        user = Alice::User.where(has_fruitcake: true).first
-        m.reply("Only #{user.primary_nick} can pass the sacred fruitcake.")
+        if user = Alice::User.where(has_fruitcake: true).first
+          m.reply("Only #{user.primary_nick} can pass the sacred fruitcake.")
+        else
+          m.reply("The sacred fruitcake is lost to us!")
+        end
       end
     end
 
