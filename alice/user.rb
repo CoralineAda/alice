@@ -5,7 +5,8 @@ class Alice::User
   field :primary_nick
   field :bio
   field :twitter_handle
-
+  field :has_fruitcake
+  
   has_many :factoids
 
   def self.find_or_create(nick)
