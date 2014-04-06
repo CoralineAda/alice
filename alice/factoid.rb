@@ -6,6 +6,10 @@ class Alice::Factoid
 
   belongs_to :user
 
+  def self.random
+    all.sample
+  end
+
   def sanitized
     sanitized = self.text
     sanitized = sanitized.gsub(/^I/i, '')
@@ -27,7 +31,7 @@ class Alice::Factoid
       "Some believe that",
       "Some say",
       "It's been said that",
-      "Legend says",
+      "Legend says that",
       "According to my notes,",
       "If the rumors are to be believed,",
       "Word on the street is that"
