@@ -10,11 +10,16 @@ class Alice::Factoid
     sanitized = self.text
     sanitized = sanitized.gsub(/^I/i, '')
     sanitized = sanitized.gsub(/^am/i, 'is')
-
+    sanitized = sanitized.gsub(/[\.\!\?]$/, '.'
+    sanitized
   end
 
   def formatted
-    prefix = [
+    "#{prefix} #{self.user.formatted_name} #{sanitized}")
+  end
+
+  def prefix
+    [
       "",
       "True story:",
       "I seem to recall that",
@@ -27,7 +32,6 @@ class Alice::Factoid
       "If the rumors are to be believed,",
       "Word on the street is that"
     ].sample
-    "#{prefix} #{self.user.formatted_name} #{sanitized}".gsub(/[\.\!\?]$/, '.')
   end
 
 
