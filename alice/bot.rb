@@ -13,7 +13,7 @@ module Alice
           config.nick = "AliceBot"
           config.user = "AliceBot"
           config.plugins.plugins = [Core, Bio]
-          config.password = "blacksk13s14"
+          config.password = ENV['USER_PASS']
           config.messages_per_second = 1
         end
       end
