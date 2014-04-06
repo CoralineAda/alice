@@ -23,7 +23,7 @@ module Alice
     def fruitcake(m, who)
       giver = Alice::User.find_or_create(m.user.nick)
       recipient = Alice::User.find_or_create(who)
-      if user.has_fruitcake?
+      if giver.has_fruitcake?
         m.action_reply "passes #{who} the fruitcake."
       else
         user = Alice::User.where(has_fruitcake: true)
