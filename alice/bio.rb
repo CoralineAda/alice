@@ -14,18 +14,18 @@ module Alice
 
     def set_bio(m, text)
       Alice::User.set_bio(m.user.nick, text)
-      m.reply("Your bio is set! I'll respond with it whenever someone asks 'Who is #{m.user.nick}?'")
+      m.action_reply("nods.")
     end
 
     def get_bio(m, who)
       if bio = Alice::User.get_bio(who)
-        m.reply "#{who} is #{bio}."
+        m.reply "#{who} is #{bio}.#{twitter_}"
       end
     end
 
     def set_factoid(m, text)
       Alice::User.set_factoid(m.user.nick, text)
-      m.reply("That's pretty interesting, I'll remember that.")
+      m.action_reply("makes a note.")
     end
 
     def get_factoid(m, who)
