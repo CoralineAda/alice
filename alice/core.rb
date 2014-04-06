@@ -21,6 +21,7 @@ module Alice
     end
 
     def fruitcake(m, who)
+      m.reply("Nice try, #{m}.") and return if who =~ /alicebot/i
       giver = Alice::User.find_or_create(m.user.nick)
       recipient = Alice::User.find_or_create(who)
       if giver.has_fruitcake?
