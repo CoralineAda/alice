@@ -6,13 +6,17 @@ class Alice::Factoid
 
   belongs_to :user
 
+  def self.add(text)
+
+  end
+
   def self.random
     all.sample
   end
 
   def sanitized
     sanitized = self.text
-    sanitized = sanitized.gsub(/^I/i, '')
+    sanitized = sanitized.gsub(/^I /i, '')
     sanitized = sanitized.gsub(/^am/i, 'is')
     sanitized = sanitized.gsub(/[\.\!\?]$/, '.')
     sanitized
