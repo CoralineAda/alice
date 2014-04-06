@@ -24,7 +24,7 @@ module Alice
       giver = Alice::User.find_or_create(m.user.nick)
       recipient = Alice::User.find_or_create(who)
       if giver.has_fruitcake?
-        m.action_reply "passes #{who} the fruitcake."
+        m.action_reply "passes the fruitcake from #{m.user.nick} to #{who}."
       else
         user = Alice::User.where(has_fruitcake: true).first
         m.reply("Only #{user.primary_nick} can pass the sacred fruitcake.")
