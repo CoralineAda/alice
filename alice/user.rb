@@ -6,8 +6,10 @@ class Alice::User
   field :alt_nicks, type: Array, default: []
   field :bio
   field :twitter_handle
+  field :last_theft, type: DateTime
 
   has_many :factoids
+  has_many :treasures
 
   def self.random
     all.sample
@@ -69,6 +71,43 @@ class Alice::User
 
   def formatted_name
     self.primary_nick.capitalize
+  end
+
+  def update_thefts
+    self.update_attributes(last_theft: DateTime.now)
+  end
+
+  def recently_stole?
+    self.last_theft ||= DateTime.now
+    self.last_theft >= DateTime.now - 1.hour
+  end
+
+  def fumble(what)
+    treasure = Alice::Treasure.where(name: what.downcase).last
+    treasure.user = [User.all.to_a - [self]].sample
+    treasure.save
+    treasure
+  end
+
+  def try_stealing(what)
+    treasure = Alice::Treasure.where(name: what.downcase).last
+    if treasure && self.treasures.include?(treasure)
+      item = fumble(what)
+      return "laughs as #{self.formatted_name} fumbles the #{what} and it falls into #{treasure.owner}'s lap."
+    end
+    if recently_stole?
+      return "thinks that #{self.formatted_name} shouldn't press their luck on the thievery front."
+    end  
+    unless treasure
+      return "eyes #{m.user.nick} curiously."
+    end  
+    update_thefts
+    if rand(10) == 1
+      thief.steal(what).from(whom)
+      return "watches in awe as #{m.formatted_name} steals the #{treasure.name} from #{treasure.owner}!"
+    else
+      return "sees #{formatted_name} try and fail to snatch the #{treasure.name} from #{treasure.owner}."
+    end
   end
 
   def twitter_url
