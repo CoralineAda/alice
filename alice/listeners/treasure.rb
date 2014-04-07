@@ -15,7 +15,7 @@ module Alice
       match /^\!discard (.+)/, method: :drop, use_prefix: false
       match /^\!inventory/, method: :inventory, use_prefix: false
       match /^\!destroy (.+)/, method: :destroy, use_prefix: false
-      match /^ha/, method: :laugh, use_prefix: false
+      match /^[ha|bwa]/, method: :laugh, use_prefix: false
 
       def laugh(m)
         return unless rand(5) == 1
