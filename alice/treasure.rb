@@ -22,7 +22,7 @@ class Alice::Treasure
   end
 
   def self.like(name)
-    where(name: /#{name}/i)
+    where(name: /^#{name}$/i)
   end
 
   def self.owner=(nick)
