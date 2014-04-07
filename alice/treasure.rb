@@ -25,6 +25,10 @@ class Alice::Treasure
     treasure.save
   end
 
+  def self.list
+    "Our collective treasures include #{all.map(&:name).to_sentence}"
+  end
+
   def self.container
     [
       "worldy possessions include",
