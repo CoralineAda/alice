@@ -8,7 +8,7 @@ module Alice
 
       include Cinch::Plugin
 
-      match /(.+)[ ]?alice(.+)/i, method: :process, use_prefix: false
+      match /\walice/i, method: :process, use_prefix: false
   
       def process(m, string_one, string_two)
         message = "#{string_one} #{string_2}"
