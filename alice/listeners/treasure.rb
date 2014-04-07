@@ -39,7 +39,7 @@ module Alice
       def drop(m, what)
         return unless treasure = Alice::Treasure.where(name: what.downcase).last
         m.reply("It seems that the #{treasure.name} is cursed and cannot be dropped!") and return if rand(5) == 1
-        message = treasure.transfer_from(m.user.nick).to(Alice::User.random).message
+        message = treasure.transfer_from(m.user.nick).to(Alice::User.random.primary_nick).message
         m.reply(message)
       end
 
