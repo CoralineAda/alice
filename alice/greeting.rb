@@ -1,5 +1,9 @@
 class Alice::Greeting
 
+  def self.process(recipient, command)
+    Alice::Response.new(content: random(recipient), kind: :action_reply)
+  end
+
   def self.random(name)
     "#{greetings.sample} #{name}."
   end
