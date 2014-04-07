@@ -35,5 +35,12 @@ class Alice::Fruitcake
     self.user.primary_nick.capitalize
   end
 
+  def elapsed_time
+    hours = (Time.now.minus_with_coercion(self.updated_at)/3600).round
+    return hours < 1 && "a short while"
+    return hours < 24 && "less than a day"
+    return "#{hours % 24} days"
+  end
+
 end
 
