@@ -15,6 +15,10 @@ class Alice::Treasure
     where(user_id: nil, place_id: nil)
   end
 
+  def self.claimed
+    excludes(user_id: nil)
+  end
+
   def self.from(string)
     names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\_\ ]/, '')).omnigrams
     names = names.map{|g| g.join ' '}
@@ -22,7 +26,7 @@ class Alice::Treasure
   end
 
   def self.like(name)
-    where(name: /^#{name}$/i)
+    where(name: /#{name}$/i)
   end
 
   def self.owner=(nick)
@@ -32,7 +36,10 @@ class Alice::Treasure
   end
 
   def self.list
-    "Our collective treasures include #{all.map{|t| "the #{t.name}"}.to_sentence}.".gsub('the the', 'the')
+    string = ""
+    string << "Our collective treasures include #{claimed.map{|t| "the #{t.name}"}.to_sentence}." if claimed.count > 0
+    string << "Somewhere in the labyrinth you may find #{unclaimed.map{|t| "the #{t.name}"}.to_sentence}." if unclaimed.count > 0
+    string.gsub('the the', 'the')
   end
 
   def self.container

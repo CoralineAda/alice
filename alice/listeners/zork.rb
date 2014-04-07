@@ -18,6 +18,12 @@ module Alice
       match /^\!drop (.+)/, method: :drop, use_prefix: false
       match /^\!discard (.+)/, method: :drop, use_prefix: false
 
+      def drop(m, what)
+        return unless treasure = Alice::Treasure.from(what).last
+        m.reply("It seems that the #{treasure.name} is cursed and cannot be dropped!") and return if treasure.cursed?
+        m.reply(treasure.drop_message(m.user.nick)) && treasure.drop
+      end
+
       def get(m, item)
         m.reply("You cannot get the #{item}!").gsub('the the', 'the') and return unless Alice::Place.last.contains?(item)
         m.reply(treasure.pickup_message(m.user.nick)) && item.to(m.user.nick)
@@ -29,7 +35,7 @@ module Alice
       end
 
       def look(m)
-        m.reply("Alice::Place.last.describe")
+        m.reply(Alice::Place.last.describe)
       end
 
     end
