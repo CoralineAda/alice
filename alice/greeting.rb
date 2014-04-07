@@ -1,7 +1,7 @@
 class Alice::Greeting
 
   def self.random(name)
-    "#{greetings.sample} #{name}"
+    "#{greetings.sample} #{name}."
   end
 
   def self.greetings
