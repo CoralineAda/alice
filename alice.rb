@@ -14,6 +14,7 @@ module Alice
   require_relative 'alice/handlers/factoid'
   require_relative 'alice/handlers/greeting'
   require_relative 'alice/handlers/twitter'
+  require_relative 'alice/handlers/oh'
   
   require_relative 'alice/listeners/setter'
   require_relative 'alice/listeners/core'
