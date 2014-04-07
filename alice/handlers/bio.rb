@@ -37,7 +37,7 @@ module Alice
       end
 
       def set_twitter(m, handle)
-        Alice::User.set_twitter(m.user.nick, text)
+        Alice::User.set_twitter(m.user.nick, handle)
         m.action_reply("follows.")
       end
 
