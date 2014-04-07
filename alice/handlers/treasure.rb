@@ -8,14 +8,20 @@ module Alice
 
       include Cinch::Plugin
 
-      match /^\!(.+)$/, method: :find_treasure, use_prefix: false
+      match /^\!([a-zA-Z]+)$/, method: :find_treasure, use_prefix: false
       match /^\!(.+) (.+)/, method: :treasure, use_prefix: false
       match /^\!forge (.+)/, method: :forge, use_prefix: false
       
       def forge(m, what)
-        return unless self.channel.users(m.user.nick).opped
-        return if treasure = Alice::Treasure.where(name: what.downcase).last
-        return unless user = Alice::User.like(m.user.nick)
+        unless m.channel.ops.map(&:nick).include?(m.user.nick)
+          m.repy("You're not the boss of me, #{m.user.nick}.")
+          return
+        end
+        if treasure = Alice::Treasure.where(name: what.downcase).last
+          m.reply("Everyone knows that that's a singleton.")
+          return
+        end
+        user = Alice::User.find_or_create(m.user.nick)
         Alice::Treasure.create(name: what.downcase, user: user)
         m.action_reply("forges a #{what} in the fires of Mount Doom.")
       end
