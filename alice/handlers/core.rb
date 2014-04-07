@@ -12,7 +12,7 @@ module Alice
       match /\!cookie (.+)/, method: :cookie, use_prefix: false
       match /\!pants/, method: :pants, use_prefix: false
       match /\!help/, method: :help, use_prefix: false
-      match /(.+) is now known as (.+)/, method: :update_nick, use_prefix: false
+      match /NICK (.+)/, method: :update_nick, use_prefix: false
 
       def greet(m)
         m.action_reply(Greeting.random(m.user.nick))
@@ -33,14 +33,8 @@ module Alice
         m.reply("Beware the fruitcake.")
       end
 
-      def update_nick(m, old_nick, new_nick)
-        user = User.like(old_nick)
-        user ||= User.like(new_nick)
-        user ||= User.new(primary_nick: old_nick)
-        user.alt_nicks << new_nick.downcase
-        user.alt_nicks << old_nick.downcase
-        user.alt_nicks = user.alt_nicks.uniq
-        user.save
+      def update_nick(m, new_nick)
+        Alice::User.update_nick(m.user.nick, new_nick)
       end
 
       def sender_is_self?(sender, who)
