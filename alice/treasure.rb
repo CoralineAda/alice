@@ -24,16 +24,17 @@ class Alice::Treasure
     self.message.nil?
   end
 
-  def transfer_from(name)
-    return self if self.user && self.user.has_nick?(name)
-    self.message = "Only #{user.primary_nick.titleize} can pass the sacred treasure!" 
+  def transfer_from(nick)
+    return self if self.user && self.user.has_nick?(nick)
+    self.message = "Only #{user.primary_nick.titleize} can pass the precious #{self.name}!" 
     self
   end
 
-  def to(name)
-    self.message = "You can't pass #{name.pluralize} to imaginary friends." unless recipient = Alice::User.find_or_create(name)
+  def to(nick)
+    recipient = Alice::User.find_or_create(nick)
+    self.message = "You can't pass the #{self.name} to an imaginary friend." unless recipient
     if transferable?
-      self.message = "#{owner} passes the #{name} to #{recipient.primary_nick.capitalize}."
+      self.message = "#{owner} passes the #{self.name} to #{recipient.primary_nick.capitalize}."
       self.user = recipient
       self.save
     end
