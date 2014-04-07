@@ -19,7 +19,7 @@ module Alice
       end
 
       def self.random
-        all.sample
+        Alice::Factoid.random
       end
 
     end

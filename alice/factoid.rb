@@ -12,7 +12,7 @@ class Alice::Factoid
   end
 
   def self.random
-    Alice::Factoid.random
+    all.sample
   end
 
   def sanitized
