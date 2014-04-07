@@ -7,7 +7,7 @@ class Alice::Fruitcake
   belongs_to :user
 
   def self.transfer
-    Fruitcake.first || Fruitcake.create
+    first || create
   end
 
   def transferable?
@@ -15,7 +15,8 @@ class Alice::Fruitcake
   end
 
   def from(name)
-    return self.user && self.user.has_nick?(name) && self
+    return self unless self.user
+    return self.user.has_nick?(name) && self
     message = "Only #{user.primary_nick.titleize} can pass the sacred fruitcake!" 
     self
   end
