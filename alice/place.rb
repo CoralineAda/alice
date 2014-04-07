@@ -86,40 +86,40 @@ class Alice::Place
 
   def self.adjective
     [
-      "A dirty",
-      "A dingy",
-      "A sparse",
-      "A spartan",
-      "An echoing",
-      "An incredibly dark",
-      "An incredibly large",
-      "A ridiculously small",
-      "A colorfully decorated",
-      "A richly decorated",
-      "A sparsely decorated",
-      "A desolate",
-      "A low-ceilinged",
-      "An immense",
-      "A dark",
-      "A sunny",
-      "A large",
-      "A long",
-      "A high-ceilinged",
-      "A brightly-lit",
-      "A small",
-      "A tiny",
-      "A tidy",
-      "An abandoned",
-      "A filthy",
-      "An immaculate",
-      "A",
-      "A",
-      "A",
-      "A",
-      "A",
-      "A",
-      "A",
-      "A",
+      "a dirty",
+      "a dingy",
+      "a sparse",
+      "a spartan",
+      "an echoing",
+      "an incredibly dark",
+      "an incredibly large",
+      "a ridiculously small",
+      "a colorfully decorated",
+      "a richly decorated",
+      "a sparsely decorated",
+      "a desolate",
+      "a low-ceilinged",
+      "an immense",
+      "a dark",
+      "a sunny",
+      "a large",
+      "a long",
+      "a high-ceilinged",
+      "a brightly-lit",
+      "a small",
+      "a tiny",
+      "a tidy",
+      "an abandoned",
+      "a filthy",
+      "an immaculate",
+      "a",
+      "a",
+      "a",
+      "a",
+      "a",
+      "a",
+      "a",
+      "a",
     ].sample
   end
 
@@ -228,7 +228,7 @@ class Alice::Place
   end
 
   def describe
-    "#{self.description}. #{contents} Exits: #{exits.to_sentence}.".gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
+    "You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}.".gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
   end
 
   def contents
