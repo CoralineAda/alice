@@ -43,5 +43,4 @@ class Alice::Factoid
     ].sample
   end
 
-
 end
