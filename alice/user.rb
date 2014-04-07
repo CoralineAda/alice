@@ -46,6 +46,10 @@ class Alice::User
     return user && twitter
   end
 
+  def has_nick?(nick)
+    [self.primary_nick, self.alt_nicks].flatten.include?(nick.downcase)
+  end
+
   def formatted_name
     self.primary_nick.capitalize
   end
