@@ -13,7 +13,7 @@ module Alice
       match /^\!forge (.+)/, method: :forge, use_prefix: false
       
       def forge(m, what)
-        return unless m.user.opped
+        return unless self.channel.users(m.user.nick).opped
         return if treasure = Alice::Treasure.where(name: what.downcase).last
         return unless user = Alice::User.like(m.user.nick)
         Alice::Treasure.create(name: what.downcase, user: user)
