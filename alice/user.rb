@@ -9,6 +9,10 @@ class Alice::User
 
   has_many :factoids
 
+  def self.random
+    all.sample
+  end
+
   def self.find_or_create(nick)
     where(primary_nick: nick.downcase).first || Alice.bot.exists?(nick) && create(primary_nick: nick.downcase)
   end

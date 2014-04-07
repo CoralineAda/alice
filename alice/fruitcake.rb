@@ -8,7 +8,7 @@ class Alice::Fruitcake
   belongs_to :user
 
   def self.transfer
-    first || create
+    first || create(user: User.random)
   end
 
   def transferable?
