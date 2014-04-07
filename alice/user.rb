@@ -40,12 +40,17 @@ class Alice::User
 
   def self.set_bio(nick, bio)
     user = find_or_create(nick)
+    bio = bio.gsub(/^is/, '')
+    bio = bio.gsub(/([a-zA-Z0-9\_]+) ^is/, '')
     user && user.update_attributes(bio: bio)
   end
 
   def self.get_bio(nick)
     user = find_or_create(nick)    
-    return user && user.bio && user.bio.gsub(/^is/, '')
+    return unless bio = user.bio
+    bio = bio.gsub(/^is/, '')
+    bio = bio.gsub(/([a-zA-Z0-9\_]+) ^is/, '')
+    bio
   end
 
   def self.set_factoid(nick, factoid)
