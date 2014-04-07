@@ -16,7 +16,7 @@ class Alice::Factoid
         Alice::Response.new(content: factoid.formatted, kind: :reply)
       end
     else
-      Alice::Response.new(content: random, kind: :reply)
+      Alice::Response.new(content: random.formatted, kind: :reply)
     end
   end
 
