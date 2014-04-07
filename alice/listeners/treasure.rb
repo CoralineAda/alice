@@ -20,12 +20,6 @@ module Alice
         end
       end
 
-      def drop(m, what)
-        return unless treasure = Alice::Treasure.where(name: what.downcase).last
-        m.reply("It seems that the #{treasure.name} is cursed and cannot be dropped!") and return if treasure.cursed?
-        m.reply(treasure.drop_message(m.user.nick)) && treasure.drop
-      end
-
       def destroy(m, what)
         return unless treasure = Alice::Treasure.where(name: what.downcase).last
         unless m.channel.ops.map(&:nick).include?(m.user.nick) || rand(5) == 1
