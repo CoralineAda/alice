@@ -1,6 +1,7 @@
 class Alice::Fruitcake
 
   include Mongoid::Document
+  include Mongoid::Timestamps
 
   attr_accessor :message
 
@@ -37,9 +38,10 @@ class Alice::Fruitcake
 
   def elapsed_time
     hours = (Time.now.minus_with_coercion(self.updated_at)/3600).round
-    return hours < 1 && "a short while"
-    return hours < 24 && "less than a day"
-    return "#{hours % 24} days"
+    elapsed = hours < 1 && "a short while"
+    elapsed ||= hours < 24 && "less than a day"
+    elapsed ||= hours / 24 == 1 ? "one day" : "#{hours / 24} days"
+    elapsed
   end
 
 end
