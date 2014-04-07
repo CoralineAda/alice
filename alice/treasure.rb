@@ -4,10 +4,16 @@ class Alice::Treasure
   include Mongoid::Timestamps
 
   field :name
+  field :is_cursed, type: Boolean
 
   attr_accessor :message
 
   belongs_to :user
+  belongs_to :place
+
+  def self.unclaimed
+    where(user_id: nil, place_id: nil)
+  end
 
   def self.from(string)
     names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\_\ ]/, '')).omnigrams
@@ -36,6 +42,30 @@ class Alice::Treasure
       "treasures include",
       "stuff includes",
       "vast collection of rarities includes"
+    ].sample
+  end
+
+  def drop
+    self.place = Alice::Place.last
+    self.user = nil
+    self.save
+  end
+
+  def cursed?
+    return self.is_cursed unless self.is_cursed.nil?
+    self.update_attribute(:is_cursed, rand(5) == 1 ? true : false)
+  end
+
+  def drop_message(nick)
+    [
+      "#{self.name} falls clattering to the floor.",
+      "#{self.name} is now resting on the ground.",
+      "#{nick} drops the #{self.name}",
+      "#{nick} discards the #{self.name}",
+      "#{nick} drops the #{self.name} on the ground.",
+      "#{nick} quietly places the #{self.name} on the floor.",
+      "#{nick} puts the #{self.name} down.",
+      "#{nick} gently puts the #{self.name} down."
     ].sample
   end
 

@@ -22,6 +22,7 @@ module Alice
   require_relative 'alice/listeners/core'
   require_relative 'alice/listeners/nlp'
   require_relative 'alice/listeners/treasure'
+  require_relative 'alice/listeners/zork'
 
   require_relative 'alice/parser/language_helper'
   require_relative 'alice/parser/ngram'
@@ -34,6 +35,7 @@ module Alice
   require_relative 'alice/treasure'
   require_relative 'alice/user'
   require_relative 'alice/oh'
+  require_relative 'alice/place'  
   
   def self.start
     @@bot = Alice::Bot.new
