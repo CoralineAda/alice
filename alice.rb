@@ -15,8 +15,8 @@ module Alice
   require_relative 'alice/handlers/fruitcake'
   require_relative 'alice/user'
   require_relative 'alice/factoid'
-  require_relative 'alice/fruitcake'
   require_relative 'alice/greeting'
+  require_relative 'alice/treasure'
 
   def self.start
     @@bot = Alice::Bot.new
