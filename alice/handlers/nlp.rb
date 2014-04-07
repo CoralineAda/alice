@@ -10,7 +10,7 @@ module Alice
 
       match /(.+)[ ]?alice(.+?)/i, method: :process, use_prefix: false
 
-      def process(m, string_one, string_two)
+      def process(m, string_one, string_two="")
         message = "#{string_one} #{string_2}"
         response = Alice::Command.parse(message) 
         response && response.kind == :reply && m.reply(response.content)
