@@ -7,7 +7,10 @@ module Alice
       attr_accessor :options, :target
      
       def self.omnigrams_from(words)
-        new(words.downcase.split(/[^a-zA-Z0-9\_\-]/).uniq.join(' ')).omnigrams.to_a.flatten.uniq
+        words = words.downcase.split(/[^a-zA-Z0-9\_\-]/).uniq
+        words << words.map{|word| Lingua.stemmer(word.downcase)}
+        words.flatten
+        new(words).omnigrams.to_a.flatten.uniq
       end
 
       def initialize(target)

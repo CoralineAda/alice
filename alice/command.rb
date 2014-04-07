@@ -21,8 +21,9 @@ module Alice
       message = message.downcase.gsub(/[^a-zA-Z0-9\/\\\s]/, ' ')
       indicators = Alice::Parser::NgramFactory.omnigrams_from(message)
       matches = Alice::Command.in(indicators: indicators)
-      command = matches.max{|command| (command.indicators | indicators).count }
-      command.has_minimum_indicators?(indicators) && command.has_no_stop_words? && command || nil
+      commands = matches.select{|m| m.has_minimum_indicators?(indicators) && m.has_no_stop_words?(indicators)}
+      command = commands.sort{|a,b| (a.indicators & indicators).count <=> (b.indicators & indicators).count}.last
+      command || nil
     end
 
     def klass

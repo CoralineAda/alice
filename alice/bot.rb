@@ -12,7 +12,7 @@ module Alice
           config.channels = ["##lonelyhackersclub", "##alicebottest"]
           config.nick = "AliceBot"
           config.user = "AliceBot"
-          config.plugins.plugins = [Handlers::Core, Handlers::Bio, Handlers::Treasure, Handlers::Nlp]
+          config.plugins.plugins = [Listeners::Core, Listeners::Bio, Listeners::Treasure, Listeners::Nlp]
           config.password = ENV['USER_PASS']
           config.messages_per_second = 1
         end
