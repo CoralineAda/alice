@@ -7,6 +7,7 @@ class Alice::User
   field :bio
   field :twitter_handle
   field :last_theft, type: DateTime
+  field :is_bot, type: Boolean, default: false
 
   has_many :factoids
   has_many :treasures
