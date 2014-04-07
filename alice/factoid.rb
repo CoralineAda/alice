@@ -24,7 +24,7 @@ class Alice::Factoid
   end
 
   def formatted
-    "#{prefix} #{self.user.formatted_name} #{sanitized}"
+    "#{prefix} #{self.user.try(:formatted_name)} #{sanitized}".gsub('  ', ' ')
   end
 
   def prefix
