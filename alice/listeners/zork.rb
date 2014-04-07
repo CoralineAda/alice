@@ -29,7 +29,7 @@ module Alice
       end
 
       def look(m)
-        m.reply("Alice::Place.last.describe)
+        m.reply("Alice::Place.last.describe")
       end
 
     end
