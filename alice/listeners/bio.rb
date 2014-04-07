@@ -11,6 +11,7 @@ module Alice
       match /^\!bio (.+)/, method: :set_bio, use_prefix: false
       match /^\!fact (.+)/, method: :set_factoid, use_prefix: false
       match /^\!twitter (.+)/, method: :set_twitter, use_prefix: false
+      match /^FACT: (.+)/, method: :set_anonymous_factoid, use_prefix: false
 
       def set_bio(m, text)
         Alice::User.set_bio(m.user.nick, text)
@@ -24,6 +25,14 @@ module Alice
           m.action_reply("makes a note.")
         else
           m.action_reply("calls BS on #{m.user.nick}.")
+        end
+      end
+
+      def set_anonymous_factoid(m, text)
+        return unless text.size > 0
+        if text.split(' ').count > 1
+          Alice::Factoid.create(text)
+          m.action_reply("listens carefully and nods to herself.")
         end
       end
 
