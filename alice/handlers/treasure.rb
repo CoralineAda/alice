@@ -10,7 +10,8 @@ module Alice
 
       def self.process(sender, command)
         if treasure = Alice::Treasure.from(command).sample
-        Alice::Response.new(content: formatted_response(treasure), kind: :reply)
+          Alice::Response.new(content: formatted_response(treasure), kind: :reply)
+        end
       end
 
       def self.formatted_response(treasure)
@@ -21,7 +22,7 @@ module Alice
           "It is said that the #{treasure.name} resides deep in the pockets of #{treasure.owner}.",
           "Don't look at me, look at #{treasure.owner}.",
           "Forged long ago in the fires of Mt. Doom, the #{treasure.name} is now guarded by the fearsome #{treasure.owner}."
-        ]
+        ].sample
       end
 
     end
