@@ -15,6 +15,10 @@ class Alice::User
     all.sample
   end
 
+  def self.from(string)
+    string.split(/[^a-zA-Z0-9\_]/).map{|name| Alice::User.like(name) }.compact || []
+  end
+
   def self.like(nick)
     where(primary_nick: nick.downcase).first || where(alt_nicks: nick.downcase).first
   end
