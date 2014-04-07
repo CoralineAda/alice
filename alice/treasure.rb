@@ -26,7 +26,7 @@ class Alice::Treasure
   end
 
   def self.list
-    "Our collective treasures include #{all.map{|t| "the #{t.name}"}.to_sentence}"
+    "Our collective treasures include #{all.map{|t| "the #{t.name}"}.to_sentence}.".gsub('the the', 'the')
   end
 
   def self.container
