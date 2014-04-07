@@ -8,7 +8,6 @@ module Alice
 
       include Cinch::Plugin
 
-      match /^\!([a-zA-Z\s]+)$/, method: :find_treasure, use_prefix: false
       match /^\!(.+) (.+)/, method: :treasure, use_prefix: false
       match /^\!forge (.+)/, method: :forge, use_prefix: false
       match /^\!steal (.+)/, method: :steal, use_prefix: false
@@ -39,13 +38,6 @@ module Alice
         return unless treasure = Alice::Treasure.where(name: what.downcase).last
         message = treasure.transfer_from(m.user.nick).to(who).message
         m.reply(message)
-      end
-
-      def find_treasure(m, what)
-        return if what == 'forge'
-        return unless treasure = Alice::Treasure.where(name: what.downcase).last
-        return unless treasure.user
-        m.reply("#{treasure.owner} has had the #{treasure.name} for #{treasure.elapsed_time}.")
       end
 
     end

@@ -10,6 +10,7 @@ class Alice::Treasure
   belongs_to :user
 
   def self.from(string)
+    names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\_\ ]/, ''))
     string.split(/[^a-zA-Z0-9\_]/).map{|name| Alice::Treasure.like(name) }.compact || []
   end
 
