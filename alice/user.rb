@@ -71,4 +71,9 @@ class Alice::User
     self.primary_nick.capitalize
   end
 
+  def twitter_url
+    return unless self.twitter_handle
+    "https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
+  end
+
 end
