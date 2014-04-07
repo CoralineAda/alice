@@ -3,7 +3,7 @@ class Alice::User
   include Mongoid::Document
 
   field :primary_nick
-  field :alt_nicks, type: Array
+  field :alt_nicks, type: Array, default: []
   field :bio
   field :twitter_handle
 
@@ -13,8 +13,12 @@ class Alice::User
     all.sample
   end
 
+  def self.like(nick)
+    where(primary_nick: nick.downcase).first || where(alt_nicks: nick.downcase).first
+  end
+
   def self.find_or_create(nick)
-    where(primary_nick: nick.downcase).first || Alice.bot.exists?(nick) && create(primary_nick: nick.downcase)
+    like(nick).first || Alice.bot.exists?(nick) && create(primary_nick: nick.downcase)
   end
 
   def self.set_twitter(nick, handle)
