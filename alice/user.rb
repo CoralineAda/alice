@@ -79,7 +79,7 @@ class Alice::User
 
   def recently_stole?
     self.last_theft ||= DateTime.now - 1.day
-    self.last_theft >= DateTime.now - 1.hour
+    self.last_theft >= DateTime.now - 13.minutes
   end
 
   def fumble(what)
