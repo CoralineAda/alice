@@ -25,6 +25,13 @@ class Alice::Treasure
     treasure.save
   end
 
+  def self.collection_name
+    [
+      "worldy possessions include",
+      "pockets contain"
+    ]
+  end
+
   def transferable?
     self.message.nil?
   end
