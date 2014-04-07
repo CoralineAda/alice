@@ -15,7 +15,8 @@ module Alice
       match /^OH: (.+)/, method: :set_oh, use_prefix: false
 
       def set_bio(m, text)
-        Alice::User.set_bio(m.user.nick, text)
+        return if text == m.user.nick
+        Alice::User.set_bio(m.user.nick, text) 
         m.action_reply(positive_memorization_response(m.user.nick))
       end
 

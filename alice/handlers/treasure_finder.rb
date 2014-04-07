@@ -9,7 +9,7 @@ module Alice
       end
 
       def self.process(sender, command)
-        if treasure = Alice::Treasure.from(command).sample
+        if treasure = Alice::Treasure.from(command).first
           Alice::Response.new(content: formatted_response(treasure), kind: :reply)
         end
       end
