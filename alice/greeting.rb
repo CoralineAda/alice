@@ -14,7 +14,8 @@ class Alice::Greeting
       "hails",
       "says hi to",
       "says hello to",
-      "greets fellow hacker"
+      "greets fellow hacker",
+      "does the o/ thing at"
     ]
   end
 
