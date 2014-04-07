@@ -31,7 +31,7 @@ module Alice
       def set_anonymous_factoid(m, text)
         return unless text.size > 0
         if text.split(' ').count > 1
-          Alice::Factoid.create(text)
+          Alice::Factoid.create(text: text)
           m.action_reply("listens carefully and nods to herself.")
         end
       end
