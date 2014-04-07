@@ -10,7 +10,7 @@ class Alice::Fruitcake
     Fruitcake.first || Fruitcake.create
   end
 
-  def valid?
+  def transferable?
     self.message.nil?
   end
 
@@ -22,7 +22,7 @@ class Alice::Fruitcake
 
   def to(name)
     message = "You can't pass fruitcakes to imaginary friends." unless recipient = Alice::User.find_or_create(name)
-    if valid?
+    if transferable?
       self.user = recipient
       self.save
     end
