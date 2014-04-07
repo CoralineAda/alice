@@ -1,7 +1,7 @@
 class Alice::Greeting
 
-  def self.process(recipient, command)
-    Alice::Response.new(content: random(recipient), kind: :action)
+  def self.process(sender, command)
+    Alice::Response.new(content: random(sender), kind: :action)
   end
 
   def self.random(name)

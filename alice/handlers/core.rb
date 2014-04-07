@@ -16,10 +16,6 @@ module Alice
     
       listen_to :nick, method: :update_nick
 
-      def greet(m)
-        m.action_reply(Greeting.random(m.user.nick))
-      end
-
       def shifty_eyes
         return unless [1,2].sample == 1
         m.action_reply "thinks #{who} looks pretty shifty."
