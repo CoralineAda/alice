@@ -52,7 +52,8 @@ module Alice
 
       def get_twitter(m, who)
         user = Alice::User.like(who)
-        user && user.twitter_handle && m.reply("#{who} is #{user.twitter_handle} on Twitter (#{user.twitter_url})")
+        user && user.twitter_handle && m.reply("#{who} is #{user.twitter_handle} on Twitter (#{user.twitter_url})") && return
+        m.reply("I don't know #{who}'s handle on Twitter. They can set it using !twitter <handle> though.")
       end
 
       def random_fact(m)
