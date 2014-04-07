@@ -18,7 +18,7 @@ class Alice::User
   end
 
   def self.find_or_create(nick)
-    like(nick).first || Alice.bot.exists?(nick) && create(primary_nick: nick.downcase)
+    like(nick) || Alice.bot.exists?(nick) && create(primary_nick: nick.downcase)
   end
 
   def self.set_twitter(nick, handle)
