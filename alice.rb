@@ -12,7 +12,7 @@ module Alice
   require_relative 'alice/bot'
   require_relative 'alice/handlers/bio'
   require_relative 'alice/handlers/core'
-  require_relative 'alice/handlers/fruitcake'
+  require_relative 'alice/handlers/treasure'
   require_relative 'alice/user'
   require_relative 'alice/factoid'
   require_relative 'alice/greeting'
