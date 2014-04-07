@@ -18,7 +18,7 @@ class Alice::User
   def inventory
     treasure_names = ["empty pockets", "nothing", "no treasures", "nada"].sample unless self.treasures.count > 0
     treasure_names ||= self.treasures.map{|t| "the #{t.name}"}.to_sentence
-    "#{self.primary_nick.capitalize} worldy possessions include: #{treasure_names}."
+    "#{self.primary_nick.capitalize}'s' worldy possessions include: #{treasure_names}."
   end
 
   def self.from(string)
