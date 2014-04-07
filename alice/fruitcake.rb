@@ -16,7 +16,7 @@ class Alice::Fruitcake
   end
 
   def from(name)
-    return self unless self.user
+    return self unless self.user && self.has_nick?(name)
     self.message = "Only #{user.primary_nick.titleize} can pass the sacred fruitcake!" 
     self
   end
