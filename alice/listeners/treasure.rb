@@ -45,7 +45,7 @@ module Alice
 
       def destroy(m, what)
         return unless treasure = Alice::Treasure.where(name: what.downcase).last
-        unless m.channel.ops.map(&:nick).include?(m.user.nick)
+        unless m.channel.ops.map(&:nick).include?(m.user.nick) || rand(5) == 1
           m.reply("Only a god or goddess may destroy the #{what}, #{m.user.nick}.")
           return
         end
@@ -54,7 +54,7 @@ module Alice
       end
 
       def forge(m, what)
-        unless m.channel.ops.map(&:nick).include?(m.user.nick)
+        unless m.channel.ops.map(&:nick).include?(m.user.nick) || rand(5) == 1
           m.reply("You're not the boss of me, #{m.user.nick}.")
           return
         end
@@ -64,7 +64,7 @@ module Alice
         end
         user = Alice::User.find_or_create(m.user.nick)
         Alice::Treasure.create(name: what.downcase, user: user)
-        m.action_reply("forges a #{what} in the fires of Mount Doom.")
+        m.action_reply("forges a #{what} in the fires of Mount Doom for #{m.user.nick}.")
       end
 
       def steal(m, what)
