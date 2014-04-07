@@ -10,7 +10,7 @@ module Alice
 
       match /^\!(.+)$/, method: :find_treasure, use_prefix: false
       match /^\!(.+) (.+)/, method: :treasure, use_prefix: false
-      match /^\!forge (.+)/, method: :create_treasure, use_prefix: false
+      match /^\!forge (.+)/, method: :forge, use_prefix: false
       
       def forge(m, what)
         return unless m.oper
