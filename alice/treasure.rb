@@ -28,7 +28,10 @@ class Alice::Treasure
   def self.collection_name
     [
       "worldy possessions include",
-      "pockets contain"
+      "pockets contain",
+      "treasures include",
+      "stuff includes",
+      "vast collection of rarities includes"
     ]
   end
 
