@@ -49,7 +49,7 @@ class Alice::User
     user = find_or_create(nick)    
     return unless bio = user.bio
     bio = bio.gsub(/^is/, '')
-    bio = bio.gsub(/([a-zA-Z0-9\_]+) ^is/, '')
+    bio = bio.gsub(/^([a-zA-Z0-9\_]+) is/, '')
     bio
   end
 
