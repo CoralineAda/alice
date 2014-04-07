@@ -8,7 +8,7 @@ module Alice
 
       include Cinch::Plugin
 
-      match /(.?[ ]?alice.?)/i, method: :process, use_prefix: false
+      match /(.?+[ ]?alice.?+)/i, method: :process, use_prefix: false
 
       def process(m, message)
         response = Alice::Command.parse(message) 
