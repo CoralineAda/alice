@@ -16,7 +16,7 @@ module Alice
 
       def set_bio(m, text)
         Alice::User.set_bio(m.user.nick, text)
-        m.action_reply("nods.")
+        m.action_reply(positive_memorization_response(m.user.nick))
       end
 
       def set_factoid(m, text)
@@ -69,7 +69,8 @@ module Alice
           "makes a mental note.",
           "grins and winks at #{nick}.",
           "nods sagely.",
-          "stares fixedly at #{nick}."
+          "nods at #{nick}.",
+          "stares fixedly at #{nick}.",
           "commits that to memory.",
           "will remember that, #{nick}.",
           "thinks that should go on the Twitters.",
