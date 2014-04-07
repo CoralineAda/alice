@@ -17,6 +17,16 @@ class Alice::User
     where(primary_nick: nick.downcase).first || where(alt_nicks: nick.downcase).first
   end
 
+  def self.update_nick(old_nick, new_nick)
+    user = User.like(m.user.nick)
+    user ||= User.like(new_nick)
+    user ||= User.new(primary_nick: old_nick)
+    user.alt_nicks << new_nick.downcase
+    user.alt_nicks << old_nick.downcase
+    user.alt_nicks = user.alt_nicks.uniq
+    user.save
+  end
+
   def self.find_or_create(nick)
     like(nick) || Alice.bot.exists?(nick) && create(primary_nick: nick.downcase)
   end
@@ -43,7 +53,7 @@ class Alice::User
   end
 
   def self.get_factoid(nick)
-    user = find_or_create(nick)  
+    return unless user = find_or_create(nick)  
     factoid = user.factoids.sample
     return factoid && factoid.formatted
   end
