@@ -32,7 +32,7 @@ class Alice::Treasure
       "treasures include",
       "stuff includes",
       "vast collection of rarities includes"
-    ]
+    ].sample
   end
 
   def transferable?
