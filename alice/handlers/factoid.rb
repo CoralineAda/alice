@@ -9,7 +9,7 @@ module Alice
       end
 
       def self.process(sender, command)
-        if subject = command.split(/[^a-zA-Z0-9\_]/).map{|name| Alice::User.like(name) }.compact.sample
+        if subject = Alice::User.from(command).sample
           if factoid = subject.factoids.sample
             Alice::Response.new(content: factoid.formatted, kind: :reply)
           end

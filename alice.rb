@@ -10,6 +10,7 @@ Mongoid.load!("config/mongoid.yml")
 
 module Alice
 
+  require_relative 'alice/handlers/bio'
   require_relative 'alice/handlers/factoid'
   require_relative 'alice/handlers/greeting'
   require_relative 'alice/handlers/twitter'
