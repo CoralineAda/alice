@@ -21,12 +21,14 @@ module Alice
       end
 
       def treasure(m, what, who)
+        return if what == 'forge'
         return unless treasure = Alice::Treasure.where(name: what.downcase).last
         message = treasure.transfer_from(m.user.nick).to(who).message
         m.reply(message)
       end
 
-      def find_treasure(m)
+      def find_treasure(m, what)
+        return if what == 'forge'
         return unless treasure = Alice::Treasure.where(name: what.downcase).last
         return unless treasure.user
         m.reply("#{treasure.owner} has had the #{treasure.name} for #{treasure.elapsed_time}.")
