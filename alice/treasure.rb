@@ -25,7 +25,7 @@ class Alice::Treasure
     treasure.save
   end
 
-  def self.collection_name
+  def self.container
     [
       "worldy possessions include",
       "pockets contain",
