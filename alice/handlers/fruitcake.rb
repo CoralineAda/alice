@@ -8,8 +8,8 @@ module Alice
 
       include Cinch::Plugin
 
-      match /\!fruitcake$/, method: :find_fruitcake, use_prefix: false
-      match /\!fruitcake (.+)/, method: :fruitcake, use_prefix: false
+      match /^\!fruitcake$/, method: :find_fruitcake, use_prefix: false
+      match /^\!fruitcake (.+)/, method: :fruitcake, use_prefix: false
 
       def fruitcake(m, who)
         message = Alice::Fruitcake.transfer.from(m.user.nick).to(who).message
