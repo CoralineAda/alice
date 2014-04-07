@@ -78,7 +78,7 @@ class Alice::User
   end
 
   def recently_stole?
-    self.last_theft ||= DateTime.now
+    self.last_theft ||= DateTime.now - 1.day
     self.last_theft >= DateTime.now - 1.hour
   end
 
@@ -103,7 +103,7 @@ class Alice::User
     end  
     update_thefts
     if rand(10) == 1
-      thief.steal(what).from(whom)
+      treasure.user = self && treasure.save
       return "watches in awe as #{m.formatted_name} steals the #{treasure.name} from #{treasure.owner}!"
     else
       return "sees #{formatted_name} try and fail to snatch the #{treasure.name} from #{treasure.owner}."
