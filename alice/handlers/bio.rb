@@ -11,7 +11,7 @@ module Alice
       match /^\!bio (.+)/, method: :set_bio, use_prefix: false
       match /^\!fact (.+)/, method: :set_factoid, use_prefix: false
       match /^\!twitter (.+)/, method: :set_twitter, use_prefix: false
-      match /!facts/, method: :random_fact, use_prefix: false
+      match /!fact[s]?$/, method: :random_fact, use_prefix: false
       match /^who[\'s|s| is]+ ([A-Za-z0-9\_]+)[!|.|\?]?$/i, method: :get_bio, use_prefix: false
       match /^tell me .+?([A-Za-z0-9\_]+)[!|.|\?]?$/i, method: :get_factoid, use_prefix: false
       match /^who[\'s|s| is]+ ([A-Za-z0-9\_]+) on twitter[!|.|\?]?$/i, method: :get_twitter, use_prefix: false
