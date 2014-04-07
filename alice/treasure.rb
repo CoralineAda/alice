@@ -1,4 +1,4 @@
-class Alice::treasure
+class Alice::Treasure
 
   include Mongoid::Document
   include Mongoid::Timestamps
