@@ -11,9 +11,9 @@ module Alice
 
     attr_accessor :message
 
-    def self.parse(message)
+    def self.parse(nick, message)
       return unless command = fuzzy_find(message)
-      eval(command.handler_class).process('bob', message)
+      eval(command.handler_class).process(nick, message)
     end
 
     def self.fuzzy_find(message)
