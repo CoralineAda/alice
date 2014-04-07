@@ -15,6 +15,12 @@ class Alice::User
     all.sample
   end
 
+  def inventory
+    treasure_names = ["empty pockets", "nothing", "no treasures", "nada"].sample unless self.treasures.count > 0
+    treasure_names ||= self.treasures.map(&:name).to_sentence
+    "#{self.primary_nick.capitalize} currently has #{treasure_names}."
+  end
+
   def self.from(string)
     string.split(/[^a-zA-Z0-9\_]/).map{|name| Alice::User.like(name) }.compact || []
   end

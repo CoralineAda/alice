@@ -11,6 +11,13 @@ module Alice
       match /^\!(.+) (.+)/, method: :treasure, use_prefix: false
       match /^\!forge (.+)/, method: :forge, use_prefix: false
       match /^\!steal (.+)/, method: :steal, use_prefix: false
+      match /^\!inventory/, method: :inventory, use_prefix: false
+
+      def inventory(m)
+        if user = User.find_or_create(m.user.nick)
+          m.reply(user.inventory)
+        end
+      end
 
       def forge(m, what)
         unless m.channel.ops.map(&:nick).include?(m.user.nick)
