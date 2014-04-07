@@ -18,7 +18,7 @@ class Alice::User
 
   def inventory
     treasure_names = ["empty pockets", "nothing", "no treasures", "nada"].sample unless self.treasures.count > 0
-    treasure_names ||= self.treasures.map{|t| "the #{t.name}"}.to_sentence
+    treasure_names ||= self.treasures.map{|t| "the #{t.name}"}.to_sentence.gsub('the the', 'the')
     "#{self.primary_nick.capitalize}'s #{Alice::Treasure.container}: #{treasure_names}."
   end
 
