@@ -16,6 +16,8 @@ module Alice
 
       def set_bio(m, text)
         return if text == m.user.nick
+        text = text.gsub(/^#{m.user.nick}/i, '')
+        return unless text.present?
         Alice::User.set_bio(m.user.nick, text) 
         m.action_reply(positive_memorization_response(m.user.nick))
       end
