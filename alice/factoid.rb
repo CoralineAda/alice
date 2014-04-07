@@ -11,6 +11,10 @@ class Alice::Factoid
     user.get_factoid
   end
 
+  def self.random
+    Alice::Factoid.random
+  end
+
   def sanitized
     sanitized = self.text
     sanitized = sanitized.gsub(/^I /i, '')
