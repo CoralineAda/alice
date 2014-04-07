@@ -19,6 +19,8 @@ GEM
     moped (1.5.2)
     multi_json (1.9.2)
     origin (1.1.0)
+    poro_plus (1.0.2)
+    ruby-stemmer (0.9.3)
     tzinfo (0.3.39)
 
 PLATFORMS
@@ -28,3 +30,5 @@ DEPENDENCIES
   cinch
   dotenv
   mongoid (~> 3.1.6)
+  poro_plus
+  ruby-stemmer (>= 0.8.3)
