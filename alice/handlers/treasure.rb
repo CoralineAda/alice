@@ -15,7 +15,7 @@ module Alice
 
       def forge(m, what)
         unless m.channel.ops.map(&:nick).include?(m.user.nick)
-          m.repy("You're not the boss of me, #{m.user.nick}.")
+          m.reply("You're not the boss of me, #{m.user.nick}.")
           return
         end
         if treasure = Alice::Treasure.where(name: what.downcase).last
