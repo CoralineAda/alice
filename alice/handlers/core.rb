@@ -13,7 +13,7 @@ module Alice
       match /\!pants/, method: :pants, use_prefix: false
       match /\!help/, method: :help, use_prefix: false
       match /do (.+)/, method: :do, use_prefix: true
-      match /say (.+)/, method: :do, use_prefix: true
+      match /say (.+)/, method: :say, use_prefix: true
       listen_to :nick, method: :update_nick
 
       def greet(m)
@@ -29,11 +29,11 @@ module Alice
       end
 
       def do(m, action)
-        m.oper && m.action_reply action
+        m.oper && m.action_reply(action)
       end
 
       def say(m, phrase)
-        m.oper && m.reply phrase
+        m.oper && m.reply(phrase)
       end
 
       def help(m)
