@@ -52,7 +52,7 @@ class Alice::Treasure
       self.message = "#{recipient.primary_nick} does not accept gifts."
     end
     if transferable?
-      self.message = "#recipient.primary_nick.capitalize} now possesses the #{self.name}."
+      self.message = "#{recipient.primary_nick.capitalize} now possesses the #{self.name}."
       self.user = recipient
       self.save
     end
