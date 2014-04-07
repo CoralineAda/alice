@@ -14,7 +14,7 @@ module Alice
       match /\!help/, method: :help, use_prefix: false
       match /\<\.\</, method: :shifty_eyes, use_prefix: false
       match /\>\.\>/, method: :shifty_eyes, use_prefix: false
-
+    
       listen_to :nick, method: :update_nick
 
       def greet(m)

@@ -12,7 +12,6 @@ module Alice
     attr_accessor :message
 
     def self.parse(message)
-      return unless message =~ / alice/i || message =~ /^alice/i
       return unless command = fuzzy_find(message)
       eval(command.handler_class).process('bob', message)
     end

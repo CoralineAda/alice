@@ -15,6 +15,7 @@ module Alice
   require_relative 'alice/handlers/bio'
   require_relative 'alice/handlers/core'
   require_relative 'alice/handlers/treasure'
+  require_relative 'alice/handlers/nlp'
   
   require_relative 'alice/parser/language_helper'
   require_relative 'alice/parser/ngram'
