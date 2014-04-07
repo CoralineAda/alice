@@ -26,7 +26,11 @@ module Alice
           "I really can't talk about that.",
           "I wish I knew more about that.",
           "All I know is that the Dude abides.",
-          "We don't talk about that here."
+          "We don't talk about that here.",
+          "No.",
+          "I will not.",
+          "I'm an enigma, remember?",
+          "#nopenopenope"
         ].sample
       end
 
