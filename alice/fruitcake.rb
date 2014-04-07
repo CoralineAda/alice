@@ -28,6 +28,7 @@ class Alice::Fruitcake
       self.user = recipient
       self.save
     end
+    self
   end
   
   def owner
