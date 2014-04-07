@@ -21,7 +21,7 @@ module Alice
 
       def cookie(m, who)
         return unless Alice::User.find_or_create(who)
-        m.action_reply "gives #{who} a cookie."
+        m.action_reply "tempts #{who} with a cookie."
       end
 
       def pants(m)
