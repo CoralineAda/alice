@@ -12,7 +12,7 @@ module Alice
           config.channels = ["##lonelyhackersclub", "##alicebottest"]
           config.nick = "AliceBot"
           config.user = "AliceBot"
-          config.plugins.plugins = [Core, Bio]
+          config.plugins.plugins = [Handlers::Core, Handlers::Bio, Handlers::Fruitcake]
           config.password = ENV['USER_PASS']
           config.messages_per_second = 1
         end
@@ -22,6 +22,10 @@ module Alice
     def start
       self.bot.start && self.bot
     end 
+
+    def exists?(nick)
+      self.bot.user_list.find(nick)
+    end
 
     def stop
       self.bot.stop
