@@ -12,11 +12,11 @@ module Alice
       match /^\!fact (.+)/, method: :set_factoid, use_prefix: false
       match /^\!twitter (.+)/, method: :set_twitter, use_prefix: false
       match /!facts/, method: :random_fact, use_prefix: false
-      match /^who is ([A-Za-z0-9\_]+)[!|.|\?]?$/i, method: :get_bio, use_prefix: false
+      match /^who[\'s|s| is]+ ([A-Za-z0-9\_]+)[!|.|\?]?$/i, method: :get_bio, use_prefix: false
       match /^tell me .+?([A-Za-z0-9\_]+)[!|.|\?]?$/i, method: :get_factoid, use_prefix: false
       match /^who[\'s|s| is]+ ([A-Za-z0-9\_]+) on twitter[!|.|\?]?$/i, method: :get_twitter, use_prefix: false
-      match /^what is ([A-Za-z0-9\_]+)'s twitter handle[!|.|\?]?$/i, method: :get_twitter, use_prefix: false
-      match /^what is ([A-Za-z0-9\_]+)'s twitter[!|.|\?]?$/i, method: :get_twitter, use_prefix: false
+      match /^what[\'s|s| is]+ ([A-Za-z0-9\_]+)'s twitter handle[!|.|\?]?$/i, method: :get_twitter, use_prefix: false
+      match /^what[\'s|s| is]+ ([A-Za-z0-9\_]+)'s twitter[!|.|\?]?$/i, method: :get_twitter, use_prefix: false
 
       def set_bio(m, text)
         Alice::User.set_bio(m.user.nick, text)
@@ -31,6 +31,7 @@ module Alice
       end
 
       def set_factoid(m, text)
+        return unless text.size > 0
         if text.split(' ').count > 1
           Alice::User.set_factoid(m.user.nick, text)
           m.action_reply("makes a note.")
