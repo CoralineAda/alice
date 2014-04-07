@@ -17,13 +17,14 @@ class Alice::Fruitcake
   def from(name)
     return self unless self.user
     return self.user.has_nick?(name) && self
-    message = "Only #{user.primary_nick.titleize} can pass the sacred fruitcake!" 
+    self.message = "Only #{user.primary_nick.titleize} can pass the sacred fruitcake!" 
     self
   end
 
   def to(name)
-    message = "You can't pass fruitcakes to imaginary friends." unless recipient = Alice::User.find_or_create(name)
+    self.message = "You can't pass fruitcakes to imaginary friends." unless recipient = Alice::User.find_or_create(name)
     if transferable?
+      self.message = "#{owner} passes the fruitcake to #{recipient.primary_nick.capitalize}."
       self.user = recipient
       self.save
     end
