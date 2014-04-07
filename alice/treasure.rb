@@ -1,41 +1,39 @@
-class Alice::Fruitcake
+class Alice::treasure
 
   include Mongoid::Document
   include Mongoid::Timestamps
+
+  field :name
 
   attr_accessor :message
 
   belongs_to :user
 
-  def self.transfer
-    first || create(user: User.random)
-  end
-
   def self.owner
-    fruitcake = first || create(user: User.random)
-    fruitcake.owner
+    treasure = first || create(user: User.random)
+    treasure.owner
   end
 
   def self.owner=(nick)
-    fruitcake = first || create(user: User.random)
-    fruitcake.user = Alice::User.like(nick)
-    fruitcake.save
+    treasure = first || create(user: User.random)
+    treasure.user = Alice::User.like(nick)
+    treasure.save
   end
 
   def transferable?
     self.message.nil?
   end
 
-  def from(name)
+  def transfer_from(name)
     return self if self.user && self.user.has_nick?(name)
-    self.message = "Only #{user.primary_nick.titleize} can pass the sacred fruitcake!" 
+    self.message = "Only #{user.primary_nick.titleize} can pass the sacred treasure!" 
     self
   end
 
   def to(name)
-    self.message = "You can't pass fruitcakes to imaginary friends." unless recipient = Alice::User.find_or_create(name)
+    self.message = "You can't pass #{name.pluralize} to imaginary friends." unless recipient = Alice::User.find_or_create(name)
     if transferable?
-      self.message = "#{owner} passes the fruitcake to #{recipient.primary_nick.capitalize}."
+      self.message = "#{owner} passes the #{name} to #{recipient.primary_nick.capitalize}."
       self.user = recipient
       self.save
     end
