@@ -20,6 +20,7 @@ module Alice
       end
 
       def cookie(m, who)
+        return unless Alice::User.find_or_create(who)
         m.action_reply "gives #{who} a cookie."
       end
 
