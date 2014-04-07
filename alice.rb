@@ -10,24 +10,26 @@ Mongoid.load!("config/mongoid.yml")
 
 module Alice
 
-  require_relative 'alice/bot'
+  require_relative 'alice/handlers/factoid'
+  require_relative 'alice/handlers/greeting'
+  require_relative 'alice/handlers/twitter'
   
-  require_relative 'alice/handlers/bio'
-  require_relative 'alice/handlers/core'
-  require_relative 'alice/handlers/treasure'
-  require_relative 'alice/handlers/nlp'
-  
+  require_relative 'alice/listeners/bio'
+  require_relative 'alice/listeners/core'
+  require_relative 'alice/listeners/nlp'
+  require_relative 'alice/listeners/treasure'
+
   require_relative 'alice/parser/language_helper'
   require_relative 'alice/parser/ngram'
   require_relative 'alice/parser/ngram_factory'
 
+  require_relative 'alice/bot'
   require_relative 'alice/command'
-  require_relative 'alice/response'
-  require_relative 'alice/user'
   require_relative 'alice/factoid'
-  require_relative 'alice/greeting'
+  require_relative 'alice/response'
   require_relative 'alice/treasure'
-
+  require_relative 'alice/user'
+  
   def self.start
     @@bot = Alice::Bot.new
     @@bot.start

@@ -6,6 +6,10 @@ module Alice
 
       attr_accessor :options, :target
      
+      def self.omnigrams_from(words)
+        new(words.downcase.split(/[^a-zA-Z0-9\_\-]/).uniq.join(' ')).omnigrams.to_a.flatten.uniq
+      end
+
       def initialize(target)
         @target = target
       end
