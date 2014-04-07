@@ -12,11 +12,18 @@ module Alice
       match /\!cookie (.+)/, method: :cookie, use_prefix: false
       match /\!pants/, method: :pants, use_prefix: false
       match /\!help/, method: :help, use_prefix: false
-      
+      match /\<\.\</, method: :shifty_eyes, use_prefix: false
+      match /\>\.\>/, method: :shifty_eyes, use_prefix: false
+
       listen_to :nick, method: :update_nick
 
       def greet(m)
         m.action_reply(Greeting.random(m.user.nick))
+      end
+
+      def shifty_eyes
+        return unless [1,2].sample == 1
+        m.action_reply "thinks #{who} looks pretty shifty."
       end
 
       def cookie(m, who)
