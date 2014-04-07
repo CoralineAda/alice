@@ -12,7 +12,6 @@ module Alice
 
       def process(m, message)
         response = Alice::Command.parse(message) 
-        p response
         p message
         response && response.kind == :reply && m.reply(response.content)
         response && response.kind == :action && m.action_reply(response.content)
