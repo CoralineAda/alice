@@ -11,6 +11,17 @@ class Alice::Fruitcake
     first || create(user: User.random)
   end
 
+  def self.owner
+    fruitcake = first || create(user: User.random)
+    fruitcake.owner
+  end
+
+  def self.owner=(nick)
+    fruitcake = first || create(user: User.random)
+    fruitcake.user = Alice::User.like(nick)
+    fruitcake.save
+  end
+
   def transferable?
     self.message.nil?
   end
