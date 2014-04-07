@@ -13,8 +13,39 @@ module Alice
       match /\!help/, method: :help, use_prefix: false
       match /\<\.\</, method: :shifty_eyes, use_prefix: false
       match /\>\.\>/, method: :shifty_eyes, use_prefix: false
+      match /^ha|^bwa|^lol/i, method: :laugh, use_prefix: false
+      match /^blech|^blegh|^ugh|frown|sigh/i, method: :frown, use_prefix: false
 
       listen_to :nick, method: :update_nick
+
+      def laugh(m)
+        return unless rand(5) == 1
+        name = m.user.nick
+        sound = [
+          "laughs along with #{name}.",
+          "grins at #{name}.",
+          "chuckles.",
+          "cackles!",
+          "smiles."
+        ].sample
+        m.action_reply(sound)
+      end
+
+      def frown(m)
+        return unless rand(5) == 1
+        name = m.user.nick
+        sound = [
+          "frowns.",
+          "agrees with #{name}.",
+          "sides with #{name}.",
+          "offers chocolate.",
+          "offers alcohol.",
+          "shakes her head.",
+          "sighs.",
+          "lets out a long sigh."
+        ].sample
+        m.action_reply(sound)
+      end
 
       def shifty_eyes
         return unless [1,2].sample == 1
