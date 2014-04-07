@@ -23,7 +23,8 @@ module Alice
       def get_bio(m, who)
         return unless user = Alice::User.like(who)
         return unless bio = Alice::User.get_bio(who)
-        m.reply "#{user.formatted_name} is #{bio}"
+        name = who.capitalize == user.formatted_name ? user.formatted_name : "#{user.formatted_name}, aka #{who.capitalize},"
+        m.reply "#{name} is #{bio}"
       end
 
       def set_factoid(m, text)
