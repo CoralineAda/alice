@@ -52,9 +52,7 @@ class Alice::User
   def self.get_bio(nick)
     user = find_or_create(nick)    
     return unless bio = user.bio
-    bio = bio.gsub(/^is/, '')
-    bio = bio.gsub(/^([a-zA-Z0-9\_]+) is/, '')
-    bio
+    formatted_bio
   end
 
   def self.set_factoid(nick, factoid)
@@ -96,6 +94,13 @@ class Alice::User
     treasure.user = [User.all.to_a - [self]].sample
     treasure.save
     treasure
+  end
+
+  def formatted_bio
+    return unless self.bio.present?
+    formatted = bio.gsub(/^is/, '')
+    formatted = formatted.gsub(/^([a-zA-Z0-9\_]+) is/, '')
+    "#{self.primary_nick.capitalize} is #{formatted}".gsub("  ", " ")
   end
 
   def try_stealing(what)
