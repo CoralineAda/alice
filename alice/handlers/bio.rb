@@ -14,6 +14,9 @@ module Alice
       match /!facts/, method: :random_fact, use_prefix: false
       match /^who is ([A-Za-z0-9\_]+)[!|.|\?]?$/i, method: :get_bio, use_prefix: false
       match /^tell me .+?([A-Za-z0-9\_]+)[!|.|\?]?$/i, method: :get_factoid, use_prefix: false
+      match /^who is ([A-Za-z0-9\_]+) on twitter[!|.|\?]?$/i, method: :get_twitter, use_prefix: false
+      match /^what is ([A-Za-z0-9\_]+)'s twitter handle[!|.|\?]?$/i, method: :get_twitter, use_prefix: false
+      match /^what is ([A-Za-z0-9\_]+)'s twitter[!|.|\?]?$/i, method: :get_twitter, use_prefix: false
 
       def set_bio(m, text)
         Alice::User.set_bio(m.user.nick, text)
@@ -38,12 +41,17 @@ module Alice
 
       def set_twitter(m, handle)
         Alice::User.set_twitter(m.user.nick, handle)
-        m.action_reply("follows.")
+        m.action_reply("considers following #{handle}.")
       end
 
       def get_factoid(m, who)
         factoid = Alice::User.get_factoid(who) 
         factoid && m.reply(factoid)
+      end
+
+      def get_twitter(m, who)
+        user = Alice::User.like(who)
+        user && user.twitter_handle && m.reply("#{who} is #{user.twitter_handle} on Twitter (#{user.twitter_url})")
       end
 
       def random_fact(m)
