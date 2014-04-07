@@ -13,16 +13,24 @@ module Alice
 
     def self.parse(nick, message)
       return unless command = fuzzy_find(message)
-      eval(command.handler_class).process(nick, message)
+      command.klass.process(nick, message)
     end
 
     def self.fuzzy_find(message)
-      message = message.gsub(/[^a-zA-Z0-9\/\\\s]/, '')
-      message = message.downcase
+      message = message.downcase.gsub(/[^a-zA-Z0-9\/\\\s]/, '')
       indicators = Alice::Parser::NgramFactory.new(message.split.uniq.join(' ')).omnigrams.to_a.flatten.uniq
       matches = Alice::Command.in(indicators: indicators)
       return unless matches.present?
-      matches.max{|command| (command.indicators | indicators).count }
+      command = matches.max{|command| (command.indicators | indicators).count }
+      [indicators & command.indicators].flatten.count >= command.minimum_indicators && command || nil
+    end
+
+    def klass
+      eval(self.handler_class)
+    end
+
+    def minimum_indicators
+      klass.respond_to?(:minimum_indicators) && klass.minimum_indicators || 1
     end
 
     def terms=(words)
