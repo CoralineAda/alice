@@ -279,7 +279,7 @@ class Alice::Place
       "brewery",
       "cavern",
       "cave",
-      "randoml generated room",
+      "randomly generated room",
       "cul-de-sac",
       "tunnel",
       "room",
@@ -336,7 +336,8 @@ class Alice::Place
   end
 
   def contents
-    self.treasures.present? || self.has_bow? && "Contents: #{self.treasures.map(&:name).to_sentence}." || ""
+    return unless self.treasures.present?
+    "Contents: #{self.treasures.map(&:name).to_sentence}."
   end
 
 end
