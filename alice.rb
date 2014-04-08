@@ -20,6 +20,7 @@ module Alice
   require_relative 'alice/handlers/treasure_giver'
   
   require_relative 'alice/listeners/setter'
+  require_relative 'alice/listeners/beverage'
   require_relative 'alice/listeners/core'
   require_relative 'alice/listeners/nlp'
   require_relative 'alice/listeners/treasure'
@@ -29,6 +30,7 @@ module Alice
   require_relative 'alice/parser/ngram'
   require_relative 'alice/parser/ngram_factory'
 
+  require_relative 'alice/beverage'
   require_relative 'alice/bot'
   require_relative 'alice/command'
   require_relative 'alice/factoid'
