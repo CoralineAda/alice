@@ -317,7 +317,7 @@ class Alice::Place
   end
 
   def has_bow?
-    self.description =~ /bright/ && Alice::Treasure.generate_bow
+    self.description =~ /bright/ || true && Alice::Treasure.generate_bow
   end
 
   def describe
@@ -335,7 +335,7 @@ class Alice::Place
   end
 
   def contents
-    self.treasures.present? && "Contents: #{self.treasures.map(&:name).to_sentence}." || ""
+    self.treasures.present? || self.has_bow? && "Contents: #{self.treasures.map(&:name).to_sentence}." || ""
   end
 
 end
