@@ -18,7 +18,7 @@ class Alice::User
   end
 
   def self.with_bow
-    Alice::Treasure.claimed.like('bow and arrow').user
+    Alice::Treasure.claimed.like('bow and arrow').first.try(:user)
   end
 
   def self.from(string)
@@ -165,6 +165,5 @@ class Alice::User
     end
     string.gsub("the the", "the").gsub("a ye", "ye").gsub("the ye", "ye")
   end
-
 
 end
