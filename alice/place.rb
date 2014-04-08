@@ -207,7 +207,7 @@ class Alice::Place
       "without any windows",
       "with tall windows",
       "shaped like a pentagon",
-      "shaped like an octogon",
+      "shaped like an octagon",
       "reminiscent of a hospital room",
       "with a hospital bed",
       "that is definitely not trapped",

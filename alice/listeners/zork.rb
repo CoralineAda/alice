@@ -132,7 +132,7 @@ module Alice
       end
 
       def move_random(m)
-        m.reply("Nothing happens.") unless rand(10) == 1
+        m.reply("Nothing happens.") and return unless rand(10) == 1
         place = Alice::Place.random 
         message = "When the room stops spinning... #{Alice::Place.last.describe}"
         m.reply(message)
