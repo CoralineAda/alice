@@ -78,10 +78,10 @@ module Alice
       end
 
       def forge(m, what)
-        unless m.channel.ops.map(&:nick).include?(m.user.nick) || rand(5) == 1
-          m.reply("You're not the boss of me, #{m.user.nick}.")
-          return
-        end
+        # unless m.channel.ops.map(&:nick).include?(m.user.nick) || rand(3) == 1
+        #   m.reply("You're not the boss of me, #{m.user.nick}.")
+        #   return
+        # end
         if treasure = Alice::Treasure.where(name: what.downcase).last
           m.reply("Everyone knows that that's a singleton.")
           return
