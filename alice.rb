@@ -15,9 +15,11 @@ module Alice
   require_relative 'alice/handlers/greeting'
   require_relative 'alice/handlers/twitter'
   require_relative 'alice/handlers/oh'
+  require_relative 'alice/handlers/beverage_finder'
   require_relative 'alice/handlers/treasure_finder'
   require_relative 'alice/handlers/treasure_lister'
   require_relative 'alice/handlers/treasure_giver'
+  require_relative 'alice/handlers/inventory'
   
   require_relative 'alice/listeners/setter'
   require_relative 'alice/listeners/beverage'

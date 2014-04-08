@@ -11,13 +11,18 @@ class Alice::Place
   
   DIRECTIONS = ['north', 'south', 'east', 'west']
 
+  def self.reset_all!
+    Alice::Treasure.reset_hidden!
+    delete_all
+  end
+
   def self.last
     where(:was_last => true).last || all.sample || generate!
   end
 
   def self.go(direction)
     return false unless last.exits.include?(direction.downcase)
-    move_to(direction)
+    move_to(direction) && true
   end
 
   def self.move_to(direction)
@@ -52,8 +57,6 @@ class Alice::Place
 
   def self.random
     room = all.sample || generate!
-    set_last_room(room)
-    room.description
   end
 
   def self.set_last_room(room)
@@ -77,6 +80,7 @@ class Alice::Place
   end
 
   def self.random_description
+    return "It is pitch black. You are likely to be eaten by a grue." if Alice::Place.count == 0
     [adjective, type, description, '.'].join(' ').gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
   end
 
@@ -244,12 +248,30 @@ class Alice::Place
     Alice::Place.set_last_room(self)
   end
 
+  def has_grue?
+    self.description =~ /dark/ && rand(10) == 1
+  end
+
+  def has_bow?
+    self.description =~ /bright/ && Alice::Treasure.generate_bow
+  end
+
   def describe
-    "You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}.".gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
+    if has_grue?
+      if user = Alice::User.with_bow 
+        "#{user.primary_nick} shoots an arrow and kills the grue!"
+      else
+        "You have been eaten by a grue!"
+      end
+    elsif self.x == 0 && self.y == 0
+      "#{self.description}. #{contents} Exits: #{exits.to_sentence}.".gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
+    else
+      "You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}.".gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
+    end
   end
 
   def contents
-    self.treasures.present? && self.treasures.to_sentence || ""
+    self.treasures.present? && "Contents: #{self.treasures.map(&:name).to_sentence}." || ""
   end
 
 end

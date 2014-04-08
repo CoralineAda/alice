@@ -5,6 +5,7 @@ class Alice::Treasure
 
   field :name
   field :is_cursed, type: Boolean
+  field :is_hidden, type: Boolean
 
   validates_uniqueness_of :name
   
@@ -13,8 +14,22 @@ class Alice::Treasure
   belongs_to :user
   belongs_to :place
 
+  def self.reset_hidden!
+    hidden.map(&:delete)
+    Alice::Treasure.claimed.like('bow and arrow').delete
+  end
+
+  def self.generate_bow
+    descriptor = ["wooden", "golden", "silver", "bronze", "platinum", "titanium"].sample
+    Alice::Treasure.create(name: "#{descriptor} bow and arrow", place: Alice::Place.last)
+  end
+
   def self.unclaimed
     where(user_id: nil, place_id: nil)
+  end
+
+  def self.hidden
+    excludes(place_id: nil)
   end
 
   def self.claimed
@@ -54,6 +69,14 @@ class Alice::Treasure
     ].sample
   end
 
+  def hide(nick)
+    self.place = Alice::Place.random
+    self.user = nil
+    self.is_hidden = true
+    self.save
+    hide_message(nick)
+  end
+
   def drop
     self.place = Alice::Place.last
     self.user = nil
@@ -65,17 +88,38 @@ class Alice::Treasure
     self.update_attribute(:is_cursed, rand(5) == 1 ? true : false)
   end
 
+  def hide_message(nick)
+    [
+      "#{nick} places the #{self.name} somewhere deep in the labyrinth.",
+      "#{nick} hides the #{self.name} somewhere deep in the labyrinth.",
+      "#{nick} has hidden the #{self.name}.",
+      "#{nick} throws the #{self.name} into the dungeon.",
+      "#{nick} hides the #{self.name}.",
+      "The #{self.name} is now hidden in the depths of the labyrinth.",
+      "Who will be the first to find the #{self.name}?"
+    ].sample.gsub("the the", "the").gsub("the ye", "ye")
+  end
+
+  def pickup_message(nick)
+    [
+      "#{nick.capitalize} pockets the #{self.name}.",
+      "The #{self.name} now belongs to #{nick}!",
+      "#{nick.capitalize} now has the #{self.name}.",
+      "Now #{nick}'s #{Alice::Treasure.container} the #{self.name}."
+    ].sample.gsub(/the the/i, 'the').gsub(/the ye/i, 'ye')
+  end
+
   def drop_message(nick)
     [
-      "#{self.name} falls clattering to the floor.",
-      "#{self.name} is now resting on the ground.",
+      "The #{self.name} falls clattering to the floor.",
+      "The #{self.name} is now resting on the ground.",
       "#{nick} drops the #{self.name}",
       "#{nick} discards the #{self.name}",
       "#{nick} drops the #{self.name} on the ground.",
       "#{nick} quietly places the #{self.name} on the floor.",
       "#{nick} puts the #{self.name} down.",
       "#{nick} gently puts the #{self.name} down."
-    ].sample
+    ].sample.gsub(/the the/i, 'the').gsub(/the ye/i, 'ye')
   end
 
   def transferable?

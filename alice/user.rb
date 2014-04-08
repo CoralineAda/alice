@@ -17,10 +17,8 @@ class Alice::User
     all.sample
   end
 
-  def inventory
-    treasure_names = ["empty pockets", "nothing", "no treasures", "nada"].sample unless self.treasures.count > 0
-    treasure_names ||= self.treasures.map{|t| "the #{t.name}"}.to_sentence.gsub('the the', 'the')
-    "#{self.primary_nick.capitalize}'s #{Alice::Treasure.container}: #{treasure_names}."
+  def self.with_bow
+    Alice::Treasure.claimed.like('bow and arrow').user
   end
 
   def self.from(string)
@@ -38,6 +36,11 @@ class Alice::User
     user.alt_nicks << old_nick.downcase
     user.alt_nicks = user.alt_nicks.uniq
     user.save
+  end
+
+  def self.inventory_for(nick)
+    user = like(nick)
+    user && user.inventory
   end
 
   def self.find_or_create(nick)
@@ -136,5 +139,32 @@ class Alice::User
     return unless self.twitter_handle
     "https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
   end
+
+  def beverage_names
+    if self.beverages.count == 0
+      @beverage_names ||= ["not a drop to drink", "nothing, not a single drink", "no drinks", "nothing fit to drink"].sample 
+    else
+      @beverage_names ||= self.beverages.map{|t| "a #{t.name}"}.to_sentence.gsub('a the', 'a')
+    end
+  end
+
+  def drinks
+    if self.beverages.count == 0
+      "#{self.primary_nick.capitalize} has #{beverage_names}." 
+    else
+      "#{self.primary_nick.capitalize}'s #{Alice::Beverage.container} #{beverage_names}." 
+    end
+  end
+
+  def inventory
+    treasure_names = ["empty pockets", "nothing", "no treasures", "nada"].sample unless self.treasures.count > 0
+    treasure_names ||= self.treasures.map{|t| "the #{t.name}"}.to_sentence.gsub('the the', 'the')
+    string = "#{self.primary_nick.capitalize}'s #{Alice::Treasure.container} #{treasure_names}."
+    if self.beverages.present?
+      string << " #{self.primary_nick.capitalize} also has a #{Alice::Beverage.container} #{beverage_names}." 
+    end
+    string.gsub("the the", "the").gsub("a ye", "ye").gsub("the ye", "ye")
+  end
+
 
 end
