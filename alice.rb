@@ -17,12 +17,13 @@ module Alice
   require_relative 'alice/handlers/oh'
   require_relative 'alice/handlers/treasure_finder'
   require_relative 'alice/handlers/treasure_lister'
+  require_relative 'alice/handlers/treasure_giver'
   
   require_relative 'alice/listeners/setter'
   require_relative 'alice/listeners/core'
   require_relative 'alice/listeners/nlp'
-  require_relative 'alice/listeners/zork'
   require_relative 'alice/listeners/treasure'
+  require_relative 'alice/listeners/zork'
 
   require_relative 'alice/parser/language_helper'
   require_relative 'alice/parser/ngram'
