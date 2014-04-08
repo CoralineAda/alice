@@ -42,6 +42,9 @@ module Alice
         return if verb == 'pick up'
         return if verb == 'reset'
         return if verb == 'forge'
+        return if verb == 'destroy'
+        return if verb == 'drink'
+        return if verb == 'brew'
 
         noun = command.split[-1..1].join(' ')
 
@@ -69,15 +72,6 @@ module Alice
             "Next thing you know you'll be asking to #{verb} the grue!",
             "I didn't peg you for a '#{noun}' person.",
             "Do you always go around #{verb}ing things?"
-          ].sample
-        else
-          message ||= [
-            "There's no #{noun} here for you to #{verb}.",
-            "Are you hallucinating #{noun.pluralize} now?",
-            "Wow, you seem to see #{noun.pluralize} everywhere, don't you?",
-            "Let's not.",
-            "That's not technically possible, since there is no #{noun}.",
-            "I'm not sure that you could #{verb} a #{noun} even if it WERE in the room. Which it is not."
           ].sample
         end
         m.reply(message)
