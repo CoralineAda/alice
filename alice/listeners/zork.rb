@@ -46,12 +46,14 @@ module Alice
         return if verb == 'drink'
         return if verb == 'brew'
 
-        noun = command.split[-1..1].join(' ')
+        noun = command.split[1..-1].join(' ')
 
         if Alice::Place.last.description.include?(noun) && user = Alice::User.from(noun).last
           message = "What would #{user.primary_nick} have to say about that?"
         end
 
+        return if noun.empty?
+        
         if Alice::Place.last.description.include?(noun)
           message ||= [
             "You can't go around #{verb}ing #{noun}s all willy-nilly.",
