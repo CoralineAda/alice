@@ -151,6 +151,7 @@ class Alice::Place
       "an immense",
       "a dark",
       "a sunny",
+      "a cheery",
       "a large",
       "a long",
       "a high-ceilinged",
@@ -317,7 +318,7 @@ class Alice::Place
   end
 
   def has_bow?
-    self.description =~ /bright/ || true && Alice::Treasure.generate_bow
+    self.description =~ /bright|cheery|sunny|green/ && Alice::Treasure.generate_bow
   end
 
   def describe
