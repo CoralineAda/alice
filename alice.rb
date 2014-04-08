@@ -37,6 +37,7 @@ module Alice
   require_relative 'alice/response'
   require_relative 'alice/treasure'
   require_relative 'alice/user'
+  require_relative 'alice/greeting'
   require_relative 'alice/oh'
   require_relative 'alice/place'  
   

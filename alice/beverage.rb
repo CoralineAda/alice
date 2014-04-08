@@ -5,6 +5,8 @@ class Alice::Beverage
 
   field :name
 
+  validates_uniqueness_of :name
+
   attr_accessor :message
 
   belongs_to :user
@@ -73,14 +75,14 @@ class Alice::Beverage
     [
       "#{owner} grows bat wings and flits around the room.",
       "#{owner}'s head feel like it's deflating like a balloon. Time to get the bicycle pump!",
-      "The drink makes #{owner} feel a little dizzy.",
+      "Drinking it all makes #{owner} feel a little dizzy.",
       "#{owner}'s heart grows three sizes.",
       "#{owner} achieves clarity of thought.",
-      "The drink makes #{owner} want to contemplate the meaning of life.",
-      "The drink really sobers up #{owner}.",
-      "The drink makes #{owner} feel like burping.",
-      "The drink gives #{owner} a ton of energy.",
-      "The drink seems to drain #{owner}'s energy.",
+      "It makes #{owner} want to contemplate the meaning of life.",
+      "It really sobers up #{owner}.",
+      "It makes #{owner} feel like burping.",
+      "It gives #{owner} a ton of energy.",
+      "It seems to drain #{owner}'s energy.",
       "#{owner} turns insubstantial.",
       "#{owner}'s wounds are healed!",
       "#{owner} feels like singing!",
@@ -91,7 +93,7 @@ class Alice::Beverage
       "#{owner} gains immunity to all elephant-based spells.",
       "#{owner} feels a strong urge to move #{Alice::Place.last.exits.sample}.",
       "#{owner} hears a strange voice calling from somewhere to the #{Alice::Place.last.exits.last}.",
-      "The drink sends a shiver to go down #{owner}'s spine.",
+      "It seems to send a shiver down #{owner}'s spine.",
       "#{owner} is filled with the sudden urge to defy gravity.",
       "#{owner} tries hard not to think of flying monkeys.",
       "#{owner} has a sudden thirst for blood.",

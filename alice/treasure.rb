@@ -6,6 +6,8 @@ class Alice::Treasure
   field :name
   field :is_cursed, type: Boolean
 
+  validates_uniqueness_of :name
+  
   attr_accessor :message
 
   belongs_to :user
