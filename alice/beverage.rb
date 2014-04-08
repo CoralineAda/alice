@@ -46,7 +46,7 @@ class Alice::Beverage
   def pass_to(owner)
     if recipient = Alice::User.find_or_create(owner)
       if recipient.is_bot?
-        self.message = "#{recipient.primary_owner} does not accept drinks."
+        self.message = "#{recipient.primary_nick} does not accept drinks."
       end
       if transferable?
         self.message = "You pass the #{self.name} to #{recipient.primary_owner.capitalize}."
