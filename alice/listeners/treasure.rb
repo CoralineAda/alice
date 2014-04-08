@@ -8,14 +8,31 @@ module Alice
 
       include Cinch::Plugin
 
-      match /^\!forge (.+)/, method: :forge, use_prefix: false
-      match /^\!steal (.+)/, method: :steal, use_prefix: false
-      match /^\!inventory/, method: :inventory, use_prefix: false
-      match /^\!destroy (.+)/, method: :destroy, use_prefix: false
-      match /^\!get (.+)/, method: :get, use_prefix: false
-      match /^\!pick up (.+)/, method: :get, use_prefix: false
-      match /^\!drop (.+)/, method: :drop, use_prefix: false
-      match /^\!discard (.+)/, method: :drop, use_prefix: false
+      match /^\!forge (.+)/,    method: :forge, use_prefix: false
+      match /^\!steal (.+)/,    method: :steal, use_prefix: false
+      match /^\!inventory/,     method: :inventory, use_prefix: false
+      match /^\!destroy (.+)/,  method: :destroy, use_prefix: false
+      match /^\!get (.+)/,      method: :get, use_prefix: false
+      match /^\!pick up (.+)/,  method: :get, use_prefix: false
+      match /^\!drop (.+)/,     method: :drop, use_prefix: false
+      match /^\!discard (.+)/,  method: :drop, use_prefix: false
+      match /^\!hide (.+)/,     method: :hide, use_prefix: false
+      match /^\!examine (.+)/,  method: :inspect, use_prefix: false
+      match /^\!inspect (.+)/,  method: :inspect, use_prefix: false
+      match /^\!find (.+)/,     method: :find, use_prefix: false
+
+      def find(m, what)
+        m.reply(Alice::Handlers::TreasureFinder.process(m, what).content)
+      end
+
+      def inspect(m, what)
+        return unless treasure = Alice::Treasure.from(what).last
+        if user.treasures.include?(treasure) || Alice::Place.last.contains?(what)
+          m.action_reply(treasure.description)
+        else
+          m.reply("The #{treasure.name} is not visible to you").gsub("the the", "the").gsub("the ye", "ye")
+        end
+      end
 
       def drop(m, what)
         return unless treasure = Alice::Treasure.from(what).last
@@ -26,8 +43,9 @@ module Alice
       end
 
       def get(m, item)
+        treasure = Alice::Treasure.like(item).first
         if Alice::Place.last.contains?(item)
-          m.reply(treasure.pickup_message(m.user.nick)) && item.to(m.user.nick)
+          m.reply(treasure.pickup_message(m.user.nick)) && treasure.to(m.user.nick)
         else
           message = "You cannot get the #{item}!"
           message = message.gsub("the ye", "ye")
@@ -52,6 +70,13 @@ module Alice
         treasure.destroy
       end
 
+      def hide(m, what)
+        return unless user = User.find_or_create(m.user.nick) 
+        return unless treasure = Alice::Treasure.from(what).select{|t| t.user == user}.first
+        return unless user.treasures.include?(treasure)
+        m.reply(treasure.hide(m.user.nick))
+      end
+
       def forge(m, what)
         unless m.channel.ops.map(&:nick).include?(m.user.nick) || rand(5) == 1
           m.reply("You're not the boss of me, #{m.user.nick}.")
@@ -64,33 +89,6 @@ module Alice
         user = Alice::User.find_or_create(m.user.nick)
         Alice::Treasure.create(name: what.downcase, user: user)
         m.action_reply("forges a #{what} in the fires of Mount Doom for #{m.user.nick}.")
-      end
-
-      def brew(m, what)
-        unless m.channel.ops.map(&:nick).include?(m.user.nick) || rand(5) < 3
-          m.reply("Your attempt at brewing failed miserably.")
-          return
-        end
-        if treasure = Alice::Treasure.where(name: what.downcase).last
-          m.reply("Everyone knows that there can only be one #{what}.")
-          return
-        end
-        user = Alice::User.find_or_create(m.user.nick)
-        Alice::Treasure.create(name: what.downcase, user: user)
-        m.action_reply("looks on in wonder as #{m.user.nick} brews an impressive #{what}.")
-      end
-
-      def drink(m, what)
-        return unless user = User.find_or_create(m.user.nick) 
-        unless treasure = Alice::Treasure.from(what).last
-          m.reply("There is no such drink as a #{treasure.name}. Maybe you should brew one?")
-          return
-        end
-        unless user.treasures.include?(treasure)
-          m.reply("You don't even have the #{treasure.name}!")
-          return
-        end
-        treasure.consume
       end
 
       def steal(m, what)

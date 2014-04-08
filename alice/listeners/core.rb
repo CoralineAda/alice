@@ -14,14 +14,20 @@ module Alice
       match /\<\.\</, method: :shifty_eyes, use_prefix: false
       match /\>\.\>/, method: :shifty_eyes, use_prefix: false
       match /^ha|^bwa|^lol/i, method: :laugh, use_prefix: false
-      match /^blech|^blegh|^ugh|frown|sigh/i, method: :frown, use_prefix: false
+      match /^grr|^arg|^blech|^blegh|^ugh|frown|sigh/i, method: :frown, use_prefix: false
+      match /to rule them all/, method: :bind_them, use_prefix: false
 
       listen_to :nick, method: :update_nick
       listen_to :join, method: :maybe_say_hi
 
+      def bind_them(m)
+        m.action_reply("solemnly intones, 'And in the darkness bind() them.'")
+      end
+
       def maybe_say_hi(m)
-        return unless rand(10) == 1
-        m.action_reply(Alice::Greeting.random(m.user.nick))
+        return if m.user.nick == Alice.bot.bot.nick
+        greeting = Alice::Greeting.random(m.user.nick)
+        greeting && rand(10) == 1 && m.action_reply(greeting)
       end
 
       def laugh(m)

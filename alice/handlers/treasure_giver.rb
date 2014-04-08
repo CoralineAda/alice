@@ -10,13 +10,13 @@ module Alice
 
       def self.process(sender, command)
         return unless command.present?
-        grams = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\_\ ]/, '')).omnigrams
-        nick = grams.map{|g| Alice.bot.exists?(g) && g}.compact.last
-        treasure = Alice::Treasure.from(command)
+        grams = Alice::Parser::NgramFactory.new(command.gsub(/[^a-zA-Z0-9\_\ ]/, '')).omnigrams - [Alice.bot.bot.nick]
+        nick = grams.map{|g| Alice.bot.exists?(g.join(' ')) && g}.compact.flatten.last
+        user = Alice::User.find_or_create(nick)
+        treasure = Alice::Treasure.from(command).last
         return unless nick
         return unless treasure
-        user = Alice::User.find_or_create(nick)
-        treasure.to(user)
+        treasure.to(nick)
         Alice::Response.new(content: treasure.message, kind: :reply)
       end
 

@@ -3,6 +3,7 @@ module Alice
   class Greeting
     
     def self.random(name)
+      return if name =~ /^aliceb/i
       [
         "tips her hat to",
         "nods to",

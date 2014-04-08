@@ -18,6 +18,8 @@ module Alice
       match /^\!gulp (.+)/,   method: :drink, use_prefix: false
       match /^\!down (.+)/,   method: :drink, use_prefix: false
       match /^\!chug (.+)/,   method: :drink, use_prefix: false
+      match /^\!drinks/,      method: :list_drinks, use_prefix: false
+      match /^\!fridge/,      method: :list_drinks, use_prefix: false
 
       def drink(m, what)
         beverage = ensure_beverage(m, what)
@@ -27,6 +29,10 @@ module Alice
       def spill(m, what)
         beverage = ensure_beverage(m, what)
         beverage && m.reply(beverage.spill)
+      end
+
+      def list_drinks(m)
+        m.reply(Alice::Beverage.list)
       end
 
       def ensure_beverage(m, what)

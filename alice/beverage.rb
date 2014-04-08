@@ -22,6 +22,27 @@ class Alice::Beverage
     where(name: /#{name}$/i)
   end
 
+  def self.container
+    [
+      "fridge with",
+      "fully stocked bar that includes",
+      "six-pack with one last",
+      "brown paper bag with"
+    ].sample
+  end
+
+  def self.list
+    return "Someone needs to brew some drinks, we're dry!" if Alice::Beverage.count == 0
+    string = ""
+    owners = Alice::Beverage.all.map(&:user).uniq
+    drinks_with_owners = owners.map(&:drinks)
+    string << "Our beverage collection includes #{drinks_with_owners.to_sentence}."
+    string.gsub!('..', '.')
+    string.gsub!('a the', 'the')
+    string.gsub!('a ye', 'ye')
+    string
+  end
+
   def pass_to(owner)
     if recipient = Alice::User.find_or_create(owner)
       if recipient.is_bot?
