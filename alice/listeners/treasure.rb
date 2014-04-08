@@ -84,7 +84,7 @@ module Alice
       def drink(m, what)
         return unless user = User.find_or_create(m.user.nick) 
         unless treasure = Alice::Treasure.from(what).last
-          m.reply("There is no such drink as a #{treasure.name}. Maybe you should brew one?"
+          m.reply("There is no such drink as a #{treasure.name}. Maybe you should brew one?")
           return
         end
         unless user.treasures.include?(treasure)
