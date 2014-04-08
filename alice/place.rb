@@ -81,11 +81,48 @@ class Alice::Place
 
   def self.random_description
     return "It is pitch black. You are likely to be eaten by a grue." if Alice::Place.count == 0
-    [adjective, type, description, '.'].join(' ').gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
+    [adjective, type, description, '.', brightness].join(' ').gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
   end
 
   def self.random_exits
     DIRECTIONS.sample(rand(2) + 2)
+  end
+
+
+  def self.brightness
+    brightness = [
+      "dark",
+      "dim",
+      "bright",
+      "sunny",
+      "foggy",
+      "misty",
+      "sparsely lit",
+      "dimly lit",
+      "lit by candles",
+      "lit from an unknown source",
+      "illuminated by glowing fungi on the walls",
+      "illuminated by the lantern in the bored-looking wizard's hand",
+      "lit by a bare bulb hanging from the ceiling",
+      "dark and shadowy",
+      "shadow-filled and dark",
+      "tastefully lit",
+      "artfully lit",
+      "pitch dark",
+      "filled with inky darkness",
+      "distinguished by its many paper lanterns",
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+    ].sample
+    brightness && "It is #{brightness}"
   end
 
   def self.adjective
@@ -175,11 +212,16 @@ class Alice::Place
       "that is definitely not trapped",
       "that is home to a sleeping bear",
       "whose walls are discolored",
-      "lit from an uknown source",
+      "lit from an unknown source",
       "lined with bookshelves",
       "that stands empty",
       "with a window through which you can see #{things}",
       "partially in ruin",
+      "decorated with #{things}",
+      "with walls that look like they were painted by #{things}",
+      "in which #{things} lies sleeping",
+      "filled with #{things} you remember so well from your childhood",
+      "your great-aunt's famous dish, #{things}",
       "echoing with hollow laughter",
       "with walls coated in flaking red paint",
       "with a strange insignia painted on the wall",
@@ -192,6 +234,25 @@ class Alice::Place
 
   def self.things
     [
+      "a randomly generated wandering monster",
+      "the remains of another adventuring party",
+      "a discarded cheeseburger",
+      "the remains of the day",
+      "a partially eaten meat pie",
+      "a dead crow",
+      "several spiral-bound notebooks",
+      "some unusually large boardgames",
+      "the expensive decor",
+      "a 20-sided die",
+      "rodents of unusual size",
+      "a poster of Spock",
+      "the best years of your life",
+      "an old deck of Pokémon cards",
+      "a Cards Against Humanity game",
+      "sommone else's face",
+      "your entire life in pictures",
+      "dark shadows",
+      "a dread gazebo",
       "a flock of birds",
       "a stack of books",
       "a solitary table",
@@ -207,7 +268,8 @@ class Alice::Place
       "an old grandfather clock",
       "a picture of a duck",
       "a broken old game console",
-      ""
+      "random stuff",
+      "tracks of the fearsome grue"
     ].sample
   end
 
@@ -216,6 +278,7 @@ class Alice::Place
       "brewery",
       "cavern",
       "cave",
+      "randoml generated room",
       "cul-de-sac",
       "tunnel",
       "room",
@@ -249,7 +312,8 @@ class Alice::Place
   end
 
   def has_grue?
-    self.description =~ /dark/ && rand(10) == 1
+    return false if self.x == 0 && self.y == 0
+    self.description =~ /dark|dim|shadow/ && rand(5) == 0
   end
 
   def has_bow?

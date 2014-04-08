@@ -17,6 +17,7 @@ class Alice::Treasure
   def self.reset_hidden!
     hidden.map(&:delete)
     Alice::Treasure.claimed.like('bow and arrow').delete
+    generate_bow
   end
 
   def self.generate_bow
