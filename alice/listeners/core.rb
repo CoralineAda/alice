@@ -17,6 +17,12 @@ module Alice
       match /^blech|^blegh|^ugh|frown|sigh/i, method: :frown, use_prefix: false
 
       listen_to :nick, method: :update_nick
+      listen_to :join, method: :maybe_say_hi
+
+      def maybe_say_hi(m)
+        return unless rand(10) == 1
+        m.action_reply(Alice::Greeting.random(m.user.nick))
+      end
 
       def laugh(m)
         return unless rand(5) == 1
