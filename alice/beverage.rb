@@ -4,13 +4,13 @@ class Alice::Beverage
   include Mongoid::Timestamps
 
   field :name
-  field :effect
 
   attr_accessor :message
 
   belongs_to :user
 
   def self.from(string)
+    return [] unless string.present?
     names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\_\ ]/, '')).omnigrams
     names = names.map{|g| g.join ' '}
     names.map{|name| Alice::Beverage.like(name) }.flatten.compact || []
@@ -20,20 +20,56 @@ class Alice::Beverage
     where(name: /#{name}$/i)
   end
 
+  def pass_to(owner)
+    if recipient = Alice::User.find_or_create(owner)
+      if recipient.is_bot?
+        self.message = "#{recipient.primary_owner} does not accept drinks."
+      end
+      if transferable?
+        self.message = "You pass the #{self.name} to #{recipient.primary_owner.capitalize}."
+        self.message = self.message.gsub("the the", "the").gsub("the ye", "ye")
+        self.user = recipient
+        self.save
+      end
+    else
+      self.message = "You can't share the #{self.name} with an imaginary friend. Maybe you've had too much?" unless recipient
+    end
+    self
+  end
+  
   def owner
-    self.user.primary_owner.capitalize
+    self.user.primary_nick.capitalize
   end
 
-  def drop
-    self.destroy && drop_message
+  def spill
+    self.destroy
+    drop_message.gsub("the the", "the").gsub("the ye", "ye")
   end
 
   def drink
-    self.destroy && [consume_message, effect_message].join(" ")
+    self.destroy
+    "#{consume_message} #{effect_message}".gsub("the the ", "the").gsub("the ye ", "ye")
+  end
+
+  def brew_message
+    [
+      "looks on in wonder as #{owner} brews a perfect #{self.name}.",
+      "watches #{owner} whip up #{self.name}.",
+      "watches #{owner} brew a nice #{self.name}.",
+      "watches #{owner} brew a #{self.name}.",
+      "watches as #{owner} makes a #{self.name}.",
+      "watches #{owner} brew a decent #{self.name}.",
+      "notices #{owner} brewing a #{self.name}.",
+      "applauds as #{owner} makes a #{self.name}.",
+      "nods approvingly as #{owner} brews a #{self.name}.",
+      "admires #{owner}'s ability to whip up a mean #{self.name}.",
+      "smiles and says, 'That's a fine #{self.name}!'",
+      "admires #{owner}'s brewing prowess."
+    ].sample
   end
 
   def effect_message
-    return unless rand(3) == 0
+    return "" unless rand(3) == 0
     [
       "#{owner} grows bat wings and flits around the room.",
       "#{owner}'s head feel like it's deflating like a balloon. Time to get the bicycle pump!",
@@ -61,7 +97,7 @@ class Alice::Beverage
       "#{owner} has a sudden thirst for blood.",
       "#{owner} still feels strangely parched.",
       "#{owner} feels a sudden urge to dance."
-    ].sample.gsub("the the").gsub("the ye", "ye")
+    ].sample
   end
 
   def drop_message
@@ -74,7 +110,7 @@ class Alice::Beverage
       "The #{self.name} shatters on the floor!",
       "#{owner} lets out a mighty 'Whoop!' and throws the #{self.name} against a wall.",
       "#{owner} slyly dumps out the #{self.name}."
-    ].sample.gsub("the the").gsub("the ye", "ye")
+    ].sample
   end
 
   def consume_message
@@ -85,29 +121,9 @@ class Alice::Beverage
       "#{owner} gulps the #{self.name}.",
       "#{owner} quaffs the entire #{self.name}.",
       "#{owner} drains the #{self.name}.",
-      "#{owner} consumes all of the #{self.name}.",
-    ].sample.gsub("the the").gsub("the ye", "ye")
+      "#{owner} consumes all of the #{self.name}."
+    ].sample
   end
 
-  def pass_to(owner)
-    if recipient = Alice::User.find_or_create(owner)
-      if recipient.is_bot?
-        self.message = "#{recipient.primary_owner} does not accept drinks."
-      end
-      if transferable?
-        self.message = "You pass the #{self.name} to #{recipient.primary_owner.capitalize}."
-        self.message = self.message.gsub("the the", "the").gsub("the ye", "ye")
-        self.user = recipient
-        self.save
-      end
-    else
-      self.message = "You can't share the #{self.name} with an imaginary friend. Maybe you've had too much?" unless recipient
-    end
-    self
-  end
-  
-  def owner
-    self.user.primary_owner.capitalize
-  end
 end
 

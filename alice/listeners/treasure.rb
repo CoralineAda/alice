@@ -16,7 +16,6 @@ module Alice
       match /^\!pick up (.+)/, method: :get, use_prefix: false
       match /^\!drop (.+)/, method: :drop, use_prefix: false
       match /^\!discard (.+)/, method: :drop, use_prefix: false
-      match /^\!brew (.+)/, method: :brew, use_prefix: false
 
       def drop(m, what)
         return unless treasure = Alice::Treasure.from(what).last

@@ -11,6 +11,7 @@ class Alice::User
 
   has_many :factoids
   has_many :treasures
+  has_many :beverages
 
   def self.random
     all.sample
