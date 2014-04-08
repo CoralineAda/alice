@@ -49,7 +49,7 @@ class Alice::Beverage
         self.message = "#{recipient.primary_nick} does not accept drinks."
       end
       if transferable?
-        self.message = "You pass the #{self.name} to #{recipient.primary_owner.capitalize}."
+        self.message = "You pass the #{self.name} to #{recipient.primary_nick.capitalize}."
         self.message = self.message.gsub("the the", "the").gsub("the ye", "ye")
         self.user = recipient
         self.save
