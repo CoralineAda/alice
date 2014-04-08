@@ -41,8 +41,9 @@ module Alice
         return if verb == 'get'
         return if verb == 'pick up'
         return if verb == 'reset'
+        return if verb == 'forge'
 
-        noun = command.split[1..1].join(' ')
+        noun = command.split[-1..1].join(' ')
 
         if Alice::Place.last.description.include?(noun) && user = Alice::User.from(noun).last
           message = "What would #{user.primary_nick} have to say about that?"
