@@ -8,29 +8,14 @@ module Alice
 
       include Cinch::Plugin
 
-      match /^\!([north])/, method: :move, use_prefix: false
-      match /^\!([south])/, method: :move, use_prefix: false
-      match /^\!([east])/, method: :move, use_prefix: false
-      match /^\!([west])/, method: :move, use_prefix: false
-      match /^\!look/, method: :look, use_prefix: false
-      match /^\!get (.+)/, method: :get, use_prefix: false
-      match /^\!pick up (.+)/, method: :get, use_prefix: false
-      match /^\!drop (.+)/, method: :drop, use_prefix: false
-      match /^\!discard (.+)/, method: :drop, use_prefix: false
-
-      def drop(m, what)
-        return unless treasure = Alice::Treasure.from(what).last
-        m.reply("It seems that the #{treasure.name} is cursed and cannot be dropped!") and return if treasure.cursed?
-        m.reply(treasure.drop_message(m.user.nick)) && treasure.drop
-      end
-
-      def get(m, item)
-        m.reply("You cannot get the #{item}!").gsub('the the', 'the') and return unless Alice::Place.last.contains?(item)
-        m.reply(treasure.pickup_message(m.user.nick)) && item.to(m.user.nick)
-      end
+      match /^\!(north)/, method: :move, use_prefix: false
+      match /^\!(south)/, method: :move, use_prefix: false
+      match /^\!(east)/,  method: :move, use_prefix: false
+      match /^\!(west)/,   method: :move, use_prefix: false
+      match /^\!look/,     method: :look, use_prefix: false
 
       def move(m, direction)
-        Alice::Place.go(direction) && message = "The party goes #{direction}." || "#{m.user.nick}, you cannot move #{direction}!"
+        Alice::Place.go(direction) && message = "The party goes #{direction}. #{Alice::Place.last.describe}" || "#{m.user.nick}, you cannot move #{direction}!"
         m.reply(message)
       end
 

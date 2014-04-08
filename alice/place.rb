@@ -86,6 +86,14 @@ class Alice::Place
 
   def self.adjective
     [
+      "a panelled",
+      "a green",
+      "a whitewashed",
+      "an extravagantly furnished",
+      "a smelly",
+      "a decrepit",
+      "a sunken",
+      "a flooded",
       "a dirty",
       "a dingy",
       "a sparse",
@@ -192,12 +200,16 @@ class Alice::Place
       "a commemorative statuette of liberty",
       "an extensive DVD collection",
       "a towering wampus",
-      "an old grandfather clock"
+      "an old grandfather clock",
+      "a picture of a duck",
+      "a broken old game console",
+      ""
     ].sample
   end
 
   def self.type
     [
+      "brewery",
       "cavern",
       "cave",
       "cul-de-sac",
@@ -213,7 +225,7 @@ class Alice::Place
       "dressing room",
       "theatre",
       "storeroom",
-      "closet",
+      "room",
       "tardis",
       "bed chamber",
       "vault",
@@ -221,6 +233,11 @@ class Alice::Place
       "lair",
       "pit"
     ].sample
+  end
+
+  def contains?(string)
+    treasure = Alice::Treasure.from(string).last
+    treasure && self.treasures.include?(treasure)
   end
 
   def enter

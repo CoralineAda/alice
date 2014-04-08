@@ -87,15 +87,17 @@ class Alice::Treasure
   end
 
   def to(nick)
-    recipient = Alice::User.find_or_create(nick)
-    self.message = "You can't pass the #{self.name} to an imaginary friend." unless recipient
-    if recipient.is_bot?
-      self.message = "#{recipient.primary_nick} does not accept gifts."
-    end
-    if transferable?
-      self.message = "#{recipient.primary_nick.capitalize} now possesses the #{self.name}."
-      self.user = recipient
-      self.save
+    if recipient = Alice::User.find_or_create(nick)
+      if recipient.is_bot?
+        self.message = "#{recipient.primary_nick} does not accept gifts."
+      end
+      if transferable?
+        self.message = "#{recipient.primary_nick.capitalize} now possesses the #{self.name}."
+        self.user = recipient
+        self.save
+      end
+    else
+      self.message = "You can't pass the #{self.name} to an imaginary friend." unless recipient
     end
     self
   end
