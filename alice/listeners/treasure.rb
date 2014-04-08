@@ -88,7 +88,7 @@ module Alice
           return
         end
         unless user.treasures.include?(treasure)
-          m.reply("You don't even have the #{treasure.name}!"
+          m.reply("You don't even have the #{treasure.name}!")
           return
         end
         treasure.consume
