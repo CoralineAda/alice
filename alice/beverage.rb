@@ -18,7 +18,7 @@ class Alice::Beverage
 
   attr_accessor :message
 
-  def self.already_exist?(name)
+  def self.already_exists?(name)
     like(name).present?
   end
 

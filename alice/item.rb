@@ -27,6 +27,10 @@ class Alice::Item
 
   before_create :check_cursed
 
+  def self.already_exists?(name)
+    like(name).present?
+  end
+
   def self.fruitcake
     where(name: 'fruitcake') || create(name: 'fruitcake', is_cursed: true)
   end
