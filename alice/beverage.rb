@@ -22,6 +22,10 @@ class Alice::Beverage
     like(name).present?
   end
 
+  def self.sweep
+    all.map{|item| item.delete unless item.actor? || item.user? || item.place? }
+  end
+
   def self.inventory_from(owner, list)
     return Alice::Util::Randomizer.empty_cooler if list.empty?
     return list.map(&:name_with_article).to_sentence

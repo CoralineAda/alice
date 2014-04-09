@@ -8,6 +8,10 @@ module Alice
         rand(number - 1) == 1
       end
 
+      def self.nth
+        [1..13].to_a.map{ |i| i == 1 && "1st" || i == 2 && "2nd" || i == 3 && "3rd" || "#{i}th"}.sample
+      end
+
       def self.color
         [
           "red",
@@ -233,6 +237,79 @@ module Alice
         ].sample        
       end
 
+      def self.item
+        [
+          "portrait of #{specific_person}",
+          "empty Tupperware container",
+          "extra batteries",
+          "spare keys",
+          "ball of string",
+          "ball of #{material}",
+          "#{material} cube",
+          "20-sided die",
+          "scissors",
+          "#{specific_person}'s autograph",
+          "#{specific_person} trading card",
+          "soccer ball",
+          "wand of healing",
+          ""
+        ].sample
+      end
+
+      def self.reading_material
+        [
+          "comic book",
+          "graphic novel",
+          "quaint newspaper",
+          "80s computer magazine",
+          "Wired Issue #{rand(100) + 1}",
+          "#{game} rulebook",
+          "#{game} strategy guide",
+          "#{places} guidebook",
+          "book",
+          "ancient tome",
+          "magazine",
+          "trashy novel",
+          "fragile parchment",
+          "floppy disk",
+          "CD-ROM",
+          "hastily-scrawled note",
+          "best-selling novel",
+          "hard-copy of an email",
+          "letter",
+          "certified letter",
+          "scroll",
+          "label",
+          "postcard",
+          "greeting card",
+          "sticker",
+          "brochure",
+          "pamphlet",
+          "empty pretzel bag",
+          "flyer",
+          "handout",
+          "Chick tract",
+          "in-flight magazine",
+          "junk mail",
+          "wadded-up paper",
+          "sticky note",
+          "placard",
+          "protest sign",
+          "official decree",
+          "etched tablet",
+          "frozen iPad",
+          "Nook",
+          "Kindle",
+          "spiral-bound notebook",
+          "diary",
+          "journal",
+          "biography of #{specific_person}",
+          "quaint phone book",
+          "note card",
+          "index card"
+        ].sample
+      end
+
       def self.thing
         [
           "a randomly generated wandering monster",
@@ -394,37 +471,53 @@ module Alice
         ].sample
       end
 
-      def self.person
+      def self.specific_person
         [
+          "Abraham Lincoln",
+          "Edgar Allan Poe",
+          "Captain Janeway",
+          "Gandalf",
+          "The Wicked Witch of the West",
+          "Edward James Olmos",
+          "Dame Judy Dench",
+          "Bored-Looking Wizard",
+          "Douglas",
+          "The #{Alice::Util::Randomizer.nth} Doctor",
+          "Rapunzel",
+          "The #{Alice::Util::Randomizer.color.capitalize} Power Ranger",
+          "Wonder Woman",
+          "Jane Goodall",
+          "Zippy the Mindreader",
+          "Too Much Coffee Man",
+          "Batwoman",
+          "Mary Jane",
+          "The Marlboro Man",
+          "Pippy Longstockings",
+          "Queen Elizabeth",
+          "Rasputin",
+          "Edward the First",
+          "Henry the Eighth",
+          "Queen Victoria",
+          "Cleopatra",
+          "Marilyn Monroe",
+          "Oprah Winfrey",
+          "Eleanor Roosevelt",
+          "Mata Hari",
+          "Headless Marie Antoinette",
+          "Beetlejuice",
+          "Batman",
+          "Spock",      
           "bell hooks",
           "Neil deGrasse Tyson",
           "Wilford Brimley",
-          "that kid from the cereal box",
-          "that actor from that one movie",
           "Jean Luc Picard",
           "Tom Waits",
-          "a news anchor",
-          "your best friend's dad",
-          "your best friend's mom",
-          "your cousin Dora",
-          "that smelly kid from 3rd grade",
-          "your algebra teacher",
-          "your first boss",
           "tenderlove",
-          "#{Alice::User.randon.proper_name}",
           "Cookie Monster",
           "Ada Lovelace",
-          "the lead singer from that one band",
           "Obama",
-          "a reporter from the Wall Street Journal",
           "Leonard Nimoy",
           "Emperor Joshua Norton",
-          "a friend of a friend",
-          "an anonymous source",
-          "our man on the street Tom Dudley",
-          "the meteorologist from Channel 12",
-          "the Count from Sesame Street",
-          "one of the Teletubbies",
           "Jim Henson",
           "Wolverine",
           "Keanu Reeves",
@@ -432,8 +525,58 @@ module Alice
           "Edison",
           "Bill Gates",
           "Steve Jobs",
-          "Lincoln",
           "Alex Trebec",
+          "Amelia Earhart",
+          "Marlene Dietrich",
+          "Billie Holiday",
+          "Yoko Ono",
+          "Emily Bronte",
+          "Mae West",
+          "Margaret Thatcher",
+          "Virginia Woolf",
+          "Maya Angelou",
+          "Whoopi Goldberg",
+          "Senator Dianne Feinstein (D, California)",
+          "Rep. Luis Gutierrez (D, Illinois)",
+          "Napoleon",
+          "Julius Caeser",
+          "Colonel Sanders",
+          "Dave Thomas",
+          "Martin Fowler",
+          "Dr. Evil",
+          "James Bond",
+          "Pinky Pie",
+          "Rainbow Dash",
+          "David Bowie"
+        ].sample
+      end
+
+      def self.person
+        [
+          Alice::Util::Randomizer.specific_person,
+          Alice::Util::Randomizer.specific_person,
+          Alice::Util::Randomizer.specific_person,
+          Alice::Util::Randomizer.specific_person,
+          Alice::Util::Randomizer.specific_person,
+          Alice::Util::Randomizer.specific_person,
+          Alice::Util::Randomizer.specific_person,
+          "that kid from the cereal box",
+          "that actor from that one movie",
+          "a news anchor",
+          "your best friend's dad",
+          "your best friend's mom",
+          "your cousin Dora",
+          "that smelly kid from 3rd grade",
+          "your algebra teacher",
+          "your first boss",
+          "the lead singer from that one band",
+          "a reporter from the Wall Street Journal",
+          "a friend of a friend",
+          "an anonymous source",
+          "our man on the street Tom Dudley",
+          "the meteorologist from Channel 12",
+          "the Count from Sesame Street",
+          "one of the Teletubbies",
           "someone from a late-night infomercial"
         ].sample
       end
@@ -858,6 +1001,103 @@ module Alice
           "#{actor_name} lets out a mighty 'Whoop!' and throws the #{item_name} against a wall.",
           "#{actor_name} slyly dumps out the #{item_name}."
         ].sample
+      end
+
+      def self.material
+        [
+          "golden",
+          "silver",
+          "bronze",
+          "wooden",
+          "plastic",
+          "stainless steel",
+          "iron",
+          "copper",
+          "carbon-fiber",
+          "ceramic",
+          "stone",
+          "rubber",
+          "clay",
+          "chrome",
+          "imaginary",
+          "ethereal",
+          "sturdy",
+          "cardboard",
+          "paper",
+          "origami",
+          "styrofoam",
+          "plexiglass",
+          "glass",
+          "crystal",
+          "leather-clad",
+          "metal",
+          "metallic",
+          "pressboard",
+          "non-stick",
+          "teflon-coated",
+          "brass",
+          "titatium",
+          "hand-carved",
+          "machine-tooled",
+          "mass-produced",
+          "hand-made",
+          "homemade",
+          "etched glass",
+          "lead crystal"
+        ].sample
+      end
+
+      def self.weapon
+        string = ""
+        string << material if one_chance_in(4)
+        string <<
+        [
+          "bow and arrow",
+          "semi-automatic rubber band gun",
+          "blowgun",
+          "sword",
+          "dagger",
+          "axe",
+          "letter opener",
+          "rolling pin",
+          "frying pan",
+          "pole-axe",
+          "farming implement",
+          "cap gun",
+          "crossbow",
+          "slingshot",
+          "BB gun",
+          "sling",
+          "squirt gun",
+          "SuperSoaker",
+          "single-shot rubber band gun",
+          "potato gun",
+          "dart",
+          "pool cue",
+          "spiked club",
+          "mace",
+          "pepper spray",
+          "baton",
+          "water cannon",
+          "antique saber",
+          "throwing knife",
+          "shuriken",
+          "katana",
+          "broadsword",
+          "longsword",
+          "boomerang",
+          "walking stick",
+          "swordcane",
+          "bowling ball",
+          "spear",
+          "trident",
+          "pointy stick",
+          "stake",
+          "war hammer",
+          "wand of fireballs",
+          "wand of magic missiles"
+        ].sample
+        string
       end
 
     end

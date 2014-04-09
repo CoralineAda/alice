@@ -11,7 +11,9 @@ class Alice::Item
   field :is_cursed, type: Boolean
   field :is_hidden, type: Boolean
   field :is_weapon, type: Boolean
+  field :is_readable, type: Boolean
   field :picked_up_at, type: DateTime
+  field :created_by
 
   validates_uniqueness_of :name
   
@@ -19,8 +21,19 @@ class Alice::Item
 
   belongs_to  :actor
   belongs_to  :user
+  belongs_to  :creator, class_name: "Alice::User"
   belongs_to  :place
   has_many    :actions
+
+  before_create :check_cursed
+
+  def self.fruitcake
+    where(name: 'fruitcake') || create(name: 'fruitcake', is_cursed: true)
+  end
+
+  def self.sweep
+    all.map{|item| item.delete unless item.actor? || item.user? || item.place? }
+  end
 
   def self.weapons
     where(is_weapon: true)
@@ -41,9 +54,8 @@ class Alice::Item
     sort(&:name)
   end
 
-  def initialize(args={})
+  def check_cursed
     self.is_cursed ||= rand(10) == 1
-    super
   end
 
   def description
@@ -52,6 +64,11 @@ class Alice::Item
 
   def name_with_article
     Alice::Util::Sanitizer.process("#{Alice::Util::Randomizer.article} #{self.name}")
+  end
+  
+  def read
+    return "#{name_with_article} is not readable!" unless self.is_readable?
+    return "It says that #{Alice::Factoid.random.formatted(false)}."
   end
 
 end
