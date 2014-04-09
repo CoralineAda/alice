@@ -11,10 +11,10 @@ module Alice
       def self.process(sender, command)
         if subject = Alice::User.from(command).sample
           if factoid = subject.factoids.sample
-            Alice::Response.new(content: factoid.formatted, kind: :reply)
+            Alice::Handlers::Response.new(content: factoid.formatted, kind: :reply)
           end
         else
-          Alice::Response.new(content: random.formatted, kind: :reply)
+          Alice::Handlers::Response.new(content: random.formatted, kind: :reply)
         end
       end
 

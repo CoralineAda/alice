@@ -25,22 +25,14 @@ module Alice
       end
 
       def maybe_say_hi(m)
-        return if m.user.nick == Alice.bot.bot.nick
-        greeting = Alice::Greeting.random(m.user.nick)
-        greeting && rand(10) == 1 && m.action_reply(greeting)
+        return if Alice::Util::Mediator.is_bot?(m.user.nick)
+        return unless Alice::Util::Randomizer.one_in_ten
+        m.action_reply(Alice::Util::Randomizer.greeting(m.user.nick))
       end
 
       def laugh(m)
         return unless rand(5) == 1
-        name = m.user.nick
-        sound = [
-          "laughs along with #{name}.",
-          "grins at #{name}.",
-          "chuckles.",
-          "cackles!",
-          "smiles."
-        ].sample
-        m.action_reply(sound)
+        m.action_reply(Alice::Util::Randomizer.laughter_with(actor, name))
       end
 
       def frown(m)

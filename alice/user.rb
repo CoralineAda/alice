@@ -1,6 +1,7 @@
 class Alice::User
 
   include Mongoid::Document
+  include Alice::Behavior::Searchable
 
   field :primary_nick
   field :alt_nicks, type: Array, default: []
@@ -13,20 +14,16 @@ class Alice::User
   has_many :treasures
   has_many :beverages
 
-  def self.random
-    all.sample
-  end
-
-  def self.with_bow
-    Alice::Treasure.claimed.like('bow and arrow').first.try(:user)
-  end
-
-  def self.from(string)
-    string.split(/[^a-zA-Z0-9\_]/).map{|name| Alice::User.like(name) }.compact || []
+  def self.find_or_create(nick)
+    like(nick) || Alice::Util::Mediator.exists?(nick) && create(primary_nick: nick.downcase)
   end
 
   def self.like(nick)
     where(primary_nick: nick.downcase).first || where(alt_nicks: nick.downcase).first
+  end
+
+  def self.random
+    all.sample
   end
 
   def self.update_nick(old_nick, new_nick)
@@ -36,15 +33,6 @@ class Alice::User
     user.alt_nicks << old_nick.downcase
     user.alt_nicks = user.alt_nicks.uniq
     user.save
-  end
-
-  def self.inventory_for(nick)
-    user = like(nick)
-    user && user.inventory
-  end
-
-  def self.find_or_create(nick)
-    like(nick) || Alice.bot.exists?(nick) && create(primary_nick: nick.downcase)
   end
 
   def self.set_twitter(nick, handle)
@@ -140,34 +128,16 @@ class Alice::User
     "https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
   end
 
-  def beverage_names
-    if self.beverages.count == 0
-      @beverage_names ||= ["not a drop to drink", "nothing, not a single drink", "no drinks", "nothing fit to drink"].sample 
-    else
-      @beverage_names ||= self.beverages.map{|t| "a #{t.name}"}.to_sentence.gsub('a the', 'a')
-    end
-  end
-
-  def drinks
-    if self.beverages.count == 0
-      "#{self.proper_name} has #{beverage_names}." 
-    else
-      "#{self.proper_name}'s #{Alice::Randomizer.container} #{beverage_names}." 
-    end
+  def inventory_of_beverages
+    Alice::Beverage.inventory_from(self.proper_name, self.beverages)
   end
 
   def proper_name
     self.primary_nick.capitalize
   end
 
-  def inventory
-    treasure_names = ["empty pockets", "nothing", "no treasures", "nada"].sample unless self.treasures.count > 0
-    treasure_names ||= self.treasures.map{|t| "the #{t.name}"}.to_sentence.gsub('the the', 'the')
-    string = "#{self.proper_name}'s #{Alice::Treasure.container} #{treasure_names}."
-    if self.beverages.present?
-      string << " #{self.proper_name} also has a #{Alice::Randomizer.container} #{beverage_names}." 
-    end
-    string.gsub("the the", "the").gsub("a ye", "ye").gsub("the ye", "ye")
+  def inventory_of_treasures
+    Alice::Treasure.inventory_from(self.proper_name, self.treasures)
   end
 
 end

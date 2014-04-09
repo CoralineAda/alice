@@ -9,7 +9,7 @@ module Alice
       end
 
       def self.process(sender, command)
-        Alice::Response.new(content: Alice::Beverage.list, kind: :reply)
+        Alice::Handlers::Response.new(content: Alice::Beverage.list, kind: :reply)
       end
 
     end

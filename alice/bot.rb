@@ -10,7 +10,7 @@ module Alice
           config.server = "irc.lonelyhackersclub.com"
           config.port = 2600
           config.channels = ["##lonelyhackersclub", "##alicebottest"]
-          config.nick = "AliceBot"
+          config.nick = "AliceBot_"
           config.user = "AliceBot"
           config.plugins.plugins = [
             Listeners::Core,
@@ -29,10 +29,6 @@ module Alice
     def start
       self.bot.start && self.bot
     end 
-
-    def exists?(nick)
-      self.bot.user_list.find(nick)
-    end
 
     def stop
       self.bot.stop

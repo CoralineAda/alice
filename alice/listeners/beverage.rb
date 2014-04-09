@@ -32,7 +32,7 @@ module Alice
       end
 
       def list_drinks(m)
-        m.reply(Alice::Beverage.list)
+        m.reply(Alice::Beverage.total_inventory)
       end
 
       def ensure_beverage(m, what)
@@ -49,7 +49,7 @@ module Alice
       end
 
       def brew(m, what)
-        unless Alice::Mediator.op?(m) || rand(5) < 3
+        unless Alice::Util::Mediator.op?(m) || rand(5) < 3
           m.reply("Your attempt at brewing failed miserably.")
           return
         end
@@ -59,7 +59,7 @@ module Alice
         end
         user = Alice::User.find_or_create(m.user.nick)
         beverage = Alice::Beverage.create(name: what.downcase, user: user)
-        m.action_reply("#{Alice::Randomizer.brew_message}")
+        m.action_reply("#{Alice::Util::Randomizer.brew_message}")
       end
 
     end
