@@ -4,6 +4,7 @@ class Alice::User
   include Mongoid::Timestamps
   include Alice::Behavior::Searchable
   include Alice::Behavior::Scorable
+  include Alice::Behavior::HasInventory
   
   field :primary_nick
   field :alt_nicks, type: Array, default: []
@@ -50,17 +51,12 @@ class Alice::User
     user.save
   end
 
-  def add_to_inventory(item)
-    item.user = self
-    item.place = nil
-    item.is_hidden = false
-    item.picked_up_at = DateTime.now
-    item.save
-  end
-
-  def remove_from_inventory(item)
-    item.drop
-    item.save
+  def describe
+    message = ""
+    message << "#{proper_name} is #{self.bio}. " if self.bio.present
+    message << "Find them on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
+    message << "They currently have #{self.points} points. "
+    message << "#{self.inventory}"
   end
 
   def has_nick?(nick)
@@ -78,14 +74,6 @@ class Alice::User
     "#{self.proper_name} is #{formatted}".gsub("  ", " ")
   end
   
-  def inventory_of_beverages
-    Alice::Beverage.inventory_from(self.proper_name, self.beverages)
-  end
-
-  def inventory_of_items
-    Alice::Item.inventory_from(self.proper_name, self.items)
-  end
-
   def proper_name
     self.primary_nick.capitalize
   end

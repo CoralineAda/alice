@@ -34,6 +34,19 @@ class Alice::Beverage
     string
   end
 
+  def self.unique_name
+    name = "#{Alice::Randomizer.beverage_container} of #{Alice::Randomizer.beverage}",
+    name = unique_name if where(name: name).first 
+    name
+  end
+
+  def self.make_random_for(actor)
+    create(
+      name: unique_name,
+      actor: actor 
+    )
+  end
+
   def self.sorted
     sort(&:name)
   end
@@ -54,7 +67,7 @@ class Alice::Beverage
   end
 
   def name_with_article
-    Alice::Util::Sanitizer.process("a #{self.name}")
+    Alice::Util::Sanitizer.process("#{Alice::Randomizer.article} #{self.name}")
   end
 
 end

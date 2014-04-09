@@ -81,29 +81,17 @@ module Alice
         Alice::Util::Mediator.reply_to(channel_user, message)
       end
 
-      def examine(channel_user, thing)
-
-        if Alice::Place.current.description.include?(thing) && user = Alice::User.from(thing.downcase).last
-          message = 
-            [
-              "That's #{user.primary_nick} alright.",
-              "Sure looks like #{user.primary_nick} to me.",
-              "Spitting image of #{user.primary_nick} right there.",
-              "It's #{user.primary_nick} all right!",
-              "I can definitely see a resemblance to #{user.primary_nick}.",
-            ].sample
+      def examine(channel_user, noun)
+        if subject = Alice::User.from(noun.downcase).last  
+          message ||= subject.description
+        elsif subject = Alice::Item.from(noun.downcase).last || Alice::Beverage.from(noun.downcase).last || Alice::Actor.from(noun.downcase).last
+          if Alice::Place.subject.contains?(noun)
+            message ||= noun.description
+          end
+        elsif Alice::Place.current.description.include?(noun)
+          message ||= Alice::Randomizer.description(noun)
         end
-
-        if Alice::Place.current.description.include?(thing)
-          message ||= Alice::Randomizer.description(thing)
-        else
-          message ||= [
-            "I don't see such a thing as #{thing} here.",
-            "I... think you're hallucinating.",
-            "Yeah, about that invisible thing you're asking about...",
-            "You could have sworn that you saw that #{thing} but it's not there now!"
-          ].sample
-        end
+        message ||= Alice::Randomizer.not_here(noun)
         Alice::Util::Mediator.reply_to(channel_user, message)
       end
 

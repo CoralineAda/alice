@@ -11,6 +11,7 @@ Mongoid.load!("config/mongoid.yml")
 module Alice
 
   require_relative 'alice/behavior/emotes'
+  require_relative 'alice/behavior/has_inventory'
   require_relative 'alice/behavior/ownable'
   require_relative 'alice/behavior/listens'
   require_relative 'alice/behavior/placeable'

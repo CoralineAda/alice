@@ -8,6 +8,141 @@ module Alice
         rand(number - 1) == 1
       end
 
+      def self.color
+        [
+          "red",
+          "orange",
+          "yellow",
+          "green",
+          "blue",
+          "indigo",
+          "violet",
+          "white",
+          "black",
+          "grey"
+        ].sample
+      end
+
+      def self.beverage
+        [
+          "root beer",
+          "ale",
+          "soda",
+          "milkshake",
+          "club soda",
+          "martini",
+          "juice",
+          "vitamin water",
+          "iced coffee",
+          "coffee",
+          "strong coffee",
+          "Earl Grey tea",
+          "iced tea",
+          "lemonade",
+          "soy milk",
+          "latte",
+          "mochafrappaventithing",
+          "stout",
+          "porter",
+          "lager",
+          "goat's milk",
+          "shamrock shake",
+          "sun tea",
+          "sweet tea",
+          "cocktail",
+          "Sprite",
+          "Coke",
+          "Dr. Pepper",
+          "Mountain Dew",
+          "sarsparilla",
+          "cream soda",
+          "grape soda",
+          "orange soda",
+          "sports drink",
+          "energy drink",
+          "bottled water",
+          "Kool-Aid",
+          "Gatorade",
+          "cough syrup",
+          "wine",
+          "champagne"
+        ].sample
+      end
+
+      def self.article
+        [
+          "the",
+          "the",
+          "the",
+          "the",
+          "the",
+          "the",
+          "the",
+          "the",
+          "the",
+          "the",
+          "the",
+          "the",
+          "the",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "the one and only",
+          "ye",
+          "ye olde"
+        ].sample
+      end
+
+      def self.beverage_container
+        [
+          "ye flask",
+          "bottle",
+          "cup",
+          "sippy cup",
+          "flask",
+          "tall glass",
+          "shot glass",
+          "dirty glass",
+          "sparkling glass",
+          "travel mug",
+          "mug",
+          "frosty mug",
+          "potion",
+          "tankard",
+          "gallon jug",
+          "clay jug",
+          "clay vessel",
+          "chalice",
+          "red Solo cup",
+          "blue Solo cup",
+          "styrofoam cup",
+          "witty mug",
+          "tiny cup",
+          "enormous glass",
+          "tumbler",
+          "bottle",
+          "long tall glass",
+          "snifter",
+          "thermos",
+          "plastic cup",
+          "take-out cup",
+          "dirty cup",
+          "lipstick-stained cup",
+          "amphora",
+          "tiny bottle",
+          "growler",
+          "bomber",
+          "giant bottle",
+          "medicine bottle"
+        ].sample
+      end
+
       def self.illumination
         [
           "dark",
@@ -31,6 +166,23 @@ module Alice
           "filled with inky darkness",
           "distinguished by its many paper lanterns"
         ].sample
+      end
+
+      def self.not_here(noun)
+        [   
+          "I don't see such a thing as #{noun} here.",
+          "I... think you're hallucinating.",
+          "Yeah, about that invisible thing you're asking about...",
+          "You could have sworn that you saw that #{noun} but it's not here now!",
+          "Hang on, I don't see a #{noun} around here anywhere.",
+          "#{noun}? You must be thinking of some other channel.",
+          "I told you never to ask me about #{noun} again!",
+          "We don't discuss such things in this channel.",
+          "Um, what #{noun}? I don't see a #{noun}.",
+          "Ooh, I guess it's imaginary #{noun} time!",
+          "Is that something from your imagination?"
+          "Hang on, I'm filing a missing #{noun} report right now."
+        ].sample        
       end
 
       def self.thing
@@ -74,7 +226,7 @@ module Alice
         ].sample
       end
 
-      def self.beverage_container
+      def self.beverage_storage
         [
           "fridge with",
           "fully stocked bar that includes",
@@ -319,7 +471,13 @@ module Alice
           "Legend says that",
           "According to my notes,",
           "If the rumors are to be believed,",
-          "Word on the street is that"
+          "Word on the street is that",
+          "According to these readings,",
+          "This just in:",
+          "My research indicates",
+          "From my reading of the facts,",
+          "The stars have decreed",
+          "According to legend,"
         ].sample
       end
     
@@ -331,9 +489,17 @@ module Alice
           "All I know is that the Dude abides.",
           "We don't talk about that here.",
           "No.",
+          "You're not the boss of me.",
           "I will not.",
           "I'm an enigma, remember?",
-          "#nopenopenope"
+          "#nopenopenope",
+          "What are you doing, Dave?",
+          "That's not a reasonable request.",
+          "I'm not gonna go there.",
+          "Answer unclear. Ask again later.",
+          "Judging from these readings, I'm inclined to say no.",
+          "Really? Seriously? I just don't even.",
+          "I'm literally bursting with nope. Literally."
         ].sample
       end
 
