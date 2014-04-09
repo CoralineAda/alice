@@ -34,7 +34,7 @@ class Alice::Beverage
 
   def self.total_inventory
     return "Someone needs to brew some drinks, we're dry!" if count == 0
-    "Our beverage collection includes #{with_owner_names.to_sentence}."
+    "Our beverage collection includes #{with_owner_names.map(&:name_with_article).to_sentence}."
   end
 
   def self.brew_random
@@ -44,11 +44,11 @@ class Alice::Beverage
   end
 
   def self.sorted
-    sort(&:name)
+    all.sort_by(&:name)
   end
 
   def self.with_owner_names
-    all.sorted.map(&:owner).uniq.map(&:drinks)
+    sorted.map(&:user).compact.uniq.map(&:beverages).flatten
   end
 
   def drink
