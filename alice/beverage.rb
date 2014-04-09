@@ -23,7 +23,7 @@ class Alice::Beverage
   end
 
   def self.sweep
-    all.map{|item| item.delete unless item.actor? || item.user? || item.place? }
+    all.map{|item| item.delete unless item.actor? || item.user?}
   end
 
   def self.inventory_from(owner, list)

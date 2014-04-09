@@ -19,13 +19,13 @@ class Alice::Place
   end
 
   def self.generate!(args={})
-    create(
-      description: random_description,
+    room = create(
       exits: (random_exits | [args[:entered_from]]).flatten.compact.uniq,
       x: args[:x] || 0,
       y: args[:y] || 0,
       is_current: args[:is_current]
     )
+    room.update_attribute(:description, random_description(room))
   end
 
   def self.go(direction)
@@ -71,8 +71,8 @@ class Alice::Place
     room.update_attribute(:is_current, true)
   end
 
-  def self.random_description
-    return "It is pitch black. You are likely to be eaten by a grue." if origin_square?
+  def self.random_description(room)
+    return "It is pitch black. You are likely to be eaten by a grue." if room.origin_square?
     description = [
       Alice::Util::Randomizer.room_adjective,
       Alice::Util::Randomizer.room_type,

@@ -17,11 +17,11 @@ module Alice
       end
 
       def self.exists?(nick)
-        Alice::Bot.bot.user_list.find(nick)
+        Alice.bot.user_list.find(nick)
       end
 
       def self.user_list
-        Alice::Bot.bot.user_list
+        Alice.bot.bot.user_list
       end
 
       def self.is_bot?(nick)

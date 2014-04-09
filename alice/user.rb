@@ -31,7 +31,7 @@ class Alice::User
   end
 
   def self.active
-    where(update_at.gte => DateTime.now - 10.minutes)
+    where(:updated_at.gte => DateTime.now - 10.minutes)
   end
 
   def self.find_or_create(nick)

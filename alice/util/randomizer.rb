@@ -265,7 +265,7 @@ module Alice
           "Wired Issue #{rand(100) + 1}",
           "#{game} rulebook",
           "#{game} strategy guide",
-          "#{places} guidebook",
+          "#{type_of_place} guidebook",
           "book",
           "ancient tome",
           "magazine",
