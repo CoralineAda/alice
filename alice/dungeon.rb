@@ -23,14 +23,18 @@ class Alice::Dungeon
     victim && victim.items << Alice::Item.fruitcake
   end
 
+  def self.however_many
+    rand(10) + 1 
+  end
+
   def self.populate
-    rand(10).times.each{ |name| Alice::Actor.create(name: Alice::Util::Randomizer.specific_person) }
+    however_many.times.each{ |name| Alice::Actor.create(name: Alice::Util::Randomizer.specific_person) }
   end
 
   def self.make_stuff
-    rand(10).times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.item) }
-    rand(10).times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.weapon, is_weapon: true) }
-    rand(10).times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.reading_material, is_readable: true) }
+    however_many.times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.item) }
+    however_many.times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.weapon, is_weapon: true) }
+    however_many.times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.reading_material, is_readable: true) }
   end
 
 end
