@@ -7,7 +7,8 @@ class Alice::Actor
   include Alice::Behavior::Steals
   include Alice::Behavior::Placeable
   include Alice::Behavior::HasInventory
-
+  include Alice::Behavior::Scorable
+  
   field :name
   field :description
   field :last_theft, type: DateTime
@@ -28,6 +29,10 @@ class Alice::Actor
 
   def self.present
     where(place_id: Alice::Place.current.id)
+  end
+
+  def self.reset_all
+    update_all(place_id: nil)
   end
 
   def self.actions

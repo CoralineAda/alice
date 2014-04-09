@@ -24,6 +24,10 @@ module Alice
         text.gsub!(/^I /i, '')
       end
 
+      def self.ordinal(number)
+        number == 1 && "1st" || number == 2 && "2nd" || number == 3 && "3rd" || "#{number}th"
+      end
+
     end
 
   end
