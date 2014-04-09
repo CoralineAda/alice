@@ -44,9 +44,9 @@ class Alice::Item
   end
 
   def self.inventory_from(owner, list)
-    return Alice::Util::Randomizer.empty_pockets if list.empty?
-    stuff = list.map(&:name_with_article).to_sentence
-    "#{owner}'s #{Alice::Util::Randomizer.item_container} #{stuff}."
+    stuff = Alice::Util::Randomizer.empty_pockets if list.empty?
+    stuff ||= list.map(&:name_with_article).to_sentence
+    "#{owner.proper_name}'s #{Alice::Util::Randomizer.item_container} #{stuff}."
   end
 
   def self.total_inventory
