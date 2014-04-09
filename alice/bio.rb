@@ -11,11 +11,11 @@ class Alice::Bio
   end
 
   def anonymized
-    "This person is #{self.text}"
+    "This person #{self.text}"
   end
 
   def formatted
-    "#{self.user.proper_name} is #{self.text}"
+    "#{self.user.proper_name} #{self.text}"
   end
 
 end

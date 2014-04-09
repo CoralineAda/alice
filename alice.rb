@@ -47,6 +47,7 @@ module Alice
   require_relative 'alice/action'
   require_relative 'alice/actor'
   require_relative 'alice/beverage'
+  require_relative 'alice/bio'
   require_relative 'alice/bot'
   require_relative 'alice/command'
   require_relative 'alice/dungeon'
