@@ -26,16 +26,16 @@ module Alice
       command.klass.process(nick, message)
     end
 
-    def klass
-      eval(self.handler_class)
-    end
-
     def has_minimum_indicators?(found_indicators)
       [found_indicators & self.indicators].flatten.count >= minimum_indicators
     end
 
     def has_no_stop_words?(found_indicators)
       [found_indicators & self.stop_words].flatten.count == 0
+    end
+
+    def klass
+      eval(self.handler_class)
     end
 
     def minimum_indicators
