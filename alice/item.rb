@@ -20,7 +20,7 @@ class Alice::Item
   attr_accessor :message
 
   belongs_to  :actor
-  belongs_to  :user
+  belongs_to  :user, inverse_of: :items
   belongs_to  :creator, class_name: "Alice::User"
   belongs_to  :place
   has_many    :actions
