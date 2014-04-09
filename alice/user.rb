@@ -37,42 +37,6 @@ class Alice::User
     user.save
   end
 
-  def self.set_twitter(nick, handle)
-    return if handle.nil? || handle.empty?
-    handle = "@#{handle}".gsub("@@", "@")
-    find_or_create(nick).update_attributes(twitter_handle: handle)
-  end
-
-  def self.set_bio(nick, bio)
-    user = find_or_create(nick)
-    bio = bio.gsub(/^is/, '')
-    bio = bio.gsub(/([a-zA-Z0-9\_]+) ^is/, '')
-    user && user.update_attributes(bio: bio)
-  end
-
-  def self.get_bio(nick)
-    user = find_or_create(nick)    
-    return unless bio = user.bio
-    formatted_bio
-  end
-
-  def self.set_factoid(nick, factoid)
-    user = find_or_create(nick)
-    user && user.factoids.create(text: factoid.gsub(/^I /,''))
-  end
-
-  def self.get_factoid(nick)
-    return unless user = find_or_create(nick)  
-    factoid = user.factoids.sample
-    return factoid && factoid.formatted
-  end
-
-  def self.get_twitter(nick)
-    user = find_or_create(nick)  
-    twitter = user.twitter_handle
-    return user && twitter
-  end
-
   def has_nick?(nick)
     [self.primary_nick, self.alt_nicks].flatten.include?(nick.downcase)
   end
@@ -96,13 +60,13 @@ class Alice::User
     Alice::Item.inventory_from(self.proper_name, self.items)
   end
 
-  def twitter_url
-    return unless self.twitter_handle
-    "https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
-  end
   def proper_name
     self.primary_nick.capitalize
   end
 
+  def twitter_url
+    return unless self.twitter_handle
+    "https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
+  end
 
 end
