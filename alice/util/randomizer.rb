@@ -312,15 +312,15 @@ module Alice
           "a portrait of #{specific_person}",
           "a commemorative stamp of #{specific_person}",
           "an empty Tupperware container",
-          "extra batteries",
-          "spare keys",
+          "a package of extra batteries",
+          "a set of spare keys",
           "a ball of string",
-          "a ball of #{material}",
+          "a ball made of #{material}",
           "a mysterious #{material} cube",
           "a 20-sided die",
           "a pair of scissors",
-          "#{specific_person}'s autograph",
-          "#{specific_person} trading card",
+          "a framed paper with #{specific_person}'s autograph",
+          "a mint #{specific_person} trading card",
           "a soccer ball",
           "a wand of healing"
         ].sample
@@ -1139,7 +1139,7 @@ module Alice
 
       def self.weapon
         string = ""
-        string << material if one_chance_in(4)
+        string << "#{material} " if one_chance_in(4)
         string <<
         [
           "bow and arrow",

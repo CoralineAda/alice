@@ -31,13 +31,17 @@ class Alice::Item
   end
 
   def self.fruitcake
-    where(name: 'fruitcake') || create(name: 'fruitcake', is_cursed: true)
+    where(name: 'fruitcake').last || create(name: 'fruitcake', is_cursed: true)
   end
 
   def self.sweep
     all.map{|item| item.delete unless item.actor? || item.user?}
   end
 
+  def self.reading_material
+    where(is_readable: true)
+  end
+  
   def self.weapons
     where(is_weapon: true)
   end
