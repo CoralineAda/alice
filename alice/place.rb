@@ -31,7 +31,7 @@ class Alice::Place
 
   def self.go(direction)
     return false unless current.exits.include?(direction.downcase)
-    move_to(direction) && true
+    move_to(direction)
   end
 
   def self.move_to(direction, party_moving=true)
@@ -86,6 +86,7 @@ class Alice::Place
   def enter
     Alice::Place.set_current_room(self)
     handle_grue && return if has_grue?
+    return true
   end
 
   def contains?(noun)
