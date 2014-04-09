@@ -17,7 +17,7 @@ module Alice
         end
 
         def like(name)
-          where(name: /#{name}$/i)
+          where(name: /^#{name}$/i)
         end
         
       end

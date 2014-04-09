@@ -10,6 +10,15 @@ Mongoid.load!("config/mongoid.yml")
 
 module Alice
 
+  require_relative 'alice/behavior/emotes'
+  require_relative 'alice/behavior/ownable'
+  require_relative 'alice/behavior/listens'
+  require_relative 'alice/behavior/placeable'
+  require_relative 'alice/behavior/scorable'
+  require_relative 'alice/behavior/searchable'
+  require_relative 'alice/behavior/steals'
+  require_relative 'alice/behavior/tracks_activity'
+
   require_relative 'alice/handlers/beverage_finder'
   require_relative 'alice/handlers/bio'
   require_relative 'alice/handlers/factoid'
@@ -32,10 +41,6 @@ module Alice
   require_relative 'alice/parser/language_helper'
   require_relative 'alice/parser/ngram'
   require_relative 'alice/parser/ngram_factory'
-
-  require_relative 'alice/behavior/emotes'
-  require_relative 'alice/behavior/placeable'
-  require_relative 'alice/behavior/searchable'
 
   require_relative 'alice/action'
   require_relative 'alice/actor'

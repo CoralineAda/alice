@@ -88,6 +88,10 @@ class Alice::Place
     handle_grue && return if has_grue?
   end
 
+  def contains?(noun)
+    noun.place_id == self.id
+  end
+
   def contents
     return unless has_item? || has_actor?
     contents = "Contents:"

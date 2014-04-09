@@ -5,7 +5,7 @@ module Alice
     class Randomizer
 
       def self.one_chance_in(number)
-        rand(number) == 1
+        rand(number - 1) == 1
       end
 
       def self.illumination
@@ -80,6 +80,140 @@ module Alice
           "fully stocked bar that includes",
           "six-pack with one last",
           "brown paper bag with"
+        ].sample
+      end
+
+      def self.game
+        [
+          "hop-scotch",
+          "Monopoly",
+          "Cards Against Humanity",
+          "poker",
+          "blackjack",
+          "Life",
+          "Scrabble",
+          "Carcassonne",
+          "Settlers of Catan",
+          "Number Wang",
+          "Jeopardy",
+          "D&D",
+          "cards",
+          "gin rummy",
+          "liar's dice",
+          "kick-the-can",
+          "ghost in the graveyard",
+          "Trivial Pursuit",
+          "Scattergories",
+          "charades"
+        ].sample
+      end
+
+      def self.type_of_place
+        [
+          "Bronx",
+          "suburbs",
+          "Isles of Langerhans",
+          "strip mall",
+          "all-night diner",
+          "roadhouse",
+          "halls of extinction",
+          "center of the universe",
+          "epicenter of human activity",
+          "country",
+          "city",
+          "rodeo",
+          "middle of nowhere",
+          "hottest nightclub in town",
+          "local watering hole",
+          "far-flung planets of our solar system",
+          "big city",
+          "heart of America",
+          "depths of the human psyche",
+          "studio that brought you Cinderella",
+          "mind of George Lucas",
+          "cherished stories of our childhoods",
+          "golden years of radio",
+          "pre-Comic Code era",
+          "high school prom",
+          "school you went to",
+          "summer camp your parents sent you to",
+          "band camp you went to in 10th grade",
+          "support group",
+          "'burbs",
+          "movie of the same name"
+        ].sample
+      end
+
+      def self.actor_description(name)
+        [
+          "a fine, upstanding young #{name}.",
+          "the kind of #{name} you don't take home to mother.",
+          "a #{name} of medium height and medium build, with brown hair and brown eyes.",
+          "a #{name} with the look of someone who just escaped a cut-throat game of #{Alice::Randomizer.game}.",
+          "an elegant figure, resplendent in fine, hand-tailored clothing.",
+          "strangely similar to that person from that one movie.",
+          "tall, dark, and handsome.",
+          "good-looking and out for a wild night at the #{Alice::Randomizer.type_of_place}.",
+          "grim-faced and resolute.",
+          "a lean, hungry-looking person.",
+          "yet another average #{name} from the #{Alice::Randomizer.type_of_place}.",
+          "friendy face from the #{Alice::Randomizer.type_of_place}.",
+          "a good-natured sort with a broad, friendly smile.",
+          "an old-fashioned sort with a heart of gold.",
+          "a spitting image of Wilford Brimley",
+          "the grown-up version of that kid from the cereal box.",
+          "the kind of person you'd expect to meet iin the #{Alice::Randomizer.type_of_place}.",
+          "just another sucker on the vine.",
+          "just another restless soul.",
+          "not the kind of person you were expecting.",
+          "perfectly average, except for their immense #{Alice::Randomizer.body_thing}.",
+
+
+        ].sample
+      end
+
+      def self.body_thing
+        [
+          "head",
+          "nose",
+          "ears",
+          "eyes",
+          "eyebrows",
+          "chin",
+          "shoulders",
+          "arms",
+          "hands",
+          "fingers",
+          "knees",
+          "feet",
+          "toes",
+          "love handles",
+          "dimples",
+          "freckles",
+          "pimples",
+          "belt buckle",
+          "nostrils",
+          "knuckles",
+          "knees",
+          "elbows",
+          "forehead"
+        ].sample
+      end
+
+      def self.item_description(thing)
+        [
+          "It looks like a perfectly ordinary #{thing}.",
+          "It looks like a perfectly ordinary #{thing}. Then again... that's how they trick you...",
+          "It seems to be a normal #{thing}.",
+          "It isn't moving, that's for sure.",
+          "The #{thing} looks a lot like the giant #{thing} standing right behind you.",
+          "It isn't supposed to be moving, that's for sure.",
+          "An ordinary #{thing}-- or is it?!",
+          "Pretty creepy as far as #{thing.pluralize} go, honestly.",
+          "Aside from its enormous size, it seems fairly normal.",
+          "Aside from its diminutive size, it seems fairly normal.",
+          "Just your standard issue #{thing}.",
+          "The #{thing}? Not much to look at if you ask me."
         ].sample
       end
 

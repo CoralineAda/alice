@@ -6,60 +6,70 @@ module Alice
 
     class Beverage
 
+      include Alice::Behavior::Listens
+      include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
-      match /^\!spill (.+)/,    method: :spill, use_prefix: false
-      match /^\!pour (.+)/,     method: :spill, use_prefix: false
-      match /^\!brew (.+)/,     method: :brew, use_prefix: false
-      match /^\!drink (.+)/,    method: :drink, use_prefix: false
-      match /^\!quaff (.+)/,    method: :drink, use_prefix: false
-      match /^\!sip (.+)/,      method: :drink, use_prefix: false
-      match /^\!swallow (.+)/,  method: :drink, use_prefix: false
-      match /^\!gulp (.+)/,     method: :drink, use_prefix: false
-      match /^\!down (.+)/,     method: :drink, use_prefix: false
-      match /^\!chug (.+)/,     method: :drink, use_prefix: false
+      match /^\!spill (.+)/,    method: :spill,       use_prefix: false
+      match /^\!pour (.+)/,     method: :spill,       use_prefix: false
+      match /^\!brew (.+)/,     method: :brew,        use_prefix: false
+      match /^\!drink (.+)/,    method: :drink,       use_prefix: false
+      match /^\!quaff (.+)/,    method: :drink,       use_prefix: false
+      match /^\!sip (.+)/,      method: :drink,       use_prefix: false
+      match /^\!swallow (.+)/,  method: :drink,       use_prefix: false
+      match /^\!gulp (.+)/,     method: :drink,       use_prefix: false
+      match /^\!down (.+)/,     method: :drink,       use_prefix: false
+      match /^\!chug (.+)/,     method: :drink,       use_prefix: false
       match /^\!drinks/,        method: :list_drinks, use_prefix: false
       match /^\!fridge/,        method: :list_drinks, use_prefix: false
 
-      def drink(m, what)
-        beverage = ensure_beverage(m, what)
-        beverage && m.reply(beverage.drink)
-      end
-
-      def spill(m, what)
-        beverage = ensure_beverage(m, what)
-        beverage && m.reply(beverage.spill)
-      end
-
-      def list_drinks(m)
-        m.reply(Alice::Beverage.total_inventory)
-      end
-
-      def ensure_beverage(m, what)
-        return unless user = User.find_or_create(m.user.nick) 
-        unless beverage = Alice::Beverage.from(what).last
-          m.reply("There is no such drink as a #{what}. Maybe you should brew one?")
+      def brew(channel_user, what)
+        if Alice::Util::Mediator.non_op?(channel_user) && Alice::Randomizer.one_chance_in(5)
+          Alice::Util::Mediator.reply_to(channel_user, "Your attempt at brewing failed miserably.")
           return
         end
-        unless user.beverages.include?(beverage)
-          m.reply("You don't even have the #{beverage.name}!")
+        if Alice::Beverage.already_exists?(what)
+          Alice::Util::Mediator.reply_to(channel_user, "Everyone knows that there can only be one #{what}.")
+          return
+        else
+          user = current_user_from(channel_user)
+          beverage = Alice::Beverage.create(name: what.downcase, user: user)
+
+          if observer == Alice.User.bot
+            Alice::Util::Mediator.emote_to(channel_user, "#{actor.observe_brewing(channel_user.user.nick, beverage.name)}")
+          else
+            Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} #{actor.observe_brewing(channel_user.user.nick, beverage.name)}")
+          end
+        end
+        
+      end
+
+      def drink(channel_user, what)
+        if beverage = ensure_beverage(channel_user, what)
+          Alice::Util::Mediator.reply_to(channel_user, beverage.drink)
+        end
+      end
+
+      def spill(channel_user, what)
+        if beverage = ensure_beverage(channel_user, what)
+          Alice::Util::Mediator.reply_to(channel_user, beverage.spill)
+        end
+      end
+
+      def list_drinks(channel_user)
+        Alice::Util::Mediator.reply_to(channel_user, Alice::Beverage.total_inventory)
+      end
+
+      def ensure_beverage(channel_user, what)
+        unless beverage = Alice::Beverage.from(what).last
+          Alice::Util::Mediator.reply_to(channel_user, "There is no such drink as a #{what}. Maybe you should brew one?")
+          return
+        end
+        unless current_user_from(channel_user).beverages.include?(beverage)
+          Alice::Util::Mediator.reply_to(channel_user, "You don't even have the #{beverage.name}!")
           return
         end
         beverage
-      end
-
-      def brew(m, what)
-        unless Alice::Util::Mediator.op?(m) || rand(5) < 3
-          m.reply("Your attempt at brewing failed miserably.")
-          return
-        end
-        if beverage = Alice::Beverage.where(name: what.downcase).last
-          m.reply("Everyone knows that there can only be one #{what}.")
-          return
-        end
-        user = Alice::User.find_or_create(m.user.nick)
-        beverage = Alice::Beverage.create(name: what.downcase, user: user)
-        m.action_reply("#{Alice::Util::Randomizer.brew_message}")
       end
 
     end

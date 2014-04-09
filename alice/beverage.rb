@@ -3,7 +3,8 @@ class Alice::Beverage
   include Mongoid::Document
   include Mongoid::Timestamps
   include Alice::Behavior::Searchable
-  include Alice::Behavior::Tradeable
+  include Alice::Behavior::Ownable
+  include Alice::Behavior::Placeable
 
   field :name
   field :is_hidden, type: Boolean
@@ -16,6 +17,10 @@ class Alice::Beverage
   belongs_to :place
 
   attr_accessor :message
+
+  def self.already_exist?(name)
+    like(name).present?
+  end
 
   def self.inventory_from(owner, list)
     return Alice::Util::Randomizer.empty_cooler if list.empty?
