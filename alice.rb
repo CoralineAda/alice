@@ -54,6 +54,7 @@ module Alice
   require_relative 'alice/factoid'
   require_relative 'alice/item'
   require_relative 'alice/oh'
+  require_relative 'alice/leaderboard'
   require_relative 'alice/place'
 
   require_relative 'alice/util/mediator'

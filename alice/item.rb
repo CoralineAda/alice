@@ -16,6 +16,7 @@ class Alice::Item
   field :creator_id
 
   validates_uniqueness_of :name
+  validates_presence_of :name
   
   attr_accessor :message
 
@@ -25,9 +26,20 @@ class Alice::Item
   has_many    :actions
 
   before_create :check_cursed
+  before_create :ensure_description
 
   def self.already_exists?(name)
     like(name).present?
+  end
+
+  def self.forge(args={})
+    new_item = create(
+      name: args[:name].downcase,
+      user: args[:user],
+      actor: args[:actor],
+      creator_id: args[:user].try(:id)
+    )
+    new_item && self.creator && self.creator.score_point
   end
 
   def self.fruitcake
@@ -67,11 +79,12 @@ class Alice::Item
   end
 
   def creator
+    return unless self.creator_id
     Alice::User.find(self.creator_id)
   end
 
-  def description
-    @description || Alice::Util::Randomizer.item_description(self.name)
+  def ensure_description
+    self.description ||= Alice::Util::Randomizer.item_description(self.name)
   end
 
   def name_with_article

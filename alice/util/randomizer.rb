@@ -79,7 +79,7 @@ module Alice
       end
 
       def self.nth
-        [1..13].to_a.map{ |i| i == 1 && "1st" || i == 2 && "2nd" || i == 3 && "3rd" || "#{i}th"}.sample
+        (1..13).to_a.map{ |i| Alice::Util::Sanitizer.ordinal(i)}.sample
       end
 
       def self.color
@@ -543,6 +543,9 @@ module Alice
 
       def self.specific_person
         [
+          "Thing One",
+          "Thing Two",
+          "Cat in the Hat",
           "Abraham Lincoln",
           "Edgar Allan Poe",
           "Captain Janeway",

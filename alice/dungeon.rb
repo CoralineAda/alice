@@ -10,7 +10,7 @@ class Alice::Dungeon
   end
 
   def self.cleanup
-    Alice::Actor.delete_all
+    Alice::Actor.reset_all
     Alice::Beverage.sweep
     Alice::Item.sweep
     Alice::Item.weapons.map{|w| w.delete}
