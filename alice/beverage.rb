@@ -35,7 +35,7 @@ class Alice::Beverage
   end
 
   def self.unique_name
-    name = "#{Alice::Randomizer.beverage_container} of #{Alice::Randomizer.beverage}",
+    name = "#{Alice::Util::Randomizer.beverage_container} of #{Alice::Util::Randomizer.beverage}",
     name = unique_name if where(name: name).first 
     name
   end
@@ -67,7 +67,7 @@ class Alice::Beverage
   end
 
   def name_with_article
-    Alice::Util::Sanitizer.process("#{Alice::Randomizer.article} #{self.name}")
+    Alice::Util::Sanitizer.process("#{Alice::Util::Randomizer.article} #{self.name}")
   end
 
 end

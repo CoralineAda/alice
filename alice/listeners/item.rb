@@ -13,14 +13,18 @@ module Alice
       match /^\!forge (.+)/,    method: :forge, use_prefix: false
       match /^\!steal (.+)/,    method: :steal, use_prefix: false
       match /^\!inventory/,     method: :inventory, use_prefix: false
+      match /^\!stuff/,         method: :inventory, use_prefix: false
+      match /^\!items/,         method: :inventory, use_prefix: false
       match /^\!destroy (.+)/,  method: :destroy, use_prefix: false
       match /^\!get (.+)/,      method: :get, use_prefix: false
+      match /^\!grab (.+)/,     method: :get, use_prefix: false
       match /^\!pick up (.+)/,  method: :get, use_prefix: false
       match /^\!drop (.+)/,     method: :drop, use_prefix: false
       match /^\!discard (.+)/,  method: :drop, use_prefix: false
       match /^\!hide (.+)/,     method: :hide, use_prefix: false
       match /^\!examine (.+)/,  method: :inspect, use_prefix: false
       match /^\!inspect (.+)/,  method: :inspect, use_prefix: false
+      match /^\!look (.+)$/,    method: :inspect, use_prefix: false
       match /^\!find (.+)/,     method: :find, use_prefix: false
 
       # TODO copy this pattern!
@@ -28,13 +32,18 @@ module Alice
         Alice::Util::Mediator.reply_to(channel_user, Alice::Handlers::ItemFinder.process(channel_user, what).content)
       end
 
-      def inspect(channel_user, what)
-        return unless noun = Alice::Item.from(what).last || Alice::Actor.from(what).last
-        if current_user_from(channel_user).items.include?(noun) || Alice::Place.current.contains?(noun)
-          Alice::Util::Mediator.emote_to(channel_user, item.description)
-        else
-          Alice::Util::Mediator.reply_to(channel_user, "#{item.proper_name} is not visible to you.")
+      def inspect(channel_user, noun)
+        if subject = Alice::User.from(noun.downcase).last  
+          message ||= subject.description
+        elsif subject = Alice::Item.from(noun.downcase).last || Alice::Beverage.from(noun.downcase).last || Alice::Actor.from(noun.downcase).last
+          if Alice::Place.subject.contains?(noun)
+            message ||= noun.description
+          end
+        elsif Alice::Place.current.description.include?(noun)
+          message ||= Alice::Util::Randomizer.description(noun)
         end
+        message ||= Alice::Util::Randomizer.not_here(noun)
+        Alice::Util::Mediator.reply_to(channel_user, message)
       end
 
       def drop(channel_user, what)
@@ -49,7 +58,7 @@ module Alice
         return unless noun = Alice::Item.from(what).last || Alice::Actor.from(what).last
         if Alice::Place.current.contains?(noun)
           user_from(channel_user).add_to_inventory(item)
-          Alice::Util::Mediator.reply_to(channel_user, Alice::Randomizer.pickup_message(item.name, channel_user.user.nick))
+          Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.pickup_message(item.name, channel_user.user.nick))
         else
           Alice::Util::Mediator.reply_to(channel_user, "You cannot get the #{item}!")
         end
