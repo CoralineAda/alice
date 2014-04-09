@@ -24,7 +24,7 @@ module Alice
       match /^\!fridge/,        method: :list_drinks, use_prefix: false
 
       def brew(channel_user, what)
-        if Alice::Util::Mediator.non_op?(channel_user) && Alice::Randomizer.one_chance_in(5)
+        if Alice::Util::Mediator.non_op?(channel_user) && Alice::Util::Randomizer.one_chance_in(5)
           Alice::Util::Mediator.reply_to(channel_user, "Your attempt at brewing failed miserably.")
           return
         end

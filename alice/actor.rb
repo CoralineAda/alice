@@ -42,11 +42,11 @@ class Alice::Actor
   end
 
   def ensure_description
-    self.description ||= Alice::Randomizer.actor_description(self.name)
+    self.description ||= Alice::Util::Randomizer.actor_description(self.name)
   end
 
   def do_something
-    return unless Alice::Randomizer.one_chance_in(10)
+    return unless Alice::Util::Randomizer.one_chance_in(10)
     self.public_send(Alice::Actor.actions.sample)
   end
 

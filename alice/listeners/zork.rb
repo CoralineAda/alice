@@ -19,9 +19,6 @@ module Alice
       match /^\!go (east)/,   method: :move, use_prefix: false
       match /^\!go (west)/,   method: :move, use_prefix: false
       match /^\!look$/,       method: :look, use_prefix: false
-      match /^\!look (.+)$/,  method: :examine, use_prefix: false
-      match /^\!inspect (.+)$/,  method: :examine, use_prefix: false
-      match /^\!examine (.+)$/,  method: :examine, use_prefix: false
       match /^\!(.+ .+)/,     method: :handle_tricksies, use_prefix: false
       match /^\!xyzzy/,       method: :move_random, use_prefix: false
       match /^\!reset maze/,  method: :reset_maze, use_prefix: false
@@ -78,20 +75,6 @@ module Alice
             "Do you always go around #{verb}ing things?"
           ].sample
         end
-        Alice::Util::Mediator.reply_to(channel_user, message)
-      end
-
-      def examine(channel_user, noun)
-        if subject = Alice::User.from(noun.downcase).last  
-          message ||= subject.description
-        elsif subject = Alice::Item.from(noun.downcase).last || Alice::Beverage.from(noun.downcase).last || Alice::Actor.from(noun.downcase).last
-          if Alice::Place.subject.contains?(noun)
-            message ||= noun.description
-          end
-        elsif Alice::Place.current.description.include?(noun)
-          message ||= Alice::Randomizer.description(noun)
-        end
-        message ||= Alice::Randomizer.not_here(noun)
         Alice::Util::Mediator.reply_to(channel_user, message)
       end
 

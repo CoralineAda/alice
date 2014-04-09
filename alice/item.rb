@@ -47,11 +47,11 @@ class Alice::Item
   end
 
   def description
-    @description || Alice::Randomizer.item_description(self.name)
+    @description || Alice::Util::Randomizer.item_description(self.name)
   end
 
   def name_with_article
-    Alice::Util::Sanitizer.process("#{Alice::Randomizer.article} #{self.name}")
+    Alice::Util::Sanitizer.process("#{Alice::Util::Randomizer.article} #{self.name}")
   end
 
 end

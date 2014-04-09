@@ -42,12 +42,12 @@ module Alice
       end
 
       def frown(channel_user)
-        return unless Alice::Randomizer::one_chance_in(5)
+        return unless Alice::Util::Randomizer::one_chance_in(5)
         Alice::Util::Mediator.emote_to(channel_user, "#{actor.frown_with(channel_user.user.nick)}")
       end
 
       def shifty_eyes(channel_user)
-        return unless Alice::Randomizer::one_chance_in(2)
+        return unless Alice::Util::Randomizer::one_chance_in(2)
         Alice::Util::Mediator.emote_to(channel_user, "thinks #{channel_user.user.nick} looks pretty shifty.")
       end
 
