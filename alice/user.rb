@@ -55,8 +55,16 @@ class Alice::User
     user.save
   end
 
+  def creations
+    Alice::Item.where(creator: self)
+  end
+
+  def can_brew?
+    self.beverages.count < 2
+  end
+
   def can_forge?
-    self.items.count < 7
+    self.items.count < 5 && self.creations.count < 6
   end
 
   def describe

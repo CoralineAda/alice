@@ -43,6 +43,7 @@ module Alice
   require_relative 'alice/parser/ngram'
   require_relative 'alice/parser/ngram_factory'
 
+  require_relative 'alice/user'
   require_relative 'alice/action'
   require_relative 'alice/actor'
   require_relative 'alice/beverage'
@@ -53,7 +54,6 @@ module Alice
   require_relative 'alice/item'
   require_relative 'alice/oh'
   require_relative 'alice/place'
-  require_relative 'alice/user'
 
   require_relative 'alice/util/mediator'
   require_relative 'alice/util/randomizer'
