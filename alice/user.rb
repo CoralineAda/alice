@@ -16,6 +16,7 @@ class Alice::User
   has_one  :bio
   has_many :factoids
   has_many :items
+  has_many :creations, class_name: "Alice::Item"
   has_many :beverages
 
   def self.online

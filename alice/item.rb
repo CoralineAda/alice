@@ -21,7 +21,7 @@ class Alice::Item
 
   belongs_to  :actor
   belongs_to  :user, inverse_of: :items
-  belongs_to  :creator, class_name: "Alice::User"
+  belongs_to  :creator, class_name: "Alice::User", inverse_of: :creations
   belongs_to  :place
   has_many    :actions
 
