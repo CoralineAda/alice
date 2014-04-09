@@ -6,12 +6,12 @@ class Alice::Dungeon
     assign_fruitcake
     make_stuff
     populate
+    true
   end
 
   def self.cleanup
     Alice::Actor.delete_all
-    Alice::Beverage.reset_hidden!
-    Alice::Item.reset_hidden!
+    Alice::Beverage.sweep
     Alice::Item.sweep
     Alice::Item.weapons.map{|w| w.delete}
     Alice::Beverage.sweep
@@ -19,7 +19,8 @@ class Alice::Dungeon
   end
 
   def self.assign_fruitcake
-    Alice::User.active_and_online.sample.items << Alice::Item.fruitcake
+    victim = Alice::User.active_and_online.sample
+    victim && victim.items << Alice::Item.fruitcake
   end
 
   def self.populate

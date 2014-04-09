@@ -32,7 +32,7 @@ class Alice::Item
   end
 
   def self.sweep
-    all.map{|item| item.delete unless item.actor? || item.user? || item.place? }
+    all.map{|item| item.delete unless item.actor? || item.user?}
   end
 
   def self.weapons
