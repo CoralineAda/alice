@@ -658,8 +658,13 @@ module Alice
 
       def self.empty_pockets
         [
-          "empty pockets",
+          "nothing but lint",
           "nothing",
+          "not a thing",
+          "nothing visible",
+          "stale air",
+          "nothing but dust",
+          "nothing but cookie crumbs"
           "no items",
           "nada"
           ].sample
@@ -729,7 +734,7 @@ module Alice
           "vast collection of rarities includes",
           "backpack conceals",
           "knapsack harbors",
-          "brown paper bag with"
+          "brown paper bag contains"
         ].sample
       end
 
