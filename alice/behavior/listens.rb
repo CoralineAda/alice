@@ -9,7 +9,7 @@ module Alice
       end
 
       def observer
-        [Alice::Actor::Observer, Alice::User.bot].compact.sample
+        [Alice::Actor.observer, Alice::User.bot].compact.sample
       end
 
     end
