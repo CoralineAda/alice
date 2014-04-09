@@ -2,7 +2,7 @@ module Alice
 
   module Behavior
 
-    module Tradeable
+    module Placeable
 
       def self.included(klass)
         klass.extend ClassMethods
@@ -53,22 +53,25 @@ module Alice
     
       module ClassMethods
       
-        def self.reset_hidden!
-          hidden.map(&:delete)
-        end
-
-        def self.unclaimed
-          where(user_id: nil, place_id: nil)
+        def self.claimed
+          excludes(user_id: nil)
         end
 
         def self.hidden
           excludes(place_id: nil)
         end
 
-        def self.claimed
-          excludes(user_id: nil)
+        def self.reset_hidden!
+          hidden.map{|obj| obj.update_attribute(place: nil) }
         end
 
+        def self.unclaimed
+          where(user_id: nil)
+        end
+
+        def self.unplaced
+          where(place_id: nil)
+        end
 
       end
 

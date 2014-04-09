@@ -15,9 +15,9 @@ class Alice::Treasure
   
   attr_accessor :message
 
-  belongs_to :user
-  belongs_to :place
-  has_many :actions
+  belongs_to  :user
+  belongs_to  :place
+  has_many    :actions
 
   def self.inventory_from(owner, list)
     return Alice::Util::Randomizer.empty_pockets if list.empty?

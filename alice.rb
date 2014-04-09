@@ -33,11 +33,16 @@ module Alice
   require_relative 'alice/parser/ngram'
   require_relative 'alice/parser/ngram_factory'
 
+  require_relative 'alice/behavior/emotes'
+  require_relative 'alice/behavior/placeable'
+  require_relative 'alice/behavior/searchable'
+
   require_relative 'alice/action'
   require_relative 'alice/actor'
   require_relative 'alice/beverage'
   require_relative 'alice/bot'
   require_relative 'alice/command'
+  require_relative 'alice/dungeon'
   require_relative 'alice/factoid'
   require_relative 'alice/treasure'
   require_relative 'alice/user'
