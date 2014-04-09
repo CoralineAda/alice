@@ -6,6 +6,8 @@ module Alice
 
     class Core
 
+      include Alice::Behavior::Listens
+      include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
       match /\!cookie (.+)/, method: :cookie, use_prefix: false
@@ -15,69 +17,62 @@ module Alice
       match /\>\.\>/, method: :shifty_eyes, use_prefix: false
       match /^ha|^bwa|^lol/i, method: :laugh, use_prefix: false
       match /^grr|^arg|^blech|^blegh|^ugh|frown|sigh/i, method: :frown, use_prefix: false
-      match /to rule them all/, method: :bind_them, use_prefix: false
+      match /rule[s]? them all/, method: :bind_them, use_prefix: false
 
       listen_to :nick, method: :update_nick
       listen_to :join, method: :maybe_say_hi
 
-      def bind_them(m)
-        m.action_reply("solemnly intones, 'And in the darkness bind() them.'")
+      def bind_them(channel_user)
+        Alice::Util::Mediator.emote_to(channel_user, "solemnly intones, 'And in the darkness bind() them.'")
       end
 
-      def maybe_say_hi(m)
-        return if Alice::Util::Mediator.is_bot?(m.user.nick)
-        return unless Alice::Util::Randomizer.one_in_ten
-        m.action_reply(Alice::Util::Randomizer.greeting(m.user.nick))
+      def maybe_say_hi(channel_user)
+        return if Alice::Util::Mediator.is_bot?(channel_user.user.nick)
+        return unless Alice::Util::Randomizer.one_chance_in(10)
+        Alice::Util::Mediator.emote_to(channel_user, Alice::Util::Randomizer.greeting(channel_user.user.nick))
       end
 
-      def laugh(m)
-        return unless rand(5) == 1
-        m.action_reply(Alice::Util::Randomizer.laughter_with(actor, name))
+      def laugh(channel_user)
+        return unless Alice::Util::Randomizer.one_chance_in(10)
+        if observer == Alice.User.bot
+          Alice::Util::Mediator.emote_to(channel_user, "#{actor.laugh_with(channel_user.user.nick)}")
+        else
+          Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} #{actor.laugh_with(channel_user.user.nick}")
+        end
       end
 
-      def frown(m)
-        return unless rand(5) == 1
-        name = m.user.nick
-        sound = [
-          "frowns.",
-          "agrees with #{name}.",
-          "sides with #{name}.",
-          "offers chocolate.",
-          "offers alcohol.",
-          "shakes her head.",
-          "sighs.",
-          "lets out a long sigh."
-        ].sample
-        m.action_reply(sound)
+      def frown(channel_user)
+        return unless Alice::Randomizer::one_chance_in(5)
+        Alice::Util::Mediator.emote_to(channel_user, "#{actor.frown_with(channel_user.user.nick)}")
       end
 
-      def shifty_eyes
-        return unless [1,2].sample == 1
-        m.action_reply "thinks #{who} looks pretty shifty."
+      def shifty_eyes(channel_user)
+        return unless Alice::Randomizer::one_chance_in(2)
+        Alice::Util::Mediator.emote_to(channel_user, "thinks #{channel_user.user.nick} looks pretty shifty.")
       end
 
-      def cookie(m, who)
+      def cookie(channel_user, who)
         return unless Alice::User.find_or_create(who)
-        m.action_reply "tempts #{who} with a cookie."
+        Alice::Util::Mediator.emote_to(channel_user, "tempts #{channel_user.user.nick} with a warm cookie.")
       end
 
-      def pants(m)
-        m.action_reply "giggles."
+      def pants(channel_user)
+        if observer == Alice.User.bot
+          Alice::Util::Mediator.emote_to(channel_user, "#{actor.laugh_with(channel_user.user.nick)}")
+        else
+          Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} #{actor.laugh_with(channel_user.user.nick}")
+        end
       end
 
-      def help(m)
-        m.reply("!bio sets your bio, !fact sets a fact about yoursef.")
-        m.reply("Learn more about your fellow hackers by asking who they are or for me to tell you about them.")
-        m.reply("I know lots of stuff. Use !facts to prove it.")
-        m.reply("Beware the fruitcake.")
+      def help(channel_user)
+        Alice::Util::Mediator.reply_to(channel_user, "For most things you can tell me or ask me something in plain English.")
+        Alice::Util::Mediator.reply_to(channel_user, "!bio sets your bio, !fact sets a fact about yoursef, !twitter sets your Twitter handle.")
+        Alice::Util::Mediator.reply_to(channel_user, "!inventory, !forge, !brew, and !look can come in handy sometimes.")
+        Alice::Util::Mediator.reply_to(channel_user, "Also: beware the fruitcake.")
       end
 
-      def update_nick(m)
-        Alice::User.update_nick(m.user.nick, m.user.last_nick)
-      end
-
-      def sender_is_self?(sender, who)
-        sender.user.nick == who
+      def update_nick(channel_user)
+        Alice::User.update_nick(channel_user.user.nick, channel_user.user.last_nick)
       end
 
     end

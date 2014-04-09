@@ -3,7 +3,8 @@ class Alice::Item
   include Mongoid::Document
   include Mongoid::Timestamps
   include Alice::Behavior::Searchable
-  include Alice::Behavior::Tradeable
+  include Alice::Behavior::Ownable
+  include Alice::Behavior::Placeable
 
   field :name
   field :description
@@ -43,6 +44,10 @@ class Alice::Item
   def initialize(args={})
     self.is_cursed ||= rand(10) == 1
     super
+  end
+
+  def description
+    @description || Alice::Randomizer.item_description(self.name)
   end
 
   def name_with_article

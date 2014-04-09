@@ -6,6 +6,8 @@ module Alice
 
     class Zork
 
+      include Alice::Behavior::TracksActivity
+      include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
       match /^\!(north)/,     method: :move, use_prefix: false
@@ -24,8 +26,8 @@ module Alice
       match /^\!xyzzy/,       method: :move_random, use_prefix: false
       match /^\!reset maze/,  method: :reset_maze, use_prefix: false
 
-      def reset_maze(m, force=false)
-        if force || m && m.channel.ops.map(&:nick).include?(m.user.nick)
+      def reset_maze(channel_user, force=false)
+        if force || m && m.channel.ops.map(&:nick).include?(channel_user.user.nick)
           Alice::Place.reset_all!
           message = "Everything goes black and you feel like you are somewhere else!"  
         else
@@ -33,7 +35,7 @@ module Alice
         end
       end
 
-      def handle_tricksies(m, command)
+      def handle_tricksies(channel_user, command)
 
         verb = command.split[0]
 
@@ -48,13 +50,13 @@ module Alice
 
         noun = command.split[1..-1].join(' ')
 
-        if Alice::Place.last.description.include?(noun) && user = Alice::User.from(noun).last
+        if Alice::Place.current.description.include?(noun) && user = Alice::User.from(noun).last
           message = "What would #{user.primary_nick} have to say about that?"
         end
 
         return if noun.empty?
         
-        if Alice::Place.last.description.include?(noun)
+        if Alice::Place.current.description.include?(noun)
           message ||= [
             "You can't go around #{verb}ing #{noun}s all willy-nilly.",
             "Issues much?",
@@ -76,12 +78,12 @@ module Alice
             "Do you always go around #{verb}ing things?"
           ].sample
         end
-        m.reply(message)
+        Alice::Util::Mediator.reply_to(channel_user, message)
       end
 
-      def examine(m, thing)
+      def examine(channel_user, thing)
 
-        if Alice::Place.last.description.include?(thing) && user = Alice::User.from(thing.downcase).last
+        if Alice::Place.current.description.include?(thing) && user = Alice::User.from(thing.downcase).last
           message = 
             [
               "That's #{user.primary_nick} alright.",
@@ -92,21 +94,8 @@ module Alice
             ].sample
         end
 
-        if Alice::Place.last.description.include?(thing)
-          message ||= [
-            "It looks like a perfectly ordinary #{thing}.",
-            "It looks like a perfectly ordinary #{thing}. Then again... that's how they trick you...",
-            "It seems to be a normal #{thing}.",
-            "It isn't moving, that's for sure.",
-            "The #{thing} looks a lot like the giant #{thing} right behind you.",
-            "It isn't supposed to be moving, that's for sure.",
-            "An ordinary #{thing}-- or is it?!",
-            "Pretty creepy as far as #{thing.pluralize} go, honestly.",
-            "Aside from its enormous size, it seems fairly normal.",
-            "Aside from its diminutive size, it seems fairly normal.",
-            "Just your standard issue #{thing}.",
-            "The #{thing}? Not much to look at if you ask me."
-          ].sample
+        if Alice::Place.current.description.include?(thing)
+          message ||= Alice::Randomizer.description(thing)
         else
           message ||= [
             "I don't see such a thing as #{thing} here.",
@@ -115,35 +104,35 @@ module Alice
             "You could have sworn that you saw that #{thing} but it's not there now!"
           ].sample
         end
-        m.reply(message)
+        Alice::Util::Mediator.reply_to(channel_user, message)
       end
 
-      def move(m, direction)
+      def move(channel_user, direction)
         if Alice::Place.go(direction)
-          message = "#{Alice::Place.last.describe}"
+          message = "#{Alice::Place.current.describe}"
         else
           message = "You cannot move #{direction}!"
         end
-        m.reply(message)
+        Alice::Util::Mediator.reply_to(channel_user, message)
         if message =~ /eaten by a grue/i || message =~ /kills the grue/i
           message = reset_maze(Alice.bot.bot.nick, true)
-          m.reply(message)
+          Alice::Util::Mediator.reply_to(channel_user, message)
         end
       end
 
-      def move_random(m)
-        m.reply("Nothing happens.") and return unless rand(10) == 1
+      def move_random(channel_user)
+        Alice::Util::Mediator.reply_to(channel_user, "Nothing happens.") and return unless rand(10) == 1
         place = Alice::Place.random 
-        message = "When the room stops spinning... #{Alice::Place.last.describe}"
-        m.reply(message)
+        message = "When the room stops spinning... #{Alice::Place.current.describe}"
+        Alice::Util::Mediator.reply_to(channel_user, message)
         if message =~ /eaten by a grue/i
           message = reset_maze(Alice.bot.bot.nick, true)
-          m.reply(message)
+          Alice::Util::Mediator.reply_to(channel_user, message)
         end
       end
 
-      def look(m)
-        m.reply(Alice::Place.last.describe)
+      def look(channel_user)
+        Alice::Util::Mediator.reply_to(channel_user, Alice::Place.current.describe)
       end
 
     end

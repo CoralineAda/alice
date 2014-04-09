@@ -17,7 +17,7 @@ module Alice
       end
 
       def self.formatted_response(item)
-        if item.user
+        if itechannel_user.user
           [
             "The #{item.name} belongs to #{item.owner}",
             "#{item.owner} has been its guardian for #{item.elapsed_time}.",

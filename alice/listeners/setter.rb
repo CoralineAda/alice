@@ -6,6 +6,8 @@ module Alice
 
     class Setter
 
+      include Alice::Behavior::TracksActivity
+      include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
       match /^\!bio (.+)/, method: :set_bio, use_prefix: false
@@ -14,45 +16,45 @@ module Alice
       match /^FACT: (.+)/, method: :set_anonymous_factoid, use_prefix: false
       match /^OH: (.+)/, method: :set_oh, use_prefix: false
 
-      def set_bio(m, text)
-        return if text == m.user.nick
-        text = text.gsub(/^#{m.user.nick}/i, '')
+      def set_bio(channel_user, text)
+        return if text == channel_user.user.nick
+        text = text.gsub(/^#{channel_user.user.nick}/i, '')
         return unless text.present?
-        Alice::User.set_bio(m.user.nick, text) 
-        m.action_reply(positive_memorization_response(m.user.nick))
+        Alice::User.set_bio(channel_user.user.nick, text) 
+        Alice::Util::Mediator.emote_to(channel_user, positive_memorization_response(channel_user.user.nick))
       end
 
-      def set_factoid(m, text)
+      def set_factoid(channel_user, text)
         return unless text.size > 0
         if text.split(' ').count > 1
-          Alice::User.set_factoid(m.user.nick, text)
-          m.action_reply(positive_memorization_response(m.user.nick))
+          Alice::User.set_factoid(channel_user.user.nick, text)
+          Alice::Util::Mediator.emote_to(channel_user, positive_memorization_response(channel_user.user.nick))
         else
-          m.action_reply(negative_memorization_response(m.user.nick))
+          Alice::Util::Mediator.emote_to(channel_user, negative_memorization_response(channel_user.user.nick))
         end
       end
 
-      def set_anonymous_factoid(m, text)
+      def set_anonymous_factoid(channel_user, text)
         return unless text.size > 0
         if text.split(' ').count > 1
           Alice::Factoid.create(text: text)
-          m.action_reply(positive_memorization_response(m.user.nick))
+          Alice::Util::Mediator.emote_to(channel_user, positive_memorization_response(channel_user.user.nick))
         end
       end
 
-      def set_oh(m, text)
+      def set_oh(channel_user, text)
         return unless text.size > 0
         if text.split(' ').count > 1
           Alice::Oh.create(text: text)
-          m.action_reply(positive_memorization_response(m.user.nick))
+          Alice::Util::Mediator.emote_to(channel_user, positive_memorization_response(channel_user.user.nick))
         else
-          m.action_reply(negative_memorization_response(m.user.nick))
+          Alice::Util::Mediator.emote_to(channel_user, negative_memorization_response(channel_user.user.nick))
         end
       end
 
-      def set_twitter(m, handle)
-        Alice::User.set_twitter(m.user.nick, handle)
-        m.action_reply(positive_memorization_response(m.user.nick))
+      def set_twitter(channel_user, handle)
+        Alice::User.set_twitter(channel_user.user.nick, handle)
+        Alice::Util::Mediator.emote_to(channel_user, positive_memorization_response(channel_user.user.nick))
       end
 
       def negative_memorization_response(nick)

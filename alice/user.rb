@@ -1,6 +1,7 @@
 class Alice::User
 
   include Mongoid::Document
+  include Mongoid::Timestamps
   include Alice::Behavior::Searchable
   include Alice::Behavior::Scorable
   
@@ -10,11 +11,23 @@ class Alice::User
   field :last_theft, type: DateTime
   field :is_bot, type: Boolean, default: false
   field :points, type: Integer, default: 0
-
+  
   has_one  :bio
   has_many :factoids
   has_many :items
   has_many :beverages
+
+  def self.online
+    Alice::Util::Mediator.user_list.map{|m| like(channel_user)}.compact
+  end
+
+  def self.bot
+    where(is_bot: true).last
+  end
+
+  def self.active
+    where(update_at.gte => DateTime.now - 10.minutes)
+  end
 
   def self.find_or_create(nick)
     like(nick) || Alice::Util::Mediator.exists?(nick) && create(primary_nick: nick.downcase)
@@ -35,6 +48,19 @@ class Alice::User
     user.alt_nicks << old_nick.downcase
     user.alt_nicks = user.alt_nicks.uniq
     user.save
+  end
+
+  def add_to_inventory(item)
+    item.user = self
+    item.place = nil
+    item.is_hidden = false
+    item.picked_up_at = DateTime.now
+    item.save
+  end
+
+  def remove_from_inventory(item)
+    item.drop
+    item.save
   end
 
   def has_nick?(nick)

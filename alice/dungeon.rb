@@ -6,6 +6,8 @@ class Alice::Dungeon
     Alice::Item.reset_hidden!
     Alice::Place.delete_all
     Alice::Place.generate!(is_current: true)
+    # ALSO: give an active user the fruitcake
+    # ALSO: fruitcake should always be cursed
   end
 
 end
