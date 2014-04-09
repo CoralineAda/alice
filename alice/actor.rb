@@ -34,7 +34,8 @@ class Alice::Actor
     [
       :brew,
       :drink,
-      :steal,
+      :drop,
+      :pick_pocket,
       :move,
       :talk
     ]
@@ -51,7 +52,7 @@ class Alice::Actor
 
   def brew
     beverage = Alice::Beverage.make_random_for(self)
-    "#{Alice::User.bot.observe_brewing(beverage.name, self.proper_name}"
+    "#{Alice::User.bot.observe_brewing(beverage.name, self.proper_name)}"
   end
 
   def describe
@@ -63,8 +64,8 @@ class Alice::Actor
   end
 
   def drink
-    return beverage = unless actor.beverages.first
-    beverage.drink
+    return unless beverages.present?
+    beverage.sample.drink
   end
 
   def is_bot?
@@ -75,12 +76,24 @@ class Alice::Actor
     self.name
   end
 
-  def steal
+  def drop
+    return unless self.items.present?
+    self.items.sample.drop
+  end
 
+  def pick_pocket(attempts=0)
+    if thing = (Alice::User.active | Alice::User.online).select{|user| user.items.sample}.compact.sample
+      steal(thing)
+    end
+  end
+
+  def move
+    direction = Alice::Place.current.exits.sample
+    self.place = Alice::Place.move_to(direction, false)
   end
 
   def talk
-
+    "#{Alice::Util::Randomizer.says} #{Alice::Factoid.random.formatted(false)}"
   end
 
   def target

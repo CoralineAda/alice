@@ -14,8 +14,11 @@ class Alice::Factoid
     all.sample
   end
 
-  def formatted
-    "#{Alice::Util::Randomizer.fact_prefix} #{self.user.try(:proper_name)} #{self.text}"
+  def formatted(with_prefix=true)
+    message = ""
+    message << "#{Alice::Util::Randomizer.fact_prefix}" if with_prefix
+    message << " #{self.user.try(:proper_name)} #{self.text}"
+    message
   end
 
 end

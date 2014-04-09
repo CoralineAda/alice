@@ -33,7 +33,7 @@ class Alice::Place
     move_to(direction) && true
   end
 
-  def self.move_to(direction)
+  def self.move_to(direction, party_moving=true)
     if direction == 'north'
       y = current.y - 1
     elsif direction == 'south'
@@ -52,7 +52,11 @@ class Alice::Place
 
     room = Alice::Place.where(x: x, y: y).first
     room ||= Alice::Place.generate!(x: x, y:y, entered_from: opposite_direction(direction))
-    room.enter
+    if party_moving
+      room.enter
+    else
+      room
+    end
   end
 
   def self.opposite_direction(direction)

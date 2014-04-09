@@ -22,6 +22,10 @@ class Alice::User
     Alice::Util::Mediator.user_list.map{|m| like(channel_user)}.compact
   end
 
+  def self.active_and_online
+    active & online
+  end
+
   def self.bot
     where(is_bot: true).last
   end
@@ -51,6 +55,10 @@ class Alice::User
     user.save
   end
 
+  def can_forge?
+    self.items.count < 7
+  end
+
   def describe
     message = ""
     message << "#{proper_name} is #{self.bio}. " if self.bio.present
@@ -74,6 +82,10 @@ class Alice::User
     "#{self.proper_name} is #{formatted}".gsub("  ", " ")
   end
   
+  def online?
+    Alice::Util::Mediator.user_list.select{|m| Alice::User.like(channel_user) == self}.present?
+  end
+
   def proper_name
     self.primary_nick.capitalize
   end

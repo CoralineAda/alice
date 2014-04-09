@@ -143,6 +143,54 @@ module Alice
         ].sample
       end
 
+      def self.forge
+        [
+          "in the fires of Mount Doom",
+          "at the local makerspace",
+          "in the Denny's parking lot",
+          "in a basement lab",
+          "in the garage",
+          "in their parent's attic",
+          "in shop class",
+          "with a 3d printer",
+          "with a MakerBot",
+          "in the top-secret secret lair",
+          "in the top-secret lab",
+          "in the bowels of the Pentagon",
+          "using a black ops budget",
+          "without the permission of any governing body",
+          "outside the purview of US law",
+          "under the noses of the authorities",
+          "with the channel's conveniently placed anvil",
+          "at the local machine shop",
+          "with the Mold-A-Rama",
+          "with a vacuum-mold",
+          "cast from resin",
+          "from a plastic mold",
+          "wrought of cold iron",
+          "fresh from the garden",
+          "just like mom used to make",
+          "using the traditional recipe",
+          "using their own recipe",
+          "from a recipe in a magazine",
+          "from a recipe in the Anarchist's Cookbook",
+          "from memory",
+          "based on the ancient texts",
+          "in the traditional manner",
+          "using hand-tools only",
+          "in a #{Alice::Util::Randomizer.illumination} room",
+          "in a #{Alice::Util::Randomizer.illumination} workshop",
+          "in a #{Alice::Util::Randomizer.illumination} laboratory",
+          "cooled in a bucket of #{Alice::Util::Randomizer.beverage}",
+          "under bright #{color} halogen lights",
+          "plucked from the bowels of the #{Alice::Util::Randomizer.type_of_place}",
+          "safe from the prying eyes of #{Alice::User.random.proper_name}",
+          "not unlike the one that #{Alice::User.random.person} always carries",
+          "under the watchful eye of #{Alice::User.random.person}",
+          "according to methods devised by #{Alice::User.random.person}"
+        ].sample
+      end
+
       def self.illumination
         [
           "dark",
@@ -180,7 +228,7 @@ module Alice
           "We don't discuss such things in this channel.",
           "Um, what #{noun}? I don't see a #{noun}.",
           "Ooh, I guess it's imaginary #{noun} time!",
-          "Is that something from your imagination?"
+          "Is that something from your imagination?",
           "Hang on, I'm filing a missing #{noun} report right now."
         ].sample        
       end
@@ -348,7 +396,7 @@ module Alice
 
       def self.person
         [
-          "bell hooks"
+          "bell hooks",
           "Neil deGrasse Tyson",
           "Wilford Brimley",
           "that kid from the cereal box",
@@ -763,6 +811,39 @@ module Alice
           "corridor",
           "lair",
           "pit"
+        ].sample
+      end
+
+      def self.says
+        [
+          "mutters,",
+          "whispers,",
+          "declares,",
+          "sings,",
+          "calls out",
+          "reminds everyone",
+          "announces",
+          "recites a poem describing the idea that",
+          "sings a song inspired by the idea that",
+          "loudly states",
+          "firmly states",
+          "tries to start a debate about whether or not",
+          "repeats the old adage that",
+          "wishes to remind us all that",
+          "will never forget that",
+          "just remembered that",
+          "notes that",
+          "observes that",
+          "recounts the time when they learned that",
+          "scribbles a note that reads",
+          "writes on the whiteboard",
+          "proudly declares",
+          "haltingly utters the words",
+          "says that",
+          "says that",
+          "says that",
+          "says that",
+          "says that"
         ].sample
       end
 

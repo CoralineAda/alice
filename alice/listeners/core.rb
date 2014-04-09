@@ -37,7 +37,7 @@ module Alice
         if observer == Alice.User.bot
           Alice::Util::Mediator.emote_to(channel_user, "#{actor.laugh_with(channel_user.user.nick)}")
         else
-          Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} #{actor.laugh_with(channel_user.user.nick}")
+          Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} #{actor.laugh_with(channel_user.user.nick)}")
         end
       end
 
@@ -60,7 +60,7 @@ module Alice
         if observer == Alice.User.bot
           Alice::Util::Mediator.emote_to(channel_user, "#{actor.laugh_with(channel_user.user.nick)}")
         else
-          Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} #{actor.laugh_with(channel_user.user.nick}")
+          Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} #{actor.laugh_with(channel_user.user.nick)}")
         end
       end
 
