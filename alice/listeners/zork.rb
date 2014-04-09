@@ -125,7 +125,7 @@ module Alice
           message = "You cannot move #{direction}!"
         end
         m.reply(message)
-        if message =~ /eaten by a grue/i
+        if message =~ /eaten by a grue/i || message =~ /kills the grue/i
           message = reset_maze(Alice.bot.bot.nick, true)
           m.reply(message)
         end
