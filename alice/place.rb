@@ -331,7 +331,7 @@ class Alice::Place
     elsif self.x == 0 && self.y == 0
       "#{self.description}. #{contents} Exits: #{exits.to_sentence}.".gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
     else
-      "You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}.".gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
+      "#{user.primary_nick}: You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}.".gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
     end
   end
 
