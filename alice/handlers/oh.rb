@@ -10,7 +10,7 @@ module Alice
 
       def self.process(sender, command)
         if oh = Alice::Oh.random
-          Alice::Response.new(content: oh.formatted, kind: :reply)
+          Alice::Handlers::Response.new(content: oh.formatted, kind: :reply)
         end
       end
 

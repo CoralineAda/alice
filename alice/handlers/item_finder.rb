@@ -12,7 +12,7 @@ module Alice
         item = Alice::Item.hidden.like('bow and arrow').first if command.include?('bow')
         item ||= Alice::Item.from(command).first
         if item
-          Alice::Response.new(content: formatted_response(item), kind: :reply)
+          Alice::Handlers::Response.new(content: formatted_response(item), kind: :reply)
         end
       end
 
