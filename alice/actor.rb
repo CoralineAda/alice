@@ -11,7 +11,7 @@ class Alice::Actor
   field :name
   field :description
   field :last_theft, type: DateTime
-  field :points
+  field :points, type: Integer, default: 0
   
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -34,6 +34,7 @@ class Alice::Actor
     [
       :brew,
       :drink,
+      :spill,
       :drop,
       :pick_pocket,
       :move,
@@ -51,21 +52,27 @@ class Alice::Actor
   end
 
   def brew
-    beverage = Alice::Beverage.make_random_for(self)
+    beverage = Alice::Beverage.brew_random
+    self.beverages << beverage
     "#{Alice::User.bot.observe_brewing(beverage.name, self.proper_name)}"
   end
 
   def describe
     message = ""
-    message << "#{proper_name} #{self.description}. "
+    message << "#{proper_name} is #{self.description}. "
     message << "#{self.inventory}. "
     message << "They currently have #{self.points} points. "
     message
   end
 
+  def spill
+    return "#{proper_name } fumbles with an empty cup." unless beverages.present?
+    beverages.sample.spill
+  end
+
   def drink
-    return unless beverages.present?
-    beverage.sample.drink
+    return "#{proper_name } looks thirsty." unless beverages.present?
+    beverages.sample.drink
   end
 
   def is_bot?
@@ -82,8 +89,10 @@ class Alice::Actor
   end
 
   def pick_pocket(attempts=0)
-    if thing = (Alice::User.active | Alice::User.online).select{|user| user.items.sample}.compact.sample
-      steal(thing)
+    if thing = Alice::User.active_and_online.map{|user| user.items.sample}.compact.sample
+      steal(thing.name)
+    else
+      "#{proper_name} looks around slyly."
     end
   end
 

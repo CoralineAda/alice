@@ -95,7 +95,7 @@ module Alice
         user = Alice::User.find_or_create(channel_user.user.nick)
 
         if user.can_forge?
-          Alice::Item.create(name: what.downcase, user: user, creator: user.id)
+          Alice::Item.create(name: what.downcase, user: user, creator_id: user.id)
           Alice::Util::Mediator.emote_to(channel_user, "forges a #{what} #{Alice::Util::Randomizer.forge} for #{channel_user.user.nick}.")
         else
           Alice::Util::Mediator.emote_to(channel_user, "thinks that #{channel_user.user.nick} has enough stuff already.")

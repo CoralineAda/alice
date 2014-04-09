@@ -13,7 +13,7 @@ class Alice::Item
   field :is_weapon, type: Boolean
   field :is_readable, type: Boolean
   field :picked_up_at, type: DateTime
-  field :created_by
+  field :creator_id
 
   validates_uniqueness_of :name
   
@@ -21,7 +21,6 @@ class Alice::Item
 
   belongs_to  :actor
   belongs_to  :user, inverse_of: :items
-  belongs_to  :creator, class_name: "Alice::User", inverse_of: :creations
   belongs_to  :place
   has_many    :actions
 
@@ -51,7 +50,7 @@ class Alice::Item
 
   def self.total_inventory
     return "We have nothing! Someone needs to forge some stuff, possibly some things as well!" if count == 0
-    return "Our equipment includes #{all.sorted.map(&:name_with_article).to_sentence}."
+    "Our equipment includes #{all.sorted.map(&:name_with_article).to_sentence}."
   end
 
   def self.sorted
@@ -60,6 +59,11 @@ class Alice::Item
 
   def check_cursed
     self.is_cursed ||= rand(10) == 1
+    true
+  end
+
+  def creator
+    Alice::User.find(self.creator_id)
   end
 
   def description

@@ -15,7 +15,7 @@ class Alice::Place
   DIRECTIONS = ['north', 'south', 'east', 'west']
 
   def self.current
-    where(:is_current => true).current || all.sample || generate!
+    where(:is_current => true).last || all.sample || generate!
   end
 
   def self.generate!(args={})
@@ -26,6 +26,7 @@ class Alice::Place
       is_current: args[:is_current]
     )
     room.update_attribute(:description, random_description(room))
+    room
   end
 
   def self.go(direction)
@@ -72,14 +73,12 @@ class Alice::Place
   end
 
   def self.random_description(room)
-    return "It is pitch black. You are likely to be eaten by a grue." if room.origin_square?
+    return "It is pitch black. You are likely to be eaten by a grue. " if room.origin_square?
     description = [
       Alice::Util::Randomizer.room_adjective,
       Alice::Util::Randomizer.room_type,
-      Alice::Util::Randomizer.room_description,
-      '.',
-    ].join(' ')
-    description << "It is #{brightness}" if Alice::Util::Randomizer.one_chance_in(5)
+      Alice::Util::Randomizer.room_description
+    ].join(' ') + "."
     description
   end
 
@@ -93,14 +92,22 @@ class Alice::Place
   end
 
   def contains?(noun)
-    noun.place_id == self.id
+    noun.place == self
   end
 
   def contents
     return unless has_item? || has_actor?
-    contents = "Contents:"
-    contents << "#{self.items.map(&:name).to_sentence}." if self.has_item?
-    contents << "#{self.actors.map(&:name).to_sentence}." if self.has_actor?
+    contents = "Contents: "
+    contents << "#{self.items.map(&:name).to_sentence}. " if self.has_item?
+    if self.has_actor?
+      contents << "You notice #{self.actors.map(&:name).to_sentence}"
+      if Alice::Util::Randomizer.one_chance_in(2)
+        contents << " #{Alice::Util::Randomizer.action}" 
+      else
+        contents << " here."
+      end  
+      contents << "."
+    end
     contents
   end
 

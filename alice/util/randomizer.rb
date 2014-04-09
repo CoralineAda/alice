@@ -8,6 +8,76 @@ module Alice
         rand(number - 1) == 1
       end
 
+      def self.action
+        [
+          "lurking nearby.",
+          "hiding behind the door.",
+          "whispering softly.",
+          "hissing like a snake.",
+          "standing around listlessly.",
+          "playing a quiet came of Chutes and Ladders.",
+          "pretending to read a book.",
+          "talking fervently about the best way to brew #{beverage}.",
+          "trying to start a fire.",
+          "discussing medieval #{weapon} forging techniques.",
+          "recounting their trip to the #{type_of_place}.",
+          "apparently planning a trip to the #{type_of_place}.",
+          "conferring quietly with an unseen figure.",
+          "miming walking in a strong wind.",
+          "trying and failing to rap.",
+          "rapping like a master rhymer.",
+          "noodling around on a guitar.",
+          "imitating dead presidents.",
+          "finishing off a #{beverage_container} of #{beverage}.",
+          "rooting around in their emoty #{beverage_container}.",
+          "drawing idly on a pad of paper.",
+          "writing furtively in their journal.",
+          "diligently dusting the room.",
+          "sweeping up broken glass.",
+          "murdering time.",
+          "smoking menthol cigarettes.",
+          "in the middle of a poetry slam.",
+          "singing folk songs.",
+          "laughing over something they saw online.",
+          "plotting the latest internet meme.",
+          "toying with the idea for a startup.",
+          "browsing Reddit.",
+          "hacking away at an IRC bot.",
+          "listening to music.",
+          "twiddling their fingers.",
+          "discussing post-modernism.",
+          "discussing the problems of second-wave feminism.",
+          "trying to take over the world.",
+          "talking to themselves in a funny voice.",
+          "singing a song about #{beverage}.",
+          "reciting a poem about #{beverage}.",
+          "reading a #{reading_material} about the history of the #{reading_material}.",
+          "reciting The Jabberwocky from memory.",
+          "throwing confetti into the air for no particular reason.",
+          "having a quiet party.",
+          "painting their nails #{color}.",
+          "dyeing their hair #{color}",
+          "looking for a #{color} crayon.",
+          "writing on their shoes with a Sharpie.",
+          "thinking about making a #{item} #{forge}",
+          "dancing alone.",
+          "sobbing gently.",
+          "laughing at nothing in particular.",
+          "drawing a picture of room that is #{illumination}.",
+          "stuffing their pockets with twenty-dollar bills.",
+          "putting out a cigarette.",
+          "twirling #{item} over their heads.",
+          "whooping like a cowboy.",
+          "staring at #{thing}",
+          "drawing doodles of #{thing}",
+          "sketching a rough drawing of #{thing} on the wall.",
+          "muttering something about heading to their #{room_type} to sleep.",
+          "sleeping on the floor.",
+          "dancing on the ceiling.",
+          "tickling an imaginary otter."
+        ].sample
+      end
+
       def self.nth
         [1..13].to_a.map{ |i| i == 1 && "1st" || i == 2 && "2nd" || i == 3 && "3rd" || "#{i}th"}.sample
       end
@@ -189,9 +259,9 @@ module Alice
           "under bright #{color} halogen lights",
           "plucked from the bowels of the #{Alice::Util::Randomizer.type_of_place}",
           "safe from the prying eyes of #{Alice::User.random.proper_name}",
-          "not unlike the one that #{Alice::User.random.person} always carries",
-          "under the watchful eye of #{Alice::User.random.person}",
-          "according to methods devised by #{Alice::User.random.person}"
+          "not unlike the one that #{Alice::User.random.proper_name} always carries",
+          "under the watchful eye of #{Alice::User.random.proper_name}",
+          "according to methods devised by #{Alice::User.random.proper_name}"
         ].sample
       end
 
@@ -239,20 +309,20 @@ module Alice
 
       def self.item
         [
-          "portrait of #{specific_person}",
-          "empty Tupperware container",
+          "a portrait of #{specific_person}",
+          "a commemorative stamp of #{specific_person}",
+          "an empty Tupperware container",
           "extra batteries",
           "spare keys",
-          "ball of string",
-          "ball of #{material}",
-          "#{material} cube",
-          "20-sided die",
-          "scissors",
+          "a ball of string",
+          "a ball of #{material}",
+          "a mysterious #{material} cube",
+          "a 20-sided die",
+          "a pair of scissors",
           "#{specific_person}'s autograph",
           "#{specific_person} trading card",
-          "soccer ball",
-          "wand of healing",
-          ""
+          "a soccer ball",
+          "a wand of healing"
         ].sample
       end
 
@@ -664,7 +734,7 @@ module Alice
           "nothing visible",
           "stale air",
           "nothing but dust",
-          "nothing but cookie crumbs"
+          "nothing but cookie crumbs",
           "no items",
           "nada"
           ].sample
@@ -894,8 +964,8 @@ module Alice
           "with scratches along the floor",
           "with claw marks on the wall",
           "with bare shelves lining the walls",
-          "with walls covered in paintings depicting #{things}",
-          "covered with posters of #{things}",
+          "with walls covered in paintings depicting #{thing}",
+          "covered with posters of #{thing}",
           "with a portrait of #{Alice::User.random.proper_name} on the wall",
           "dominated by a large statue of #{Alice::User.random.proper_name}",
           "with graffiti spelling out #{Alice::User.random.proper_name}'s name on the wall",
@@ -904,15 +974,15 @@ module Alice
           "with a faint smell of gunpowder",
           "with a corpse in the middle of the room",
           "with a massive church organ against one wall",
-          "containing #{things}",
-          "housing #{things}",
-          "containing #{things} and #{things}",
-          "servng as a storage room for #{things}",
+          "containing #{thing}",
+          "housing #{thing}",
+          "containing #{thing} and #{thing}",
+          "servng as a storage room for #{thing}",
           "with walls papered in intricate yellow designs",
           "with crumbling walls",
           "with a drooping ceiling",
           "with broken furniture scattered throughout",
-          "with #{things} on the floor",
+          "with #{thing} on the floor",
           "with high shelves",
           "overrun with rats",
           "swarming with centipedes",
@@ -931,13 +1001,13 @@ module Alice
           "lit from an unknown source",
           "lined with bookshelves",
           "that stands empty",
-          "with a window through which you can see #{things}",
+          "with a window through which you can see #{thing}",
           "partially in ruin",
-          "decorated with #{things}",
-          "with walls that look like they were painted by #{things}",
-          "in which #{things} lies sleeping",
-          "filled with #{things} you remember so well from your childhood",
-          "your great-aunt's famous dish, #{things}",
+          "decorated with #{thing}",
+          "with walls that look like they were painted by #{thing}",
+          "in which #{thing} lies sleeping",
+          "filled with #{thing} you remember so well from your childhood",
+          "your great-aunt's famous dish, #{thing}",
           "echoing with hollow laughter",
           "with walls coated in flaking red paint",
           "with a strange insignia painted on the wall",
@@ -1012,14 +1082,14 @@ module Alice
 
       def self.spill_message(item_name, actor_name)
         [
-          "#{actor_name} spills the #{item_name} all over the floor.",
-          "#{actor_name} spills the #{item_name} down the front of their shirt.",
-          "#{actor_name} knocks the #{item_name} over.",
-          "#{actor_name} slowly pours the #{item_name} out.",
-          "#{actor_name} cries over spilled #{item_name}.",
-          "The #{item_name} shatters on the floor!",
-          "#{actor_name} lets out a mighty 'Whoop!' and throws the #{item_name} against a wall.",
-          "#{actor_name} slyly dumps out the #{item_name}."
+          "#{actor_name} spills their #{item_name} all over the floor.",
+          "#{actor_name} spills their #{item_name} down the front of their shirt.",
+          "#{actor_name} accidentally knocks their #{item_name} over.",
+          "#{actor_name} slowly pours their #{item_name} out.",
+          "#{actor_name} cries over a spilled #{item_name}.",
+          "#{actor_name}'s' #{item_name} shatters on the floor!",
+          "#{actor_name} lets out a mighty 'Whoop!' and throws their #{item_name} against a wall.",
+          "#{actor_name} slyly dumps out their #{item_name}."
         ].sample
       end
 
