@@ -33,7 +33,7 @@ module Alice
       end
 
       def self.emote_to(channel_user, message)
-        channel_user.action_reply(Alice::Util::Sanitizer.process(message).capitalize)
+        channel_user.action_reply(Alice::Util::Sanitizer.process(message))
       end
 
     end
