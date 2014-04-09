@@ -53,11 +53,8 @@ class Alice::Place
 
     room = Alice::Place.where(x: x, y: y).first
     room ||= Alice::Place.generate!(x: x, y:y, entered_from: opposite_direction(direction))
-    if party_moving
-      room.enter
-    else
-      room
-    end
+    return room.enter if party_moving
+    return room
   end
 
   def self.opposite_direction(direction)
