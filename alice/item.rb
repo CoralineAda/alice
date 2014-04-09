@@ -51,7 +51,7 @@ class Alice::Item
   end
 
   def name_with_article
-    Alice::Util::Sanitizer.process("a #{self.name}")
+    Alice::Util::Sanitizer.process("#{Alice::Randomizer.article} #{self.name}")
   end
 
 end

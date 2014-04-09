@@ -6,17 +6,21 @@ class Alice::Actor
   include Alice::Behavior::Emotes
   include Alice::Behavior::Steals
   include Alice::Behavior::Placeable
+  include Alice::Behavior::HasInventory
 
   field :name
   field :description
   field :last_theft, type: DateTime
   field :points
   
+  validates_presence_of :name
   validates_uniqueness_of :name
 
   has_many   :beverages
   has_many   :items
   belongs_to :place
+
+  before_create :ensure_description
 
   def self.observer
     Alice::Actor.present.sample
@@ -36,22 +40,31 @@ class Alice::Actor
     ]
   end
 
+  def ensure_description
+    self.description ||= Alice::Randomizer.actor_description(self.name)
+  end
+
   def do_something
     return unless Alice::Randomizer.one_chance_in(10)
     self.public_send(Alice::Actor.actions.sample)
   end
 
   def brew
-    Alice::Beverage::
-    message = "#{Alice::Util::Mediator.bot_name} #{}"
+    beverage = Alice::Beverage.make_random_for(self)
+    "#{Alice::User.bot.observe_brewing(beverage.name, self.proper_name}"
   end
 
-  def description
-    "Just your run-of-the-mill #{self.proper_name}."
+  def describe
+    message = ""
+    message << "#{proper_name} #{self.description}. "
+    message << "#{self.inventory}. "
+    message << "They currently have #{self.points} points. "
+    message
   end
 
   def drink
-
+    return beverage = unless actor.beverages.first
+    beverage.drink
   end
 
   def is_bot?
@@ -60,6 +73,10 @@ class Alice::Actor
 
   def proper_name
     self.name
+  end
+
+  def steal
+
   end
 
   def talk
