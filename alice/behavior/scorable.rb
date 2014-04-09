@@ -1,6 +1,6 @@
 module Alice
 
-  module Steals
+  module Scorable
 
     def check_score
       score_text = "#{self.proper_name} has #{self.points} points"
@@ -14,6 +14,7 @@ module Alice
     end
 
     def penalize
+      return if self.score == 0
       self.update_attribute(score: self.score - 1)
     end
 

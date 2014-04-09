@@ -17,9 +17,11 @@ module Alice
 
       if Alice::Util::Randomizer.one_chance_in(5)
         message = "watches in awe as #{proper_name} steals the #{item.name} from #{item.owner}!"
-        item.user = self && item.save
+        self.items << item
+        self.score if self.respone_to?(:score)
       else
         message = "sees #{proper_name} try and fail to snatch the #{item.name} from #{item.owner}."
+        self.penalize if self.respone_to?(:penalize)
       end
     end
 
