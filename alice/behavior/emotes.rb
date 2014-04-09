@@ -35,11 +35,9 @@ module Alice
 
     def laugh_with(actor)
       [
-        "#{self.proper_name} laughs along with #{actor}.",
-        "#{self.proper_name} grins at #{actor}.",
-        "#{self.proper_name} chuckles.",
-        "#{self.proper_name} cackles!",
-        "#{self.proper_name} smiles."
+        "#{self.proper_name} #{Alice::Util::Randomizer.laugh} along with #{actor}.",
+        "#{self.proper_name} #{laugh} at #{actor}'s antics.",
+        "#{self.proper_name} #{laugh}."
       ].sample
     end
 

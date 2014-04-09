@@ -2,16 +2,18 @@ class Alice::User
 
   include Mongoid::Document
   include Alice::Behavior::Searchable
-
+  include Alice::Behavior::Scorable
+  
   field :primary_nick
   field :alt_nicks, type: Array, default: []
-  field :bio
   field :twitter_handle
   field :last_theft, type: DateTime
   field :is_bot, type: Boolean, default: false
+  field :points, type: Integer, default: 0
 
+  has_one  :bio
   has_many :factoids
-  has_many :treasures
+  has_many :items
   has_many :beverages
 
   def self.find_or_create(nick)
@@ -79,65 +81,28 @@ class Alice::User
     self.proper_name
   end
 
-  def update_thefts
-    self.update_attributes(last_theft: DateTime.now)
-  end
-
-  def recently_stole?
-    self.last_theft ||= DateTime.now - 1.day
-    self.last_theft >= DateTime.now - 13.minutes
-  end
-
-  def fumble(what)
-    treasure = Alice::Treasure.where(name: what.downcase).last
-    treasure.user = [User.all.to_a - [self]].sample
-    treasure.save
-    treasure
-  end
-
   def formatted_bio
     return unless self.bio.present?
     formatted = bio.gsub(/^is/, '')
     formatted = formatted.gsub(/^([a-zA-Z0-9\_]+) is/, '')
     "#{self.proper_name} is #{formatted}".gsub("  ", " ")
   end
+  
+  def inventory_of_beverages
+    Alice::Beverage.inventory_from(self.proper_name, self.beverages)
+  end
 
-  def try_stealing(what)
-    treasure = Alice::Treasure.where(name: what.downcase).last
-    if treasure && self.treasures.include?(treasure)
-      item = fumble(what)
-      return "laughs as #{self.formatted_name} fumbles the #{what} and it falls into #{treasure.owner}'s lap."
-    end
-    if recently_stole?
-      return "thinks that #{self.formatted_name} shouldn't press their luck on the thievery front."
-    end  
-    unless treasure
-      return "eyes #{m.user.nick} curiously."
-    end  
-    update_thefts
-    if rand(10) == 1
-      treasure.user = self && treasure.save
-      return "watches in awe as #{m.formatted_name} steals the #{treasure.name} from #{treasure.owner}!"
-    else
-      return "sees #{formatted_name} try and fail to snatch the #{treasure.name} from #{treasure.owner}."
-    end
+  def inventory_of_items
+    Alice::Item.inventory_from(self.proper_name, self.items)
   end
 
   def twitter_url
     return unless self.twitter_handle
     "https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
   end
-
-  def inventory_of_beverages
-    Alice::Beverage.inventory_from(self.proper_name, self.beverages)
-  end
-
   def proper_name
     self.primary_nick.capitalize
   end
 
-  def inventory_of_treasures
-    Alice::Treasure.inventory_from(self.proper_name, self.treasures)
-  end
 
 end

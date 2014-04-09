@@ -2,7 +2,7 @@ module Alice
 
   module Handlers
 
-    class TreasureGiver
+    class ItemGiver
 
       def self.minimum_indicators
         2
@@ -14,11 +14,11 @@ module Alice
         nick = grams.map{|g| Alice.bot.exists?(g.join(' ')) && g}.compact.flatten.last
         return unless nick
         user = Alice::User.find_or_create(nick)
-        treasure = Alice::Treasure.from(command).last
+        item = Alice::Item.from(command).last
         beverage = Alice::Beverage.from(command).last
-        if treasure
-          treasure.to(nick)
-          Alice::Response.new(content: treasure.message, kind: :reply)
+        if item
+          item.to(nick)
+          Alice::Response.new(content: item.message, kind: :reply)
         elsif beverage
           beverage.pass_to(nick)
           Alice::Response.new(content: beverage.message, kind: :reply)

@@ -15,7 +15,7 @@ module Alice
           config.plugins.plugins = [
             Listeners::Core,
             Listeners::Setter,
-            Listeners::Treasure,
+            Listeners::Item,
             Listeners::Nlp,
             Listeners::Zork,
             Listeners::Beverage
