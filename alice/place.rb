@@ -314,7 +314,7 @@ class Alice::Place
 
   def has_grue?
     return false if self.x == 0 && self.y == 0
-    self.description =~ /dark|dim|shadow/ && rand(5) == 0
+    @has_grue ||= self.description =~ /dark|dim|shadow/ && rand(5) == 0
   end
 
   def has_bow?
@@ -331,7 +331,7 @@ class Alice::Place
     elsif self.x == 0 && self.y == 0
       "#{self.description}. #{contents} Exits: #{exits.to_sentence}.".gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
     else
-      "#{user.primary_nick}: You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}.".gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
+      "You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}.".gsub('  ', ' ').gsub(' .', '.').gsub('..', '.')
     end
   end
 
