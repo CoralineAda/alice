@@ -102,7 +102,7 @@ module Alice
         [
           "empty pockets",
           "nothing",
-          "no treasures",
+          "no items",
           "nada"
           ].sample
       end
@@ -148,11 +148,11 @@ module Alice
         ].sample
       end
 
-      def self.treasure_container
+      def self.item_container
         [
           "worldy possessions include",
           "pockets contain",
-          "treasures include",
+          "items include",
           "stuff includes",
           "vast collection of rarities includes",
           "backpack conceals",
@@ -229,12 +229,33 @@ module Alice
         ].sample
       end
 
+      def self.laugh
+        [
+          "cackles",
+          "chortles",
+          "chuckles",
+          "giggles",
+          "snickers",
+          "bursts out laughing",
+          "hoots",
+          "howls with laughter",
+          "cracks up",
+          "ROFLs",
+          "LOLs",
+          "guffaws",
+          "grins",
+          "laughs",
+          "snorts",
+          "smiles"
+        ].sample
+      end
+
       def self.pickup_message(item_name, actor_name)
         [
           "#{actor_name} pockets the #{item_name}.",
           "The #{item_name} now belongs to #{actor_name}!",
           "#{actor_name} now has the #{item_name}.",
-          "Now #{actor_name}'s #{Alice::Treasure.container} the #{item_name}."
+          "Now #{actor_name}'s #{Alice::Item.container} the #{item_name}."
         ].sample
       end
 

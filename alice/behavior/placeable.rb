@@ -33,11 +33,11 @@ module Alice
       end
 
       def owner
-        self.user.proper_name
+        self.user && self.user.proper_name || self.actor && self.actor.proper_name || nil
       end
 
       def pass_to(actor)
-        if recipient = Alice::User.find_or_create(actor)
+        if recipient = Alice::Actor::where(name: actor) || Alice::User.find_or_create(actor)
           if recipient.is_bot?
             self.message = "#{recipient.proper_name} does not accept drinks."
           else

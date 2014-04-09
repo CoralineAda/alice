@@ -4,10 +4,10 @@ class Alice::Action
 
   field :trigger
   field :description
-
+  
   validates_presence_of :trigger, :description
 
-  belongs_to :treasure
+  belongs_to :item
 
   def self.triggered
     where(trigger: trigger).first

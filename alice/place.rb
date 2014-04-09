@@ -8,7 +8,7 @@ class Alice::Place
   field :x, type: Integer
   field :y, type: Integer
 
-  has_many :treasures
+  has_many :items
   has_many :beverages
   has_many :actors
   
@@ -91,7 +91,7 @@ class Alice::Place
   def contents
     return unless has_item? || has_actor?
     contents = "Contents:"
-    contents << "#{self.treasures.map(&:name).to_sentence}." if self.has_item?
+    contents << "#{self.items.map(&:name).to_sentence}." if self.has_item?
     contents << "#{self.actors.map(&:name).to_sentence}." if self.has_actor?
     contents
   end
@@ -119,10 +119,10 @@ class Alice::Place
   end
 
   def has_item?
-    return true if self.treasures.present?
+    return true if self.items.present?
     return if self.origin_square?
     return unless Alice::Util::Randomizer.one_chance_in(10)
-    return unless item = Alice::Treasure.unclaimed.unplaced.sample
+    return unless item = Alice::Item.unclaimed.unplaced.sample
     item.update_attribute(place: self)
   end
 
