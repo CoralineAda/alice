@@ -9,16 +9,7 @@ class Alice::Oh
   end
 
   def formatted
-    "#{prefix} #{text}".gsub('  ',' ')
-  end
-
-  def prefix
-    [
-      "Some say that",
-      "I heard recently that",
-      "Someone said that",
-      "It's been said that"
-    ].sample
+    "#{Alice::Util::Randomizer.oh_prefix} #{text}"
   end
 
 end

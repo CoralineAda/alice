@@ -6,24 +6,34 @@ class Alice::Beverage
   include Alice::Behavior::Tradeable
 
   field :name
+  field :is_hidden, type: Boolean
+  field :picked_up_at, type: DateTime
 
   validates_uniqueness_of :name
 
   belongs_to :user
+  belongs_to :place
 
   attr_accessor :message
 
-  def self.with_owner_names
-    all.map(&:user).uniq.map(&:drinks)
+  def self.inventory_from(owner, list)
+    return Alice::Util::Randomizer.empty_cooler if list.empty?
+    return list.map(&:name_with_article).to_sentence
   end
 
-  def self.list
+  def self.total_inventory
     return "Someone needs to brew some drinks, we're dry!" if count == 0
-    "Our beverage collection includes #{drinks_with_owners.to_sentence}."
+    string = "Our beverage collection includes #{with_owner_names.to_sentence}."
+    string << "Somewhere in the labyrinth you may find #{unclaimed.map(&:name_with_article).to_sentence}." if unclaimed.count > 0
+    string
   end
 
-  def spill
-    self.destroy && Randomizer.spill_message(self.name, owner)
+  def self.sorted
+    sort(&:name)
+  end
+
+  def self.with_owner_names
+    all.sorted.map(&:owner).uniq.map(&:drinks)
   end
 
   def drink
@@ -33,5 +43,12 @@ class Alice::Beverage
     message
   end
 
-end
+  def spill
+    self.destroy && Randomizer.spill_message(self.name, owner)
+  end
 
+  def name_with_article
+    Alice::Util::Sanitizer.process("a #{self.name}")
+  end
+
+end

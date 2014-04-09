@@ -5,7 +5,7 @@ module Alice
     class Greeting
 
       def self.process(sender, command)
-        Alice::Response.new(content: Alice::Greeting.random(sender), kind: :action)
+        Alice::Response.new(content: Alice::Util::Randomizer.greeting(sender), kind: :action)
       end
 
     end

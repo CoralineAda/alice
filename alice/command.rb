@@ -12,11 +12,6 @@ module Alice
 
     attr_accessor :message
 
-    def self.parse(nick, message)
-      return unless command = fuzzy_find(message)
-      command.klass.process(nick, message)
-    end
-
     def self.fuzzy_find(message)
       message = message.downcase.gsub(/[^a-zA-Z0-9\/\\\s]/, ' ')
       indicators = Alice::Parser::NgramFactory.omnigrams_from(message)
@@ -24,6 +19,11 @@ module Alice
       commands = matches.select{|m| m.has_minimum_indicators?(indicators) && m.has_no_stop_words?(indicators)}
       command = commands.sort{|a,b| (a.indicators & indicators).count <=> (b.indicators & indicators).count}.last
       command || nil
+    end
+
+    def self.parse(nick, message)
+      return unless command = fuzzy_find(message)
+      command.klass.process(nick, message)
     end
 
     def klass

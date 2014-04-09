@@ -8,6 +8,8 @@ class Alice::Place
   field :y, type: Integer
 
   has_many :treasures
+  has_many :beverages
+  has_many :actors
   
   DIRECTIONS = ['north', 'south', 'east', 'west']
 
