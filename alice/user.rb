@@ -31,6 +31,10 @@ class Alice::User
     where(is_bot: true).last
   end
 
+  def self.with_weapon
+    Alice::Item.weapons.exclude(user_id: nil).map(&:user)
+  end
+
   def self.active
     where(:updated_at.gte => DateTime.now - 10.minutes)
   end
