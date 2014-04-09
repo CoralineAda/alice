@@ -8,8 +8,11 @@ class Alice::Oh
     all.sample
   end
 
-  def formatted
-    "#{Alice::Util::Randomizer.oh_prefix} #{text}"
+  def formatted(prefix=true)
+    message = ""
+    message << Alice::Util::Randomizer.oh_prefix if prefix
+    message << text
+    message
   end
 
 end
