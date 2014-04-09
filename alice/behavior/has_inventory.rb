@@ -6,16 +6,16 @@ module Alice
 
       def inventory
         message = inventory_of_items
-        message << inventory_of_beverages
+        message << " " + inventory_of_beverages
         message
       end
 
       def inventory_of_beverages
-        Alice::Beverage.inventory_from(self.proper_name, self.beverages)
+        Alice::Beverage.inventory_from(self, self.beverages)
       end
 
       def inventory_of_items
-        Alice::Item.inventory_from(self.proper_name, self.items)
+        Alice::Item.inventory_from(self, self.items)
       end
 
       def add_to_inventory(item)

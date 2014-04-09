@@ -5,6 +5,7 @@ class Alice::User
   include Alice::Behavior::Searchable
   include Alice::Behavior::Scorable
   include Alice::Behavior::HasInventory
+  include Alice::Behavior::Emotes
   
   field :primary_nick
   field :alt_nicks, type: Array, default: []
@@ -15,8 +16,7 @@ class Alice::User
   
   has_one  :bio
   has_many :factoids
-  has_many :items, class_name: "Alice::Item", as: :items
-  has_many :creations, class_name: "Alice::Item", as: :creations
+  has_many :items
   has_many :beverages
 
   def self.online
@@ -57,7 +57,7 @@ class Alice::User
   end
 
   def creations
-    Alice::Item.where(creator: self)
+    Alice::Item.where(creator_id: self.id)
   end
 
   def can_brew?

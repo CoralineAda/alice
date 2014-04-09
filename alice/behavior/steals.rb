@@ -12,20 +12,25 @@ module Alice
       def steal(what)
         return "thinks that #{proper_name} shouldn't press their luck on the thievery front." if recently_stole?
 
-        item = what.respond_to(:name) ? item : Alice::Item.where(name: what.downcase).last
+        item = what.respond_to?(:name) ? item : Alice::Item.where(name: what.downcase).last
         return "eyes #{proper_name} curiously." unless item
-        return "#{Alice::Util::Randomizer.laugh} as #{proper_name} tries to steal their own #{item.name}!"
+        return "#{Alice::Util::Randomizer.laugh} as #{proper_name} tries to steal their own #{item.name}!" if item.owner == self.proper_name
 
         update_thefts
 
         if Alice::Util::Randomizer.one_chance_in(5)
           message = "watches in awe as #{proper_name} steals the #{item.name} from #{item.owner}!"
+          item.user_id = nil
+          item.actor_id = nil
+          item.place_id = nil
+          item.save
           self.items << item
-          self.score if self.respone_to?(:score)
+          self.score if self.respond_to?(:score)
         else
           message = "sees #{proper_name} try and fail to snatch the #{item.name} from #{item.owner}."
-          self.penalize if self.respone_to?(:penalize)
+          self.penalize if self.respond_to?(:penalize)
         end
+        message
       end
 
       def update_thefts

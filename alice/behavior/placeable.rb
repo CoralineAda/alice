@@ -25,23 +25,23 @@ module Alice
 
       module ClassMethods
       
-        def self.claimed
+        def claimed
           excludes(user_id: nil)
         end
 
-        def self.hidden
+        def hidden
           excludes(place_id: nil)
         end
 
-        def self.reset_hidden!
+        def reset_hidden!
           hidden.map{|obj| obj.update_attribute(place: nil) }
         end
 
-        def self.unclaimed
+        def unclaimed
           where(user_id: nil)
         end
 
-        def self.unplaced
+        def unplaced
           where(place_id: nil)
         end
 
