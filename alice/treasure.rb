@@ -4,6 +4,7 @@ class Alice::Treasure
   include Mongoid::Timestamps
 
   field :name
+  field :description
   field :is_cursed, type: Boolean
   field :is_hidden, type: Boolean
 
@@ -13,6 +14,7 @@ class Alice::Treasure
 
   belongs_to :user
   belongs_to :place
+  has_many :actions
 
   def self.reset_hidden!
     hidden.map(&:delete)
@@ -54,7 +56,7 @@ class Alice::Treasure
 
   def self.list
     string = ""
-    string << "Our collective treasures include #{claimed.map{|t| "the #{t.name}"}.to_sentence}." if claimed.count > 0
+    string << "Your collective treasures include #{claimed.map{|t| "the #{t.name}"}.to_sentence}." if claimed.count > 0
     string << "Somewhere in the labyrinth you may find #{unclaimed.map{|t| "the #{t.name}"}.to_sentence}." if unclaimed.count > 0
     string.gsub('the the', 'the')
   end
@@ -65,7 +67,10 @@ class Alice::Treasure
       "pockets contain",
       "treasures include",
       "stuff includes",
-      "vast collection of rarities includes"
+      "vast collection of rarities includes",
+      "backpack conceals",
+      "knapsack harbors",
+      "brown paper bag with"
     ].sample
   end
 
@@ -138,7 +143,7 @@ class Alice::Treasure
         self.message = "#{recipient.primary_nick} does not accept gifts."
       end
       if transferable?
-        self.message = "#{recipient.primary_nick.capitalize} now possesses the #{self.name}."
+        self.message = "#{recipient.proper_name} now possesses the #{self.name}."
         self.user = recipient
         self.save
       end
@@ -149,7 +154,7 @@ class Alice::Treasure
   end
   
   def owner
-    self.user.primary_nick.capitalize
+    self.user.proper_name
   end
 
   def elapsed_time

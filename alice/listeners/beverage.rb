@@ -8,18 +8,18 @@ module Alice
 
       include Cinch::Plugin
 
-      match /^\!spill (.+)/,  method: :spill, use_prefix: false
-      match /^\!pour (.+)/,   method: :spill, use_prefix: false
-      match /^\!brew (.+)/,   method: :brew, use_prefix: false
-      match /^\!drink (.+)/,   method: :drink, use_prefix: false
-      match /^\!quaff (.+)/,   method: :drink, use_prefix: false
-      match /^\!sip (.+)/,   method: :drink, use_prefix: false
-      match /^\!swallow (.+)/,   method: :drink, use_prefix: false
-      match /^\!gulp (.+)/,   method: :drink, use_prefix: false
-      match /^\!down (.+)/,   method: :drink, use_prefix: false
-      match /^\!chug (.+)/,   method: :drink, use_prefix: false
-      match /^\!drinks/,      method: :list_drinks, use_prefix: false
-      match /^\!fridge/,      method: :list_drinks, use_prefix: false
+      match /^\!spill (.+)/,    method: :spill, use_prefix: false
+      match /^\!pour (.+)/,     method: :spill, use_prefix: false
+      match /^\!brew (.+)/,     method: :brew, use_prefix: false
+      match /^\!drink (.+)/,    method: :drink, use_prefix: false
+      match /^\!quaff (.+)/,    method: :drink, use_prefix: false
+      match /^\!sip (.+)/,      method: :drink, use_prefix: false
+      match /^\!swallow (.+)/,  method: :drink, use_prefix: false
+      match /^\!gulp (.+)/,     method: :drink, use_prefix: false
+      match /^\!down (.+)/,     method: :drink, use_prefix: false
+      match /^\!chug (.+)/,     method: :drink, use_prefix: false
+      match /^\!drinks/,        method: :list_drinks, use_prefix: false
+      match /^\!fridge/,        method: :list_drinks, use_prefix: false
 
       def drink(m, what)
         beverage = ensure_beverage(m, what)
@@ -49,7 +49,7 @@ module Alice
       end
 
       def brew(m, what)
-        unless m.channel.ops.map(&:nick).include?(m.user.nick) || rand(5) < 3
+        unless Alice::Mediator.op?(m) || rand(5) < 3
           m.reply("Your attempt at brewing failed miserably.")
           return
         end
@@ -59,7 +59,7 @@ module Alice
         end
         user = Alice::User.find_or_create(m.user.nick)
         beverage = Alice::Beverage.create(name: what.downcase, user: user)
-        m.action_reply("#{beverage.brew_message}")
+        m.action_reply("#{Alice::Randomizer.brew_message}")
       end
 
     end

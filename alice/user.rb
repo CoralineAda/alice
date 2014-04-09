@@ -88,7 +88,7 @@ class Alice::User
   end
 
   def formatted_name
-    self.primary_nick.capitalize
+    self.proper_name
   end
 
   def update_thefts
@@ -111,7 +111,7 @@ class Alice::User
     return unless self.bio.present?
     formatted = bio.gsub(/^is/, '')
     formatted = formatted.gsub(/^([a-zA-Z0-9\_]+) is/, '')
-    "#{self.primary_nick.capitalize} is #{formatted}".gsub("  ", " ")
+    "#{self.proper_name} is #{formatted}".gsub("  ", " ")
   end
 
   def try_stealing(what)
@@ -150,18 +150,22 @@ class Alice::User
 
   def drinks
     if self.beverages.count == 0
-      "#{self.primary_nick.capitalize} has #{beverage_names}." 
+      "#{self.proper_name} has #{beverage_names}." 
     else
-      "#{self.primary_nick.capitalize}'s #{Alice::Beverage.container} #{beverage_names}." 
+      "#{self.proper_name}'s #{Alice::Randomizer.container} #{beverage_names}." 
     end
+  end
+
+  def proper_name
+    self.primary_nick.capitalize
   end
 
   def inventory
     treasure_names = ["empty pockets", "nothing", "no treasures", "nada"].sample unless self.treasures.count > 0
     treasure_names ||= self.treasures.map{|t| "the #{t.name}"}.to_sentence.gsub('the the', 'the')
-    string = "#{self.primary_nick.capitalize}'s #{Alice::Treasure.container} #{treasure_names}."
+    string = "#{self.proper_name}'s #{Alice::Treasure.container} #{treasure_names}."
     if self.beverages.present?
-      string << " #{self.primary_nick.capitalize} also has a #{Alice::Beverage.container} #{beverage_names}." 
+      string << " #{self.proper_name} also has a #{Alice::Randomizer.container} #{beverage_names}." 
     end
     string.gsub("the the", "the").gsub("a ye", "ye").gsub("the ye", "ye")
   end
