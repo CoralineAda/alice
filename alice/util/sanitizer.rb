@@ -16,6 +16,7 @@ module Alice
         text.gsub!("a o", "an o")
         text.gsub!(/^am/i, 'is')
         text.gsub!('..', '.')
+        text.gsub!('. .', '.')
         text.gsub!('  ', ' ')
         text
       end
