@@ -50,11 +50,11 @@ class Alice::Item
 
   def self.total_inventory
     return "We have nothing! Someone needs to forge some stuff, possibly some things as well!" if count == 0
-    "Our equipment includes #{all.sorted.map(&:name_with_article).to_sentence}."
+    "Our equipment includes #{sorted.map(&:name_with_article).to_sentence}."
   end
 
   def self.sorted
-    sort(&:name)
+    all.sort_by(&:name)
   end
 
   def check_cursed
