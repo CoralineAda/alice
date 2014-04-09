@@ -551,6 +551,21 @@ module Alice
         ].sample
       end
 
+      def self.greeting(name)
+        [
+          "tips their hat to",
+          "nods to",
+          "greets",
+          "smiles at",
+          "waves to",
+          "hails",
+          "says hi to",
+          "says hello to",
+          "greets fellow hacker",
+          "does the o/ thing at"
+        ].sample + " #{name}."
+      end        
+      
       def self.person
         [
           Alice::Util::Randomizer.specific_person,
