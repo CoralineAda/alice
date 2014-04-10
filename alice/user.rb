@@ -66,7 +66,7 @@ class Alice::User
   end
 
   def can_brew?
-    self.beverages.count < 2
+    self.beverages.count < 4
   end
 
   def can_forge?
