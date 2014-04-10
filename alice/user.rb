@@ -96,7 +96,7 @@ class Alice::User
 
   def formatted_bio
     return unless self.bio.present?
-    formatted = bio.gsub(/^is/, '')
+    formatted = formatted.gsub(/^is/, '')
     formatted = formatted.gsub(/^([a-zA-Z0-9\_]+) is/, '')
     "#{self.proper_name} is #{formatted}".gsub("  ", " ")
   end
