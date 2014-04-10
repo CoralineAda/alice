@@ -13,7 +13,7 @@ module Alice
       match /\!cookie (.+)/, method: :cookie, use_prefix: false
       match /\!pants/, method: :pants, use_prefix: false
       match /\!help/, method: :help, use_prefix: false
-      match /\!score^/, method: :score, use_prefix: false
+      match /\!score$/, method: :score, use_prefix: false
       match /\!score (.+)/, method: :player_score, use_prefix: false
       match /\!scores/, method: :scores, use_prefix: false
       match /\<\.\</, method: :shifty_eyes, use_prefix: false
