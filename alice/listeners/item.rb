@@ -66,7 +66,7 @@ module Alice
       end
 
       def get(channel_user, item)
-        return unless noun = Alice::Item.from(what).last || Alice::Actor.from(what).last
+        return unless noun = Alice::Item.from(item).last || Alice::Actor.from(item).last
         if Alice::Place.current.contains?(noun)
           user_from(channel_user).add_to_inventory(item)
           Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.pickup_message(item.name, channel_user.user.nick))
