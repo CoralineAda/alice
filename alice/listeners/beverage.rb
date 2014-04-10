@@ -29,8 +29,8 @@ module Alice
           Alice::Util::Mediator.reply_to(channel_user, "Your attempt at brewing failed miserably.")
           return
         end
-        if Alice::Beverage.already_exists?(what)
-          Alice::Util::Mediator.reply_to(channel_user, "Everyone knows that there can only be one #{what}.")
+        if Alice::Beverage.already_exists?(what) || Alice::User.like(what).first
+          Alice::Util::Mediator.reply_to(channel_user, "I'm afraid that there can only be one #{what}.")
           return
         else
           user = current_user_from(channel_user)

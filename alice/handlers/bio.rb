@@ -15,8 +15,6 @@ module Alice
           else
             Alice::Handlers::Response.new(content: Alice::Util::Randomizer.dunno_response(subject, kind: :reply))
           end
-        else
-          Alice::Handlers::Response.new(content: Alice::Util::Randomizer.negative_response, kind: :reply)
         end
       end
 
