@@ -5,7 +5,7 @@ module Alice
     class Factoid
 
       def self.minimum_indicators
-        2
+        3
       end
 
       def self.process(sender, command)

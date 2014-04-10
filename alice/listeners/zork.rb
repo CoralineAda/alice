@@ -19,17 +19,22 @@ module Alice
         'forge',
         'destroy',
         'drink',
-        'brew'
+        'brew',
+        'cookie',
+        'pants',
+        'help',
+        'source',
+        'bug'
       ]
 
       match /^\!(north)/i,     method: :move, use_prefix: false
       match /^\!(south)/i,     method: :move, use_prefix: false
       match /^\!(east)/i,      method: :move, use_prefix: false
       match /^\!(west)/i,      method: :move, use_prefix: false
-      match /^\!go (north)/i,  method: :move, use_prefix: false
-      match /^\!go (south)/i,  method: :move, use_prefix: false
-      match /^\!go (east)/i,   method: :move, use_prefix: false
-      match /^\!go (west)/i,   method: :move, use_prefix: false
+      match /^\!go|run|walk|exit (north)/i,  method: :move, use_prefix: false
+      match /^\!go|run|walk|exit (south)/i,  method: :move, use_prefix: false
+      match /^\!go|run|walk|exit (east)/i,   method: :move, use_prefix: false
+      match /^\!go|run|walk|exit (west)/i,   method: :move, use_prefix: false
       match /^\!look$/i,       method: :look, use_prefix: false
       match /^\!xyzzy/i,       method: :move_random, use_prefix: false
       match /^\!reset maze/i,  method: :reset_maze, use_prefix: false
@@ -40,7 +45,7 @@ module Alice
         verb = command.split[0]
         noun = command.split[1..-1].join(' ')
         
-        return if STOPWORDS.include?(verb)
+        return if STOPWORDS.include?(verb.gsub('!',''))
 
         if noun =~ /gazebo/
           message = "The gazebo kills you all!"
