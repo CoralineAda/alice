@@ -479,7 +479,7 @@ module Alice
           "Joust",
           "Mario Bros.",
           "Zelda",
-          "Super NES favorites"
+          "another Super NES favorite"
         ].sample
       end
 
@@ -558,7 +558,7 @@ module Alice
           "a movie star.",
           "a rockstar ninja unicorn.",
           "a 10x developer.",
-          "a bookish sort with a rouguish smile.",
+          "a bookish sort with a roguish smile.",
           "just stunning, really.",
           "always smiling and with a good word for everyone.",
           "notable for their elfish features.",
@@ -593,7 +593,7 @@ module Alice
           "Batwoman",
           "Mary Jane",
           "The Marlboro Man",
-          "Pippy Longstockings",
+          "Pippi Longstocking",
           "Queen Elizabeth",
           "Rasputin",
           "Edward the First",
@@ -604,7 +604,7 @@ module Alice
           "Oprah Winfrey",
           "Eleanor Roosevelt",
           "Mata Hari",
-          "Headless Marie Antoinette",
+          "A Headless Marie Antoinette",
           "Beetlejuice",
           "Batman",
           "Spock",      
@@ -646,7 +646,7 @@ module Alice
           "Martin Fowler",
           "Dr. Evil",
           "James Bond",
-          "Pinky Pie",
+          "Pinkie Pie",
           "Rainbow Dash",
           "David Bowie"
         ].sample
@@ -1212,7 +1212,7 @@ module Alice
           "bowling ball",
           "spear",
           "trident",
-          "pointy stick",
+          "Mr. Pointy",
           "stake",
           "war hammer",
           "wand of fireballs",
