@@ -13,9 +13,6 @@ module Alice
       match /\!cookie (.+)/i,     method: :cookie, use_prefix: false
       match /\!pants/i,           method: :pants, use_prefix: false
       match /\!help/i,            method: :help, use_prefix: false
-      match /\!score$/i,          method: :my_score, use_prefix: false
-      match /\!score (.+)/i,      method: :player_score, use_prefix: false
-      match /\!scores/i,          method: :scores, use_prefix: false
       match /\!source$/i,         method: :source, use_prefix: false
       match /\!bug$/i,            method: :bug, use_prefix: false
       match /\<\.\</,             method: :shifty_eyes, use_prefix: false
@@ -74,24 +71,11 @@ module Alice
         Alice::Util::Mediator.emote_to(channel_user, Alice::Util::Randomizer.greeting(channel_user.user.nick))
       end
 
-      def my_score(channel_user)
-        user = Alice::User.like(channel_user.user.nick)
-        Alice::Util::Mediator.reply_to(channel_user, user.check_score)
-      end
-
       def pants(channel_user)
         if observer == Alice::User.bot
           Alice::Util::Mediator.emote_to(channel_user, "#{observer.laugh_with(channel_user.user.nick)}")
         else
           Alice::Util::Mediator.reply_to(channel_user, "#{observer.proper_name} #{observer.laugh_with(channel_user.user.nick)}")
-        end
-      end
-
-      def player_score(channel_user, player)
-        if actor = Alice::User.from(player).first || Alice::Actor.from(player).first
-          Alice::Util::Mediator.reply_to(channel_user, actor.check_score)
-        else
-          Alice::Util::Mediator.reply_to(channel_user, "#{player} isn't even playing the game.")
         end
       end
 
@@ -107,7 +91,6 @@ module Alice
         return unless Alice::Util::Randomizer::one_chance_in(3)
         Alice::Util::Mediator.emote_to(channel_user, "thinks #{channel_user.user.nick} looks pretty shifty.")
       end
-
 
       def update_nick(channel_user)
         Alice::User.update_nick(channel_user.user.nick, channel_user.user.last_nick)

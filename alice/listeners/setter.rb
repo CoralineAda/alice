@@ -21,9 +21,9 @@ module Alice
         text = text.gsub(/^#{channel_user.user.nick}/i, '')
         return unless text.present?
         current_user = current_user_from(channel_user)
-          current_user.bio.try(:delete)
-          current_user.bio = Alice::Bio.create(text: text) 
-          Alice::Util::Mediator.emote_to(channel_user, positive_response(channel_user.user.nick))
+        current_user.bio.try(:delete)
+        current_user.bio = Alice::Bio.create(text: text) 
+        Alice::Util::Mediator.emote_to(channel_user, positive_response(channel_user.user.nick))
       end
 
       def set_factoid(channel_user, text)
