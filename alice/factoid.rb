@@ -18,6 +18,7 @@ class Alice::Factoid
     fact = self.text
     fact = Alice::Util::Sanitizer.strip_pronouns(fact)
     fact = Alice::Util::Sanitizer.make_third_person(fact)
+    fact = Alice::Util::Sanitizer.initial_downcase(fact)
 
     message = ""
     message << "#{Alice::Util::Randomizer.fact_prefix}" if with_prefix
