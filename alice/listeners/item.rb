@@ -134,7 +134,7 @@ module Alice
 
       def steal(channel_user, what)
         thief = Alice::User.find_or_create(channel_user.user.nick)
-        message = thief.try_stealing(what)
+        message = thief.steal(what)
         Alice::Util::Mediator.emote_to(channel_user, message)
       end
 
