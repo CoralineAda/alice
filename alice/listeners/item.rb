@@ -53,7 +53,7 @@ module Alice
         return unless current_user = current_user_from(channel_user)
         return unless current_user = current_user_from(channel_user).items.include?(item)
         Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be dropped!") and return if item.is_cursed?
-        Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.drop_message(item.name, channel_user.user.nick)) && item.drop
+        Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.drop_message(item.name_with_article, channel_user.user.nick)) && item.drop
       end
 
       def play(channel_user, game)
@@ -62,7 +62,7 @@ module Alice
         if item && current_user.items.include?(item)
           Alice::Util::Mediator.reply_to(channel_user, "#{item.play}.")
         else
-          Alice::Util::Mediator.reply_to(channel_user, "You don't have #{game}.")
+          Alice::Util::Mediator.reply_to(channel_user, "You don't have #{game.name_with_article}.")
         end
       end
 
@@ -73,7 +73,7 @@ module Alice
           current_user_from(channel_user).add_to_inventory(noun)
           Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.pickup_message(noun.name, channel_user.user.nick))
         else
-          Alice::Util::Mediator.reply_to(channel_user, "You cannot get the #{item}!")
+          Alice::Util::Mediator.reply_to(channel_user, "You cannot get #{item.name_with_article}!")
         end
       end
 
@@ -102,7 +102,7 @@ module Alice
 
       def forge(channel_user, what)
         if item = Alice::Item.exists?(what)
-          Alice::Util::Mediator.reply_to(channel_user, "Everyone knows that that's a singleton.")
+          Alice::Util::Mediator.reply_to(channel_user, "Everyone knows that a #{what} is a singleton.")
           return
         end
         user = Alice::User.find_or_create(channel_user.user.nick)
