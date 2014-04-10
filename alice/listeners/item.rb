@@ -117,7 +117,7 @@ module Alice
 
       def read(channel_user, what)
         item = Alice::Item.where(name: /#{what}/i).last
-        if item && current_user.items.include?(item)
+        if item && current_user_from(channel_user).items.include?(item)
           Alice::Util::Mediator.reply_to(channel_user, "#{item.read}.")
         else
           Alice::Util::Mediator.reply_to(channel_user, "You don't have a #{what}.")
