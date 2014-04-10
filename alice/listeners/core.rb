@@ -31,7 +31,7 @@ module Alice
       end
 
       def player_score(channel_user, player)
-        actor = Alice::User.from(player) || Alice::Actor.from(player)
+        actor = Alice::User.from(player).first || Alice::Actor.from(player).first
         Alice::Util::Mediator.emote_to(channel_user, actor.check_score)
       end
 
