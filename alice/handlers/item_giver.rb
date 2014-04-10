@@ -11,7 +11,7 @@ module Alice
       def self.process(sender, command)
         return unless command.present?
         grams = Alice::Parser::NgramFactory.new(command.gsub(/[^a-zA-Z0-9\_\ ]/, '')).omnigrams - [Alice.bot.bot.nick]
-        return unless recipient = grams.map{|g| Alice::Mediator.exists?(g.join(' ')) && g}.compact.flatten.last
+        return unless recipient = grams.map{|g| Alice::Util::Mediator.exists?(g.join(' ')) && g}.compact.flatten.last
 
         giver_user = Alice::User.like(sender)
         recipient_user = Alice::User.find_or_create(recipient)
