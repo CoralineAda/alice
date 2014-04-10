@@ -53,7 +53,7 @@ module Alice
         return unless current_user = current_user_from(channel_user)
         return unless current_user = current_user_from(channel_user).items.include?(item)
         Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be dropped!") and return if item.is_cursed?
-        Alice::Util::Mediator.reply_to(channel_user, item.drop_message(channel_user.user.nick)) && item.drop
+        Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.drop_message(item.name, channel_user.user.nick)) && item.drop
       end
 
       def play(channel_user, game)
