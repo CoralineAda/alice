@@ -70,7 +70,7 @@ module Alice
 
         if Alice::Place.current.contains?(noun)          
           current_user_from(channel_user).add_to_inventory(noun)
-          Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.pickup_message(item.name, channel_user.user.nick))
+          Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.pickup_message(noun.name, channel_user.user.nick))
         else
           Alice::Util::Mediator.reply_to(channel_user, "You cannot get the #{item}!")
         end
