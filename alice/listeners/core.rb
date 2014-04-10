@@ -13,7 +13,7 @@ module Alice
       match /\!cookie (.+)/, method: :cookie, use_prefix: false
       match /\!pants/, method: :pants, use_prefix: false
       match /\!help/, method: :help, use_prefix: false
-      match /\!score$/, method: :score, use_prefix: false
+      match /\!score$/, method: :my_score, use_prefix: false
       match /\!score (.+)/, method: :player_score, use_prefix: false
       match /\!scores/, method: :scores, use_prefix: false
       match /\<\.\</, method: :shifty_eyes, use_prefix: false
@@ -25,7 +25,7 @@ module Alice
       listen_to :nick, method: :update_nick
       listen_to :join, method: :maybe_say_hi
 
-      def score(channel_user)
+      def my_score(channel_user)
         user = Alice::User.like(channel_user)
         Alice::Util::Mediator.emote_to(channel_user, user.check_score)
       end
