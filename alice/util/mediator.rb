@@ -17,7 +17,7 @@ module Alice
       end
 
       def self.exists?(nick)
-        Alice.bot.user_list.find(nick)
+        Alice.bot.bot.user_list.find(nick)
       end
 
       def self.user_list

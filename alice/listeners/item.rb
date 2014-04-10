@@ -61,10 +61,11 @@ module Alice
           Alice::Util::Mediator.reply_to(channel_user, "Everyone knows that a #{what} is a singleton.")
           return
         end
-        user = Alice::User.find_or_create(channel_user.user.nick)
+        
+        current_user = current_user_from(channel_user)
 
-        if user.can_forge?
-          Alice::Item.forge(name: what.downcase, user: user, creator_id: user.id)
+        if current_user.can_forge?
+          Alice::Item.forge(name: what.downcase, user: current_user, creator_id: user.id)
           Alice::Util::Mediator.emote_to(channel_user, "forges a #{what} #{Alice::Util::Randomizer.forge} for #{channel_user.user.nick}.")
         else
           Alice::Util::Mediator.emote_to(channel_user, "thinks that #{channel_user.user.nick} has enough stuff already.")

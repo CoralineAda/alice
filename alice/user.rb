@@ -6,6 +6,7 @@ class Alice::User
   include Alice::Behavior::Scorable
   include Alice::Behavior::HasInventory
   include Alice::Behavior::Emotes
+  include Alice::Behavior::Steals
   
   field :primary_nick
   field :alt_nicks, type: Array, default: []
@@ -78,9 +79,13 @@ class Alice::User
     self.last_game >= DateTime.now - 13.minutes
   end
 
+  def description
+    describe
+  end
+
   def describe
     message = ""
-    message << "#{proper_name} is #{self.bio}. " if self.bio.present
+    message << "#{proper_name} is #{self.bio.formatted}. " if self.bio.present?
     message << "Find them on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
     message << "They currently have #{self.points} points. "
     message << "#{self.inventory}"

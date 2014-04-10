@@ -7,7 +7,7 @@ module Alice
     class Setter
 
       include Alice::Behavior::TracksActivity
-      include Alice::Behavior::TracksActivity
+      include Alice::Behavior::Listens
       include Cinch::Plugin
 
       match /^\!bio (.+)/i,     method: :set_bio, use_prefix: false
@@ -20,16 +20,17 @@ module Alice
         return if text == channel_user.user.nick
         text = text.gsub(/^#{channel_user.user.nick}/i, '')
         return unless text.present?
-        subject = Alice::User.from(noun.downcase).last  
-          subject.bio.try(:delete)
-          subject.bio = Alice::Bio.create(text: text) 
+        current_user = current_user_from(channel_user)
+          current_user.bio.try(:delete)
+          current_user.bio = Alice::Bio.create(text: text) 
           Alice::Util::Mediator.emote_to(channel_user, positive_response(channel_user.user.nick))
       end
 
       def set_factoid(channel_user, text)
         return unless text.size > 0
         if text.split(' ').count > 1
-          Alice::User.set_factoid(channel_user.user.nick, text)
+          current_user = current_user_from(channel_user)
+          current_user.factoids.create(text: text)
           Alice::Util::Mediator.emote_to(channel_user, positive_response(channel_user.user.nick))
         else
           Alice::Util::Mediator.emote_to(channel_user, negative_response(channel_user.user.nick))
@@ -55,7 +56,8 @@ module Alice
       end
 
       def set_twitter(channel_user, handle)
-        Alice::User.set_twitter(channel_user.user.nick, handle)
+        current_user = current_user_from(channel_user)
+        current_user.update_attribute(:twitter_handle, handle)
         Alice::Util::Mediator.emote_to(channel_user, positive_response(channel_user.user.nick))
       end
 

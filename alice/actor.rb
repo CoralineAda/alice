@@ -18,6 +18,7 @@ class Alice::Actor
   validates_uniqueness_of :name
 
   has_many   :beverages
+  has_many   :catchphrases
   has_many   :items
   belongs_to :place
 
@@ -119,8 +120,13 @@ class Alice::Actor
   end
 
   def talk
-    return unless topic = [Alice::Factoid.random.formatted(false), Alice::Oh.random.formatted(false)].compact.sample
-    "#{Alice::Util::Randomizer.says} \"#{topic}.\""
+    if message = Alice::Util::Randomizer.one_chance_in(2) && self.catchphrases.sample
+      "#{message.text}."
+    elsif message = [Alice::Factoid.random.formatted(false), Alice::Oh.random.formatted(false)].compact.sample
+      "#{Alice::Util::Randomizer.says} \"#{message}.\""
+    else
+      "says nothing."
+    end
   end
 
   def target

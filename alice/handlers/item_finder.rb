@@ -9,7 +9,6 @@ module Alice
       end
 
       def self.process(sender, command)
-        item = Alice::Item.hidden.like('bow and arrow').first if command.include?('bow')
         item ||= Alice::Item.from(command).first
         if item
           Alice::Handlers::Response.new(content: formatted_response(item), kind: :reply)
@@ -17,7 +16,7 @@ module Alice
       end
 
       def self.formatted_response(item)
-        if itechannel_user.user
+        if item.channel_user.user
           [
             "The #{item.name} belongs to #{item.owner}",
             "#{item.owner} has been its guardian for #{item.elapsed_time}.",
