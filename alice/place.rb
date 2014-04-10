@@ -134,7 +134,7 @@ class Alice::Place
   def has_item?
     return true if self.items.present?
     return if self.origin_square?
-    return unless Alice::Util::Randomizer.one_chance_in(10)
+    return unless Alice::Util::Randomizer.one_chance_in(5)
     return unless item = Alice::Item.unclaimed.unplaced.sample
     item.update_attribute(:place, self)
   end
@@ -142,7 +142,7 @@ class Alice::Place
   def has_actor?
     return true if self.actors.present?
     return if self.origin_square?
-    return unless Alice::Util::Randomizer.one_chance_in(10)
+    return unless Alice::Util::Randomizer.one_chance_in(5)
     return unless actor = Alice::Actor.unplaced.sample
     actor.update_attribute(:place, self)
   end
