@@ -45,6 +45,12 @@ module Alice
         text.gsub!(/^I /i, '')
       end
 
+      def self.make_third_person(text)
+        text.gsub!(/ I /i, ' they ')
+        text.gsub!(/ me /i, ' they ')
+        text
+      end
+
       def self.ordinal(number)
         number == 1 && "1st" || number == 2 && "2nd" || number == 3 && "3rd" || "#{number}th"
       end

@@ -15,9 +15,13 @@ class Alice::Factoid
   end
 
   def formatted(with_prefix=true)
+    fact = self.text
+    fact = Alice::Util::Sanitizer.strip_pronouns(fact)
+    fact = Alice::Util::Sanitizer.make_third_person(fact)
+
     message = ""
     message << "#{Alice::Util::Randomizer.fact_prefix}" if with_prefix
-    message << " #{self.user.try(:proper_name)} #{self.text}"
+    message << " #{self.user.try(:proper_name)} #{fact}"
     message
   end
 
