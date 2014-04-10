@@ -10,15 +10,15 @@ module Alice
       include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
-      match /\!cookie (.+)/i,     method: :cookie, use_prefix: false
-      match /\!pants/i,           method: :pants, use_prefix: false
-      match /\!help/i,            method: :help, use_prefix: false
-      match /\!source$/i,         method: :source, use_prefix: false
-      match /\!bug$/i,            method: :bug, use_prefix: false
+      match /^\!cookie (.+)/,     method: :cookie, use_prefix: false
+      match /^\!pants/,          method: :pants, use_prefix: false
+      match /^\!help/,           method: :help, use_prefix: false
+      match /^\!source/,          method: :source, use_prefix: false
+      match /^\!bug/,            method: :bug, use_prefix: false
       match /\<\.\</,             method: :shifty_eyes, use_prefix: false
       match /\>\.\>/,             method: :shifty_eyes, use_prefix: false
-      match /rule[s]? them all/i, method: :bind_them, use_prefix: false
-      match /say we all/i,        method: :say_we_all, use_prefix: false
+      match /rule[s]? them all/, method: :bind_them, use_prefix: false
+      match /say we all/,        method: :say_we_all, use_prefix: false
 
       listen_to :nick, method: :update_nick
       listen_to :join, method: :maybe_say_hi
@@ -67,8 +67,13 @@ module Alice
 
       def maybe_say_hi(channel_user)
         return if Alice::Util::Mediator.is_bot?(channel_user.user.nick)
-        return unless Alice::Util::Randomizer.one_chance_in(10)
-        Alice::Util::Mediator.emote_to(channel_user, Alice::Util::Randomizer.greeting(channel_user.user.nick))
+        if Alice::User.like(channel_user.user.nick)
+          return unless Alice::Util::Randomizer.one_chance_in(10)
+          Alice::Util::Mediator.emote_to(channel_user, Alice::Util::Randomizer.greeting(channel_user.user.nick))
+        else #new user
+          new_user = Alice::User.create(primary_nick: channel_user.user.nick)
+          Alice::Util::Mediator.emote_to(channel_user, "greets the new hacker, #{channel_user.user.nick}!")  
+        end
       end
 
       def pants(channel_user)

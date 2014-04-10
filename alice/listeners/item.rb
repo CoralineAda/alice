@@ -17,6 +17,7 @@ module Alice
       match /^\!items/i,         method: :inventory, use_prefix: false
       match /^\!destroy (.+)/i,  method: :destroy, use_prefix: false
       match /^\!get (.+)/i,      method: :get, use_prefix: false
+      match /^\!take (.+)/i,     method: :get, use_prefix: false
       match /^\!grab (.+)/i,     method: :get, use_prefix: false
       match /^\!pick up (.+)/i,  method: :get, use_prefix: false
       match /^\!drop (.+)/i,     method: :drop, use_prefix: false
@@ -57,7 +58,7 @@ module Alice
       end
 
       def forge(channel_user, what)
-        if item = Alice::Item.already_exists?(what)
+        if Alice::Item.already_exists?(what) || Alice::User.like(what)
           Alice::Util::Mediator.reply_to(channel_user, "Everyone knows that a #{what} is a singleton.")
           return
         end
@@ -95,13 +96,15 @@ module Alice
 
       def inspect(channel_user, noun)
         current_user = current_user_from(channel_user)
-        subject = Alice::User.from(noun.downcase).last
+        subject = Alice::User.from(noun).last
         subject ||= Alice::Actor.from(noun.downcase).last
         subject ||= Alice::Item.from(noun).last
         subject ||= Alice::Beverage.from(noun).last
         
-        if subject.is_present? || current_user.items.include?(subject) || current_user.beverages.include?(subject)
+        if subject && (subject.is_present? || current_user.items.include?(subject) || current_user.beverages.include?(subject))
           message = subject.describe
+        elsif Alice::Place.current.description =~ /#{subject}/i
+          message = Alice::Util::Randomizer.item_description(noun)
         else
           message = Alice::Util::Randomizer.not_here(noun)  
         end

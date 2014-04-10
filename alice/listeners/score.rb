@@ -4,7 +4,7 @@ module Alice
 
   module Listeners
 
-    class Core
+    class Score
 
       include Alice::Behavior::Listens
       include Alice::Behavior::TracksActivity
@@ -17,11 +17,11 @@ module Alice
       match /^(.+)\+\+/,         method: :award, use_prefix: false
 
       def award(channel_user, player)
-        return unless actor = Alice::User.from(player).first || Alice::Actor.from(player).first
+        return unless actor = Alice::User.find_or_create(player) || Alice::Actor.from(player).first
         current_user = current_user_from(channel_user)
-        # if actor == current_user
-        #   Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} is gonna make themselves go blind that way.")
-        if current_user.can_award_points?
+        if actor == current_user
+          Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} is gonna make themselves go blind that way.")
+        elsif current_user.can_award_points?
           current_user.award_point_to(actor)
           Alice::Util::Mediator.reply_to(channel_user, actor.check_score)
         else

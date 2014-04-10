@@ -67,7 +67,7 @@ module Alice
           "standing around listlessly.",
           "playing a quiet came of Chutes and Ladders.",
           "pretending to read a book.",
-          "talking fervently about the best way to brew #{beverage}.",
+          "talking fervently about the best way to brew a #{beverage}.",
           "trying to start a fire.",
           "discussing medieval #{weapon} forging techniques.",
           "recounting their trip to the #{type_of_place}.",
@@ -78,7 +78,7 @@ module Alice
           "rapping like a master rhymer.",
           "noodling around on a guitar.",
           "imitating dead presidents.",
-          "finishing off a #{beverage_container} of #{beverage}.",
+          "finishing off a #{beverage_container} of a #{beverage}.",
           "rooting around in their empty #{beverage_container}.",
           "drawing idly on a pad of paper.",
           "writing furtively in their journal.",
@@ -99,8 +99,8 @@ module Alice
           "discussing the problems of second-wave feminism.",
           "trying to take over the world.",
           "talking to themselves in a funny voice.",
-          "singing a song about #{beverage}.",
-          "reciting a poem about #{beverage}.",
+          "singing a song about a #{beverage}.",
+          "reciting a poem about a #{beverage}.",
           "reading a #{reading_material} about the history of the #{reading_material}.",
           "reciting The Jabberwocky from memory.",
           "throwing confetti into the air for no particular reason.",
@@ -886,11 +886,11 @@ module Alice
       
       def self.oh_prefix  
         [
-          "Some say that",
-          "I heard recently that",
-          "Someone said that",
-          "A wise person once said",
-          "It's been said that"
+          "Some say that ",
+          "I heard recently that ",
+          "Someone said that ",
+          "A wise person once said ",
+          "It's been said that "
         ].sample
       end
 
