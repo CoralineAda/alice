@@ -112,7 +112,7 @@ class Alice::Actor
 
   def talk
     return unless topic = [Alice::Factoid.random.formatted(false), Alice::Oh.random.formatted(false)].compact.sample
-    "#{Alice::Util::Randomizer.says} #{topic}"
+    "#{Alice::Util::Randomizer.says} '#{topic}'."
   end
 
   def target
