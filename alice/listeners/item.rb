@@ -16,6 +16,7 @@ module Alice
       match /^\!stuff/i,         method: :inventory, use_prefix: false
       match /^\!items/i,         method: :inventory, use_prefix: false
       match /^\!destroy (.+)/i,  method: :destroy, use_prefix: false
+      match /^\!eat (.+)/i,      method: :eat, use_prefix: false
       match /^\!get (.+)/i,      method: :get, use_prefix: false
       match /^\!take (.+)/i,     method: :get, use_prefix: false
       match /^\!grab (.+)/i,     method: :get, use_prefix: false
@@ -33,6 +34,10 @@ module Alice
 
       def destroy(channel_user, what)
         return unless item = Alice::Item.from(what).last
+        if item.is_cursed?
+          Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be destroyed!")
+          return
+        end
         unless Alice::Util::Mediator.op?(channel_user) || Alice::Util::Randomizer.one_chance_in(2)
           Alice::Util::Mediator.reply_to(channel_user, "You're not really up to the task of destroying the #{what} right now, #{channel_user.user.nick}.")
           return
@@ -41,10 +46,24 @@ module Alice
         item.destroy
       end
 
+      def eat(channel_user, what)
+        return unless item = Alice::Item.from(what).last
+        if item.is_cursed?
+          Alice::Util::Mediator.reply_to(channel_user, "The #{item.name} is cursed and should really not go in your mouth.")
+          return
+        end
+        unless Alice::Util::Mediator.op?(channel_user) || Alice::Util::Randomizer.one_chance_in(2)
+          Alice::Util::Mediator.reply_to(channel_user, "You're not really up to the task of eating the #{what} right now, #{channel_user.user.nick}.")
+          return
+        end
+        Alice::Util::Mediator.emote_to(channel_user, "devours the #{what}, which I find pretty damned funny.")
+        item.destroy
+      end
+
       def drop(channel_user, what)
         return unless item = Alice::Item.from(what).last
         return unless current_user = current_user_from(channel_user)
-        return unless current_user = current_user_from(channel_user).items.include?(item)
+        return unless current_user_from(channel_user).items.include?(item)
         if item.is_cursed?
           Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be dropped!")
         else
