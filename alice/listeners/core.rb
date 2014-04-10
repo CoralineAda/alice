@@ -16,6 +16,8 @@ module Alice
       match /\!score$/i,          method: :my_score, use_prefix: false
       match /\!score (.+)/i,      method: :player_score, use_prefix: false
       match /\!scores/i,          method: :scores, use_prefix: false
+      match /\!source^/i,          method: :source, use_prefix: false
+      match /\!bug^/i,             method: :bug, use_prefix: false
       match /\<\.\</,             method: :shifty_eyes, use_prefix: false
       match /\>\.\>/,             method: :shifty_eyes, use_prefix: false
       match /rule[s]? them all/i, method: :bind_them, use_prefix: false
@@ -23,6 +25,14 @@ module Alice
 
       listen_to :nick, method: :update_nick
       listen_to :join, method: :maybe_say_hi
+
+      def source(channel_user)
+        Alice::Util::Mediator.reply_to(channel_user, "You can view my source at #{ENV['GITHUB_URL']}")
+      end
+
+      def bug(channel_user)
+        Alice::Util::Mediator.reply_to(channel_user, "You can report bugs by visiting #{ENV['ISSUES_URL']}")
+      end
 
       def bind_them(channel_user)
         Alice::Util::Mediator.emote_to(channel_user, "whispers, 'And in the darkness bind() them.'")
