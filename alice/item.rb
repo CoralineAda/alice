@@ -90,6 +90,10 @@ class Alice::Item
     Alice::User.find(self.creator_id)
   end
 
+  def describe
+    self.description
+  end
+
   def ensure_description
     self.description ||= Alice::Util::Randomizer.item_description(self.name)
   end
