@@ -96,7 +96,7 @@ class Alice::Place
   def contents
     return unless has_item? || has_actor?
     contents = "Contents: "
-    contents << "#{self.items.map(&:name).to_sentence}. " if self.has_item?
+    contents << "#{self.items.map(&:name).to_sentence}. " if has_item?
     if self.has_actor?
       contents << "You notice #{self.actors.map(&:name).to_sentence}"
       if Alice::Util::Randomizer.one_chance_in(2)
@@ -136,7 +136,7 @@ class Alice::Place
     return if self.origin_square?
     return unless Alice::Util::Randomizer.one_chance_in(5)
     return unless item = Alice::Item.unclaimed.unplaced.sample
-    item.update_attribute(:place, self)
+    item.update_attribute(:place_id, self.id)
   end
 
   def has_actor?
@@ -144,7 +144,7 @@ class Alice::Place
     return if self.origin_square?
     return unless Alice::Util::Randomizer.one_chance_in(5)
     return unless actor = Alice::Actor.unplaced.sample
-    actor.update_attribute(:place, self)
+    actor.update_attribute(:place_id, self.id)
   end
 
   def origin_square?
