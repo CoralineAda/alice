@@ -40,7 +40,7 @@ module Alice
           message ||= subject.description
         elsif subject = Alice::Item.from(noun.downcase).last || Alice::Beverage.from(noun.downcase).last || Alice::Actor.from(noun.downcase).last
           if Alice::Place.current.contains?(subject)
-            message ||= noun.description
+            message ||= subject.description
           end
         elsif Alice::Place.current.description.include?(noun)
           message ||= Alice::Util::Randomizer.item_description(noun)
