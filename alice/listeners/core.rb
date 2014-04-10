@@ -26,8 +26,8 @@ module Alice
       listen_to :join, method: :maybe_say_hi
 
       def my_score(channel_user)
-        user = Alice::User.like(channel_user)
-        Alice::Util::Mediator.emote_to(channel_user, user.check_score)
+        user = Alice::User.like(channel_user.use.nick)
+        Alice::Util::Mediator.reply_to(channel_user, user.check_score)
       end
 
       def score(channel_user, player)
