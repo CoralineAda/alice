@@ -1008,7 +1008,7 @@ module Alice
           "containing #{thing}",
           "housing #{thing}",
           "containing #{thing} and #{thing}",
-          "servng as a storage room for #{thing}",
+          "serving as a storage room for #{thing}",
           "with walls papered in intricate yellow designs",
           "with crumbling walls",
           "with a drooping ceiling",
