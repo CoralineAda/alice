@@ -11,6 +11,7 @@ module Alice
         text.gsub!("a the ", "a ")
         text.gsub!("a ye ", "ye ")
         text.gsub!("ye ye ", "ye ")
+        text.gsub!("an a ", "a")
         text.gsub!("a a", "an a")
         text.gsub!("a e", "an e")
         text.gsub!("a i", "an i")
