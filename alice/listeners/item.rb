@@ -58,7 +58,7 @@ module Alice
       end
 
       def talk(channel_user, who)
-        return unless actor = Alice::Actor.from(what).last 
+        return unless actor = Alice::Actor.from(who).last 
         return unless actor.is_present?
         return unless current_user = current_user_from(channel_user)
         Alice::Util::Mediator.reply_to(channel_user, actor.talk)
