@@ -28,6 +28,10 @@ module Alice
         Alice::Util::Mediator.reply_to(channel_user, "You can view my source at #{ENV['GITHUB_URL']}")
       end
 
+      def cast(channel_user, spell)
+        Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.spell_effect(channel_user, spell))
+      end
+
       def bug(channel_user)
         Alice::Util::Mediator.reply_to(channel_user, "You can report bugs by visiting #{ENV['ISSUES_URL']}")
       end

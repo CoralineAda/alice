@@ -8,6 +8,10 @@ module Alice
         rand(number) == 1
       end
 
+      def self.spell_effect(caster, spell)
+
+      end
+      
       def self.cant_touch_this(verb, noun)
         [
           "You can't go around #{verb}ing #{noun}s all willy-nilly.",
