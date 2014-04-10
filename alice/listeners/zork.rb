@@ -89,6 +89,7 @@ module Alice
         if force || Alice::Util::Mediator.op?(channel_user)
           Alice::Dungeon.reset!
           message = "Everything goes black and you feel like you are somewhere else!"  
+          message << " #{Alice::Item.fruitcake.user.proper_name} has been given a special gift."
         else
           message = "There is a thundering sound but nothing happens."
         end
