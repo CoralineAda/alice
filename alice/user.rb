@@ -12,6 +12,7 @@ class Alice::User
   field :alt_nicks, type: Array, default: []
   field :twitter_handle
   field :last_theft, type: DateTime
+  field :last_award, type: DateTime
   field :last_game, type: DateTime
   field :is_bot, type: Boolean, default: false
   field :points, type: Integer, default: 0
@@ -76,7 +77,7 @@ class Alice::User
 
   def can_play_game?
     self.last_game ||= DateTime.now - 1.day
-    self.last_game >= DateTime.now - 13.minutes
+    self.last_game <= DateTime.now - 13.minutes
   end
 
   def description
