@@ -26,6 +26,14 @@ module Alice
       end
     end
 
+    def join(channel_name)
+      self.bot.join(channel_name)
+    end
+
+    def leave(channel_name)
+      self.bot.channels.select{|c| c.name == channel_name}.first.part
+    end
+
     def start
       self.bot.start && self.bot
     end 
