@@ -98,8 +98,12 @@ class Alice::Item
     self.description ||= Alice::Util::Randomizer.item_description(self.name)
   end
 
+  def name_with_appendix
+    self.is_game? && "#{self.name} game" || self.name
+  end
+
   def name_with_article
-    Alice::Util::Sanitizer.process("#{Alice::Util::Randomizer.article} #{self.name}")
+    Alice::Util::Sanitizer.process("#{Alice::Util::Randomizer.article} #{self.name_with_appendix}")
   end
   
   def read
