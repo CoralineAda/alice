@@ -33,7 +33,7 @@ class Alice::User
   end
 
   def self.with_weapon
-    Alice::Item.weapons.exclude(user_id: nil).map(&:user)
+    Alice::Item.weapons.excludes(user_id: nil).map(&:user)
   end
 
   def self.active
