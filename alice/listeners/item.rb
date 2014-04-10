@@ -57,12 +57,12 @@ module Alice
       end
 
       def play(channel_user, game)
-        return unless item = Alice::Item.from(what).last
+        item = Alice::Item.from(game).last
         return unless current_user = current_user_from(channel_user)
-        if current_user.items.include?(item)
+        if item && current_user.items.include?(item)
           Alice::Util::Mediator.reply_to(channel_user, "#{item.play}.")
         else
-          Alice::Util::Mediator.reply_to(channel_user, "You don't have #{item.name_with_article}.")
+          Alice::Util::Mediator.reply_to(channel_user, "You don't have #{game}.")
         end
       end
 
