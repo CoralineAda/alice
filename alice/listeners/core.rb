@@ -32,14 +32,14 @@ module Alice
 
       def player_score(channel_user, player)
         if actor = Alice::User.from(player).first || Alice::Actor.from(player).first
-          Alice::Util::Mediator.emote_to(channel_user, actor.check_score)
+          Alice::Util::Mediator.reply_to(channel_user, actor.check_score)
         else
-          Alice::Util::Mediator.emote_to(channel_user, "#{player} isn't even playing the game.")
+          Alice::Util::Mediator.reply_to(channel_user, "#{player} isn't even playing the game.")
         end
       end
 
       def scores(channel_user)
-        Alice::Util::Mediator.emote_to(channel_user, Alice::Leaderboard.report)
+        Alice::Util::Mediator.reply_to(channel_user, Alice::Leaderboard.report)
       end
 
       def bind_them(channel_user)
