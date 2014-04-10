@@ -37,6 +37,7 @@ module Alice
   require_relative 'alice/listeners/nlp'
   require_relative 'alice/listeners/setter'
   require_relative 'alice/listeners/score'
+  require_relative 'alice/listeners/number_wang'
   require_relative 'alice/listeners/item'
   require_relative 'alice/listeners/zork'
 

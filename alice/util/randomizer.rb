@@ -10,33 +10,33 @@ module Alice
 
       def self.spell_effect(caster, spell)
         [
-          "#{caster.proper_name} waves a wand but nothing happens.",
-          "#{caster.proper_name} attacks the darkness!",
-          "#{caster.proper_name} tries and fails to cast #{spell}.",
-          "#{caster.proper_name} casts an impressive variant of #{spell}.",
-          "Holding their wand aloft, #{caster.proper.name} casts #{spell}!",
-          "#{caster.proper_name} did not learn their lesson from last time, apparently.",
-          "#{spell} is not available at #{caster.proper_name}'s current level.",
+          "#{caster} waves a wand but nothing happens.",
+          "#{caster} attacks the darkness!",
+          "#{caster} tries and fails to cast #{spell}.",
+          "#{caster} casts an impressive variant of #{spell}.",
+          "Holding their wand aloft, #{caster} casts #{spell}!",
+          "#{caster} did not learn their lesson from last time, apparently.",
+          "#{spell} is not available at #{caster}'s current level.",
           "The #{spell} fizzles.",
-          "#{caster.proper_name} temporarily turns into #{specific_person}.",
+          "#{caster} temporarily turns into #{specific_person}.",
           "Great, now everyone in the channel looks like #{person}.",
           "There is suddenly an overwhelming smell of #{thing}.",
-          "A #{thing} appears out of nowhere and runs #{Alice::Place.current.exists.sample}!",
+          "A #{thing} appears out of nowhere and runs #{Alice::Place.current.exits.sample}!",
           "The illusion of a #{thing} appears, to all appearances #{action}",
           "The face of #{specific_person} flickers in mid-air, frowns, and then vanishes.",
           "The room is filled with a dense #{color} fog.",
-          "When #{caster.proper_name} waves their hands, a #{thing} flies across the room and smashes!",
-          "With a word from #{caster.proper_name}, the ghost of a #{person} materializes and asks to play #{game} with everyone.",
+          "When #{caster} waves their hands, a #{thing} flies across the room and smashes!",
+          "With a word from #{caster}, the ghost of a #{person} materializes and asks to play #{game} with everyone.",
           "A portal to the #{type_of_place} flickers into existence!",
-          "#{caster.proper_name} turns into #{actor_description}.",
-          "#{caster.proper_name} takes on the appearance of #{specific person}.",
-          "#{Alice::User.active_and_online.sample.proper_name} starts speaking in the voice of #{specific person}.",
+          "#{caster} turns into #{actor_description(specific_person)}.",
+          "#{caster} takes on the appearance of #{specific_person}.",
+          "#{Alice::User.active_and_online.sample.proper_name} starts speaking in the voice of #{specific_person}.",
           "#{Alice::User.active_and_online.sample.proper_name}'s #{body_thing} turns #{color}!",
-          "#{caster.proper_name} summons a fearsome #{thing}!",
-          "#{caster.proper_name} tries to summon a mighty #{thing}, but manages only #{empty_pockets}.",
+          "#{caster} summons a fearsome #{thing}!",
+          "#{caster} tries to summon a mighty #{thing}, but manages only #{empty_pockets}.",
           "#{effect_message('spell', Alice::User.active_and_online.sample.proper_name)}",
           "a #{room_type} appears somewhere deep in the dungeon."
-        ]
+        ].sample
       end
 
       def self.cant_touch_this(verb, noun)

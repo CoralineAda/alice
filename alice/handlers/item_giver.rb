@@ -16,13 +16,17 @@ module Alice
         giver_user = Alice::User.like(sender)
         recipient_user = Alice::User.find_or_create(recipient)
         
-        if items = Alice::Item.from(command)
+        if items = grams.map{|g| Alice::Item.like(gram)}.compact.uniq
           item = items.select{|i| giver_user.items.include?(i) }.compact.uniq
         end
 
-        if beverage = Alice::Beverage.from(command)
-          beverage = items.select{|i| giver_user.beverages.include?(i) }.compact
+        item ||= Alice::Item.like(command.split("give")[-1].split("to")[-2].strip).last
+
+        if beverages = grams.map{|g| Alice::Beverage.like(gram)}.compact.uniq
+          beverage = beverage.select{|i| giver_user.beverages.include?(i) }.compact
         end
+
+        beverage ||= Alice::Beverage.like(command.split("give")[-1].split("to")[-2].strip).last
 
         if item
           giver_user.remove_from_inventory(item)
