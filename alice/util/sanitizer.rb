@@ -5,6 +5,7 @@ module Alice
     class Sanitizer
 
       def self.process(text)
+        text ||= ""
         text.gsub!("the the ", "the ")
         text.gsub!("the ye ", "ye ")
         text.gsub!("a the ", "a ")

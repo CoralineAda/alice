@@ -27,6 +27,7 @@ module Alice
       match /^\!look (.+)$/,    method: :inspect, use_prefix: false
       match /^\!find (.+)/,     method: :find, use_prefix: false
       match /^\!play (.+)/,     method: :play, use_prefix: false
+      match /^\!read (.+)/,     method: :read, use_prefix: false
 
       # TODO copy this pattern!
       def find(channel_user, what)
@@ -111,6 +112,15 @@ module Alice
           Alice::Util::Mediator.emote_to(channel_user, "forges a #{what} #{Alice::Util::Randomizer.forge} for #{channel_user.user.nick}.")
         else
           Alice::Util::Mediator.emote_to(channel_user, "thinks that #{channel_user.user.nick} has enough stuff already.")
+        end
+      end
+
+      def read(channel_user, what)
+        return unless item = Alice::Item.where(name: what.downcase).last
+        if current_user.items.include?(item)
+          Alice::Util::Mediator.reply_to(channel_user, "#{item.read}.")
+        else
+          Alice::Util::Mediator.reply_to(channel_user, "You don't have #{item.name_with_article}.")
         end
       end
 
