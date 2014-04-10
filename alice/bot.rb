@@ -19,6 +19,7 @@ module Alice
             Listeners::Zork,
             Listeners::Beverage,
             Listeners::Score,
+            Listeners::NumberWang,
             Listeners::Core
           ]
           config.password = ENV['USER_PASS']

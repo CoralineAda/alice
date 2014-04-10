@@ -32,22 +32,22 @@ module Alice
         current_user = current_user_from(channel_user)
         if Alice::Util::Randomizer.one_chance_in(20)
           if weapon = Alice::Item.weapons.unclaimed.sample
-            Alice::Place.items << weapon 
+            Alice::Place.current.items << weapon 
             current_user.score_point
-            Alice::Util::Mediator.reply_to(channel_user, "#{weapon.name_with_article} appears at #{channel_user}'s feet!")
+            Alice::Util::Mediator.reply_to(channel_user, "#{weapon.name_with_article} appears at #{current_user.proper_name}'s feet!")
           end
         elsif Alice::Util::Randomizer.one_chance_in(20)
-          if actor = Alice::Actor.random
-            Alice::Place.actors << actor 
+          if actor = Alice::Actor.all.sample
+            Alice::Place.current.actors << actor 
             current_user.score_point
-            Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} magically appears before #{channel_user}!")
+            Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} magically appears before #{current_user.proper_name}!")
           end
         elsif Alice::Util::Randomizer.one_chance_in(5)
           current_user.items << Alice::Item.fruitcake
           current_user.penalize
-          Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} is rewarded with the fruitcake!")
+          Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} is rewarded with the fruitcake!")
         else
-          Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.spell_effect(channel_user, spell))
+          Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.spell_effect(current_user.proper_name, spell))
         end
       end
 
