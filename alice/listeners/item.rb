@@ -26,6 +26,7 @@ module Alice
       match /^\!inspect (.+)/,  method: :inspect, use_prefix: false
       match /^\!look (.+)$/,    method: :inspect, use_prefix: false
       match /^\!find (.+)/,     method: :find, use_prefix: false
+      match /^\!play (.+)/,     method: :play, use_prefix: false
 
       # TODO copy this pattern!
       def find(channel_user, what)
@@ -49,9 +50,19 @@ module Alice
       def drop(channel_user, what)
         return unless item = Alice::Item.from(what).last
         return unless current_user
-        return unless user.items.include?(item)
+        return unless current_user.items.include?(item)
         Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be dropped!") and return if item.cursed?
         Alice::Util::Mediator.reply_to(channel_user, item.drop_message(channel_user.user.nick)) && item.drop
+      end
+
+      def play(channel_user, game)
+        return unless item = Alice::Item.from(what).last
+        return unless current_user
+        if current_user.items.include?(item)
+          Alice::Util::Mediator.reply_to(channel_user, "#{item.play}.")
+        else
+          Alice::Util::Mediator.reply_to(channel_user, "You don't have #{item.name_with_article}.")
+        end
       end
 
       def get(channel_user, item)
@@ -82,8 +93,8 @@ module Alice
 
       def hide(channel_user, what)
         return unless current_user
-        return unless item = Alice::Item.from(what).select{|t| t.user == user}.first
-        return unless user.items.include?(item)
+        return unless item = Alice::Item.from(what).select{|t| t.user == current_user}.first
+        return unless current_user.items.include?(item)
         Alice::Util::Mediator.reply_to(channel_user, item.hide(channel_user.user.nick))
       end
 
