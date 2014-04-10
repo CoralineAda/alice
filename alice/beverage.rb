@@ -7,6 +7,7 @@ class Alice::Beverage
   include Alice::Behavior::Placeable
 
   field :name
+  field :description
   field :is_hidden, type: Boolean
   field :picked_up_at, type: DateTime
 
@@ -16,6 +17,8 @@ class Alice::Beverage
   belongs_to :actor
   belongs_to :user
   belongs_to :place
+
+  before_create :ensure_description
 
   attr_accessor :message
 
@@ -56,6 +59,10 @@ class Alice::Beverage
     message = Alice::Util::Randomizer.drink_message(self.name, self.owner)
     message << " " + Alice::Util::Randomizer.effect_message(self.name, self.owner) if Alice::Util::Randomizer.one_chance_in(4)
     message
+  end
+
+  def ensure_description
+    self.description ||= Alice::Util::Randomizer.drink_description(self.name)
   end
 
   def spill

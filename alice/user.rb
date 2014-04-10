@@ -21,7 +21,7 @@ class Alice::User
   has_many :beverages
 
   def self.online
-    Alice::Util::Mediator.user_list.map{|m| like(channel_user)}.compact
+    Alice::Util::Mediator.user_list.map{|user| like(user.nick)}.compact
   end
 
   def self.active_and_online
@@ -88,6 +88,10 @@ class Alice::User
 
   def has_nick?(nick)
     [self.primary_nick, self.alt_nicks].flatten.include?(nick.downcase)
+  end
+
+  def is_present?
+    true
   end
 
   def formatted_name

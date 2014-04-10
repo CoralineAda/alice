@@ -8,6 +8,33 @@ module Alice
         rand(number - 1) == 1
       end
 
+      def self.negative_request_response(name)
+        [
+          "calls bs on #{name}.",
+          "stares blankly at #{name}",
+          "shakes her head at #{name}",
+          "refuses to listen to #{name} anymore.",
+          "snaps her eyes shut and shakes her head."
+        ].sample
+      end
+
+      def self.positive_request_response(name)
+        [
+          "listens carefully and nods to herself.",
+          "googles to verify that.",
+          "makes a mental note.",
+          "grins and winks at #{name}.",
+          "nods sagely.",
+          "nods at #{name}.",
+          "stares fixedly at #{name}.",
+          "commits that to memory.",
+          "will remember that, #{name}.",
+          "thinks that should go on the Twitters.",
+          "suspects that soneone will tweet about that.",
+          "remembers something about that from earlier."
+        ].sample
+      end
+
       def self.action
         [
           "lurking nearby.",
@@ -725,6 +752,23 @@ module Alice
         ].sample
       end
 
+      def self.drink_description(thing)
+        [
+          "A delicious new beverage from the makers of #{beverage.titleize}™.",
+          "Drinkable, but perhaps a little flat.",
+          "It seems like ordinary #{thing}.",
+          "There's something floating in it, but it's probably fine.",
+          "You shouldn't examine your drinks so closely.",
+          "It's giving off an otherworldly glow but otherwise seems normal.",
+          "Is it supposed to have bubbles like that?",
+          "Pretty tamd as far as #{thing.pluralize} go.",
+          "I think that #{thing} is an acquired taste.",
+          "It looks deliious!",
+          "Your getting thirsty just looking at it.",
+          "The #{thing}? Well, it's better than #{beverage}."
+        ].sample
+      end
+
       def self.item_description(thing)
         [
           "It looks like a perfectly ordinary #{thing}.",
@@ -843,7 +887,7 @@ module Alice
         [
           "The #{item_name} falls clattering to the floor.",
           "The #{item_name} is now resting on the ground.",
-          "#{actor_name} drops the #{item_name}",
+          "#{actor_name} drops the #{item_name}.",
           "#{actor_name} discards the #{item_name}",
           "#{actor_name} drops the #{item_name} on the ground.",
           "#{actor_name} quietly places the #{item_name} on the floor.",
@@ -933,7 +977,7 @@ module Alice
           "#{actor_name} pockets the #{item_name}.",
           "The #{item_name} now belongs to #{actor_name}!",
           "#{actor_name} now has the #{item_name}.",
-          "Now #{actor_name}'s #{Alice::Item.container} the #{item_name}."
+          "Now #{actor_name}'s #{item_container} the #{item_name}."
         ].sample
       end
 

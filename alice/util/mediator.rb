@@ -29,11 +29,15 @@ module Alice
       end
 
       def self.reply_to(channel_user, message)
-        channel_user.reply(Alice::Util::Sanitizer.process(message))
+        text = Alice::Util::Sanitizer.process(message)
+        text = Alice::Util::Sanitizer.initial_upcase(text)
+        channel_user.reply(text)
       end
 
       def self.emote_to(channel_user, message)
-        channel_user.action_reply(Alice::Util::Sanitizer.process(message))
+        text = Alice::Util::Sanitizer.process(message)
+        text = Alice::Util::Sanitizer.initial_downcase(text)
+        channel_user.action_reply(text)
       end
 
     end
