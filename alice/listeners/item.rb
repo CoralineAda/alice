@@ -61,7 +61,7 @@ module Alice
         return unless actor = Alice::Actor.from(who).last 
         return unless actor.is_present?
         return unless current_user = current_user_from(channel_user)
-        Alice::Util::Mediator.reply_to(channel_user, actor.talk)
+        Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} #{actor.talk}")
       end
 
       def play(channel_user, game)
