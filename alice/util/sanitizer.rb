@@ -20,6 +20,10 @@ module Alice
         text.gsub!('..', '.')
         text.gsub!('. .', '.')
         text.gsub!('  ', ' ')
+        text.gsub(/ (A) /) {|s| s.downcase}
+        text.gsub(/ (The) /) {|s| s.downcase}
+        text.gsub(/ (An) /) {|s| s.downcase}
+        text.gsub(/ (Their) /) {|s| s.downcase}
         text[0].try(:upcase)
         text
       end
