@@ -29,7 +29,26 @@ module Alice
       end
 
       def cast(channel_user, spell)
-        Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.spell_effect(channel_user, spell))
+        current_user = current_user_from(channel_user)
+        if Alice::Util::Randomizer.one_chance_in(20)
+          if weapon = Alice::Item.weapons.unclaimed.sample
+            Alice::Place.items << weapon 
+            current_user.score_point
+            Alice::Util::Mediator.reply_to(channel_user, "#{weapon.name_with_article} appears at #{channel_user}'s feet!")
+          end
+        elsif Alice::Util::Randomizer.one_chance_in(20)
+          if actor = Alice::Actor.random
+            Alice::Place.actors << actor 
+            current_user.score_point
+            Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} magically appears before #{channel_user}!")
+          end
+        elsif Alice::Util::Randomizer.one_chance_in(5)
+          current_user.items << Alice::Item.fruitcake
+          current_user.penalize
+          Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} is rewarded with the fruitcake!")
+        else
+          Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.spell_effect(channel_user, spell))
+        end
       end
 
       def bug(channel_user)

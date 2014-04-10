@@ -1,7 +1,7 @@
 module Alice
 
   module Util
-    
+
     class Randomizer
 
       def self.one_chance_in(number)
@@ -9,9 +9,36 @@ module Alice
       end
 
       def self.spell_effect(caster, spell)
-
+        [
+          "#{caster.proper_name} waves a wand but nothing happens.",
+          "#{caster.proper_name} attacks the darkness!",
+          "#{caster.proper_name} tries and fails to cast #{spell}.",
+          "#{caster.proper_name} casts an impressive variant of #{spell}.",
+          "Holding their wand aloft, #{caster.proper.name} casts #{spell}!",
+          "#{caster.proper_name} did not learn their lesson from last time, apparently.",
+          "#{spell} is not available at #{caster.proper_name}'s current level.",
+          "The #{spell} fizzles.",
+          "#{caster.proper_name} temporarily turns into #{specific_person}.",
+          "Great, now everyone in the channel looks like #{person}.",
+          "There is suddenly an overwhelming smell of #{thing}.",
+          "A #{thing} appears out of nowhere and runs #{Alice::Place.current.exists.sample}!",
+          "The illusion of a #{thing} appears, to all appearances #{action}",
+          "The face of #{specific_person} flickers in mid-air, frowns, and then vanishes.",
+          "The room is filled with a dense #{color} fog.",
+          "When #{caster.proper_name} waves their hands, a #{thing} flies across the room and smashes!",
+          "With a word from #{caster.proper_name}, the ghost of a #{person} materializes and asks to play #{game} with everyone.",
+          "A portal to the #{type_of_place} flickers into existence!",
+          "#{caster.proper_name} turns into #{actor_description}.",
+          "#{caster.proper_name} takes on the appearance of #{specific person}.",
+          "#{Alice::User.active_and_online.sample.proper_name} starts speaking in the voice of #{specific person}.",
+          "#{Alice::User.active_and_online.sample.proper_name}'s #{body_thing} turns #{color}!",
+          "#{caster.proper_name} summons a fearsome #{thing}!",
+          "#{caster.proper_name} tries to summon a mighty #{thing}, but manages only #{empty_pockets}.",
+          "#{effect_message('spell', Alice::User.active_and_online.sample.proper_name)}",
+          "a #{room_type} appears somewhere deep in the dungeon."
+        ]
       end
-      
+
       def self.cant_touch_this(verb, noun)
         [
           "You can't go around #{verb}ing #{noun}s all willy-nilly.",
@@ -345,7 +372,7 @@ module Alice
       end
 
       def self.not_here(noun)
-        [   
+        [
           "I don't see such a thing as #{noun} here.",
           "I... think you're hallucinating.",
           "Yeah, about that invisible thing you're asking about...",
@@ -358,7 +385,7 @@ module Alice
           "Ooh, I guess it's imaginary #{noun} time!",
           "Is that something from your imagination?",
           "Hang on, I'm filing a missing #{noun} report right now."
-        ].sample        
+        ].sample
       end
 
       def self.item
@@ -662,7 +689,7 @@ module Alice
           "Headless Marie Antoinette",
           "Beetlejuice",
           "Batman",
-          "Spock",      
+          "Spock",
           "bell hooks",
           "Neil deGrasse Tyson",
           "Wilford Brimley",
@@ -721,8 +748,8 @@ module Alice
           "greets fellow hacker",
           "does the o/ thing at"
         ].sample + " #{name}."
-      end        
-      
+      end
+
       def self.person
         [
           Alice::Util::Randomizer.specific_person,
@@ -865,7 +892,7 @@ module Alice
           "According to legend,"
         ].sample
       end
-    
+
       def self.negative_response
         [
           "I would tell you if I could.",
@@ -888,8 +915,8 @@ module Alice
         ].sample
       end
 
-      
-      def self.oh_prefix  
+
+      def self.oh_prefix
         [
           "Some say that ",
           "I heard recently that ",
@@ -941,7 +968,7 @@ module Alice
         [
           "#{actor_name} grows bat wings and flits around the room.",
           "#{actor_name}'s head feel like it's deflating like a balloon. Time to get the bicycle pump!",
-          "Drinking it all makes #{actor_name} feel a little dizzy.",
+          "That makes #{actor_name} feel a little dizzy.",
           "#{actor_name}'s heart grows three sizes.",
           "#{actor_name} achieves clarity of thought.",
           "It makes #{actor_name} want to contemplate the meaning of life.",
