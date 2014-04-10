@@ -58,8 +58,8 @@ module Alice
       end
 
       def forge(channel_user, what)
-        if Alice::Item.already_exists?(what) || Alice::User.like(what)
-          Alice::Util::Mediator.reply_to(channel_user, "Everyone knows that a #{what} is a singleton.")
+        if Alice::Item.already_exists?(what) || Alice::User.like(what).first
+          Alice::Util::Mediator.reply_to(channel_user, "I'm afraid that a #{what} is a singleton.")
           return
         end
         
