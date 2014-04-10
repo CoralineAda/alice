@@ -8,6 +8,29 @@ module Alice
         rand(number - 1) == 1
       end
 
+      def self.cant_touch_this(verb, noun)
+        [
+          "You can't go around #{verb}ing #{noun}s all willy-nilly.",
+          "Issues much?",
+          "The #{noun} is NOT amused.",
+          "While that may be technically possible, it is ill advised.",
+          "I can't let you do that.",
+          "Um, let's say no?",
+          "That #{noun} will hurt you if you're not careful.",
+          "Let's do something else instead.",
+          "Shouldn't you be hunting the grue instead of messing around with #{noun.pluralize}?",
+          "It's been established that if you #{verb} #{noun.pluralize}, you are likely to attract a grue.",
+          "I'm not sure that you should really #{verb} a #{noun}.",
+          "Are you saying that a #{noun} is a clown here for your amusement?",
+          "Fine, if I let you #{verb} the #{noun} can we get on with our lives?",
+          "She who #{verb.pluralize} the #{noun} must also #{verb} herself.",
+          "It's a crazy world where people go around #{verb}ing all the #{noun.pluralize} they see.",
+          "Next thing you know you'll be asking to #{verb} the grue!",
+          "I didn't peg you for a '#{noun}' person.",
+          "Do you always go around #{verb}ing things?"
+        ].sample
+      end
+
       def self.negative_request_response(name)
         [
           "calls bs on #{name}.",
