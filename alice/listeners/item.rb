@@ -43,7 +43,7 @@ module Alice
             message ||= noun.description
           end
         elsif Alice::Place.current.description.include?(noun)
-          message ||= Alice::Util::Randomizer.description(noun)
+          message ||= Alice::Util::Randomizer.item_description(noun)
         end
         message ||= Alice::Util::Randomizer.not_here(noun)
         Alice::Util::Mediator.reply_to(channel_user, message)
