@@ -43,6 +43,7 @@ module Alice
 
       def self.strip_pronouns(text)
         text.gsub!(/^I /i, '')
+        text
       end
 
       def self.make_third_person(text)
