@@ -440,7 +440,7 @@ module Alice
           "kills some time with",
           "pays half-attention as they play",
           "loudly engages in",
-          "concentrates hard on their",
+          "concentrates hard on",
           "disregards #{thing} and focuses their attention on",
           "mutters something about winning against #{thing} at",
           "hopes to win #{thing} in",
