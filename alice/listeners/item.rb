@@ -28,6 +28,7 @@ module Alice
       match /^\!find (.+)/,     method: :find, use_prefix: false
       match /^\!play (.+)/,     method: :play, use_prefix: false
       match /^\!read (.+)/,     method: :read, use_prefix: false
+      match /^\!talk (.+)/,     method: :talk, use_prefix: false
 
       # TODO copy this pattern!
       def find(channel_user, what)
@@ -54,6 +55,13 @@ module Alice
         return unless current_user = current_user_from(channel_user).items.include?(item)
         Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be dropped!") and return if item.is_cursed?
         Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.drop_message(item.name_with_article, channel_user.user.nick)) && item.drop
+      end
+
+      def talk(channel_user, who)
+        return unless actor = Alice::Actor.from(what).last 
+        return unless actor.is_present?
+        return unless current_user = current_user_from(channel_user)
+        Alice::Util::Mediator.reply_to(channel_user, actor.talk)
       end
 
       def play(channel_user, game)

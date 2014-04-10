@@ -84,6 +84,10 @@ class Alice::Actor
     false
   end
 
+  def is_present?
+    self.place == Alice::Place.current
+  end
+
   def proper_name
     self.name
   end
