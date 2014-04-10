@@ -10,7 +10,7 @@ module Alice
       include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
-      match /([0-9\,\.]+)$/, method: :check_number, use_prefix: false
+      match /([0-9]+)$/, method: :check_number, use_prefix: false
 
       def check_number(channel_user, number)
         if Alice::Util::Randomizer.one_chance_in(5)
