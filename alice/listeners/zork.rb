@@ -47,6 +47,13 @@ module Alice
 
         noun = command.split[1..-1].join(' ')
 
+        if noun =~ /gazebo/
+          message = "The gazebo kills you all!"
+          Alice::Util::Mediator.reply_to(channel_user, message)
+          reset_maze(channel_user, force=true)
+        end
+        
+
         if Alice::Place.current.description.include?(noun) && user = Alice::User.from(noun).last
           message = "What would #{user.primary_nick} have to say about that?"
         end
@@ -84,6 +91,7 @@ module Alice
         else
           message = "You cannot move #{direction}!"
         end
+        Alice::Util::Mediator.reply_to(channel_user, message)
         Alice::Util::Mediator.reply_to(channel_user, message)
         if message =~ /eaten by a grue/i || message =~ /kills the grue/i
           message = reset_maze(Alice.bot.bot.nick, true)
