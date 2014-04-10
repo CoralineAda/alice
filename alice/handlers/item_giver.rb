@@ -16,12 +16,12 @@ module Alice
         giver_user = Alice::User.like(sender)
         recipient_user = Alice::User.find_or_create(recipient)
         
-        if item = Alice::Item.from(command)
-          item = giver_user.items.include?(item) && item
+        if items = Alice::Item.from(command)
+          item = items.select{|i| giver_user.items.include?(i) }.compact
         end
 
-        if beverage = Alice::Beverage.from(command).last
-          beverage = giver_user.beverages.include?(item) && item
+        if beverage = Alice::Beverage.from(command)
+          beverage = items.select{|i| giver_user.beverages.include?(i) }.compact
         end
 
         if item
