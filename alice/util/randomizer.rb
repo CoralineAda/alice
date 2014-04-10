@@ -388,15 +388,10 @@ module Alice
           "the remains of the day",
           "a partially eaten meat pie",
           "a dead crow",
-          "several spiral-bound notebooks",
-          "some unusually large boardgames",
           "the expensive decor",
-          "a 20-sided die",
           "rodents of unusual size",
           "a poster of Spock",
           "the best years of your life",
-          "an old deck of Pokémon cards",
-          "a Cards Against Humanity game",
           "sommone else's face",
           "your entire life in pictures",
           "dark shadows",
@@ -415,7 +410,6 @@ module Alice
           "a towering wampus",
           "an old grandfather clock",
           "a picture of a duck",
-          "a broken old game console",
           "random stuff",
           "tracks of the fearsome grue"
         ].sample
@@ -427,6 +421,34 @@ module Alice
           "fully stocked bar that includes",
           "six-pack with one last",
           "brown paper bag with"
+        ].sample
+      end
+
+      def self.play
+        [
+          "spends some time with",
+          "enjoys a rousing session of",
+          "pretends to be enthralled with",
+          "zones out with",
+          "tunes out with",
+          "goes for the high score in",
+          "plays to win at",
+          "plays a full-contact version of",
+          "challenges the world to a",
+          "enjoys playing",
+          "starts playing",
+          "kills some time with",
+          "pays half-attention as they play",
+          "loudly engages in",
+          "concentrates hard on their",
+          "disregards #{thing} and focuses their attention on",
+          "mutters something about winning against #{thing} at",
+          "hopes to win #{thing} in",
+          "goes for broke in",
+          "sits on the floor to play",
+          "kills it in",
+          "loses badly in",
+          "ties for #{nth} place in"
         ].sample
       end
 
@@ -451,7 +473,13 @@ module Alice
           "ghost in the graveyard",
           "Trivial Pursuit",
           "Scattergories",
-          "charades"
+          "charades",
+          "Zaxxon",
+          "Pac Man",
+          "Joust",
+          "Mario Bros.",
+          "Zelda",
+          "Super NES favorites"
         ].sample
       end
 

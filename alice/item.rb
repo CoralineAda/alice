@@ -11,6 +11,7 @@ class Alice::Item
   field :is_cursed, type: Boolean
   field :is_hidden, type: Boolean
   field :is_weapon, type: Boolean
+  field :is_game, type: Boolean
   field :is_readable, type: Boolean
   field :picked_up_at, type: DateTime
   field :creator_id
@@ -50,6 +51,10 @@ class Alice::Item
     all.map{|item| item.delete unless item.actor? || item.user?}
   end
 
+  def self.games
+    where(is_game: true)
+  end
+  
   def self.reading_material
     where(is_readable: true)
   end
@@ -81,6 +86,12 @@ class Alice::Item
   def creator
     return unless self.creator_id
     Alice::User.find(self.creator_id)
+  end
+
+  def play
+    return "It's not safe to play with #{name_with_article}!" unless self.is_game?
+    self.user.score_point if self.user.can_play_game?
+    return "#{owner} #{Alice::Util::Randomizer.play} a game of #{name}."
   end
 
   def ensure_description
