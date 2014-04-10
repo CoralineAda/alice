@@ -64,7 +64,7 @@ module Alice
         user = current_user_from(channel_user)
         if user.beverages.present?
           Alice::Util::Mediator.reply_to(channel_user, user.inventory_of_beverages)
-        end
+        else
           Alice::Util::Mediator.reply_to(channel_user, "Your cooler is empty.")
         end
       end
