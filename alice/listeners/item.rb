@@ -92,7 +92,7 @@ module Alice
       end
 
       def hide(channel_user, what)
-        return unless current_user = current_user_from(channel_user) = current_user_from(channel_user)
+        return unless current_user = current_user_from(channel_user)
         return unless item = Alice::Item.from(what).select{|t| t.user == current_user}.first
         return unless current_user = current_user_from(channel_user).items.include?(item)
         Alice::Util::Mediator.reply_to(channel_user, item.hide(channel_user.user.nick))
