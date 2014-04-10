@@ -42,7 +42,7 @@ module Alice
               Alice::Util::Mediator.reply_to(channel_user, "#{observer.proper_name} #{actor.observe_brewing(beverage.name, channel_user.user.nick)}")
             end
           else
-              Alice::Util::Mediator.reply_to(channel_user, "#{observer.proper_name} has enough beverages.")
+              Alice::Util::Mediator.reply_to(channel_user, "#{user.proper_name} has enough beverages.")
           end
         end
         
