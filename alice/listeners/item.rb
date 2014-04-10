@@ -49,15 +49,15 @@ module Alice
 
       def drop(channel_user, what)
         return unless item = Alice::Item.from(what).last
-        return unless current_user
-        return unless current_user.items.include?(item)
+        return unless current_user = current_user_from(channel_user) = current_user_from(channel_user)
+        return unless current_user = current_user_from(channel_user).items.include?(item)
         Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be dropped!") and return if item.cursed?
         Alice::Util::Mediator.reply_to(channel_user, item.drop_message(channel_user.user.nick)) && item.drop
       end
 
       def play(channel_user, game)
         return unless item = Alice::Item.from(what).last
-        return unless current_user
+        return unless current_user = current_user_from(channel_user)
         if current_user.items.include?(item)
           Alice::Util::Mediator.reply_to(channel_user, "#{item.play}.")
         else
@@ -92,9 +92,9 @@ module Alice
       end
 
       def hide(channel_user, what)
-        return unless current_user
+        return unless current_user = current_user_from(channel_user) = current_user_from(channel_user)
         return unless item = Alice::Item.from(what).select{|t| t.user == current_user}.first
-        return unless current_user.items.include?(item)
+        return unless current_user = current_user_from(channel_user).items.include?(item)
         Alice::Util::Mediator.reply_to(channel_user, item.hide(channel_user.user.nick))
       end
 
