@@ -16,8 +16,8 @@ module Alice
       match /\!score$/i,          method: :my_score, use_prefix: false
       match /\!score (.+)/i,      method: :player_score, use_prefix: false
       match /\!scores/i,          method: :scores, use_prefix: false
-      match /\!source^/i,          method: :source, use_prefix: false
-      match /\!bug^/i,             method: :bug, use_prefix: false
+      match /\!source$/i,         method: :source, use_prefix: false
+      match /\!bug$/i,            method: :bug, use_prefix: false
       match /\<\.\</,             method: :shifty_eyes, use_prefix: false
       match /\>\.\>/,             method: :shifty_eyes, use_prefix: false
       match /rule[s]? them all/i, method: :bind_them, use_prefix: false
