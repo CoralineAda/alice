@@ -16,7 +16,7 @@ module Alice
       end
 
       def penalize
-        return if self.score == 0
+        return if self.points == 0
         self.update_attribute(:points, self.points - 1)
       end
 

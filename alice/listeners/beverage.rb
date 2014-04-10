@@ -22,6 +22,7 @@ module Alice
       match /^\!chug (.+)/i,     method: :drink,       use_prefix: false
       match /^\!drinks/i,        method: :list_my_drinks, use_prefix: false
       match /^\!fridge/i,        method: :list_drinks, use_prefix: false
+      match /^\!cooler/i,        method: :list_drinks, use_prefix: false
 
       def brew(channel_user, what)
         if Alice::Util::Mediator.non_op?(channel_user) && Alice::Util::Randomizer.one_chance_in(5)

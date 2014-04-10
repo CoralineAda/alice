@@ -5,7 +5,7 @@ module Alice
     class Randomizer
 
       def self.one_chance_in(number)
-        rand(number - 1) == 1
+        rand(number) == 1
       end
 
       def self.cant_touch_this(verb, noun)
@@ -33,7 +33,7 @@ module Alice
 
       def self.negative_request_response(name)
         [
-          "calls bs on #{name}.",
+          "calls BS on #{name}.",
           "stares blankly at #{name}",
           "shakes her head at #{name}",
           "refuses to listen to #{name} anymore.",
@@ -661,6 +661,7 @@ module Alice
           "bell hooks",
           "Neil deGrasse Tyson",
           "Wilford Brimley",
+          "Dread Pirate Roberts",
           "Jean Luc Picard",
           "Tom Waits",
           "tenderlove",

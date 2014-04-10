@@ -49,6 +49,7 @@ module Alice
   require_relative 'alice/beverage'
   require_relative 'alice/bio'
   require_relative 'alice/bot'
+  require_relative 'alice/catchphrase'
   require_relative 'alice/command'
   require_relative 'alice/dungeon'
   require_relative 'alice/factoid'
