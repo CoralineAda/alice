@@ -13,11 +13,11 @@ module Alice
         def from(string)
           return [] unless string.present?
           names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\-\_\ ]/, '')).omnigrams.map{|g| g.join ' '} << string
-          names.map{|name| like(name) }.flatten.compact || []
+          names.map{|name| like(name) }.flatten.compact.uniq || []
         end
 
         def like(name)
-          where(name: /#{Regexp.escape(name)}/i)
+          where(name: /#{name}$/i)
         end
         
       end

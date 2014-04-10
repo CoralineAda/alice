@@ -17,7 +17,7 @@ module Alice
         recipient_user = Alice::User.find_or_create(recipient)
         
         if items = Alice::Item.from(command)
-          item = items.select{|i| giver_user.items.include?(i) }.compact
+          item = items.select{|i| giver_user.items.include?(i) }.compact.uniq
         end
 
         if beverage = Alice::Beverage.from(command)
