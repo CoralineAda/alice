@@ -51,8 +51,8 @@ module Alice
       def laugh_with(actor)
         [
           "#{Alice::Util::Randomizer.laugh} along with #{actor}.",
-          "#{laugh} at #{actor}'s antics.",
-          "#{laugh}."
+          "#{Alice::Util::Randomizer.laugh} at #{actor}'s antics.",
+          "#{Alice::Util::Randomizer.laugh}."
         ].sample
       end
 
