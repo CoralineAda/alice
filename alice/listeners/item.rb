@@ -101,7 +101,7 @@ module Alice
       end
 
       def forge(channel_user, what)
-        if item = Alice::Item.where(name: what.downcase).last
+        if item = Alice::Item.exists?(what)
           Alice::Util::Mediator.reply_to(channel_user, "Everyone knows that that's a singleton.")
           return
         end
@@ -116,11 +116,11 @@ module Alice
       end
 
       def read(channel_user, what)
-        return unless item = Alice::Item.where(name: what.downcase).last
-        if current_user.items.include?(item)
+        item = Alice::Item.where(name: /#{what}/i).last
+        if item && current_user.items.include?(item)
           Alice::Util::Mediator.reply_to(channel_user, "#{item.read}.")
         else
-          Alice::Util::Mediator.reply_to(channel_user, "You don't have #{item.name_with_article}.")
+          Alice::Util::Mediator.reply_to(channel_user, "You don't have a #{what}.")
         end
       end
 
