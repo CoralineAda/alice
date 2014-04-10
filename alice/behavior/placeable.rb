@@ -15,12 +15,16 @@ module Alice
         self.save
       end
 
-      def hide(nick)
+      def hide
         self.place = nil
         self.user = nil
         self.is_hidden = true
         self.picked_up_at = nil
         self.save
+      end
+
+      def is_present?
+        Alice::Place.current.contains?(self)
       end
 
       module ClassMethods

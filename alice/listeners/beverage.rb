@@ -10,18 +10,18 @@ module Alice
       include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
-      match /^\!spill (.+)/,    method: :spill,       use_prefix: false
-      match /^\!pour (.+)/,     method: :spill,       use_prefix: false
-      match /^\!brew (.+)/,     method: :brew,        use_prefix: false
-      match /^\!drink (.+)/,    method: :drink,       use_prefix: false
-      match /^\!quaff (.+)/,    method: :drink,       use_prefix: false
-      match /^\!sip (.+)/,      method: :drink,       use_prefix: false
-      match /^\!swallow (.+)/,  method: :drink,       use_prefix: false
-      match /^\!gulp (.+)/,     method: :drink,       use_prefix: false
-      match /^\!down (.+)/,     method: :drink,       use_prefix: false
-      match /^\!chug (.+)/,     method: :drink,       use_prefix: false
-      match /^\!drinks/,        method: :list_my_drinks, use_prefix: false
-      match /^\!fridge/,        method: :list_drinks, use_prefix: false
+      match /^\!spill (.+)/i,    method: :spill,       use_prefix: false
+      match /^\!pour (.+)/i,     method: :spill,       use_prefix: false
+      match /^\!brew (.+)/i,     method: :brew,        use_prefix: false
+      match /^\!drink (.+)/i,    method: :drink,       use_prefix: false
+      match /^\!quaff (.+)/i,    method: :drink,       use_prefix: false
+      match /^\!sip (.+)/i,      method: :drink,       use_prefix: false
+      match /^\!swallow (.+)/i,  method: :drink,       use_prefix: false
+      match /^\!gulp (.+)/i,     method: :drink,       use_prefix: false
+      match /^\!down (.+)/i,     method: :drink,       use_prefix: false
+      match /^\!chug (.+)/i,     method: :drink,       use_prefix: false
+      match /^\!drinks/i,        method: :list_my_drinks, use_prefix: false
+      match /^\!fridge/i,        method: :list_drinks, use_prefix: false
 
       def brew(channel_user, what)
         if Alice::Util::Mediator.non_op?(channel_user) && Alice::Util::Randomizer.one_chance_in(5)

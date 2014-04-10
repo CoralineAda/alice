@@ -24,12 +24,13 @@ module Alice
       match /^\!reset maze/,  method: :reset_maze, use_prefix: false
 
       def reset_maze(channel_user, force=false)
-        if force || m && m.channel.ops.map(&:nick).include?(channel_user.user.nick)
-          Alice::Place.reset_all!
+        if force || Alice::Util::Mediator.op?(channel_user)
+          Alice::Dungeon.reset!
           message = "Everything goes black and you feel like you are somewhere else!"  
         else
           message = "There is a thundering sound but nothing happens."
         end
+        Alice::Util::Mediator.reply_to(channel_user, message)
       end
 
       def handle_tricksies(channel_user, command)
@@ -38,6 +39,7 @@ module Alice
 
         return if verb == 'look'
         return if verb == 'get'
+        return if verb == 'hide'
         return if verb == 'pick up'
         return if verb == 'reset'
         return if verb == 'forge'
@@ -93,8 +95,7 @@ module Alice
         end
         Alice::Util::Mediator.reply_to(channel_user, message)
         if message =~ /eaten by a grue/i || message =~ /kills the grue/i
-          message = reset_maze(Alice.bot.bot.nick, true)
-          Alice::Util::Mediator.reply_to(channel_user, message)
+          reset_maze(Alice.bot.bot.nick, true)
         end
       end
 

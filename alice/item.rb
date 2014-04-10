@@ -34,13 +34,15 @@ class Alice::Item
   end
 
   def self.forge(args={})
-    new_item = create(
-      name: args[:name].downcase,
-      user: args[:user],
-      actor: args[:actor],
-      creator_id: args[:user].try(:id)
-    )
-    new_item && self.creator && self.creator.score_point
+    if new_item = create(
+        name: args[:name].downcase,
+        user: args[:user],
+        actor: args[:actor],
+        creator_id: args[:user].try(:id)
+      )
+      new_item.creator && new_item.creator.score_point
+      new_item
+    end
   end
 
   def self.fruitcake
@@ -88,12 +90,6 @@ class Alice::Item
     Alice::User.find(self.creator_id)
   end
 
-  def play
-    return "It's not safe to play with #{name_with_article}!" unless self.is_game?
-    self.user.score_point if self.user.can_play_game?
-    return "#{owner} #{Alice::Util::Randomizer.play} a game of #{name}."
-  end
-
   def ensure_description
     self.description ||= Alice::Util::Randomizer.item_description(self.name)
   end
@@ -104,6 +100,12 @@ class Alice::Item
 
   def name_with_article
     Alice::Util::Sanitizer.process("#{Alice::Util::Randomizer.article} #{self.name_with_appendix}")
+  end
+
+  def play
+    return "It's not safe to play with #{name_with_article}!" unless self.is_game?
+    self.user.score_point if self.user.can_play_game?
+    return "#{owner} #{Alice::Util::Randomizer.play} a game of #{name}."
   end
   
   def read

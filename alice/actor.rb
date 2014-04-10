@@ -70,6 +70,10 @@ class Alice::Actor
     message
   end
 
+  def is_present?
+    self.place == Alice::Place.current
+  end
+
   def spill
     return "#{proper_name } fumbles with an empty cup." unless beverages.present?
     beverages.sample.spill

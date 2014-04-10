@@ -10,18 +10,16 @@ module Alice
       include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
-      match /\!cookie (.+)/, method: :cookie, use_prefix: false
-      match /\!pants/, method: :pants, use_prefix: false
-      match /\!help/, method: :help, use_prefix: false
-      match /\!score$/, method: :my_score, use_prefix: false
-      match /\!score (.+)/, method: :player_score, use_prefix: false
-      match /\!scores/, method: :scores, use_prefix: false
-      match /\<\.\</, method: :shifty_eyes, use_prefix: false
-      match /\>\.\>/, method: :shifty_eyes, use_prefix: false
-      match /^ha|^bwa|^lol/i, method: :laugh, use_prefix: false
-      match /^grr|^arg|^blech|^blegh|^ugh|frown|sigh/i, method: :frown, use_prefix: false
-      match /rule[s]? them all/, method: :bind_them, use_prefix: false
-      match /say we all/, method: :say_we_all, use_prefix: false
+      match /\!cookie (.+)/i,     method: :cookie, use_prefix: false
+      match /\!pants/i,           method: :pants, use_prefix: false
+      match /\!help/i,            method: :help, use_prefix: false
+      match /\!score$/i,          method: :my_score, use_prefix: false
+      match /\!score (.+)/i,      method: :player_score, use_prefix: false
+      match /\!scores/i,          method: :scores, use_prefix: false
+      match /\<\.\</,             method: :shifty_eyes, use_prefix: false
+      match /\>\.\>/,             method: :shifty_eyes, use_prefix: false
+      match /rule[s]? them all/i, method: :bind_them, use_prefix: false
+      match /say we all/i,        method: :say_we_all, use_prefix: false
 
       listen_to :nick, method: :update_nick
       listen_to :join, method: :maybe_say_hi
