@@ -39,7 +39,7 @@ module Alice
         if subject = Alice::User.from(noun.downcase).last  
           message ||= subject.description
         elsif subject = Alice::Item.from(noun.downcase).last || Alice::Beverage.from(noun.downcase).last || Alice::Actor.from(noun.downcase).last
-          if Alice::Place.subject.contains?(noun)
+          if Alice::Place.current.contains?(noun)
             message ||= noun.description
           end
         elsif Alice::Place.current.description.include?(noun)
