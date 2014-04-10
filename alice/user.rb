@@ -43,11 +43,11 @@ class Alice::User
   end
 
   def self.find_or_create(nick)
-    like(nick) || Alice::Util::Mediator.exists?(nick) && create(primary_nick: nick.downcase)
+    like(nick) || Alice::Util::Mediator.exists?(nick) && create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
   end
 
   def self.like(nick)
-    where(primary_nick: nick.downcase).first || where(alt_nicks: nick.downcase).first
+    where(primary_nick: nick.downcase).first || where(primary_nick: nick.gsub('_','').downcase) || where(alt_nicks: nick.downcase).first
   end
 
   def self.random

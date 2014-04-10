@@ -621,6 +621,7 @@ module Alice
 
       def self.specific_person
         [
+          "Dwarf from Twin Peaks",
           "Thing One",
           "Thing Two",
           "Cat in the Hat",
