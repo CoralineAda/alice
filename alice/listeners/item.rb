@@ -80,7 +80,7 @@ module Alice
           current_user_from(channel_user).add_to_inventory(noun)
           Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.pickup_message(noun.name, channel_user.user.nick))
         else
-          Alice::Util::Mediator.reply_to(channel_user, "You cannot get #{item}!")
+          Alice::Util::Mediator.reply_to(channel_user, "You cannot get the #{item}!")
         end
       end
 
