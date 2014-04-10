@@ -12,7 +12,7 @@ module Alice
 
         def from(string)
           return [] unless string.present?
-          names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\-\_\ ]/, '')).omnigrams.map{|g| g.join ' '}
+          names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\-\_\ ]/, '')).omnigrams.map{|g| g.join ' '} << string
           names.map{|name| like(name) }.flatten.compact || []
         end
 
