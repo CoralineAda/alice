@@ -955,7 +955,7 @@ module Alice
       def self.drink_message(item_name, actor_name)
         [
           "#{actor_name} slams the #{item_name}.",
-          "#{actor_name} sip the #{item_name}.",
+          "#{actor_name} sips the #{item_name}.",
           "#{actor_name} imbibes the #{item_name}.",
           "#{actor_name} gulps the #{item_name}.",
           "#{actor_name} quaffs the entire #{item_name}.",
@@ -1319,6 +1319,18 @@ module Alice
           "wand of magic missiles"
         ].sample
         string
+      end
+
+      def self.points_dont_matter
+        [
+          "a dudebro's opinions",
+          "the consensus on Hacker News",
+          "Microsoft's latest mobile offering",
+          "Fleetwood Mac's box set",
+          "dudebro tears",
+          ""
+
+        ].sample
       end
 
     end
