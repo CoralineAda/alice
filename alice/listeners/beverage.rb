@@ -20,7 +20,7 @@ module Alice
       match /^\!gulp (.+)/,     method: :drink,       use_prefix: false
       match /^\!down (.+)/,     method: :drink,       use_prefix: false
       match /^\!chug (.+)/,     method: :drink,       use_prefix: false
-      match /^\!drinks/,        method: :list_drinks, use_prefix: false
+      match /^\!drinks/,        method: :list_my_drinks, use_prefix: false
       match /^\!fridge/,        method: :list_drinks, use_prefix: false
 
       def brew(channel_user, what)
@@ -57,6 +57,15 @@ module Alice
       def spill(channel_user, what)
         if beverage = ensure_beverage(channel_user, what)
           Alice::Util::Mediator.reply_to(channel_user, beverage.spill)
+        end
+      end
+
+      def list_my_drinks(channel_user)
+        user = current_user_from(channel_user)
+        if user.beverages.present?
+          Alice::Util::Mediator.reply_to(channel_user, user.inventory_of_beverages)
+        end
+          Alice::Util::Mediator.reply_to(channel_user, "Your cooler is empty.")
         end
       end
 
