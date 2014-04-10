@@ -21,11 +21,11 @@ module Alice
         if item
           giver_user.remove_from_inventory(item)
           recipient_user.add_to_inventory(item)
-          Alice::Util::Mediator.reply_to(channel_user, "#{giver_user.proper_name} hands the #{item.name} over to #{recipient_user.proper_name}.")
+          Alice::Handlers::Response.new(content: "#{giver_user.proper_name} hands the #{item.name} over to #{recipient_user.proper_name}.", kind: :reply)
         elsif beverage
-          giver_user.remove_from_inventory(item)
-          recipient_user.add_to_inventory(item)
-          Alice::Util::Mediator.reply_to(channel_user, "#{giver_user.proper_name} passes the #{item.name} to #{recipient_user.proper_name}.")
+          giver_user.remove_from_inventory(beverage)
+          recipient_user.add_to_inventory(beverage)
+          Alice::Handlers::Response.new(content: "#{giver_user.proper_name} passes the #{beverage.name} over to #{recipient_user.proper_name}.", kind: :reply)
         end
       end
 

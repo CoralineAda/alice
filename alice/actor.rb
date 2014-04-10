@@ -121,7 +121,7 @@ class Alice::Actor
 
   def talk
     if message = Alice::Util::Randomizer.one_chance_in(2) && self.catchphrases.sample
-      "#{message.text}."
+      "#{self.proper_name} says, '#{message.text}.'"
     elsif message = [Alice::Factoid.random.formatted(false), Alice::Oh.random.formatted(false)].compact.sample
       "#{Alice::Util::Randomizer.says} \"#{message}.\""
     else

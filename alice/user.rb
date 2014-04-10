@@ -86,9 +86,13 @@ class Alice::User
 
   def describe
     message = ""
-    message << "#{proper_name} is #{self.bio.formatted}. " if self.bio.present?
+    if self.bio.present?
+      message << "#{proper_name} is #{self.bio.formatted}. " 
+    else
+      message << "It's #{proper_name}! "
+    end
     message << "Find them on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
-    message << "They currently have #{self.points} points. "
+    message << "They currently have #{self.points == 1 ? "1 point" : self.points.to_s << ' points'} "
     message << "#{self.inventory}"
   end
 

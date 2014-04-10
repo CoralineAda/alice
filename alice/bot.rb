@@ -35,7 +35,8 @@ module Alice
     end
 
     def start
-      self.bot.start && self.bot
+      self.bot.start
+      self.bot
     end 
 
     def stop

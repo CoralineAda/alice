@@ -65,7 +65,7 @@ module Alice
         current_user = current_user_from(channel_user)
 
         if current_user.can_forge?
-          Alice::Item.forge(name: what.downcase, user: current_user, creator_id: user.id)
+          Alice::Item.forge(name: what.downcase, user: current_user, creator_id: current_user.id)
           Alice::Util::Mediator.emote_to(channel_user, "forges a #{what} #{Alice::Util::Randomizer.forge} for #{channel_user.user.nick}.")
         else
           Alice::Util::Mediator.emote_to(channel_user, "thinks that #{channel_user.user.nick} has enough stuff already.")
@@ -101,7 +101,7 @@ module Alice
         subject ||= Alice::Beverage.from(noun).last
         
         if subject.is_present? || current_user.items.include?(subject) || current_user.beverages.include?(subject)
-          message = subject.description
+          message = subject.describe
         else
           message = Alice::Util::Randomizer.not_here(noun)  
         end

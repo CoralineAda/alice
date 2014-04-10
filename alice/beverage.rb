@@ -61,6 +61,10 @@ class Alice::Beverage
     message
   end
 
+  def describe
+    self.description
+  end
+
   def ensure_description
     self.description ||= Alice::Util::Randomizer.drink_description(self.name)
   end

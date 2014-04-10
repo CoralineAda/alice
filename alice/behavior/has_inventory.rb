@@ -28,6 +28,7 @@ module Alice
       end
 
       def remove_from_inventory(item)
+        return unless drop
         item.drop
         item.save
       end
