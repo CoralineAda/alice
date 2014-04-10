@@ -19,7 +19,7 @@ module Alice
         text.gsub!('..', '.')
         text.gsub!('. .', '.')
         text.gsub!('  ', ' ')
-        text[0].upcase
+        text[0].try(:upcase)
         text
       end
 
