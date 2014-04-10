@@ -15,8 +15,14 @@ module Alice
 
         giver_user = Alice::User.like(sender)
         recipient_user = Alice::User.find_or_create(recipient)
-        item = Alice::Item.from(command).last
-        beverage = Alice::Beverage.from(command).last
+        
+        if item = Alice::Item.from(command)
+          item = giver_user.items.include?(item) && item
+        end
+
+        if beverage = Alice::Beverage.from(command).last
+          beverage = giver_user.beverages.include?(item) && item
+        end
 
         if item
           giver_user.remove_from_inventory(item)
@@ -26,6 +32,8 @@ module Alice
           giver_user.remove_from_inventory(beverage)
           recipient_user.add_to_inventory(beverage)
           Alice::Handlers::Response.new(content: "#{giver_user.proper_name} passes the #{beverage.name} over to #{recipient_user.proper_name}.", kind: :reply)
+        else
+          Alice::Handlers::Response.new(content: "I can't seem to find any #{item}.", kind: :reply)
         end
       end
 
