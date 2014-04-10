@@ -24,10 +24,10 @@ class Alice::Actor
   before_create :ensure_description
 
   def self.observer
-    Alice::Actor.present.sample
+    Alice::Actor.is_present.sample
   end
 
-  def self.present
+  def self.is_present
     where(place_id: Alice::Place.current.id)
   end
 
@@ -52,7 +52,6 @@ class Alice::Actor
   end
 
   def do_something
-    return unless Alice::Util::Randomizer.one_chance_in(10)
     self.public_send(Alice::Actor.actions.sample)
   end
 
@@ -62,7 +61,12 @@ class Alice::Actor
     "#{Alice::User.bot.observe_brewing(beverage.name, self.proper_name)}"
   end
 
+  def check_action
+    return unless Alice::Util::Randomizer.one_chance_in(10)
+  end
+
   def describe
+    check_action
     message = ""
     message << "#{proper_name} is #{self.description}. "
     message << "#{self.inventory}. "
