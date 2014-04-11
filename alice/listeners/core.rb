@@ -61,7 +61,7 @@ module Alice
 
       def cookie(channel_user, who)
         return unless Alice::User.find_or_create(who)
-        Alice::Util::Mediator.emote_to(channel_user, "tempts #{channel_user.user.nick} with a warm cookie.")
+        Alice::Util::Mediator.emote_to(channel_user, "tempts #{who.proper_name} with a warm cookie.")
       end
 
       def frown(channel_user)
