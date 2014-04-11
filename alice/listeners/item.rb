@@ -31,6 +31,14 @@ module Alice
       match /^\!play (.+)/i,     method: :play, use_prefix: false
       match /^\!read (.+)/i,     method: :read, use_prefix: false
       match /^\!talk (.+)/i,     method: :talk, use_prefix: false
+      match /^\!dance (.+)/i,    method: :dance, use_prefix: false
+
+      def dance(channel_user, who)
+        return unless actor = Alice::Actor.from(who).last 
+        return unless actor.is_present?
+        return unless current_user = current_user_from(channel_user)
+        Alice::Util::Mediator.reply_to(channel_user, "#{Alice::Util::Randomizer.dance(current_user.proper_name, actor.proper_name)}")
+      end
 
       def destroy(channel_user, what)
         return unless item = Alice::Item.from(what).last

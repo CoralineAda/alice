@@ -8,6 +8,17 @@ module Alice
         rand(number) == 1
       end
 
+      def self.dance(dancer, partner)
+        [
+          "#{dancer} walzes around with #{parter}.",
+          "#{dancer} and #{partner} cut a rug!",
+          "#{dancer} and #{partner} do the pogo all around the room.",
+          "#{dancer} and #{partner} appear to be walking like Egyptians.",
+          "#{dancer} has two left feet. No, I mean literally two left feet.",
+          "Watching #{dancer} and #{partner} like this brings a tear to the eye"
+        ].sample
+      end
+
       def self.spell_effect(caster, spell)
         [
           "#{caster} waves a wand but nothing happens.",
