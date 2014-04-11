@@ -19,7 +19,7 @@ module Alice
         if item.user
           [
             "The #{item.name} belongs to #{item.owner}",
-            "#{item.owner} has been its guardian for #{item.elapsed_time}.",
+            "#{item.owner} has been its guardian for #{item.owned_time}.",
             "#{item.owner} holds the #{item.name}.",
             "It is said that the #{item.name} resides deep in the pockets of #{item.owner}.",
             "Don't look at me, look at #{item.owner}.",
