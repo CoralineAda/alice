@@ -46,10 +46,6 @@ module Alice
           Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be destroyed!")
           return
         end
-        unless Alice::Util::Mediator.op?(channel_user) || Alice::Util::Randomizer.one_chance_in(2)
-          Alice::Util::Mediator.reply_to(channel_user, "You're not really up to the task of destroying the #{what} right now, #{channel_user.user.nick}.")
-          return
-        end
         Alice::Util::Mediator.emote_to(channel_user, Alice::Util::Randomizer.destroy_message(what))
         item.destroy
       end
