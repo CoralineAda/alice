@@ -47,7 +47,7 @@ class Alice::User
   end
 
   def self.like(nick)
-    where(primary_nick: nick.downcase).first || where(primary_nick: nick.gsub('_','').downcase) || where(alt_nicks: nick.downcase).first
+    where(primary_nick: nick.downcase).first || where(primary_nick: nick.gsub('_','').downcase).first || where(alt_nicks: nick.downcase).first
   end
 
   def self.random
@@ -55,7 +55,7 @@ class Alice::User
   end
 
   def self.update_nick(old_nick, new_nick)
-    user = like(old_nick).first || like(new_nick).first
+    user = like(old_nick) || like(new_nick)
     user ||= new(primary_nick: old_nick)
     user.alt_nicks << new_nick.downcase
     user.alt_nicks << old_nick.downcase
