@@ -22,7 +22,7 @@ module Alice
 
         item ||= Alice::Item.like(command.split("give")[-1].split("to")[-2].strip).last
 
-        if beverages = grams.map{|g| Alice::Item.like(g.join(' '))}.flatten.compact.uniq
+        if beverages = grams.map{|g| Alice::Beverage.like(g.join(' '))}.flatten.compact.uniq
           beverage = beverages.select{|i| giver_user.beverages.include?(i) }.compact.uniq.last
         end
 
