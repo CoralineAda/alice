@@ -16,6 +16,7 @@ class Alice::Place
 
   after_create :place_item
   after_create :place_actor
+  after_create :ensure_description
 
   def self.current
     where(:is_current => true).last || all.sample || generate!
@@ -110,6 +111,11 @@ class Alice::Place
     else
       "You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}."
     end
+  end
+
+  def ensure_description
+    return true if self.description.present?
+    update_attribute(:description, Alice::Place.random_description(self))
   end
 
   def handle_grue
