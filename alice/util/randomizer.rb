@@ -19,6 +19,30 @@ module Alice
         ].sample
       end
 
+      def self.destroy_message(what)
+        [
+          "drops the #{what} into the fires of Mount Doom! That should do it.",
+          "destroyed the #{what}. See, that's why we can't have nice things.",
+          "smashed the #{what} into pieces. Someone should clean that up.",
+          "things you will regret not having the #{what} anymore. Mark my words.",
+          "melts the #{what} in the microwave.",
+          "sends the #{what} to the store for cigarettes, and it's never seen again.",
+          "watches in disbelief as #{person} devours the #{what}!",
+          "smiles as #{specific_person} carts the #{what} off to its doom.",
+          "will never see that #{what} again.",
+          "throws a going-away party for the #{what}.",
+          "sobs as the #{what} crumbles to dust.",
+          "gives the #{what} an unforgettable send-off.",
+          "melts the #{what} down into a smelly puddle of goo.",
+          "shivers, the last words of the #{what} still ringing in their ears.",
+          "marks the passing of yet another #{what}.",
+          "smiles as the #{what} recedes into the sunset.",
+          "exercises the nuclear option and vaporizes the #{what}.",
+          "thinks you will miss that #{what} one day.",
+          "knows that you loved the #{what}, and that's why you had to let it go."
+        ].sample
+      end
+
       def self.spell_effect(caster, spell)
         [
           "#{caster} waves a wand but nothing happens.",
