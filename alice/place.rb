@@ -140,8 +140,6 @@ class Alice::Place
     end
   end
 
-  end
-
   def place_actor
     if Alice::Util::Randomizer.one_chance_in(10) && actor = Alice::Actor.unplaced.sample
       actor.update_attribute(:place_id, self.id)
