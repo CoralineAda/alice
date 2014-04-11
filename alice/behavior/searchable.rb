@@ -15,7 +15,7 @@ module Alice
           names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\-\_\ ]/, '')).omnigrams.map{|g| g.join ' '} << string
           objects = names.map do |name|
             if found = like(name)
-              SearchResult.new(term: name, result: like(name).first) 
+              SearchResult.new(term: name, result: like(name)) 
             end
           end.compact
           objects = objects.select{|obj| obj.result.present?}.uniq || []
