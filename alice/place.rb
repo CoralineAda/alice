@@ -126,21 +126,19 @@ class Alice::Place
   end
 
   def has_item?
-    if @has_item || self.items.present?
-      return @has_item
-    else
-      @has_item = false if self.origin_square?
-      if item = Alice::Util::Randomizer.one_chance_in(5) && Alice::Item.unclaimed.unplaced.sample
-        @has_item = item.update_attribute(:place_id, self.id)
-      end
-    end
+    return true if self.items.present?
+    return @has_item if @has_item.present?
+    @has_item = false if self.origin_square?
+    return unless Alice::Util::Randomizer.one_chance_in(10)
+    return unless item = Alice::Item.unclaimed.unplaced.sample
+    @has_item = item.update_attribute(:place_id, self.id)
   end
 
   def has_actor?
-    return @has_actor if @has_actor
     return true if self.actors.present?
-    return if self.origin_square?
-    return unless Alice::Util::Randomizer.one_chance_in(5)
+    return @has_actor if @has_actor.present?
+    @has_actor = false if self.origin_square?
+    return unless Alice::Util::Randomizer.one_chance_in(10)
     return unless actor = Alice::Actor.unplaced.sample
     @has_actor = actor.update_attribute(:place_id, self.id)
   end
