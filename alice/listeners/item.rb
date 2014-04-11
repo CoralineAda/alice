@@ -150,7 +150,7 @@ module Alice
         if item && current_user.items.include?(item)
           Alice::Util::Mediator.reply_to(channel_user, "#{item.play}.")
         else
-          Alice::Util::Mediator.reply_to(channel_user, "You don't have #{game.name_with_article}.")
+          Alice::Util::Mediator.reply_to(channel_user, "You don't have #{game}.")
         end
       end
 

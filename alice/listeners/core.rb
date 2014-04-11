@@ -13,9 +13,9 @@ module Alice
       match /^\!cast (.+)/,     method: :cast, use_prefix: false
       match /^\!cookie (.+)/,     method: :cookie, use_prefix: false
       match /^\!pants/,          method: :pants, use_prefix: false
-      match /^\!help/,           method: :help, use_prefix: false
-      match /^\!source/,          method: :source, use_prefix: false
-      match /^\!bug/,            method: :bug, use_prefix: false
+      match /^\!help$/,           method: :help, use_prefix: false
+      match /^\!source$/,          method: :source, use_prefix: false
+      match /^\!bug$/,            method: :bug, use_prefix: false
       match /\<\.\</,             method: :shifty_eyes, use_prefix: false
       match /\>\.\>/,             method: :shifty_eyes, use_prefix: false
       match /rule[s]? them all/, method: :bind_them, use_prefix: false
