@@ -47,7 +47,10 @@ class Alice::User
   end
 
   def self.like(nick)
-    where(primary_nick: nick.downcase).first || where(primary_nick: nick.gsub('_','').downcase).first || where(alt_nicks: nick.downcase).first
+    scrubbed_nick = nick.gsub('_','').downcase
+    found =where(primary_nick: nick.downcase).first || where(primary_nick: scrubbed_nick).first
+    found ||= where(alt_nicks: nick.downcase).first || where(alt_nicks: scrubbed_nick).first
+    found
   end
 
   def self.random
