@@ -16,7 +16,7 @@ module Alice
         giver_user = Alice::User.like(sender)
         recipient_user = Alice::User.find_or_create(recipient)
         
-        if items = grams.map{|g| Alice::Item.like(g)}.compact.uniq
+        if items = grams.map{|g| Alice::Item.like(g.join(' '))}.compact.uniq
           item = items.select{|i| giver_user.items.include?(i) }.compact.uniq
         end
 
