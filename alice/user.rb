@@ -55,7 +55,7 @@ class Alice::User
   end
 
   def self.update_nick(old_nick, new_nick)
-    user = like(old_nick) || like(new_nick)
+    user = like(old_nick).first || like(new_nick).first
     user ||= new(primary_nick: old_nick)
     user.alt_nicks << new_nick.downcase
     user.alt_nicks << old_nick.downcase
