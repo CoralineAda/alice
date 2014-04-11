@@ -22,6 +22,10 @@ class Alice::User
   has_many :items
   has_many :beverages
 
+  def self.by_nick(nick)
+    where(primary_nick: nick).last
+  end
+
   def self.online
     Alice::Util::Mediator.user_list.map{|user| like(user.nick)}.compact
   end

@@ -19,7 +19,7 @@ module Alice
         end
 
         def like(name)
-          where(name: /#{Regexp.escape(name)}/i)
+          where(name: /#{Regexp.escape(name)}/i) || []
         end
         
       end
