@@ -50,7 +50,7 @@ module Alice
           Alice::Util::Mediator.reply_to(channel_user, "You're not really up to the task of destroying the #{what} right now, #{channel_user.user.nick}.")
           return
         end
-        Alice::Util::Mediator.emote_to(channel_user, "drops the #{what} into the fires of Mount Doom! That should do it.")
+        Alice::Util::Mediator.emote_to(channel_user, Alice::Util::Randomizer.destroy_message(what))
         item.destroy
       end
 
