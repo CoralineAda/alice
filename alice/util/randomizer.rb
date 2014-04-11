@@ -10,12 +10,12 @@ module Alice
 
       def self.dance(dancer, partner)
         [
-          "#{dancer} walzes around with #{parter}.",
+          "#{dancer} walzes around with #{partner}.",
           "#{dancer} and #{partner} cut a rug!",
           "#{dancer} and #{partner} do the pogo all around the room.",
           "#{dancer} and #{partner} appear to be walking like Egyptians.",
           "#{dancer} has two left feet. No, I mean literally two left feet.",
-          "Watching #{dancer} and #{partner} like this brings a tear to the eye"
+          "Watching #{dancer} and #{partner} like this brings a tear to the eye"  
         ].sample
       end
 
