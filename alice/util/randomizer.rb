@@ -475,7 +475,7 @@ module Alice
           "the best years of your life",
           "sommone else's face",
           "your entire life in pictures",
-          "a dark shadow`",
+          "a dark shadow",
           "a dread gazebo",
           "a flock of birds",
           "a stack of books",
