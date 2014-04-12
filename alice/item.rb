@@ -99,7 +99,9 @@ class Alice::Item
   end
 
   def describe
-    self.description
+    text = self.description
+    text << " The maker's mark indicates that it was created by #{creator.proper_name}." if creator
+    text
   end
 
   def ensure_description
