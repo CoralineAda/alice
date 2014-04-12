@@ -92,7 +92,7 @@ class Alice::Place
 
   def enter
     Alice::Place.set_current_room(self)
-    handle_grue && return if has_grue?
+    handle_grue || self.describe
     return true
   end
 
@@ -122,17 +122,14 @@ class Alice::Place
   end
 
   def handle_grue
+    return if self.origin_square?
+    return unless Alice::Util::Randomizer.one_chance_in(13)
     if user = Alice::User.with_weapon.sample 
       "#{user.proper_name} slays the grue!"
     else
       "You have been eaten by a grue!"
     end
   end    
-
-  def has_grue?
-    return false if self.origin_square?
-    return false unless Alice::Util::Randomizer.one_chance_in(13)
-  end
 
   def has_item?
     self.items.present?
