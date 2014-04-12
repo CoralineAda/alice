@@ -9,6 +9,14 @@ class Alice::Dungeon
     true
   end
 
+  def self.win!
+    Alice::Actor.active_and_online.each{|actor| actor.update_attribute(:points, actor.points + 5) }
+  end
+
+  def self.lose!
+    Alice::Actor.active_and_online.each{|actor| actor.update_attribute(:points, [actor.points - 5, 0].max) }
+  end
+
   def self.cleanup
     Alice::Actor.reset_all
     Alice::Beverage.sweep
