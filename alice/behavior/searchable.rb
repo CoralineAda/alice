@@ -19,7 +19,7 @@ module Alice
             end
           end.compact
           objects = objects.select{|obj| obj.result.present?}.uniq || []
-          objects.sort{|a,b| a.term.length <=> b.term.length}.map(&:result)
+          objects.sort{|b,a| b.term.length <=> a.term.length}.map(&:result)
         end
 
         def like(name)
