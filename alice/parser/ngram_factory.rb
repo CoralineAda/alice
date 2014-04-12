@@ -6,11 +6,17 @@ module Alice
 
       attr_accessor :options, :target
      
+      def self.filtered_grams_from(words)
+        filtered = words.split.reject!{|name| Alice::Parser::LanguageHelper::IDENTIFIERS.include?(name)}
+        filtered.reject!(&:empty?)
+        omnigrams_from(filtered.join(' '))
+      end
+
       def self.omnigrams_from(words)
         words = words.downcase.split(/[^a-zA-Z0-9\_\-]/).uniq
         words << words.map{|word| Lingua.stemmer(word.downcase)}
         words.flatten
-        new(words).omnigrams.to_a.flatten.uniq
+        new(words).omnigrams.to_a.flatten.uniq.reject!(&:empty?)
       end
 
       def initialize(target)

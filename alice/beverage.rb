@@ -10,9 +10,14 @@ class Alice::Beverage
   field :description
   field :is_hidden, type: Boolean
   field :picked_up_at, type: DateTime
+  field :creator_id
 
   validates_presence_of :name
   validates_uniqueness_of :name
+
+  index({ name: 1 },        { unique: true, })
+  index({ is_hidden: 1 },   { unique: false })
+  index({ creator_id: 1 },  { unique: false })
 
   belongs_to :actor
   belongs_to :user

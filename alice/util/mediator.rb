@@ -28,6 +28,16 @@ module Alice
         Alice.bot.bot.nick == nick
       end
 
+      def self.default_user
+        Alice.bot.bot.channels.last.users.keys.last
+      end
+
+      def self.send_raw(message)
+        text = Alice::Util::Sanitizer.process(message)
+        text = Alice::Util::Sanitizer.initial_upcase(text)
+        Alice.bot.bot.channels.first.msg(text)
+      end
+
       def self.reply_to(channel_user, message)
         text = Alice::Util::Sanitizer.process(message)
         text = Alice::Util::Sanitizer.initial_upcase(text)

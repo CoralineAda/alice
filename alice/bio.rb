@@ -15,7 +15,7 @@ class Alice::Bio
   end
 
   def formatted
-    "#{self.user.proper_name} #{self.text}"
+    "#{self.user.proper_name} is #{self.text}"
   end
 
 end

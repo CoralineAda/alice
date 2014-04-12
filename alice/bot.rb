@@ -9,7 +9,7 @@ module Alice
         configure do |config|
           config.server = "irc.lonelyhackersclub.com"
           config.port = 2600
-          config.channels = ["##lonelyhackersclub", "##alicebottest"]
+          config.channels = [ENV['PRIMARY_CHANNEL'], ENV['DEBUG_CHANNEL']]
           config.nick = "AliceBot_"
           config.user = "AliceBot"
           config.plugins.plugins = [
@@ -20,7 +20,8 @@ module Alice
             Listeners::Beverage,
             Listeners::Score,
             Listeners::NumberWang,
-            Listeners::Core
+            Listeners::Core,
+            Listeners::TickTock
           ]
           config.password = ENV['USER_PASS']
           config.messages_per_second = 1

@@ -8,6 +8,22 @@ module Alice
         rand(number) == 1
       end
 
+      def self.give_message(giver, receiver, thing)
+        [
+          "#{giver} hands #{thing} to #{receiver}.",
+          "#{giver} passes #{thing} to #{receiver}.",
+          "#{receiver} is now the proud owner of #{thing}, only slightly used.",
+          "#{receiver} notes that #{thing} has a lot of carbon scoring, and must have seen some action.",
+          "#{giver} tosses #{thing} to #{receiver}, who catches it deftly.",
+          "#{giver} throws #{thing} to #{receiver}, who almost drops it!",
+          "#{giver}, with a tear in their eye, slowly hands #{thing} over to #{receiver}",
+          "Who is the new owner of #{thing}? #{recipient} is!",
+          "#{recipient} quickly stuffs #{thing} into their bag, before #{giver} changes their mind.",
+          "#{giver} signs over #{thing} to #{recipient}.",
+          "#{giver} gave #{thing} to #{recipient}? Well that just happened."
+        ].sample
+      end
+
       def self.dance(dancer, partner)
         [
           "#{dancer} waltzes around with #{partner}.",
