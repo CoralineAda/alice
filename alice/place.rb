@@ -144,7 +144,7 @@ class Alice::Place
   end
 
   def place_item
-    if Alice::Util::Randomizer.one_chance_in(10) && actor = Alice::Item.unplaced.sample
+    if Alice::Util::Randomizer.one_chance_in(10) && item = Alice::Item.unplaced.sample
       item.update_attribute(:place_id, self.id)
     end
   end
