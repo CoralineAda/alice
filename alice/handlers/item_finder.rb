@@ -9,7 +9,7 @@ module Alice
       end
 
       def self.process(sender, command)
-        item ||= Alice::Item.from(command).first
+        item ||= Alice::Item.from(command)
         if item
           Alice::Handlers::Response.new(content: formatted_response(item), kind: :reply)
         end
