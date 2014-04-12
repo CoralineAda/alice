@@ -40,7 +40,7 @@ module Alice
           "drops the #{what} into the fires of Mount Doom! That should do it.",
           "destroyed the #{what}. See, that's why we can't have nice things.",
           "smashed the #{what} into pieces. Someone should clean that up.",
-          "things you will regret not having the #{what} anymore. Mark my words.",
+          "thinks you will regret not having the #{what} anymore. Mark my words.",
           "melts the #{what} in the microwave.",
           "sends the #{what} to the store for cigarettes, and it's never seen again.",
           "watches in disbelief as #{person} devours the #{what}!",
