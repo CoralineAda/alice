@@ -63,7 +63,8 @@ module Alice
       end
 
       def move(channel_user, direction)
-        if Alice::Place.go(direction)
+        if Alice::Place.current.exits.include?(direction) 
+          Alice::Place.go(direction)
           message = "#{Alice::Place.current.describe}"
         else
           message = "You cannot move #{direction}!"
