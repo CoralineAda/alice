@@ -34,14 +34,14 @@ module Alice
       match /^\!dance (.+)/i,    method: :dance, use_prefix: false
 
       def dance(channel_user, who)
-        return unless actor = Alice::Actor.from(who).last 
+        return unless actor = Alice::Actor.from(who)
         return unless actor.is_present?
         return unless current_user = current_user_from(channel_user)
         Alice::Util::Mediator.reply_to(channel_user, "#{Alice::Util::Randomizer.dance(current_user.proper_name, actor.proper_name)}")
       end
 
       def destroy(channel_user, what)
-        return unless item = Alice::Item.from(what).last
+        return unless item = Alice::Item.from(what)
         if item.is_cursed?
           Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be destroyed!")
           return
@@ -51,7 +51,7 @@ module Alice
       end
 
       def eat(channel_user, what)
-        return unless item = Alice::Item.from(what).last
+        return unless item = Alice::Item.from(what)
         if item.is_cursed?
           Alice::Util::Mediator.reply_to(channel_user, "The #{item.name} is cursed and should really not go in your mouth.")
           return
@@ -65,7 +65,7 @@ module Alice
       end
 
       def drop(channel_user, what)
-        return unless item = Alice::Item.from(what).last
+        return unless item = Alice::Item.from(what)
         return unless current_user = current_user_from(channel_user)
         return unless current_user_from(channel_user).items.include?(item)
         if item.is_cursed?
@@ -85,7 +85,7 @@ module Alice
           Alice::Util::Mediator.reply_to(channel_user, "I'm afraid that a #{what} is a singleton.")
           return
         end
-        
+
         current_user = current_user_from(channel_user)
 
         if current_user.can_forge?
@@ -97,8 +97,8 @@ module Alice
       end
 
       def get(channel_user, item)
-        noun = Alice::Item.from(item).last || Alice::Actor.from(item).last
-        if noun && Alice::Place.current.contains?(noun)          
+        noun = Alice::Item.from(item) || Alice::Actor.from(item)
+        if noun && Alice::Place.current.contains?(noun)
           current_user_from(channel_user).add_to_inventory(noun)
           Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.pickup_message(noun.name, channel_user.user.nick))
         else
@@ -108,7 +108,8 @@ module Alice
 
       def hide(channel_user, what)
         current_user = current_user_from(channel_user)
-        return unless item = Alice::Item.from(what).select{|t| t.user == current_user}.first
+        return unless item = Alice::Item.from(what)
+        return unless item.user == current_user
         return unless current_user = current_user_from(channel_user).items.include?(item)
         if item.is_cursed?
           Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be hidden!")
@@ -119,17 +120,17 @@ module Alice
 
       def inspect(channel_user, noun)
         current_user = current_user_from(channel_user)
-        subject = Alice::User.from(noun).last
-        subject ||= Alice::Actor.from(noun.downcase).last
-        subject ||= Alice::Item.from(noun).last
-        subject ||= Alice::Beverage.from(noun).last
-        
+        subject = Alice::User.from(noun)
+        subject ||= Alice::Actor.from(noun.downcase)
+        subject ||= Alice::Item.from(noun)
+        subject ||= Alice::Beverage.from(noun)
+
         if subject && (subject.is_present? || current_user.items.include?(subject) || current_user.beverages.include?(subject))
           message = subject.describe
         elsif Alice::Place.current.description =~ /#{subject}/i
           message = Alice::Util::Randomizer.item_description(noun)
         else
-          message = Alice::Util::Randomizer.not_here(noun)  
+          message = Alice::Util::Randomizer.not_here(noun)
         end
 
         Alice::Util::Mediator.reply_to(channel_user, message)
@@ -141,7 +142,7 @@ module Alice
       end
 
       def play(channel_user, game)
-        item = Alice::Item.from(game).last
+        item = Alice::Item.from(game)
         return unless current_user = current_user_from(channel_user)
         if item && current_user.items.include?(item)
           Alice::Util::Mediator.reply_to(channel_user, "#{item.play}.")
@@ -166,7 +167,7 @@ module Alice
       end
 
       def talk(channel_user, who)
-        return unless actor = Alice::Actor.from(who).last 
+        return unless actor = Alice::Actor.from(who)
         return unless actor.is_present?
         return unless current_user = current_user_from(channel_user)
         Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} #{actor.talk}")

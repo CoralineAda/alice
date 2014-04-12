@@ -46,7 +46,7 @@ module Alice
               Alice::Util::Mediator.reply_to(channel_user, "#{user.proper_name} has enough beverages.")
           end
         end
-        
+
       end
 
       def drink(channel_user, what)
@@ -75,7 +75,7 @@ module Alice
       end
 
       def ensure_beverage(channel_user, what)
-        unless beverage = Alice::Beverage.from(what).last
+        unless beverage = Alice::Beverage.from(what)
           Alice::Util::Mediator.reply_to(channel_user, "There is no such drink as a #{what}. Maybe you should brew one?")
           return
         end
