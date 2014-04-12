@@ -34,16 +34,20 @@ module Alice
           return
         else
           user = current_user_from(channel_user)
-
+          p "brew-1"
           if user.can_brew?
+            p "brew-2"
             beverage = Alice::Beverage.create(name: what.downcase, user: user)
             if observer == Alice::User.bot
+              p "brew-3"
               Alice::Util::Mediator.emote_to(channel_user, "#{observer.observe_brewing(beverage.name, channel_user.user.nick)}")
             else
+              p "brew-4"
               Alice::Util::Mediator.reply_to(channel_user, "#{observer.proper_name} #{actor.observe_brewing(beverage.name, channel_user.user.nick)}")
             end
           else
-              Alice::Util::Mediator.reply_to(channel_user, "#{user.proper_name} has enough beverages.")
+            p "brew-5"
+            Alice::Util::Mediator.reply_to(channel_user, "#{user.proper_name} has enough beverages.")
           end
         end
 
