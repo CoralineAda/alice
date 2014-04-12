@@ -100,7 +100,7 @@ class Alice::Item
 
   def describe
     text = self.description
-    text << " The maker's mark indicates that it was created by #{creator.proper_name}." if creator
+    text << " #{creator.proper_name} was its creator, judging by the maker's mark." if creator
     text
   end
 
