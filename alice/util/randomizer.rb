@@ -8,7 +8,7 @@ module Alice
         rand(number) == 1
       end
 
-      def self.safe_message
+      def self.view_from_afar
         [
           "It looks safe enough.",
           "Pretty sure there's no imminent danger there.",

@@ -8,6 +8,7 @@ class Alice::Place
   field :x, type: Integer
   field :y, type: Integer
   field :is_dark, type: Boolean
+  field :view_from_afar
 
   has_many :items
   has_many :beverages
@@ -16,9 +17,9 @@ class Alice::Place
   index({ x: 1, y: 1 },    { unique: true })
   index({ is_current: 1 }, { unique: false })
   
-  after_create :place_item
-  after_create :place_actor
-  after_create :ensure_description
+  after_create  :place_item
+  after_create  :place_actor
+  before_create :ensure_description
 
   DIRECTIONS = ['north', 'south', 'east', 'west']
 
@@ -39,26 +40,27 @@ class Alice::Place
 
   def self.go(direction)
     return false unless current.exits.include?(direction.downcase)
-    move_to(direction)
+    place_to(direction, true)
   end
 
-  def self.move_to(direction, party_moving=true)
+  def self.place_to(direction, party_moving=false)
     if direction == 'north'
-      y = current.y + 1
-    elsif direction == 'south'
       y = current.y - 1
+    elsif direction == 'south'
+      y = current.y + 1
     else
       y = current.y
     end
 
     if direction == 'west'
-      x = current.x + 1
-    elsif direction == 'east'
       x = current.x - 1
+    elsif direction == 'east'
+      x = current.x + 1
     else
       x = current.x
     end
-
+   
+    p x,y
     room = Alice::Place.where(x: x, y: y).first
     room ||= Alice::Place.generate!(x: x, y:y, entered_from: opposite_direction(direction))
     return room.enter if party_moving
@@ -70,11 +72,6 @@ class Alice::Place
     return 'north' if direction == 'south'
     return 'east' if direction == 'west'
     return 'west' if direction == 'east'
-  end
-
-  def self.set_current_room(room)
-    Alice::Place.current.update_attribute(:is_current, false)
-    room.update_attribute(:is_current, true)
   end
 
   def self.random_description(room)
@@ -89,6 +86,11 @@ class Alice::Place
 
   def self.random_exits
     DIRECTIONS.sample(rand(2) + 2)
+  end
+
+  def self.set_current_room(room)
+    Alice::Place.current.update_attribute(:is_current, false)
+    room.update_attribute(:is_current, true)
   end
 
   def enter
@@ -120,8 +122,10 @@ class Alice::Place
   end
 
   def ensure_description
-    return true if self.description.present?
-    update_attribute(:description, Alice::Place.random_description(self))
+    return true if self.description.present? && self.view_from_afar.present?
+    p "CALLED ensure_description on #{self.id}"
+    self.description ||= Alice::Place.random_description(self)
+    self.view_from_afar ||= Alice::Util::Randomizer.view_from_afar
   end
 
   def handle_grue
@@ -148,6 +152,21 @@ class Alice::Place
     self.actors.grue.present?
   end
 
+  def neighbors
+    self.exits.inject([]) do |rooms, exit|
+      room =   exit == 'north' && Alice::Place.place_to('north', false)
+      room ||= exit == 'south' && Alice::Place.place_to('south', false)
+      room ||= exit == 'east'  && Alice::Place.place_to('east', false) 
+      room ||= exit == 'west'  && Alice::Place.place_to('west', false) 
+      rooms << { direction: exit, room: room }
+      rooms
+    end
+  end
+
+  def origin_square?
+    self.x == 0 && self.y == 0
+  end
+
   def place_grue
     return false if self.origin_square?
     return true if has_grue?
@@ -171,8 +190,11 @@ class Alice::Place
     end
   end
 
-  def origin_square?
-    self.x == 0 && self.y == 0
+  def view
+    message = self.view_from_afar
+    message << " There is someone in there but you can't make out who it is from here." if has_actor?
+    message << " It is dark in there!" if has_grue? || is_dark?
+    message
   end
 
 end
