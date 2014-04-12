@@ -93,7 +93,6 @@ class Alice::Place
   def enter
     Alice::Place.set_current_room(self)
     handle_grue || self.describe
-    return true
   end
 
   def contains?(noun)
