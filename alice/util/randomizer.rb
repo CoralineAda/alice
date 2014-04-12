@@ -8,6 +8,38 @@ module Alice
         rand(number) == 1
       end
 
+      def self.safe_message
+        [
+          "It looks safe enough.",
+          "Pretty sure there's no imminent danger there.",
+          "Probably fine. Probably.",
+          "There might be something shiny in there!",
+          "Nothing to see, but there's quite a smell coming from that direction.",
+          "Perfectly ordinary room.",
+          "You see a bloodthirsty monster. Just kidding!",
+          "You think you saw #{person} leaving the room, but you're not sure.",
+          "Listen! Do you smell something?",
+          "It's... It's... another room!",
+          "Why not just enter the room and see up close?",
+          "A real hero woud leap before they looked.",
+          "You're just gonna have to go that way and see for yourself.",
+          "Wait, weren't you just in that room?",
+          "Looks remarkably like another room you've seen.",
+          "There is a trail of breadcrumbs leading that way.",
+          "There is a silver thread leading off in that direction.",
+          "You spy an evil, sneaky room, ready to pounce on unsuspecting adventuring parties.",
+          "Looks normal enough, so it's probably trapped or something.",
+          "There are muddy footprints leading that way.",
+          "Someone was recently in that room, you can just tell.",
+          "Though you see no piano in that direction, you hear the unmistakable sound of someone smashing the keyboard of one.",
+          "Rest assured, it's safe that way...",
+          "You don't want to go that way, trust me.",
+          "I don't know, looks pretty sketchy to me.",
+          "It's a room alright.",
+          "There's bound to be adventure in that direction."
+        ].sample
+      end
+
       def self.give_message(giver, receiver, thing)
         [
           "#{giver} hands #{thing} to #{receiver}.",

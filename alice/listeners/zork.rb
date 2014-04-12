@@ -35,10 +35,26 @@ module Alice
       match /^\!go (south)/i,  method: :move, use_prefix: false
       match /^\!go (east)/i,   method: :move, use_prefix: false
       match /^\!go (west)/i,   method: :move, use_prefix: false
+      match /^\!look (north)/i,  method: :look_direction, use_prefix: false
+      match /^\!look (south)/i,  method: :look_direction, use_prefix: false
+      match /^\!look (east)/i,   method: :look_direction, use_prefix: false
+      match /^\!look (west)/i,   method: :look_direction, use_prefix: false
       match /^\!look$/i,       method: :look, use_prefix: false
       match /^\!xyzzy/i,       method: :move_random, use_prefix: false
       match /^\!reset maze/i,  method: :reset_maze, use_prefix: false
       match /^\!(.+ .+)/,      method: :handle_tricksies, use_prefix: false
+
+      def look_direction(channel_user, direction)
+        if room = Alice::Place.current.neighbors.map{|r| r[:direction] == direction && r[:room]}.compact.first
+          message = ""
+          message << "There is someone in there but you can't make out who it is from here. " if room.has_actor?
+          message << "It is dark in there! " if room.has_grue? || room.is_dark?
+          message = Alice::Util::Randomizer.safe_message unless message.present?
+        else
+          message = "Yeah, that's a nice wall right there."
+        end
+        Alice::Util::Mediator.reply_to(channel_user, message)
+      end
 
       def handle_tricksies(channel_user, command)
 
@@ -85,15 +101,16 @@ module Alice
         end
       end
 
-      def reset_maze(channel_user, force=false)
-        if force || Alice::Util::Mediator.op?(channel_user)
-          Alice::Dungeon.reset!
-          message = "Everything goes black and you feel like you are somewhere else!"  
-          message << " #{Alice::Item.fruitcake.user.proper_name} has been given a special gift."
-        else
-          message = "There is a thundering sound but nothing happens."
-        end
-        Alice::Util::Mediator.reply_to(channel_user, message)
+      def reset_maze(channel_user=nil, force=false)
+        # if force || Alice::Util::Mediator.op?(channel_user)
+        #   message = "Everything goes black and you feel like you are somewhere else!"  
+        #   message << " #{Alice::Item.fruitcake.user.proper_name} has been given a special gift."
+        #   message << " Please wait while we regenerate the matrix."
+        # else
+        #   message = "There is a thundering sound but nothing happens."
+        # end
+        # Alice::Util::Mediator.send_raw(message)
+        # Alice::Dungeon.reset!
       end
 
     end

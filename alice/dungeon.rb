@@ -4,17 +4,21 @@ class Alice::Dungeon
     cleanup
     Alice::Place.generate!(is_current: true)
     assign_fruitcake
+    ensure_grue
     make_stuff
-    populate
     true
   end
 
   def self.win!
-    Alice::Actor.active_and_online.each{|actor| actor.update_attribute(:points, actor.points + 5) }
+    Alice::User.active_and_online.each{|actor| actor.update_attribute(:points, actor.points + 5) }
+    grue = Alice::Actor.grue
+    grue.update_attribute(:points, [grue.points - 5, 0].max)
   end
 
   def self.lose!
-    Alice::Actor.active_and_online.each{|actor| actor.update_attribute(:points, [actor.points - 5, 0].max) }
+    Alice::User.active_and_online.each{|actor| actor.update_attribute(:points, [actor.points - 5, 0].max) }
+    grue = Alice::Actor.grue
+    grue.update_attribute(:points, grue.points + 5)
   end
 
   def self.cleanup
@@ -31,12 +35,12 @@ class Alice::Dungeon
     victim && victim.items << Alice::Item.fruitcake
   end
 
-  def self.however_many
-    rand(10) + 1 
+  def self.ensure_grue
+    Alice::Actor.grue || Alice::Actor.create(name: 'Grue', is_grue: true)
   end
 
-  def self.populate
-    however_many.times.each{ |name| Alice::Actor.create(name: Alice::Util::Randomizer.specific_person) }
+  def self.however_many
+    rand(10) + 1 
   end
 
   def self.make_stuff
