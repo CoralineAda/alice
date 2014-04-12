@@ -124,9 +124,11 @@ class Alice::Place
     return if self.origin_square?
     return unless Alice::Util::Randomizer.one_chance_in(13)
     if user = Alice::User.with_weapon.sample 
+      Alice::Dungeon.win!
       "#{user.proper_name} slays the grue!"
     else
-      "You have been eaten by a grue!"
+      Alice::Dungeon.lose!
+      "The party has been eaten by a grue!"
     end
   end    
 
