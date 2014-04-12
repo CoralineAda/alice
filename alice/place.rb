@@ -131,8 +131,7 @@ class Alice::Place
 
   def has_grue?
     return false if self.origin_square?
-    return false unless Alice::Util::Randomizer.one_chance_in(20)
-    @has_grue ||= true
+    return false unless Alice::Util::Randomizer.one_chance_in(13)
   end
 
   def has_item?

@@ -12,6 +12,7 @@ class Alice::Item
   field :is_hidden, type: Boolean
   field :is_weapon, type: Boolean
   field :is_game, type: Boolean
+  field :is_key, type: Boolean
   field :is_readable, type: Boolean
   field :picked_up_at, type: DateTime
   field :creator_id
@@ -101,6 +102,10 @@ class Alice::Item
   def describe
     text = self.description
     text << " #{creator.proper_name} was its creator, judging by the maker's mark." if creator
+    text << " Might be fun to read." if self.is_readable?
+    text << " Might make a decent weapon." if self.is_weapon?
+    text << " Might be fun to play." if self.is_game?
+    text << " Could come in handy with those pesky locked doors." if self.is_key?
     text
   end
 
