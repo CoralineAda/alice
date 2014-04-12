@@ -4,6 +4,8 @@ class Alice::Factoid
 
   field :text
 
+  validates_presence_of :text
+  
   belongs_to :user
 
   def self.for(nick)

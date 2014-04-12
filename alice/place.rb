@@ -12,11 +12,14 @@ class Alice::Place
   has_many :beverages
   has_many :actors
   
-  DIRECTIONS = ['north', 'south', 'east', 'west']
-
+  index({ x: 1, y: 1 },    { unique: true })
+  index({ is_current: 1 }, { unique: false })
+  
   after_create :place_item
   after_create :place_actor
   after_create :ensure_description
+
+  DIRECTIONS = ['north', 'south', 'east', 'west']
 
   def self.current
     where(:is_current => true).last || all.sample || generate!

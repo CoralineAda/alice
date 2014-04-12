@@ -12,10 +12,13 @@ module Alice
 
         def from(string)
           return [] unless string.present?
-          names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\-\_\ ]/, '')).omnigrams.map{|g| g.join ' '} << string
+          names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\-\_\ ]/, '')).omnigrams
+          names = names.map{|g| g.join ' '} << string
+          names.reject!{|name| Alice::Parser::LanguageHelper::IDENTIFIERS.include?(name)}
           objects = names.map do |name|
-            if found = like(name)
-              SearchResult.new(term: name, result: like(name)) 
+            name = (name.split(/\W+/) - Alice::Parser::LanguageHelper::IDENTIFIERS).compact
+            if found = like(name.join(' '))
+              SearchResult.new(term: name, result: found) 
             end
           end.compact
           objects = objects.select{|obj| obj.result.present?}.uniq || []
@@ -23,7 +26,10 @@ module Alice
         end
 
         def like(name)
-          where(name: /#{Regexp.escape(name)}/i).first
+          unless match = where(name: /^#{Regexp.escape(name)}$/i).first
+            match = where(name: /\b#{Regexp.escape(name)}\b/i).first
+          end
+          match
         end
         
       end

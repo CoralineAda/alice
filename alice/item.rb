@@ -16,6 +16,14 @@ class Alice::Item
   field :picked_up_at, type: DateTime
   field :creator_id
 
+  index({ name: 1 },        { unique: true, })
+  index({ is_cursed: 1 },   { unique: false })
+  index({ is_hidden: 1 },   { unique: false })
+  index({ is_weapon: 1 },   { unique: false })
+  index({ is_game: 1 },     { unique: false })
+  index({ is_readable: 1 }, { unique: false })
+  index({ creator_id: 1 },  { unique: false })
+
   validates_uniqueness_of :name
   validates_presence_of :name
   
@@ -115,6 +123,12 @@ class Alice::Item
   def read
     return "#{name_with_article} is not readable!" unless self.is_readable?
     return "It says that #{Alice::Factoid.random.formatted(false)}."
+  end
+
+  def transfer_to(recipient)
+    self.user = recipient
+    self.picked_up_at = DateTime.now
+    self.save
   end
 
 end

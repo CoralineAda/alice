@@ -4,6 +4,8 @@ class Alice::Action
 
   field :trigger
   field :description
+ 
+  index({ trigger: 1 }, { unique: true })
   
   validates_presence_of :trigger, :description
 

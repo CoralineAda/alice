@@ -16,11 +16,17 @@ class Alice::User
   field :last_game, type: DateTime
   field :is_bot, type: Boolean, default: false
   field :points, type: Integer, default: 0
-  
+
+  index({ primary_nick: 1 },  { unique: true })
+  index({ alt_nicks: 1 },     { unique: true })
+    
   has_one  :bio
   has_many :factoids
   has_many :items
   has_many :beverages
+
+  validates_presence_of :primary_nick
+  validates_uniqueness_of :primary_nick, :alt_nicks, :twitter_handle
 
   def self.by_nick(nick)
     where(primary_nick: nick).last
@@ -94,7 +100,7 @@ class Alice::User
   def describe
     message = ""
     if self.bio.present?
-      message << "#{proper_name} is #{self.bio.formatted}. " 
+      message << "#{self.bio.formatted}. " 
     else
       message << "It's #{proper_name}! "
     end

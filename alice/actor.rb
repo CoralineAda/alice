@@ -17,6 +17,8 @@ class Alice::Actor
   validates_presence_of :name
   validates_uniqueness_of :name
 
+  index({ name: 1 }, { unique: true })
+
   has_many   :beverages
   has_many   :catchphrases
   has_many   :items

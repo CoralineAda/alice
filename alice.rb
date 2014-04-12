@@ -40,6 +40,7 @@ module Alice
   require_relative 'alice/listeners/number_wang'
   require_relative 'alice/listeners/item'
   require_relative 'alice/listeners/zork'
+  require_relative 'alice/listeners/tick_tock'
 
   require_relative 'alice/parser/language_helper'
   require_relative 'alice/parser/ngram'

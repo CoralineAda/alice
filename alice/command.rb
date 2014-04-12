@@ -10,6 +10,11 @@ module Alice
     field :handler_class
     field :response_kind, default: :message
 
+    index({ indicators: 1 }, { unique: true })
+
+    validates_uniqueness_of :name
+    validates_presence_of :name, :indicators, :handler_class
+
     attr_accessor :message
 
     def self.fuzzy_find(message)
