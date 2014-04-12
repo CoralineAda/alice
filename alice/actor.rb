@@ -13,7 +13,9 @@ class Alice::Actor
   field :description
   field :last_theft, type: DateTime
   field :points, type: Integer, default: 0
-  
+  field :is_grue, type: Boolean
+  field :in_play, type: Boolean
+
   validates_presence_of :name
   validates_uniqueness_of :name
 
@@ -26,6 +28,14 @@ class Alice::Actor
 
   before_create :ensure_description
 
+  def self.random
+    excludes(is_grue: true).sample
+  end
+
+  def self.grue
+    where(is_grue: true).first
+  end
+
   def self.observer
     Alice::Actor.is_present.sample
   end
@@ -34,8 +44,19 @@ class Alice::Actor
     where(place_id: Alice::Place.current.id)
   end
 
+  def self.in_play
+    where(in_play: true)
+  end
+
+  def self.malleable
+    where(permanent: false)
+  end
+
   def self.reset_all
-    update_all(place_id: nil)
+    all.each{|actor| actor.in_play = false; actor.place_id = nil; actor.save}
+    10.times{create(name: Alice::Util::Randomizer.specific_person)}
+    all.sample(10).map(&:put_in_play)
+    grue.put_in_play
   end
 
   def self.actions
@@ -48,6 +69,13 @@ class Alice::Actor
       :move,
       :talk
     ]
+  end
+
+  def put_in_play
+    self.in_play = true
+    self.description = nil
+    ensure_description
+    save
   end
 
   def ensure_description
@@ -73,7 +101,7 @@ class Alice::Actor
     message = ""
     message << "#{proper_name} is #{self.description}. "
     message << "#{self.inventory}. "
-    message << "They currently have #{self.points} points. "
+    message << check_score
     message
   end
 

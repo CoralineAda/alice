@@ -7,6 +7,7 @@ class Alice::Place
   field :is_current, type: Boolean
   field :x, type: Integer
   field :y, type: Integer
+  field :is_dark, type: Boolean
 
   has_many :items
   has_many :beverages
@@ -43,17 +44,17 @@ class Alice::Place
 
   def self.move_to(direction, party_moving=true)
     if direction == 'north'
-      y = current.y - 1
-    elsif direction == 'south'
       y = current.y + 1
+    elsif direction == 'south'
+      y = current.y - 1
     else
       y = current.y
     end
 
     if direction == 'west'
-      x = current.x - 1
-    elsif direction == 'east'
       x = current.x + 1
+    elsif direction == 'east'
+      x = current.x - 1
     else
       x = current.x
     end
@@ -77,7 +78,7 @@ class Alice::Place
   end
 
   def self.random_description(room)
-    return "It is pitch black. You are likely to be eaten by a grue. " if room.origin_square?
+    return "It is pitch black. You are likely to be eaten by a grue" if room.origin_square?
     description = [
       Alice::Util::Randomizer.room_adjective,
       Alice::Util::Randomizer.room_type,
@@ -101,18 +102,21 @@ class Alice::Place
 
   def contents
     return unless has_item? || has_actor?
-    contents = ""
-    contents << "You notice #{self.actors.map(&:name).to_sentence} #{Alice::Util::Randomizer.action}. " if self.has_actor?
-    contents << "Contents: #{self.items.map(&:name).to_sentence}. " if has_item?
-    contents
+    contents_text = ""
+    contents_text << "You notice #{self.actors.map(&:name).to_sentence} #{Alice::Util::Randomizer.action}. " if self.has_actor?
+    contents_text << "Contents: #{self.items.map(&:name).to_sentence}. " if has_item?
+    contents_text
   end
 
   def describe
     if self.origin_square?
-      "#{self.description}. #{contents} Exits: #{exits.to_sentence}."
+      message = "#{self.description}. #{contents} Exits: #{exits.to_sentence}. "
+    elsif self.is_dark?
+      message = "It is pitch black and you can't see a thing. What if there is a grue?"
     else
-      "You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}."
+      message = "You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}. "
     end
+    message
   end
 
   def ensure_description
@@ -121,14 +125,14 @@ class Alice::Place
   end
 
   def handle_grue
-    return if self.origin_square?
-    return unless Alice::Util::Randomizer.one_chance_in(13)
-    if user = Alice::User.with_weapon.sample 
-      Alice::Dungeon.win!
-      "#{user.proper_name} slays the grue!"
-    else
-      Alice::Dungeon.lose!
-      "The party has been eaten by a grue!"
+    if self.actors.include? Alice::Actor.grue
+      if user = Alice::User.with_weapon.sample 
+        Alice::Dungeon.win!
+        "#{user.proper_name} slays the grue!"
+      else
+        Alice::Dungeon.lose!
+        "The party has been eaten by a grue!"
+      end
     end
   end    
 
@@ -140,14 +144,29 @@ class Alice::Place
     self.actors.present?
   end
 
+  def has_grue?
+    self.actors.grue.present?
+  end
+
+  def place_grue
+    return false if self.origin_square?
+    return true if has_grue?
+    odds = self.is_dark? ? 5 : 20
+    if Alice::Util::Randomizer.one_chance_in(odds) && actor = Alice::Actor.unplaced.grue
+      actor.update_attribute(:place_id, self.id)
+    end
+  end
+
   def place_item
+    return false if self.origin_square?
     if Alice::Util::Randomizer.one_chance_in(10) && item = Alice::Item.unplaced.sample
       item.update_attribute(:place_id, self.id)
     end
   end
 
   def place_actor
-    if Alice::Util::Randomizer.one_chance_in(10) && actor = Alice::Actor.unplaced.sample
+    return false if self.origin_square?
+    if Alice::Util::Randomizer.one_chance_in(10) && actor = Alice::Actor.in_play.unplaced.sample
       actor.update_attribute(:place_id, self.id)
     end
   end

@@ -119,6 +119,7 @@ module Alice
       end
 
       def inspect(channel_user, noun)
+        return if Alice::Place::DIRECTIONS.include?(noun)
         current_user = current_user_from(channel_user)
         subject = Alice::User.from(noun)
         subject ||= Alice::Actor.from(noun.downcase)

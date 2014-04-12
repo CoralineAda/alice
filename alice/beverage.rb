@@ -62,7 +62,7 @@ class Alice::Beverage
   def drink
     self.destroy
     message = Alice::Util::Randomizer.drink_message(self.name, self.owner)
-    message << " " + Alice::Util::Randomizer.effect_message(self.name, self.owner) if Alice::Util::Randomizer.one_chance_in(4)
+    message << " " + Alice::Util::Randomizer.effect_message(self.name, self.owner) if self.is_potion? || Alice::Util::Randomizer.one_chance_in(4)
     message
   end
 
@@ -72,6 +72,10 @@ class Alice::Beverage
 
   def ensure_description
     self.description ||= Alice::Util::Randomizer.drink_description(self.name)
+  end
+
+  def is_potion?
+    self.name =~ 'potion'
   end
 
   def spill
