@@ -128,7 +128,7 @@ module Alice
 
         if subject && (subject.is_present? || current_user.items.include?(subject) || current_user.beverages.include?(subject))
           message = subject.describe
-        elsif Alice::Place.current.description =~ /#{subject}/i
+        elsif Alice::Place.current.description =~ /#{noun}/i
           message = Alice::Util::Randomizer.item_description(noun)
         else
           message = Alice::Util::Randomizer.not_here(noun)

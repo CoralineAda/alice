@@ -146,7 +146,7 @@ class Alice::Actor
 
   def move
     direction = Alice::Place.current.exits.sample
-    self.place = Alice::Place.move_to(direction, false)
+    self.place = Alice::Place.place_to(direction, false)
   end
 
   def talk
