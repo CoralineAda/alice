@@ -28,11 +28,14 @@ class Alice::Place
   end
 
   def self.generate!(args={})
+    x = args[:x] || 0
+    y = args[:y] || 0
     room = create(
       exits: (random_exits | [args[:entered_from]]).flatten.compact.uniq,
-      x: args[:x] || 0,
-      y: args[:y] || 0,
-      is_current: args[:is_current]
+      x: x,
+      y: y,
+      is_current: args[:is_current],
+      is_dark: x == 0 && y == 0 || Alice::Util::Randomizer.one_chance_in(5)
     )
     room.update_attribute(:description, random_description(room))
     room
@@ -60,7 +63,6 @@ class Alice::Place
       x = current.x
     end
    
-    p x,y
     room = Alice::Place.where(x: x, y: y).first
     room ||= Alice::Place.generate!(x: x, y:y, entered_from: opposite_direction(direction))
     return room.enter if party_moving
@@ -123,7 +125,6 @@ class Alice::Place
 
   def ensure_description
     return true if self.description.present? && self.view_from_afar.present?
-    p "CALLED ensure_description on #{self.id}"
     self.description ||= Alice::Place.random_description(self)
     self.view_from_afar ||= Alice::Util::Randomizer.view_from_afar
   end
