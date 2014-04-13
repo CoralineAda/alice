@@ -138,7 +138,7 @@ class Alice::Item
   end
 
   def transfer_to(recipient)
-    self.user = recipient
+    self.user_id = recipient.id
     self.picked_up_at = DateTime.now
     self.save
   end
