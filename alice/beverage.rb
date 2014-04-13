@@ -27,6 +27,28 @@ class Alice::Beverage
 
   attr_accessor :message
 
+  ALCOHOL_INDICATORS = [
+    "beer",
+    "ale",
+    "whisky",
+    "whiskey",
+    "stout",
+    "lager",
+    "porter",
+    "wine",
+    "martini",
+    "snifter",
+    "mixed",
+    "mimosa",
+    "gin",
+    "rum",
+    "vodka",
+    "rye",
+    "scotch",
+    "chablis",
+    "merlot"
+  ]
+
   def self.already_exists?(name)
     like(name).present?
   end
@@ -66,7 +88,7 @@ class Alice::Beverage
   def drink
     self.destroy
     message = Alice::Util::Randomizer.drink_message(self.name, self.owner)
-    if self.is_potion? || Alice::Util::Randomizer.one_chance_in(4)
+    if self.is_potion? || self.is_alcohol? || Alice::Util::Randomizer.one_chance_in(4)
       effect = [:drunk, :dazed, :disoriented].sample
       message << " In addition to feeling a little #{effect.to_s}, " + Alice::Util::Randomizer.effect_message(self.name, self.owner) 
       self.user.filters << effect
@@ -81,6 +103,10 @@ class Alice::Beverage
 
   def ensure_description
     self.description ||= Alice::Util::Randomizer.drink_description(self.name)
+  end
+
+  def is_alcohol?
+    self.name =~ /#{ALCOHOL_INDICATORS * '|'}/i
   end
 
   def is_potion?
