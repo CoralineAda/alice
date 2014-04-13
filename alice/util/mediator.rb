@@ -17,7 +17,7 @@ module Alice
       end
 
       def self.exists?(nick)
-        Alice.bot.bot.user_list.map(&:nick).include?(nick)
+        Alice.bot.bot.user_list.map(&:nick).select{|n| n =~ /^#{nick}$/i}.compact.present?
       end
 
       def self.user_list

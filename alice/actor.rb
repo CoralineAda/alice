@@ -71,19 +71,8 @@ class Alice::Actor
     ]
   end
 
-  def put_in_play
-    self.in_play = true
-    self.description = nil
-    ensure_description
-    save
-  end
-
-  def ensure_description
-    self.description ||= Alice::Util::Randomizer.actor_description(self.name)
-  end
-
-  def do_something
-    self.public_send(Alice::Actor.actions.sample)
+  def add_catchphrase(text)
+    catchphrases.create(text: text)
   end
 
   def brew
@@ -103,6 +92,14 @@ class Alice::Actor
     message << "#{self.inventory}. "
     message << check_score
     message
+  end
+
+  def do_something
+    self.public_send(Alice::Actor.actions.sample)
+  end
+
+  def ensure_description
+    self.description ||= Alice::Util::Randomizer.actor_description(self.name)
   end
 
   def is_present?
@@ -147,6 +144,13 @@ class Alice::Actor
 
   def proper_name
     self.name.capitalize
+  end
+
+  def put_in_play
+    self.in_play = true
+    self.description = nil
+    ensure_description
+    save
   end
 
   def talk
