@@ -83,7 +83,7 @@ module Alice
         end
         Alice::Util::Mediator.reply_to(channel_user, message)
         if message =~ /eaten by a grue/i || message =~ /kills the grue/i
-          reset_maze(Alice.bot.bot.nick, true)
+          reset_maze(nil, true)
         end
       end
 
@@ -99,15 +99,13 @@ module Alice
       end
 
       def reset_maze(channel_user=nil, force=false)
-        # if force || Alice::Util::Mediator.op?(channel_user)
-        #   message = "Everything goes black and you feel like you are somewhere else!"  
-        #   message << " #{Alice::Item.fruitcake.user.proper_name} has been given a special gift."
-        #   message << " Please wait while we regenerate the matrix."
-        # else
-        #   message = "There is a thundering sound but nothing happens."
-        # end
-        # Alice::Util::Mediator.send_raw(message)
-        # Alice::Dungeon.reset!
+        if force || Alice::Util::Mediator.op?(channel_user)
+          message = "Everything goes black and you feel like you are suddenly somewhere else!"  
+          message << " Please wait while we regenerate the matrix."
+          message << " #{Alice::Item.fruitcake.user.proper_name} has been given a special gift."
+        end
+        Alice::Util::Mediator.send_raw(message)
+        Alice::Dungeon.reset!
       end
 
     end
