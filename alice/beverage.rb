@@ -51,6 +51,10 @@ class Alice::Beverage
     )
   end
 
+  def self.for_user(user)
+    where(user_id: user.id)
+  end
+
   def self.sorted
     all.sort_by(&:name)
   end
@@ -62,7 +66,12 @@ class Alice::Beverage
   def drink
     self.destroy
     message = Alice::Util::Randomizer.drink_message(self.name, self.owner)
-    message << " " + Alice::Util::Randomizer.effect_message(self.name, self.owner) if self.is_potion? || Alice::Util::Randomizer.one_chance_in(4)
+    if self.is_potion? || Alice::Util::Randomizer.one_chance_in(4)
+      effect = [:drunk, :dazed, :disoriented].sample
+      message << " In addition to feeling a little #{effect.to_s}, " + Alice::Util::Randomizer.effect_message(self.name, self.owner) 
+      self.user.filters << effect
+      self.user.save
+    end
     message
   end
 
@@ -75,7 +84,7 @@ class Alice::Beverage
   end
 
   def is_potion?
-    self.name =~ 'potion'
+    self.name =~ /potion/
   end
 
   def spill

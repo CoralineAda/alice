@@ -6,7 +6,7 @@ module Alice
 
     class Zork
 
-      include Alice::Behavior::TracksActivity
+      include Alice::Behavior::Listens
       include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
@@ -92,7 +92,12 @@ module Alice
               message << Alice::Place.go(direction)
             end
           else
-            message = Alice::Place.go(direction)
+            user = current_user_from(channel_user)
+            message = "#{user.proper_name} dazedly leads the party #{direction}. " if user.dazed?
+            message = "#{user.proper_name} staggers #{direction}. " if user.drunk?
+            message = "#{user.proper_name} leads the party (hopefully) #{direction}. " if user.disoriented?
+            message ||= ""
+            message << Alice::Place.go(direction)
           end
         else
           message = "You cannot move #{direction}!"

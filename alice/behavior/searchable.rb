@@ -14,7 +14,7 @@ module Alice
           return [] unless string.present?
           names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\-\_\ ]/, '')).omnigrams
           names = names.map{|g| g.join ' '} << string
-          names.reject!{|name| Alice::Parser::LanguageHelper::IDENTIFIERS.include?(name)}
+          names.uniq.reject!{|name| Alice::Parser::LanguageHelper::IDENTIFIERS.include?(name)}
           objects = names.map do |name|
             name = (name.split(/\W+/) - Alice::Parser::LanguageHelper::IDENTIFIERS).compact
             if found = like(name.join(' '))

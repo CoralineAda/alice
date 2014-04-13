@@ -20,6 +20,10 @@ module Alice
   require_relative 'alice/behavior/steals'
   require_relative 'alice/behavior/tracks_activity'
 
+  require_relative 'alice/filters/dazed'
+  require_relative 'alice/filters/drunk'
+  require_relative 'alice/filters/disoriented'
+  
   require_relative 'alice/handlers/beverage_finder'
   require_relative 'alice/handlers/bio'
   require_relative 'alice/handlers/factoid'
