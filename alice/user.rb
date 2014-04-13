@@ -9,13 +9,16 @@ class Alice::User
   include Alice::Behavior::Steals
   
   field :primary_nick
-  field :alt_nicks, type: Array, default: []
+  field :alt_nicks,         type: Array, default: []
   field :twitter_handle
-  field :last_theft, type: DateTime
-  field :last_award, type: DateTime
-  field :last_game, type: DateTime
-  field :is_bot, type: Boolean, default: false
-  field :points, type: Integer, default: 0
+  field :last_theft,        type: DateTime
+  field :last_award,        type: DateTime
+  field :last_game,         type: DateTime
+  field :is_bot,            type: Boolean
+  field :is_disoriented,    type: Boolean
+  field :is_drunk,          type: Boolean
+  field :is_hallucinating,  type: Boolean
+  field :points,            type: Integer, default: 0
 
   index({ primary_nick: 1 },  { unique: true })
   index({ alt_nicks: 1 },     { unique: true })
@@ -26,7 +29,7 @@ class Alice::User
   has_many :beverages
 
   validates_presence_of :primary_nick
-  validates_uniqueness_of :primary_nick, :alt_nicks, :twitter_handle
+  validates_uniqueness_of :primary_nick
 
   def self.by_nick(nick)
     where(primary_nick: nick).last

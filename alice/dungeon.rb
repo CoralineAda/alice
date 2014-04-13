@@ -26,6 +26,7 @@ class Alice::Dungeon
     Alice::Beverage.sweep
     Alice::Item.sweep
     Alice::Item.weapons.map{|w| w.delete}
+    Alice::Item.keys.map{|w| w.delete}
     Alice::Beverage.sweep
     Alice::Place.delete_all
   end
@@ -48,7 +49,7 @@ class Alice::Dungeon
     however_many.times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.item) }
     however_many.times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.weapon, is_weapon: true) }
     however_many.times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.reading_material, is_readable: true) }
-    however_many.times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.keys, is_key: true) }
+    (however_many / 2).times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.keys, is_key: true) }
   end
 
 end
