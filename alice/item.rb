@@ -22,6 +22,7 @@ class Alice::Item
   index({ is_hidden: 1 },   { unique: false })
   index({ is_weapon: 1 },   { unique: false })
   index({ is_game: 1 },     { unique: false })
+  index({ is_key: 1 },      { unique: false })
   index({ is_readable: 1 }, { unique: false })
   index({ creator_id: 1 },  { unique: false })
 
@@ -64,6 +65,10 @@ class Alice::Item
 
   def self.games
     where(is_game: true)
+  end
+
+  def self.keys
+    where(is_key: true)
   end
   
   def self.reading_material
@@ -128,7 +133,7 @@ class Alice::Item
   end
   
   def read
-    return "#{name_with_article} is not readable!" unless self.is_readable?
+    return "#{name_with_article} is not a very interesting read." unless self.is_readable?
     return "It says that #{Alice::Factoid.random.formatted(false)}."
   end
 

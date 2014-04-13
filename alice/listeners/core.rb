@@ -10,22 +10,27 @@ module Alice
       include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
-      match /^\!cast (.+)/,     method: :cast, use_prefix: false
+      match /^\!cast (.+)/,       method: :cast, use_prefix: false
       match /^\!cookie (.+)/,     method: :cookie, use_prefix: false
-      match /^\!pants/,          method: :pants, use_prefix: false
+      match /^\!pants/,           method: :pants, use_prefix: false
       match /^\!help$/,           method: :help, use_prefix: false
-      match /^\!source$/,          method: :source, use_prefix: false
+      match /^\!source$/,         method: :source, use_prefix: false
       match /^\!bug$/,            method: :bug, use_prefix: false
       match /\<\.\</,             method: :shifty_eyes, use_prefix: false
       match /\>\.\>/,             method: :shifty_eyes, use_prefix: false
-      match /rule[s]? them all/, method: :bind_them, use_prefix: false
-      match /say we all/,        method: :say_we_all, use_prefix: false
+      match /rule[s]? them all/,  method: :bind_them, use_prefix: false
+      match /say we all/,         method: :say_we_all, use_prefix: false
+      match /.+/,                 method: :track_activity, use_prefix: false
 
       listen_to :nick, method: :update_nick
       listen_to :join, method: :maybe_say_hi
 
       def source(channel_user)
         Alice::Util::Mediator.reply_to(channel_user, "You can view my source at #{ENV['GITHUB_URL']}")
+      end
+
+      def track_activity(channel_user)
+        track(channel_user.user.nick)
       end
 
       def cast(channel_user, spell)
@@ -91,7 +96,7 @@ module Alice
 
       def maybe_say_hi(channel_user)
         return if Alice::Util::Mediator.is_bot?(channel_user.user.nick)
-        if Alice::User.like(channel_user.user.nick)
+        if Alice::User.with_nick_like(channel_user.user.nick)
           return unless Alice::Util::Randomizer.one_chance_in(10)
           Alice::Util::Mediator.emote_to(channel_user, Alice::Util::Randomizer.greeting(channel_user.user.nick))
         else #new user

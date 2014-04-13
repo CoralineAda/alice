@@ -8,7 +8,9 @@ class Alice::Place
   field :x, type: Integer
   field :y, type: Integer
   field :is_dark, type: Boolean
+  field :locked_exit
   field :view_from_afar
+  field :last_visited, type: DateTime
 
   has_many :items
   has_many :beverages
@@ -95,9 +97,13 @@ class Alice::Place
     room.update_attribute(:is_current, true)
   end
 
-  def enter
-    Alice::Place.set_current_room(self)
-    handle_grue || self.describe
+  def self.visited
+    excludes(last_visited: nil)
+  end
+
+
+  def already_visited?
+    self.last_visited.present?
   end
 
   def contains?(noun)
@@ -110,6 +116,10 @@ class Alice::Place
     contents_text << "You notice #{self.actors.map(&:name).to_sentence} #{Alice::Util::Randomizer.action}. " if self.has_actor?
     contents_text << "Contents: #{self.items.map(&:name).to_sentence}. " if has_item?
     contents_text
+  end
+
+  def coords
+    [self.x, self.y]
   end
 
   def describe
@@ -127,6 +137,16 @@ class Alice::Place
     return true if self.description.present? && self.view_from_afar.present?
     self.description ||= Alice::Place.random_description(self)
     self.view_from_afar ||= Alice::Util::Randomizer.view_from_afar
+  end
+
+  def enter
+    Alice::Place.set_current_room(self)
+    self.update_attribute(:last_visited, DateTime.now)
+    handle_grue || self.describe
+  end
+
+  def exit_is_locked?(direction)
+    self.locked_exit == direction
   end
 
   def handle_grue
@@ -151,6 +171,22 @@ class Alice::Place
 
   def has_grue?
     self.actors.grue.present?
+  end
+
+  def has_locked_door?
+    return false if self.exits.count == 1
+    return true if self.locked_exit.present?
+    candidates = self.exits - neighbors.select{|n| ! n[:room].already_visited? }.map{|n| n[:direction]}
+    if Alice::Util::Randomizer.one_chance_in(2)
+      self.update_attribute(:locked_exit, candidates.sample) 
+      neighbors.select{|n| n[:direction] == self.locked_exit}.first[:room].lock_door(Alice::Place.opposite_direction(locked_exit))
+    end
+  end
+
+  def lock_door(direction)
+    self.exits ||= (random_exits | ['direction']).flatten.compact.uniq
+    self.locked_exit = direction
+    self.save
   end
 
   def neighbors
@@ -189,6 +225,11 @@ class Alice::Place
     if Alice::Util::Randomizer.one_chance_in(10) && actor = Alice::Actor.in_play.unplaced.sample
       actor.update_attribute(:place_id, self.id)
     end
+  end
+
+  def unlock
+    neighbors.select{|n| n[:direction] = self.locked_exit}.first[:room].update_attribute(:locked_exit, nil)
+    self.update_attribute(:locked_exit, nil)
   end
 
   def view

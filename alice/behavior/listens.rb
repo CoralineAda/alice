@@ -5,7 +5,9 @@ module Alice
     module Listens
 
       def current_user_from(channel_user)
-        Alice::User.find_or_create(channel_user.user.nick)
+        user = Alice::User.find_or_create(channel_user.user.nick)
+        user.touch
+        user
       end
 
       def observer
