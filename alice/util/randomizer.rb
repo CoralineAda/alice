@@ -8,6 +8,23 @@ module Alice
         rand(number) == 1
       end
 
+      def self.exclamation
+        [
+          "Dude...",
+          "Whoa!",
+          "OMG!",
+          "OMFG!",
+          "Damn!",
+          "Hold on.",
+          "Wha?",
+          "What?",
+          "No way.",
+          "Hmm.",
+          "Sorry, but",
+          "That was distracting."
+        ].sample
+      end
+
       def self.keys
         [
           "a giant skeleton key",
@@ -240,7 +257,7 @@ module Alice
           "dyeing their hair #{color}",
           "looking for a #{color} crayon.",
           "writing on their shoes with a Sharpie.",
-          "thinking about making a #{item} #{forge}",
+          "thinking about making #{item} #{forge}.",
           "dancing alone.",
           "sobbing gently.",
           "laughing at nothing in particular.",
@@ -1101,7 +1118,9 @@ module Alice
           "#{actor_name} tries hard not to think of flying monkeys.",
           "#{actor_name} has a sudden thirst for blood.",
           "#{actor_name} still feels strangely parched.",
-          "#{actor_name} feels a sudden urge to dance."
+          "#{actor_name} feels a sudden urge to dance.",
+          "#{actor_name} can't seem to stop hiccuping.",
+          "#{actor_name} is giggling uncontrollably."
         ].sample
       end
 

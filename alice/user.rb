@@ -15,10 +15,8 @@ class Alice::User
   field :last_award,        type: DateTime
   field :last_game,         type: DateTime
   field :is_bot,            type: Boolean
-  field :is_disoriented,    type: Boolean
-  field :is_drunk,          type: Boolean
-  field :is_hallucinating,  type: Boolean
   field :points,            type: Integer, default: 0
+  field :filters,           type: Array, default: []
 
   index({ primary_nick: 1 },  { unique: true })
   index({ alt_nicks: 1 },     { unique: true })
@@ -48,14 +46,6 @@ class Alice::User
     where(is_bot: true).last
   end
 
-  def self.with_key
-    Alice::Item.keys.excludes(user_id: nil).map(&:user)
-  end
-
-  def self.with_weapon
-    Alice::Item.weapons.excludes(user_id: nil).map(&:user)
-  end
-
   def self.active
     where(:updated_at.gte => DateTime.now - 10.minutes)
   end
@@ -64,15 +54,27 @@ class Alice::User
     with_nick_like(nick) || Alice::Util::Mediator.exists?(nick) && create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
   end
 
-  def self.with_nick_like(nick)
-    scrubbed_nick = nick.gsub('_','').downcase
-    found =where(primary_nick: nick.downcase).first || where(primary_nick: scrubbed_nick).first
-    found ||= where(alt_nicks: nick.downcase).first || where(alt_nicks: scrubbed_nick).first
-    found
+  def self.like(arg)
+    with_nick_like(arg)
   end
 
   def self.random
     all.sample
+  end
+
+  def self.with_nick_like(nick)
+    scrubbed_nick = nick.gsub('_','').downcase
+    found = where(primary_nick: nick.downcase).first || where(primary_nick: scrubbed_nick).first
+    found ||= where(alt_nicks: nick.downcase).first || where(alt_nicks: scrubbed_nick).first
+    found
+  end
+
+  def self.with_key
+    Alice::Item.keys.excludes(user_id: nil).map(&:user)
+  end
+
+  def self.with_weapon
+    Alice::Item.weapons.excludes(user_id: nil).map(&:user)
   end
 
   def self.update_nick(old_nick, new_nick)
@@ -82,6 +84,14 @@ class Alice::User
     user.alt_nicks << old_nick.downcase
     user.alt_nicks = user.alt_nicks.uniq
     user.save
+  end
+
+  def apply_filters(text)
+    self.filters.pop if Alice::Util::Randomizer.one_chance_in(10)
+    self.filters.inject([]) do |processed, filter|
+      processed[0] = eval("Alice::Filters::#{filter.to_s.classify}").new.process(processed.first || text)
+      processed
+    end.first || text
   end
 
   def creations
@@ -101,6 +111,18 @@ class Alice::User
     self.last_game <= DateTime.now - 13.minutes
   end
 
+  def dazed?
+    self.filters.include?(:dazed)
+  end
+
+  def disoriented?
+    self.filters.include?(:disoriented)
+  end
+
+  def drunk?
+    self.filters.include?(:drunk)
+  end
+
   def description
     describe
   end
@@ -113,8 +135,10 @@ class Alice::User
       message << "It's #{proper_name}! "
     end
     message << "Find them on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
-    message << "They currently have #{self.points == 1 ? "1 point." : self.points.to_s << ' points.'} "
-    message << "#{self.inventory}"
+    message << "#{self.inventory} "
+    message << "#{check_score} "
+    message << "#{proper_name} is currently feeling a little #{self.filters.map(&:to_s).to_sentence}. " if self.filters.present?
+    message
   end
 
   def has_nick?(nick)

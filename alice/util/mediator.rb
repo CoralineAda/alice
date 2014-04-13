@@ -38,9 +38,14 @@ module Alice
         Alice.bot.bot.channels.first.msg(text)
       end
 
+      def self.user_from(channel_user)
+        Alice::User.with_nick_like(channel_user.user.nick)
+      end
+
       def self.reply_to(channel_user, message)
         text = Alice::Util::Sanitizer.process(message)
         text = Alice::Util::Sanitizer.initial_upcase(text)
+        text = user_from(channel_user).apply_filters(text)
         channel_user.reply(text)
       end
 

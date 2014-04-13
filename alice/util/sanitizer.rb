@@ -4,8 +4,16 @@ module Alice
     
     class Sanitizer
 
+      def self.filter_for(user, text)
+        text = Alice::Filter::Drunk.new.process(text) if user.is_drunk?
+        text = Alice::Filter::Dazed.new.process(text) if user.is_dazed?
+        text = Alice::Filter::Disoriented.new.process(text) if user.is_disoriented?
+      end
+
       def self.process(text)
         text ||= ""
+        text.gsub!(/ is is /i, " is ")
+        text.gsub!(/ is was /i, " was ")
         text.gsub!(/ the the /i, " the ")
         text.gsub!(/ the ye /i, " ye ")
         text.gsub!(/ the a /i, " the ")
@@ -25,7 +33,7 @@ module Alice
         text.gsub!(/ a o/i, " an o")
         text.gsub!(/^am/i, 'is')
         text.gsub!('..', '.')
-        text.gsub!('..', '.')
+        text.gsub!(',,', ',')
         text.gsub!('!.', '!')
         text.gsub!('. .', '.')
         text.gsub!('  ', ' ')
