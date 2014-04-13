@@ -83,10 +83,10 @@ module Alice
           "#{giver} tosses #{thing} to #{receiver}, who catches it deftly.",
           "#{giver} throws #{thing} to #{receiver}, who almost drops it!",
           "#{giver}, with a tear in their eye, slowly hands #{thing} over to #{receiver}",
-          "Who is the new owner of #{thing}? #{recipient} is!",
-          "#{recipient} quickly stuffs #{thing} into their bag, before #{giver} changes their mind.",
-          "#{giver} signs over #{thing} to #{recipient}.",
-          "#{giver} gave #{thing} to #{recipient}? Well that just happened."
+          "Who is the new owner of #{thing}? #{receiver} is!",
+          "#{receiver} quickly stuffs #{thing} into their bag, before #{giver} changes their mind.",
+          "#{giver} signs over #{thing} to #{receiver}.",
+          "#{giver} gave #{thing} to #{receiver}? Well that just happened."
         ].sample
       end
 

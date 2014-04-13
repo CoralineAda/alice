@@ -26,6 +26,7 @@ module Alice
         end
 
         def like(name)
+          name = name.respond_to?(:join) && name.join(' ') || name
           unless match = where(name: /^#{Regexp.escape(name)}$/i).first
             match = where(name: /\b#{Regexp.escape(name)}\b/i).first
           end

@@ -11,8 +11,8 @@ module Alice
       def self.process(sender, command)
         return unless giver = Alice::User.with_nick_like(sender)
         return unless grams = Alice::Parser::NgramFactory.filtered_grams_from(command)
-        candidates = Alice::Util::Mediator.user_list.map(&:nick).map(&:downcase) & grams
-        return unless recipient = User.where(name: candidates.first)
+        candidates = Alice::Util::Mediator.user_list.map(&:nick).map(&:downcase) & grams.flatten.map{|g| g.gsub(/[^\w]/, '')}
+        return unless recipient = User.like(candidates.first)
         process_gift(giver, recipient, grams) || process_unknown
       end
 
@@ -20,7 +20,7 @@ module Alice
         
         items = grams.map{|g| giver.items.like(g)}.compact
         beverages = grams.map{|g| giver.beverages.like(g)}.compact
-        stuff = [items, beverages].flatten.compact
+        stuff = [items, beverages].flatten.compact.uniq
 
         return false unless stuff.present?
 
