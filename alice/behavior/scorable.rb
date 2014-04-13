@@ -33,6 +33,7 @@ module Alice
       end
 
       def rank
+        return unless self.points > 0
         places = (Alice::User.where(:points.gt => 0) + Alice::Actor.where(:points.gt => 0)).sort_by(&:points).reverse
         places.present? && places.index(self) + 1
       end

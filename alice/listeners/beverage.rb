@@ -29,7 +29,7 @@ module Alice
           Alice::Util::Mediator.reply_to(channel_user, "Your attempt at brewing failed miserably.")
           return
         end
-        if Alice::Beverage.already_exists?(what) || Alice::User.like(what)
+        if Alice::Beverage.already_exists?(what) || Alice::User.with_nick_like(what)
           Alice::Util::Mediator.reply_to(channel_user, "I'm afraid that there can only be one #{what}.")
           return
         else

@@ -27,26 +27,32 @@ module Alice
         'bug'
       ]
 
-      match /^\!(north)/i,     method: :move, use_prefix: false
-      match /^\!(south)/i,     method: :move, use_prefix: false
-      match /^\!(east)/i,      method: :move, use_prefix: false
-      match /^\!(west)/i,      method: :move, use_prefix: false
-      match /^\!go (north)/i,  method: :move, use_prefix: false
-      match /^\!go (south)/i,  method: :move, use_prefix: false
-      match /^\!go (east)/i,   method: :move, use_prefix: false
-      match /^\!go (west)/i,   method: :move, use_prefix: false
-      match /^\!look (north)/i,  method: :look_direction, use_prefix: false
-      match /^\!look (south)/i,  method: :look_direction, use_prefix: false
-      match /^\!look (east)/i,   method: :look_direction, use_prefix: false
-      match /^\!look (west)/i,   method: :look_direction, use_prefix: false
-      match /^\!look$/i,       method: :look, use_prefix: false
-      match /^\!xyzzy/i,       method: :move_random, use_prefix: false
-      match /^\!reset maze/i,  method: :reset_maze, use_prefix: false
-      match /^\!(.+ .+)/,      method: :handle_tricksies, use_prefix: false
+      match /^\!(north)/i,        method: :move, use_prefix: false
+      match /^\!(south)/i,        method: :move, use_prefix: false
+      match /^\!(east)/i,         method: :move, use_prefix: false
+      match /^\!(west)/i,         method: :move, use_prefix: false
+      match /^\!go (north)/i,     method: :move, use_prefix: false
+      match /^\!go (south)/i,     method: :move, use_prefix: false
+      match /^\!go (east)/i,      method: :move, use_prefix: false
+      match /^\!go (west)/i,      method: :move, use_prefix: false
+      match /^\!look (north)/i,   method: :look_direction, use_prefix: false
+      match /^\!look (south)/i,   method: :look_direction, use_prefix: false
+      match /^\!look (east)/i,    method: :look_direction, use_prefix: false
+      match /^\!look (west)/i,    method: :look_direction, use_prefix: false
+      match /^\!look$/i,          method: :look, use_prefix: false
+      match /^\!teleport (.+)$/i, method: :teleport, use_prefix: false
+      match /^\!xyzzy/i,          method: :move_random, use_prefix: false
+      match /^\!reset maze/i,     method: :reset_maze, use_prefix: false
+      match /^\!(.+ .+)/,         method: :handle_tricksies, use_prefix: false
 
       def look_direction(channel_user, direction)
-        if room = Alice::Place.current.neighbors.select{|r| r[:direction] == direction}.map{|r| r[:room]}.first
-          message = room.view
+        here = Alice::Place.current
+        if room = here.neighbors.select{|r| r[:direction] == direction}.map{|r| r[:room]}.first
+          if here.has_locked_door? && here.exit_is_locked?(direction)
+            message = "You can't see past the big, locked door to the #{direction}."
+          else
+            message = room.view
+          end
         else
           message = "Yeah, that's a nice wall right there."
         end
@@ -76,8 +82,18 @@ module Alice
       end
 
       def move(channel_user, direction)
-        if Alice::Place.current.exits.include?(direction) 
-          message = Alice::Place.go(direction)
+        here = Alice::Place.current
+        if here.exits.include?(direction) 
+          if here.exit_is_locked?(direction)
+            message = "The door to the #{direction} is locked tight! "
+            if user_with_key = (Alice::User.with_key & Alice::User.active_and_online).sample
+              here.unlock
+              message << "Luckily #{user_with_key.proper_name} was able to unlock it with #{user_with_key.items.keys.first.name_with_article}. "
+              message << Alice::Place.go(direction)
+            end
+          else
+            message = Alice::Place.go(direction)
+          end
         else
           message = "You cannot move #{direction}!"
         end
@@ -106,6 +122,19 @@ module Alice
         end
         Alice::Util::Mediator.send_raw(message)
         Alice::Dungeon.reset!
+      end
+
+      def teleport(channel_user, coords)
+        x, y = coords.split(',')
+        if Alice::Util::Mediator.op?(channel_user)
+          if place = Alice::Place.where(x: x, y: y).visited.first
+            Alice::Place.set_current_room(place)
+            message = place.describe
+            Alice::Util::Mediator.reply_to(channel_user, message)
+          end
+        else
+          message = "Nice try, #{channel_user.use.nick}!"
+        end
       end
 
     end

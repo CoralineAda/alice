@@ -127,10 +127,6 @@ class Alice::Actor
     self.place == Alice::Place.current
   end
 
-  def proper_name
-    self.name
-  end
-
   def drop
     return unless self.items.present?
     self.items.sample.drop
@@ -147,6 +143,10 @@ class Alice::Actor
   def move
     direction = Alice::Place.current.exits.sample
     self.place = Alice::Place.place_to(direction, false)
+  end
+
+  def proper_name
+    self.name.capitalize
   end
 
   def talk

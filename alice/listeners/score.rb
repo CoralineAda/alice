@@ -30,7 +30,7 @@ module Alice
       end
 
       def my_score(channel_user)
-        current_user = Alice::User.like(channel_user.user.nick)
+        current_user = Alice::User.with_nick_like(channel_user.user.nick)
         Alice::Util::Mediator.reply_to(channel_user, user.check_score)
       end
 

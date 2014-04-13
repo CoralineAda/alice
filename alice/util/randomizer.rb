@@ -8,6 +8,23 @@ module Alice
         rand(number) == 1
       end
 
+      def self.keys
+        [
+          "a giant skeleton key",
+          "house key",
+          "lockpick",
+          "bobby pin",
+          "keyring",
+          "rabbit's foot key chain",
+          "#{specific_person}'s car keys",
+          "#{material} skeleton key",
+          "#{material} skeleton key",
+          "#{material} skeleton key",
+          "#{material} skeleton key",
+          "#{material} skeleton key"
+        ].sample
+      end
+
       def self.view_from_afar
         [
           "It looks safe enough.",
@@ -916,12 +933,22 @@ module Alice
           "It isn't moving, that's for sure.",
           "The #{thing} looks a lot like the giant #{thing} standing right behind you.",
           "It isn't supposed to be moving, that's for sure.",
-          "An ordinary #{thing}-- or is it?!",
+          "An ordinary #{thing}— or is it?!",
           "Pretty creepy as far as #{thing.pluralize} go, honestly.",
           "Aside from its enormous size, it seems fairly normal.",
           "Aside from its diminutive size, it seems fairly normal.",
           "Just your standard issue #{thing}.",
-          "The #{thing}? Not much to look at if you ask me."
+          "The #{thing}? Not much to look at if you ask me.",
+          "Cool, it's got skulls on it!",
+          "Looks like someone went all out on this #{thing}.",
+          "This is one tricked-out #{thing}.",
+          "You've never seen a #{thing} quite like this one.",
+          "Ooh, it's numbered: #{rand(20) + 1} of 100!",
+          "A #{thing} like this would cost a pretty penny from SkyMall.",
+          "Looks like the genuine article to me.",
+          "Sleek, seamless, and #{material}.",
+          "Hmm, mass-produced by the look of it, but not a bad #{thing}.",
+          "A Hello Kitty version of #{thing} would be cooler, but it's pretty nice all the same."
         ].sample
       end
 

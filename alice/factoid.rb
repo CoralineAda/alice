@@ -9,7 +9,7 @@ class Alice::Factoid
   belongs_to :user
 
   def self.for(nick)
-    Alice::User.like(nick).try(:get_factoid)
+    Alice::User.with_nick_like(nick).try(:get_factoid)
   end
 
   def self.random

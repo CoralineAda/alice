@@ -33,15 +33,20 @@ class Alice::User
   end
 
   def self.online
-    Alice::Util::Mediator.user_list.map{|user| like(user.nick)}.compact
+    list = Alice::Util::Mediator.user_list.map(&:nick).map(&:downcase)
+    any_in(primary_nick: list) | any_in(alt_nicks: list)
   end
 
   def self.active_and_online
-    active & online
+    active.online
   end
 
   def self.bot
     where(is_bot: true).last
+  end
+
+  def self.with_key
+    Alice::Item.keys.excludes(user_id: nil).map(&:user)
   end
 
   def self.with_weapon
@@ -53,10 +58,10 @@ class Alice::User
   end
 
   def self.find_or_create(nick)
-    like(nick) || Alice::Util::Mediator.exists?(nick) && create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
+    with_nick_like(nick) || Alice::Util::Mediator.exists?(nick) && create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
   end
 
-  def self.like(nick)
+  def self.with_nick_like(nick)
     scrubbed_nick = nick.gsub('_','').downcase
     found =where(primary_nick: nick.downcase).first || where(primary_nick: scrubbed_nick).first
     found ||= where(alt_nicks: nick.downcase).first || where(alt_nicks: scrubbed_nick).first
@@ -68,7 +73,7 @@ class Alice::User
   end
 
   def self.update_nick(old_nick, new_nick)
-    user = like(old_nick) || like(new_nick)
+    user = with_nick_like(old_nick) || with_nick_like(new_nick)
     user ||= new(primary_nick: old_nick)
     user.alt_nicks << new_nick.downcase
     user.alt_nicks << old_nick.downcase
@@ -129,7 +134,7 @@ class Alice::User
   end
   
   def online?
-    Alice::Util::Mediator.user_list.select{|m| Alice::User.like(channel_user) == self}.present?
+    Alice::Util::Mediator.user_list.select{|m| Alice::User.with_nick_like(channel_user) == self}.present?
   end
 
   def proper_name
