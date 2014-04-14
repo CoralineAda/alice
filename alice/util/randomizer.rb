@@ -4,7 +4,7 @@ module Alice
 
     class Randomizer
 
-      def self.one_chancet_in(number)
+      def self.one_chance_in(number)
         rand(number) == 1
       end
 
