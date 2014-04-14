@@ -937,7 +937,7 @@ module Alice
           "Pretty tamd as far as #{thing.pluralize} go.",
           "I think that #{thing} is an acquired taste.",
           "It looks deliious!",
-          "Your getting thirsty just looking at it.",
+          "You're getting thirsty just looking at it.",
           "The #{thing}? Well, it's better than #{beverage}."
         ].sample
       end
