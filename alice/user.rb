@@ -17,6 +17,7 @@ class Alice::User
   field :is_bot,            type: Boolean
   field :points,            type: Integer, default: 0
   field :filters,           type: Array, default: []
+  field :filters_expire_at, type: DateTime
 
   index({ primary_nick: 1 },  { unique: true })
   index({ alt_nicks: 1 },     { unique: true })
@@ -87,11 +88,14 @@ class Alice::User
   end
 
   def apply_filters(text)
-    self.filters.pop if Alice::Util::Randomizer.one_chance_in(10)
-    self.filters.inject([]) do |processed, filter|
-      processed[0] = eval("Alice::Filters::#{filter.to_s.classify}").new.process(processed.first || text)
-      processed
-    end.first || text
+    if remove_filter?
+      self.update_attribute(:filters, [])
+    else
+      self.filters.inject([]) do |processed, filter|
+        processed[0] = eval("Alice::Filters::#{filter.to_s.classify}").new.process(processed.first || text)
+        processed
+      end.first || text
+    end
   end
 
   def creations
@@ -139,6 +143,11 @@ class Alice::User
     message << "#{check_score} "
     message << "#{proper_name} is currently feeling a little #{self.filters.map(&:to_s).to_sentence}. " if self.filters.present?
     message
+  end
+
+  def remove_filter?
+    self.filter_applied ||= DateTime.now - 1.day
+    self.filter_applied <= DateTime.now - 13.minutes
   end
 
   def has_nick?(nick)
