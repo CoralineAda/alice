@@ -17,7 +17,7 @@ class Alice::User
   field :is_bot,            type: Boolean
   field :points,            type: Integer, default: 0
   field :filters,           type: Array, default: []
-  field :filters_expire_at, type: DateTime
+  field :filter_applied, type: DateTime
 
   index({ primary_nick: 1 },  { unique: true })
   index({ alt_nicks: 1 },     { unique: true })
