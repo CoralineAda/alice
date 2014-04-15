@@ -43,6 +43,11 @@ class Alice::Item
     like(name).present?
   end
 
+  def self.cursed
+    where(is_cursed: true).excludes(name: 'fruitcake')
+  end
+
+
   def self.forge(args={})
     if new_item = create(
         name: args[:name].downcase,
@@ -83,6 +88,10 @@ class Alice::Item
     stuff = Alice::Util::Randomizer.empty_pockets if list.empty?
     stuff ||= list.map(&:name_with_article).to_sentence
     "#{owner.proper_name}'s #{Alice::Util::Randomizer.item_container} #{stuff}."
+  end
+
+  def self.reset_cursed
+    cursed.update_all(is_cursed: false)
   end
 
   def self.total_inventory
