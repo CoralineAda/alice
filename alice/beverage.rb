@@ -39,6 +39,7 @@ class Alice::Beverage
     "mixed",
     "porter",
     "rum",
+    "rumchata",
     "rye",
     "scotch",
     "snifter",
