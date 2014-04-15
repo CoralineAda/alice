@@ -28,25 +28,26 @@ class Alice::Beverage
   attr_accessor :message
 
   ALCOHOL_INDICATORS = [
-    "beer",
     "ale",
-    "whisky",
-    "whiskey",
-    "stout",
-    "lager",
-    "porter",
-    "wine",
-    "martini",
-    "snifter",
-    "mixed",
-    "mimosa",
+    "beer",
+    "chablis",
     "gin",
+    "lager",
+    "martini",
+    "merlot",
+    "mimosa",
+    "mixed",
+    "porter",
     "rum",
-    "vodka",
     "rye",
     "scotch",
-    "chablis",
-    "merlot"
+    "snifter",
+    "stout",
+    "tequila",
+    "vodka",
+    "whisky",
+    "whiskey",
+    "wine"
   ]
 
   def self.already_exists?(name)
