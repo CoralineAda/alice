@@ -23,6 +23,7 @@ class Alice::Dungeon
 
   def self.cleanup
     Alice::Actor.reset_all
+    Alice::Item.reset_cursed
     Alice::Beverage.sweep
     Alice::Item.sweep
     Alice::Item.weapons.map{|w| w.delete}
