@@ -90,6 +90,7 @@ class Alice::User
   def apply_filters(text)
     if remove_filter?
       self.update_attribute(:filters, [])
+      return text
     else
       self.filters.inject([]) do |processed, filter|
         processed[0] = eval("Alice::Filters::#{filter.to_s.classify}").new.process(processed.first || text)
