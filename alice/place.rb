@@ -142,6 +142,7 @@ class Alice::Place
   def enter
     Alice::Place.set_current_room(self)
     self.update_attribute(:last_visited, DateTime.now)
+    place_grue
     handle_grue || self.describe
   end
 
@@ -207,7 +208,7 @@ class Alice::Place
   def place_grue
     return false if self.origin_square?
     return true if has_grue?
-    odds = self.is_dark? ? 5 : 20
+    odds = self.is_dark? ? 4 : 20
     if Alice::Util::Randomizer.one_chance_in(odds) && actor = Alice::Actor.unplaced.grue
       actor.update_attribute(:place_id, self.id)
     end
