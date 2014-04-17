@@ -43,6 +43,7 @@ module Alice
       match /^\!teleport (.+)$/i, method: :teleport, use_prefix: false
       match /^\!xyzzy/i,          method: :move_random, use_prefix: false
       match /^\!reset maze/i,     method: :reset_maze, use_prefix: false
+      match /^\!reset dungeon/i,  method: :reset_maze, use_prefix: false
       match /^\!(.+ .+)/,         method: :handle_tricksies, use_prefix: false
 
       def look_direction(channel_user, direction)
@@ -120,13 +121,11 @@ module Alice
       end
 
       def reset_maze(channel_user=nil, force=false)
-        if force || Alice::Util::Mediator.op?(channel_user)
-          message = "Everything goes black and you feel like you are suddenly somewhere else!"  
-          message << " Please wait while we regenerate the matrix."
-          message << " #{Alice::Item.fruitcake.user.proper_name} has been given a special gift."
-        end
-        Alice::Util::Mediator.send_raw(message)
+        return unless force || Alice::Util::Mediator.op?(channel_user)
+        Alice::Util::Mediator.send_raw("Everything goes black and you feel like you are suddenly somewhere else!")
+        Alice::Util::Mediator.send_raw("Please wait while we regenerate the matrix.")
         Alice::Dungeon.reset!
+        Alice::Util::Mediator.send_raw("#{Alice::Item.fruitcake.user.proper_name} has been given a special gift.")
       end
 
       def teleport(channel_user, coords)
