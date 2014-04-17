@@ -32,6 +32,7 @@ module Alice
       match /^\!read (.+)/i,     method: :read, use_prefix: false
       match /^\!talk (.+)/i,     method: :talk, use_prefix: false
       match /^\!dance (.+)/i,    method: :dance, use_prefix: false
+      match /^\!give (.+)/i,     method: :give, use_prefix: false
 
       def dance(channel_user, who)
         return unless actor = Alice::Actor.from(who)
@@ -50,6 +51,17 @@ module Alice
         item.destroy
       end
 
+      def drop(channel_user, what)
+        return unless item = Alice::Item.from(what)
+        return unless current_user = current_user_from(channel_user)
+        return unless current_user_from(channel_user).items.include?(item)
+        if item.is_cursed?
+          Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be dropped!")
+        else
+          Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.drop_message(item.name_with_article, channel_user.user.nick)) && item.drop
+        end
+      end
+
       def eat(channel_user, what)
         return unless item = Alice::Item.from(what)
         if item.is_cursed?
@@ -62,17 +74,6 @@ module Alice
         end
         Alice::Util::Mediator.emote_to(channel_user, "devours the #{what}, which I find pretty damned funny.")
         item.destroy
-      end
-
-      def drop(channel_user, what)
-        return unless item = Alice::Item.from(what)
-        return unless current_user = current_user_from(channel_user)
-        return unless current_user_from(channel_user).items.include?(item)
-        if item.is_cursed?
-          Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be dropped!")
-        else
-          Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.drop_message(item.name_with_article, channel_user.user.nick)) && item.drop
-        end
       end
 
       # TODO copy this pattern!
@@ -90,9 +91,9 @@ module Alice
 
         if current_user.can_forge?
           Alice::Item.forge(name: what.downcase, user: current_user, creator_id: current_user.id)
-          Alice::Util::Mediator.emote_to(channel_user, "forges a #{what} #{Alice::Util::Randomizer.forge} for #{channel_user.user.nick}.")
+          Alice::Util::Mediator.emote_to(channel_user, ", at #{channel_user.user.nick}'s request, forges a #{what} #{Alice::Util::Randomizer.forge}.")
         else
-          Alice::Util::Mediator.emote_to(channel_user, "thinks that #{channel_user.user.nick} has enough stuff already.")
+          Alice::Util::Mediator.emote_to(channel_user, "thinks that #{channel_user.user.nick} can't carry more stuff right now.")
         end
       end
 
@@ -103,6 +104,12 @@ module Alice
           Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.pickup_message(noun.name, channel_user.user.nick))
         else
           Alice::Util::Mediator.reply_to(channel_user, "You cannot get the #{item}!")
+        end
+      end
+
+      def give(channel_user, command)
+        if result = Alice::Handlers::ItemGiver.process(channel_user.user.nick, command)
+          Alice::Util::Mediator.reply_to(channel_user, result.content)
         end
       end
 
@@ -121,10 +128,13 @@ module Alice
       def inspect(channel_user, noun)
         return if Alice::Place::DIRECTIONS.include?(noun)
         current_user = current_user_from(channel_user)
+        place = Alice::Place.current
         subject = Alice::User.from(noun)
-        subject ||= Alice::Actor.from(noun.downcase)
-        subject ||= Alice::Item.from(noun)
-        subject ||= Alice::Beverage.from(noun)
+        subject ||= current_user.items.where(name: /#{noun}$/i).first
+        subject ||= current_user.beverages.where(name: /#{noun}$/i).first
+        subject ||= place.items.where(name: /#{noun}$/i).first
+        subject ||= place.beverages.where(name: /#{noun}$/i).first
+        subject ||= place.actors.where(name: /#{noun}$/i).first
 
         if subject && (subject.is_present? || current_user.items.include?(subject) || current_user.beverages.include?(subject))
           message = subject.describe

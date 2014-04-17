@@ -7,7 +7,8 @@ module Alice
       attr_accessor :options, :target
      
       def self.filtered_grams_from(words)
-        filtered = words.split.reject!{|name| Alice::Parser::LanguageHelper::IDENTIFIERS.include?(name)}
+        filtered = words.gsub(/[^a-zA-Z0-9\-\_]/, ' ').split.map(&:strip)
+        filtered.reject!{|name| Alice::Parser::LanguageHelper::IDENTIFIERS.include?(name)}
         filtered.reject!(&:empty?)
         new(filtered.join(' ')).omnigrams
       end

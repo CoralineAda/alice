@@ -11,8 +11,8 @@ module Alice
       def self.process(sender, command)
         return unless giver = Alice::User.with_nick_like(sender)
         return unless grams = Alice::Parser::NgramFactory.filtered_grams_from(command)
-        grams = grams.flatten.map{|g| g.gsub(/[^\w]/, '')}.map(&:downcase)
-        candidates = Alice::Util::Mediator.user_list.map(&:nick).map(&:downcase) & grams
+        grams = grams.flatten.map{|g| g.gsub(/[^\w]/, '')}.map(&:downcase).uniq
+        candidates = (Alice::Util::Mediator.user_list.map(&:nick).map(&:downcase) & grams.flatten) - [Alice::User.bot.primary_nick.downcase]
         return unless recipient = Alice::User.like(candidates.first)
         process_gift(giver, recipient, grams) || process_unknown
       end
@@ -23,7 +23,19 @@ module Alice
         beverages = grams.map{|g| giver.beverages.like(g)}.compact
         stuff = [items, beverages].flatten.compact.uniq
 
-        return false unless stuff.present?
+        unless stuff.present?
+          return Alice::Handlers::Response.new(
+            content: "Sorry, I don't know what you're trying to give to #{recipient.proper_name}.",
+            kind: :reply
+          )
+        end
+
+        unless recipient.accepts_gifts?
+          return Alice::Handlers::Response.new(
+            content: "#{recipient.proper_name} demurely declines.",
+            kind: :reply
+          )
+        end
 
         if stuff.count > 1
           return Alice::Handlers::Response.new(

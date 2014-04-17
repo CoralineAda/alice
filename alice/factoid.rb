@@ -3,10 +3,17 @@ class Alice::Factoid
   include Mongoid::Document
 
   field :text
+  field :keywords, type: Array, default: []
+
+  index({ text: 1 }, { unique: true })
+  index({ keywords: 1 }, { unique: false })
 
   validates_presence_of :text
-  
+  validates_uniqueness_of :text
+
   belongs_to :user
+
+  before_create :extract_keywords
 
   def self.for(nick)
     Alice::User.with_nick_like(nick).try(:get_factoid)
@@ -14,6 +21,17 @@ class Alice::Factoid
 
   def self.random
     all.sample
+  end
+
+  def self.about(subject)
+    keywords = subject.split.map(&:downcase).uniq.map{|w| w.gsub!(/[^a-zA-Z0-9\_\-]/, '')}.compact
+    keywords << keywords.map{|word| Lingua.stemmer(word.downcase)}
+    keywords = keywords.flatten.uniq
+    any_in(keywords: keywords).sample
+  end
+
+  def extract_keywords
+    self.keywords = Alice::Parser::NgramFactory.filtered_grams_from(self.text).flatten.uniq
   end
 
   def formatted(with_prefix=true)
@@ -24,7 +42,7 @@ class Alice::Factoid
 
     message = ""
     message << "#{Alice::Util::Randomizer.fact_prefix}" if with_prefix
-    message << " #{self.user.try(:proper_name)} #{fact}"
+    message << " #{self.user.try(:proper_name)} #{fact}."
     message
   end
 

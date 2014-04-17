@@ -180,7 +180,9 @@ class Alice::Place
     candidates = self.exits - neighbors.select{|n| ! n[:room].already_visited? }.map{|n| n[:direction]}
     if Alice::Util::Randomizer.one_chance_in(2)
       self.update_attribute(:locked_exit, candidates.sample) 
-      neighbors.select{|n| n[:direction] == self.locked_exit}.first[:room].lock_door(Alice::Place.opposite_direction(locked_exit))
+      if room = neighbors.select{|n| n[:direction] == self.locked_exit}.first
+        room[:room].lock_door(Alice::Place.opposite_direction(locked_exit))
+      end
     end
   end
 

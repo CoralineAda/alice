@@ -111,6 +111,10 @@ class Alice::Beverage
     self.name =~ /#{ALCOHOL_INDICATORS * '|'}/i
   end
 
+  def is_cursed?
+    false
+  end
+
   def is_potion?
     self.name =~ /potion/
   end

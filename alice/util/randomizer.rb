@@ -8,6 +8,22 @@ module Alice
         rand(number) == 1
       end
 
+      def self.summon_failure(who, whom)
+        [
+          "#{who} looks crestfallen when #{whom} fails to appear.",
+          "#{who} gesticulates wildly, to no effect.",
+          "#{who} should not summon that which cannot be banished!"
+        ].sample
+      end
+
+      def self.disarm_message(who, what)
+        [
+          "#{who} is quite disarming!",
+          "#{who} deftly disarms the #{what}.",
+          "#{what} proves to be no match for the wily #{name}."
+        ].sample
+      end
+
       def self.exclamation
         [
           "Dude...",
