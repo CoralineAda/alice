@@ -31,7 +31,7 @@ module Alice
         text.gsub!(/ a e/i, " an e")
         text.gsub!(/ a i/i, " an i")
         text.gsub!(/ a o/i, " an o")
-        text.gsub!(/^am/i, 'is')
+        text.gsub!(/^am /i, 'is ')
         text.gsub!('..', '.')
         text.gsub!(',,', ',')
         text.gsub!('!.', '!')
