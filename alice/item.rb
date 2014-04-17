@@ -146,11 +146,5 @@ class Alice::Item
     return "It says that #{Alice::Factoid.random.formatted(false)}."
   end
 
-  def transfer_to(recipient)
-    self.user_id = recipient.id
-    self.picked_up_at = DateTime.now
-    self.save
-  end
-
 end
 

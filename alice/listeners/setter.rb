@@ -13,7 +13,8 @@ module Alice
       match /^\!bio (.+)/i,     method: :set_bio, use_prefix: false
       match /^\!fact (.+)/i,    method: :set_factoid, use_prefix: false
       match /^\!twitter (.+)/i, method: :set_twitter, use_prefix: false
-      match /^FACT: (.+)/i,     method: :set_anonymous_factoid, use_prefix: false
+      match /^\!oh (.+)/i,      method: :set_oh, use_prefix: false
+      match /^FACT: (.+)/i,     method: :set_factoid, use_prefix: false
       match /^OH: (.+)/i,       method: :set_oh, use_prefix: false
 
       def set_bio(channel_user, text)
@@ -30,18 +31,14 @@ module Alice
         return unless text.size > 0
         if text.split(' ').count > 1
           current_user = current_user_from(channel_user)
-          current_user.factoids.create(text: text)
+          if text =~ /^!fact I /i
+            current_user.factoids.create(text: text)
+          else
+            Alice::Factoid.create(text: text)
+          end
           Alice::Util::Mediator.emote_to(channel_user, positive_response(channel_user.user.nick))
         else
           Alice::Util::Mediator.emote_to(channel_user, negative_response(channel_user.user.nick))
-        end
-      end
-
-      def set_anonymous_factoid(channel_user, text)
-        return unless text.size > 0
-        if text.split(' ').count > 1
-          Alice::Factoid.create(text: text)
-          Alice::Util::Mediator.emote_to(channel_user, positive_response(channel_user.user.nick))
         end
       end
 

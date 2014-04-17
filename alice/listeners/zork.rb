@@ -24,7 +24,9 @@ module Alice
         'pants',
         'help',
         'source',
-        'bug'
+        'bug',
+        'summon',
+        'disarm'
       ]
 
       match /^\!(north)/i,        method: :move, use_prefix: false

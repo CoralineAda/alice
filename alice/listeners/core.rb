@@ -16,9 +16,11 @@ module Alice
       match /^\!help$/,           method: :help, use_prefix: false
       match /^\!source$/,         method: :source, use_prefix: false
       match /^\!bug$/,            method: :bug, use_prefix: false
+      match /^\!summon (.+)/,     method: :summon, use_prefix: false
       match /\<\.\</,             method: :shifty_eyes, use_prefix: false
       match /\>\.\>/,             method: :shifty_eyes, use_prefix: false
       match /rule[s]? them all/,  method: :bind_them, use_prefix: false
+      match /!disarm (.+)/,       method: :disarm, use_prefix: false
       match /say we all/,         method: :say_we_all, use_prefix: false
       match /.+/,                 method: :track_activity, use_prefix: false
 
@@ -31,6 +33,29 @@ module Alice
 
       def track_activity(channel_user)
         track(channel_user.user.nick)
+      end
+
+      def disarm(channel_user, thing)
+        current_user = current_user_from(channel_user)
+        if Alice::Place.current.description.include?(thing)
+          Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.disarm_message(current_user.proper_name, thing))
+        end
+      end
+
+      def summon(channel_user, actor_name)
+        current_user = current_user_from(channel_user)
+        place = Alice::Place.current
+        if actor = Alice::Actor.from(actor_name)
+          if Alice::Util::Mediator.op?(channel_user) || Alice::Util::Randomizer.one_chance_in(2)
+            actor.put_in_play && (place.actors << actor) && place.save
+            Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} appears before #{current_user.proper_name}!")
+            return
+          else
+            Alice::Util::Mediator.reply_to(channel_user, "A flickering image of #{actor.proper_name} appears for a moment, then is gone.")
+            return
+          end
+        end
+        Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.summon_failure(current_user.proper_name, actor_name))
       end
 
       def cast(channel_user, spell)
@@ -48,9 +73,17 @@ module Alice
             Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} magically appears before #{current_user.proper_name}!")
           end
         elsif Alice::Util::Randomizer.one_chance_in(5)
-          current_user.items << Alice::Item.fruitcake
-          current_user.penalize
-          Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} is rewarded with the fruitcake!")
+          fruitcake = Alice::Item.fruitcake
+          if current_user.items.include?(fruitcake)
+            recipient = (Alice::User.active_and_online - [current_user]).sample
+            recipient.items << Alice::Item.fruitcake
+            Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} loses their precious fruitcake to #{recipient.proper_name}!")
+            current_user.score_point
+          else
+            Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} is rewarded with the fruitcake!")
+            current_user.items << Alice::Item.fruitcake
+            current_user.penalize
+          end
         else
           Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.spell_effect(current_user.proper_name, spell))
         end

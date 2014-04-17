@@ -64,7 +64,7 @@ class Alice::User
   end
 
   def self.with_nick_like(nick)
-    scrubbed_nick = nick.gsub('_','').downcase
+    scrubbed_nick = nick.to_s.gsub('_','').downcase
     found = where(primary_nick: nick.downcase).first || where(primary_nick: scrubbed_nick).first
     found ||= where(alt_nicks: nick.downcase).first || where(alt_nicks: scrubbed_nick).first
     found
@@ -85,6 +85,10 @@ class Alice::User
     user.alt_nicks << old_nick.downcase
     user.alt_nicks = user.alt_nicks.uniq
     user.save
+  end
+
+  def accepts_gifts?
+    ! self.is_bot?
   end
 
   def apply_filters(text)
