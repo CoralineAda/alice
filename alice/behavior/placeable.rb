@@ -7,19 +7,28 @@ module Alice
       def self.included(klass)
         klass.extend ClassMethods
       end
-    
+
       def drop
         self.place = Alice::Place.current
-        self.user = nil
-        self.picked_up_at = nil
+        self.respond_to?(:user) && self.user = nil
+        self.respond_to?(:is_hidden) && self.is_hidden = false
+        self.respond_to?(:picked_up_at) && self.picked_up_at = nil
         self.save
       end
 
       def hide
         self.place = nil
-        self.user = nil
-        self.is_hidden = true
-        self.picked_up_at = nil
+        self.respond_to?(:user) && self.user = nil
+        self.respond_to?(:is_hidden) && self.is_hidden = true
+        self.respond_to?(:picked_up_at) && self.picked_up_at = nil
+        self.save
+      end
+
+      def remove
+        self.place = nil
+        self.respond_to?(:user) && self.user = nil
+        self.respond_to?(:is_hidden) && self.is_hidden = false
+        self.respond_to?(:picked_up_at) && self.picked_up_at = nil
         self.save
       end
 
@@ -28,7 +37,7 @@ module Alice
       end
 
       module ClassMethods
-      
+
         def claimed
           excludes(user_id: nil)
         end

@@ -26,6 +26,7 @@ class Alice::Dungeon
     Alice::Item.reset_cursed
     Alice::Beverage.sweep
     Alice::Item.sweep
+    Alice::Machine.sweep
     Alice::Item.weapons.map{|w| w.delete}
     Alice::Item.keys.map{|w| w.delete}
     Alice::Beverage.sweep
@@ -42,7 +43,7 @@ class Alice::Dungeon
   end
 
   def self.however_many
-    rand(10) + 1 
+    rand(10) + 1
   end
 
   def self.make_stuff

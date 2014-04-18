@@ -12,13 +12,14 @@ class Alice::Place
   field :view_from_afar
   field :last_visited, type: DateTime
 
-  has_many :items
-  has_many :beverages
   has_many :actors
-  
+  has_many :beverages
+  has_many :items
+  has_many :machines
+
   index({ x: 1, y: 1 },    { unique: true })
   index({ is_current: 1 }, { unique: false })
-  
+
   after_create  :place_item
   after_create  :place_actor
   before_create :ensure_description
@@ -64,7 +65,7 @@ class Alice::Place
     else
       x = current.x
     end
-   
+
     room = Alice::Place.where(x: x, y: y).first
     room ||= Alice::Place.generate!(x: x, y:y, entered_from: opposite_direction(direction))
     return room.enter if party_moving
@@ -111,11 +112,15 @@ class Alice::Place
   end
 
   def contents
-    return unless has_item? || has_actor?
+    return unless stuff.present? || has_actor?
     contents_text = ""
     contents_text << "You notice #{self.actors.map(&:name).to_sentence} #{Alice::Util::Randomizer.action}. " if self.has_actor?
-    contents_text << "Contents: #{self.items.map(&:name).to_sentence}. " if has_item?
+    contents_text << "Contents: #{stuff.map(&:name).to_sentence}. " if stuff.present?
     contents_text
+  end
+
+  def stuff
+    @stuff ||= self.items + self.beverages + self.machines
   end
 
   def coords
@@ -152,7 +157,7 @@ class Alice::Place
 
   def handle_grue
     if self.actors.include? Alice::Actor.grue
-      if user = Alice::User.with_weapon.sample 
+      if user = Alice::User.with_weapon.sample
         Alice::Dungeon.win!
         "#{user.proper_name} slays the grue!"
       else
@@ -160,7 +165,7 @@ class Alice::Place
         "The party has been eaten by a grue!"
       end
     end
-  end    
+  end
 
   def has_item?
     self.items.present?
@@ -179,7 +184,7 @@ class Alice::Place
     return true if self.locked_exit.present?
     candidates = self.exits - neighbors.select{|n| ! n[:room].already_visited? }.map{|n| n[:direction]}
     if Alice::Util::Randomizer.one_chance_in(2)
-      self.update_attribute(:locked_exit, candidates.sample) 
+      self.update_attribute(:locked_exit, candidates.sample)
       if room = neighbors.select{|n| n[:direction] == self.locked_exit}.first
         room[:room].lock_door(Alice::Place.opposite_direction(locked_exit))
       end
@@ -196,8 +201,8 @@ class Alice::Place
     self.exits.inject([]) do |rooms, exit|
       room =   exit == 'north' && Alice::Place.place_to('north', false)
       room ||= exit == 'south' && Alice::Place.place_to('south', false)
-      room ||= exit == 'east'  && Alice::Place.place_to('east', false) 
-      room ||= exit == 'west'  && Alice::Place.place_to('west', false) 
+      room ||= exit == 'east'  && Alice::Place.place_to('east', false)
+      room ||= exit == 'west'  && Alice::Place.place_to('west', false)
       rooms << { direction: exit, room: room }
       rooms
     end

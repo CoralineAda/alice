@@ -113,7 +113,7 @@ module Alice
           "#{dancer} and #{partner} do the pogo all around the room.",
           "#{dancer} and #{partner} appear to be walking like Egyptians.",
           "#{dancer} has two left feet. No, I mean literally two left feet.",
-          "Watching #{dancer} and #{partner} like this brings a tear to the eye"  
+          "Watching #{dancer} and #{partner} like this brings a tear to the eye"
         ].sample
       end
 
@@ -1496,13 +1496,10 @@ module Alice
 
       def self.points_dont_matter
         [
-          "a dudebro's opinions",
-          "the consensus on Hacker News",
+          "the comments on Hacker News",
           "Microsoft's latest mobile offering",
           "Fleetwood Mac's box set",
-          "dudebro tears",
-          ""
-
+          "a dudebro's opinion"
         ].sample
       end
 

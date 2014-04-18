@@ -92,7 +92,7 @@ class Alice::Beverage
     message = Alice::Util::Randomizer.drink_message(self.name, self.owner)
     if self.is_potion? || self.is_alcohol? || Alice::Util::Randomizer.one_chance_in(4)
       effect = [:drunk, :dazed, :disoriented].sample
-      message << " In addition to feeling a little #{effect.to_s}, " + Alice::Util::Randomizer.effect_message(self.name, self.owner) 
+      message << " In addition to feeling a little #{effect.to_s}, " + Alice::Util::Randomizer.effect_message(self.name, self.owner)
       self.user.filters << effect
       self.user.save
     end
@@ -117,6 +117,14 @@ class Alice::Beverage
 
   def is_potion?
     self.name =~ /potion/
+  end
+
+  def randomize_name
+    new_name = self.name
+    new_name = "#{Alice::Util::Randomizer.beverage_container} of #{self.name}" if Alice::Beverage.where(name: new_name).first
+    new_name = "#{Alice::Util::Randomizer.material} #{new_name}" if Alice::Beverage.where(name: new_name).first
+    new_name = "#{new_name} with SN #{Time.now.to_i}" if Alice::Beverage.where(name: new_name).first
+    self.name = new_name
   end
 
   def spill

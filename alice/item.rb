@@ -28,13 +28,12 @@ class Alice::Item
 
   validates_uniqueness_of :name
   validates_presence_of :name
-  
+
   attr_accessor :message
 
   belongs_to  :actor
   belongs_to  :user, inverse_of: :items
   belongs_to  :place
-  has_many    :actions
 
   before_create :check_cursed
   before_create :ensure_description
@@ -75,11 +74,11 @@ class Alice::Item
   def self.keys
     where(is_key: true)
   end
-  
+
   def self.reading_material
     where(is_readable: true)
   end
-  
+
   def self.weapons
     where(is_weapon: true)
   end
@@ -140,7 +139,14 @@ class Alice::Item
     self.user.score_point if self.user.can_play_game?
     return "#{owner} #{Alice::Util::Randomizer.play} a game of #{name}."
   end
-  
+
+  def randomize_name
+    new_name = self.name
+    new_name = "#{Alice::Util::Randomizer.material} #{new_name}" if Alice::Item.where(name: new_name).first
+    new_name = "#{new_name} with SN #{Time.now.to_i}" if Alice::Item.where(name: new_name).first
+    self.name = new_name
+  end
+
   def read
     return "#{name_with_article} is not a very interesting read." unless self.is_readable?
     return "It says that #{Alice::Factoid.random.formatted(false)}."
