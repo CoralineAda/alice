@@ -12,7 +12,7 @@ module Alice
         self.place = Alice::Place.current
         self.user = nil if self.respond_to?(:user)
         self.is_hidden = false if self.respond_to?(:is_hidden)
-        self.picked_up_at = nil self.respond_to?(:picked_up_at)
+        self.picked_up_at = nil sif elf.respond_to?(:picked_up_at)
         self.save
       end
 
@@ -20,7 +20,7 @@ module Alice
         self.place = nil
         self.user = nil if self.respond_to?(:user)
         self.is_hidden = true if self.respond_to?(:is_hidden)
-        self.picked_up_at = nil self.respond_to?(:picked_up_at)
+        self.picked_up_at = nil if self.respond_to?(:picked_up_at)
         self.save
       end
 
@@ -28,7 +28,7 @@ module Alice
         self.place = nil
         self.user = nil if self.respond_to?(:user)
         self.is_hidden = false if self.respond_to?(:is_hidden)
-        self.picked_up_at = nil self.respond_to?(:picked_up_at)
+        self.picked_up_at = nil if self.respond_to?(:picked_up_at)
         self.save
       end
 
