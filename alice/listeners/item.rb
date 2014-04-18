@@ -98,12 +98,12 @@ module Alice
       end
 
       def get(channel_user, item)
-        noun = Alice::Item.from(item) || Alice::Actor.from(item)
+        noun = Alice::Item.from(item) || Alice::Beverage.from(item)
         if noun && Alice::Place.current.contains?(noun)
           current_user_from(channel_user).add_to_inventory(noun)
           Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.pickup_message(noun.name, channel_user.user.nick))
         else
-          Alice::Util::Mediator.reply_to(channel_user, "You cannot get the #{item}!")
+          Alice::Util::Mediator.reply_to(channel_user, "You cannot get ye #{item}!")
         end
       end
 
