@@ -23,7 +23,7 @@ module Alice
   require_relative 'alice/filters/dazed'
   require_relative 'alice/filters/drunk'
   require_relative 'alice/filters/disoriented'
-  
+
   require_relative 'alice/handlers/beverage_finder'
   require_relative 'alice/handlers/bio'
   require_relative 'alice/handlers/factoid'
@@ -41,6 +41,7 @@ module Alice
   require_relative 'alice/listeners/nlp'
   require_relative 'alice/listeners/setter'
   require_relative 'alice/listeners/score'
+  require_relative 'alice/listeners/machine'
   require_relative 'alice/listeners/number_wang'
   require_relative 'alice/listeners/item'
   require_relative 'alice/listeners/zork'
@@ -61,6 +62,7 @@ module Alice
   require_relative 'alice/dungeon'
   require_relative 'alice/factoid'
   require_relative 'alice/item'
+  require_relative 'alice/machine'
   require_relative 'alice/oh'
   require_relative 'alice/leaderboard'
   require_relative 'alice/place'

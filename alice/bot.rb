@@ -21,7 +21,8 @@ module Alice
             Listeners::Score,
             Listeners::NumberWang,
             Listeners::Core,
-            Listeners::TickTock
+            Listeners::TickTock,
+            Listeners::Machine
           ]
           config.password = ENV['USER_PASS']
           config.messages_per_second = 1
@@ -40,7 +41,7 @@ module Alice
     def start
       self.bot.start
       self.bot
-    end 
+    end
 
     def stop
       self.bot.stop

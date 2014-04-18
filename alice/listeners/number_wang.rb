@@ -13,7 +13,7 @@ module Alice
       match /^([0-9]+[\.\,]?[0-9]*)$/, method: :check_number, use_prefix: false
 
       def check_number(channel_user, number)
-        if Alice::Util::Randomizer.one_chance_in(10)
+        if Alice::Util::Randomizer.one_chance_in(8)
           current_user = current_user_from(channel_user)
           if Alice::Util::Randomizer.one_chance_in(5)
             3.times{current_user.score_point}

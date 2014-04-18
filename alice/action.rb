@@ -3,20 +3,22 @@ class Alice::Action
   include Mongoid::Document
 
   field :trigger
+  field :is_primary, type: Boolean
   field :description
- 
+  field :trigger_method
+
   index({ trigger: 1 }, { unique: true })
-  
+
   validates_presence_of :trigger, :description
 
-  belongs_to :item
+  belongs_to :machine
 
-  def self.triggered
-    where(trigger: trigger).first
+  def self.triggered_by(action)
+    where(trigger: action)
   end
 
-  def emote
-    return description
+  def self.primary
+    where(is_primary: true)
   end
 
 end

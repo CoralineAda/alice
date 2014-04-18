@@ -135,6 +135,7 @@ module Alice
         subject ||= place.items.where(name: /#{noun}$/i).first
         subject ||= place.beverages.where(name: /#{noun}$/i).first
         subject ||= place.actors.where(name: /#{noun}$/i).first
+        subject ||= place.machines.where(name: /#{noun}$/i).first
 
         if subject && (subject.is_present? || current_user.items.include?(subject) || current_user.beverages.include?(subject))
           message = subject.describe
