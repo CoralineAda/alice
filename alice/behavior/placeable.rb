@@ -10,25 +10,25 @@ module Alice
 
       def drop
         self.place = Alice::Place.current
-        self.respond_to?(:user) && self.user = nil
-        self.respond_to?(:is_hidden) && self.is_hidden = false
-        self.respond_to?(:picked_up_at) && self.picked_up_at = nil
+        self.user = nil if self.respond_to?(:user)
+        self.is_hidden = false if self.respond_to?(:is_hidden)
+        self.picked_up_at = nil self.respond_to?(:picked_up_at)
         self.save
       end
 
       def hide
         self.place = nil
-        self.respond_to?(:user) && self.user = nil
-        self.respond_to?(:is_hidden) && self.is_hidden = true
-        self.respond_to?(:picked_up_at) && self.picked_up_at = nil
+        self.user = nil if self.respond_to?(:user)
+        self.is_hidden = true if self.respond_to?(:is_hidden)
+        self.picked_up_at = nil self.respond_to?(:picked_up_at)
         self.save
       end
 
       def remove
         self.place = nil
-        self.respond_to?(:user) && self.user = nil
-        self.respond_to?(:is_hidden) && self.is_hidden = false
-        self.respond_to?(:picked_up_at) && self.picked_up_at = nil
+        self.user = nil if self.respond_to?(:user)
+        self.is_hidden = false if self.respond_to?(:is_hidden)
+        self.picked_up_at = nil self.respond_to?(:picked_up_at)
         self.save
       end
 
