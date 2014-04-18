@@ -88,7 +88,6 @@ class Alice::Beverage
   end
 
   def drink
-    self.destroy
     message = Alice::Util::Randomizer.drink_message(self.name, self.owner)
     if self.is_potion? || self.is_alcohol? || Alice::Util::Randomizer.one_chance_in(4)
       effect = [:drunk, :dazed, :disoriented].sample
@@ -96,6 +95,7 @@ class Alice::Beverage
       self.user.filters << effect
       self.user.save
     end
+    self.delete
     message
   end
 
