@@ -48,7 +48,7 @@ module Alice
           return
         end
         Alice::Util::Mediator.emote_to(channel_user, Alice::Util::Randomizer.destroy_message(what))
-        item.destroy
+        item.delete
       end
 
       def drop(channel_user, what)
