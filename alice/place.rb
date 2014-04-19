@@ -135,6 +135,9 @@ class Alice::Place
     else
       message = "You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}. "
     end
+    if self.has_grue?
+      message << handle_grue
+    end
     message
   end
 
