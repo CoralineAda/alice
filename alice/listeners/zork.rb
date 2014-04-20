@@ -66,7 +66,7 @@ module Alice
 
         verb = command.split[0]
         noun = command.split[1..-1].join(' ')
-        
+
         return if STOPWORDS.include?(verb.gsub('!',''))
 
         if noun =~ /gazebo/
@@ -86,7 +86,7 @@ module Alice
 
       def move(channel_user, direction)
         here = Alice::Place.current
-        if here.exits.include?(direction) 
+        if here.exits.include?(direction)
           if here.exit_is_locked?(direction)
             message = "The door to the #{direction} is locked tight! "
             if user_with_key = (Alice::User.with_key & Alice::User.active_and_online).sample
@@ -113,7 +113,7 @@ module Alice
 
       def move_random(channel_user)
         Alice::Util::Mediator.reply_to(channel_user, "Nothing happens.") and return unless rand(10) == 1
-        place = Alice::Place.random 
+        place = Alice::Place.random
         message = "When the room stops spinning... #{Alice::Place.current.describe}"
         Alice::Util::Mediator.reply_to(channel_user, message)
         if message =~ /eaten by a grue/i
@@ -128,6 +128,7 @@ module Alice
         Alice::Util::Mediator.send_raw("Please wait while we regenerate the matrix.")
         Alice::Dungeon.reset!
         Alice::Util::Mediator.send_raw("#{Alice::Item.fruitcake.user.proper_name} has been given a special gift.")
+        Alice::Util::Mediator.send_raw(Alice::Place.current.describe)
       end
 
       def teleport(channel_user, coords)

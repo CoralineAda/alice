@@ -17,6 +17,10 @@ class Alice::Machine
 
   attr_accessor :just_made
 
+  def self.sweep
+    all.map{|i| i.place = nil; i.save}
+  end
+
   def describe
     self.description
   end
