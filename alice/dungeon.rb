@@ -43,7 +43,7 @@ class Alice::Dungeon
   end
 
   def self.however_many
-    rand(10) + 1
+    rand(10) + 2
   end
 
   def self.make_stuff

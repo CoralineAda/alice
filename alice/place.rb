@@ -151,6 +151,7 @@ class Alice::Place
     Alice::Place.set_current_room(self)
     self.update_attribute(:last_visited, DateTime.now)
     place_grue
+    place_item
     handle_grue || self.describe
   end
 
@@ -171,7 +172,7 @@ class Alice::Place
   end
 
   def has_item?
-    self.items.present?
+    return true if self.items.present?
   end
 
   def has_actor?
@@ -226,7 +227,7 @@ class Alice::Place
 
   def place_item
     return false if self.origin_square?
-    if Alice::Util::Randomizer.one_chance_in(10) && item = Alice::Item.unplaced.sample
+    if Alice::Util::Randomizer.one_chance_in(5) && item = Alice::Item.unplaced.unclaimed.sample
       item.update_attribute(:place_id, self.id)
     end
   end

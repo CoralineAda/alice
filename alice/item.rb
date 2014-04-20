@@ -39,13 +39,12 @@ class Alice::Item
   before_create :ensure_description
 
   def self.already_exists?(name)
-    like(name).present?
+    where(name: name).present?
   end
 
   def self.cursed
     where(is_cursed: true).excludes(name: 'fruitcake')
   end
-
 
   def self.forge(args={})
     if new_item = create(
