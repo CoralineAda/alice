@@ -152,7 +152,7 @@ class Alice::Place
     self.update_attribute(:last_visited, DateTime.now)
     place_grue
     place_item
-    handle_grue || self.describe
+    handle_grue || describe
   end
 
   def exit_is_locked?(direction)
