@@ -46,7 +46,7 @@ module Alice
         current_user = current_user_from(channel_user)
         place = Alice::Place.current
         if actor = Alice::Actor.from(actor_name)
-          if Alice::Util::Mediator.op?(channel_user) || Alice::Util::Randomizer.one_chance_in(2)
+          if actor.name != "Grue" && (Alice::Util::Mediator.op?(channel_user) || Alice::Util::Randomizer.one_chance_in(2))
             actor.put_in_play && (place.actors << actor) && place.save
             Alice::Util::Mediator.reply_to(channel_user, "#{actor.proper_name} appears before #{current_user.proper_name}!")
             return
@@ -62,13 +62,13 @@ module Alice
         current_user = current_user_from(channel_user)
         if Alice::Util::Randomizer.one_chance_in(20)
           if weapon = Alice::Item.weapons.unclaimed.sample
-            Alice::Place.current.items << weapon 
+            Alice::Place.current.items << weapon
             current_user.score_point
             Alice::Util::Mediator.reply_to(channel_user, "#{weapon.name_with_article} appears at #{current_user.proper_name}'s feet!")
           end
         elsif Alice::Util::Randomizer.one_chance_in(20)
           if actor = Alice::Actor.all.sample
-            Alice::Place.current.actors << actor 
+            Alice::Place.current.actors << actor
             current_user.score_point
             Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} magically appears before #{current_user.proper_name}!")
           end
@@ -134,7 +134,7 @@ module Alice
           Alice::Util::Mediator.emote_to(channel_user, Alice::Util::Randomizer.greeting(channel_user.user.nick))
         else #new user
           new_user = Alice::User.create(primary_nick: channel_user.user.nick)
-          Alice::Util::Mediator.emote_to(channel_user, "greets the new hacker, #{channel_user.user.nick}!")  
+          Alice::Util::Mediator.emote_to(channel_user, "greets the new hacker, #{channel_user.user.nick}!")
         end
       end
 
