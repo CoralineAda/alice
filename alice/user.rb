@@ -52,7 +52,7 @@ class Alice::User
   end
 
   def self.fighting
-    (Alice::User.with_weapon & Alice::User.active_and_online).sample
+    (Alice::User.with_weapon & Alice::User.active_and_online)
   end
 
   def self.find_or_create(nick)
