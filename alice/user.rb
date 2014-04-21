@@ -7,7 +7,7 @@ class Alice::User
   include Alice::Behavior::HasInventory
   include Alice::Behavior::Emotes
   include Alice::Behavior::Steals
-  
+
   field :primary_nick
   field :alt_nicks,         type: Array, default: []
   field :twitter_handle
@@ -21,7 +21,7 @@ class Alice::User
 
   index({ primary_nick: 1 },  { unique: true })
   index({ alt_nicks: 1 },     { unique: true })
-    
+
   has_one  :bio
   has_many :factoids
   has_many :items
@@ -49,6 +49,10 @@ class Alice::User
 
   def self.active
     where(:updated_at.gte => DateTime.now - 10.minutes)
+  end
+
+  def self.fighting
+    (Alice::User.with_weapon & Alice::User.active_and_online).sample
   end
 
   def self.find_or_create(nick)
@@ -139,7 +143,7 @@ class Alice::User
   def describe
     message = ""
     if self.bio.present?
-      message << "#{self.bio.formatted}. " 
+      message << "#{self.bio.formatted}. "
     else
       message << "It's #{proper_name}! "
     end
@@ -173,7 +177,7 @@ class Alice::User
     formatted = formatted.gsub(/^([a-zA-Z0-9\_]+) is/, '')
     "#{self.proper_name} is #{formatted}".gsub("  ", " ")
   end
-  
+
   def online?
     Alice::Util::Mediator.user_list.select{|m| Alice::User.with_nick_like(channel_user) == self}.present?
   end
