@@ -49,7 +49,7 @@ class Alice::Dungeon
   def self.make_stuff
     Alice::Item.create(name: Alice::Util::Randomizer.game, is_game: true)
     however_many.times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.item) }
-    however_many.times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.weapon, is_weapon: true) }
+    (however_many / 2).times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.weapon, is_weapon: true) }
     however_many.times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.reading_material, is_readable: true) }
     (however_many / 2).times.each{ |name| Alice::Item.create(name: Alice::Util::Randomizer.keys, is_key: true) }
   end
