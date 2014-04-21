@@ -161,12 +161,12 @@ class Alice::Place
 
   def handle_grue
     if self.actors.include? Alice::Actor.grue
-      if user = Alice::User.with_weapon.sample
+      if user = Alice::User.fighting.sample
         Alice::Dungeon.win!
-        "#{user.proper_name} slays the grue!"
+        "Huzzah! After a difficult fight and against all odds, #{user.proper_name} brandishes their #{user.weapons.sample.name} and slays the grue!"
       else
         Alice::Dungeon.lose!
-        "The party has been eaten by a grue!"
+        "Eep! After wandering around in the dark room for a moment, the party has been eaten by a grue!"
       end
     end
   end
