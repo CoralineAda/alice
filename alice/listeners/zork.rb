@@ -106,7 +106,7 @@ module Alice
           message = "You cannot move #{direction}!"
         end
         Alice::Util::Mediator.reply_to(channel_user, message)
-        if message =~ /eaten by a grue/i || message =~ /kills the grue/i
+        if message =~ /eaten by a grue/i || message =~ /slays the grue/i
           reset_maze(nil, true)
         end
       end
