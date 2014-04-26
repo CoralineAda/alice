@@ -106,7 +106,7 @@ module Alice
           message = "You cannot move #{direction}!"
         end
         Alice::Util::Mediator.reply_to(channel_user, message)
-        reset_maze(nil, true) if here.has_grue?
+        reset_maze(nil, true) if Alice::Place.current.has_grue?
       end
 
       def move_random(channel_user)
