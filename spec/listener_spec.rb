@@ -8,6 +8,10 @@ describe Alice::Listener do
     def user; Struct.new(:nick); end
   end
 
+  before do
+    Alice::Listener.any_instance.stub(:track) { true }
+  end
+
   context "#parse_command" do
 
     let(:bot) { Alice::Bot.new.bot }
