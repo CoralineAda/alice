@@ -4,7 +4,7 @@ module Alice
 
     include PoroPlus
 
-    attr_accessor :content, :sender
+    attr_accessor :content
 
     def verb
       components[0]

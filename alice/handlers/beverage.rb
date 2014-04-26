@@ -6,7 +6,7 @@ module Alice
 
       include PoroPlus
 
-      attr_accessor :raw_command
+      attr_accessor :parsed_command, :raw_command
 
       def self.minimum_indicators
         3
