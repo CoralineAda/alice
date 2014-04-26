@@ -131,7 +131,7 @@ class Alice::Place
       message = "You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}. "
     end
     if self.has_grue?
-      message << handle_grue
+      message = handle_grue
     end
     message
   end
@@ -158,7 +158,7 @@ class Alice::Place
     if self.actors.include? Alice::Actor.grue
       if user = Alice::User.fighting.sample
         Alice::Dungeon.win!
-        "Huzzah! After a difficult fight and against all odds, #{user.proper_name} brandishes their #{user.weapons.sample.name} and slays the grue!"
+        "Huzzah! After a difficult fight and against all odds, #{user.proper_name} brandishes their #{user.items.weapons.sample.name} and slays the grue!"
       else
         Alice::Dungeon.lose!
         "Eep! After wandering around in the dark room for a moment, the party has been eaten by a grue!"

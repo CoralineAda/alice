@@ -1,7 +1,7 @@
 module Alice
 
   module Behavior
-  
+
     module Scorable
 
       def award_point_to(actor)
@@ -23,8 +23,8 @@ module Alice
         score_text
       end
 
-      def score_point
-        self.update_attribute(:points, self.points + 1)
+      def score_point(value=1)
+        self.update_attribute(:points, self.points + value)
       end
 
       def penalize
