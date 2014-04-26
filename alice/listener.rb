@@ -4,7 +4,6 @@ module Alice
 
   class Listener
 
-    include Alice::Behavior::TracksActivity
     include Cinch::Plugin
 
     match /(.+)/, method: :parse_command, use_prefix: false
@@ -14,7 +13,7 @@ module Alice
     def parse_command(message_obj, match)
       self.message = message_obj
       self.param = match
-      respond
+      track && respond
     end
 
     def process_direct_command(channel_user, message)
@@ -48,8 +47,8 @@ module Alice
 
     def respond
       return unless response
-      response.kind == :reply && Alice::Util::Mediator.reply_to(channel_user, response.content)
-      response.kind == :action && Alice::Util::Mediator.emote_to(channel_user, response.content)
+      Alice::Util::Mediator.reply_to(channel_user, response.content) and return true if response.kind == :reply
+      Alice::Util::Mediator.emote_to(channel_user, response.content) and return true if response.kind == :action
     end
 
     def command_string
@@ -60,6 +59,10 @@ module Alice
       return @response if @response.present?
       @response = direct_command && direct_command.process
       @response ||= fuzzy_command && fuzzy_command.process
+    end
+
+    def track
+      Alice::User.find_or_create(message.user.nick).touch
     end
 
   end

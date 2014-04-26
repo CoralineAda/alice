@@ -13,12 +13,10 @@ module Alice
   require_relative 'alice/behavior/emotes'
   require_relative 'alice/behavior/has_inventory'
   require_relative 'alice/behavior/ownable'
-  require_relative 'alice/behavior/listens'
   require_relative 'alice/behavior/placeable'
   require_relative 'alice/behavior/scorable'
   require_relative 'alice/behavior/searchable'
   require_relative 'alice/behavior/steals'
-  require_relative 'alice/behavior/tracks_activity'
 
   require_relative 'alice/filters/dazed'
   require_relative 'alice/filters/drunk'
