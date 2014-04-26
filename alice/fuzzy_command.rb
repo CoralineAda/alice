@@ -1,6 +1,6 @@
 module Alice
 
-  class ParsedCommand
+  class FuzzyCommand
 
     include Mongoid::Document
 
@@ -17,7 +17,7 @@ module Alice
 
     attr_accessor :message
 
-    def self.parse(message)
+    def self.process(message)
       message = message.downcase.gsub(/[^a-zA-Z0-9\/\\\s]/, ' ')
       indicators = Alice::Parser::NgramFactory.omnigrams_from(message)
       matches = Alice::Command.in(indicators: indicators)
@@ -32,6 +32,10 @@ module Alice
 
     def has_no_stop_words?(found_indicators)
       [found_indicators & self.stop_words].flatten.count == 0
+    end
+
+    def invoke!
+      klass.new(method: self.handler_method, raw_command: self.raw_command).process
     end
 
     def klass

@@ -48,7 +48,7 @@ module Alice
   require_relative 'alice/bot'
   require_relative 'alice/catchphrase'
   require_relative 'alice/direct_command'
-  require_relative 'alice/parsed_command'
+  require_relative 'alice/fuzzy_command'
   require_relative 'alice/command_string'
   require_relative 'alice/dungeon'
   require_relative 'alice/factoid'
