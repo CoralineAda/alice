@@ -10,7 +10,7 @@ class Alice::Dungeon
   end
 
   def self.win!
-    Alice::User.active_and_online.each{|actor| actor.update_attribute(:points, actor.points + 5) }
+    Alice::User.active_and_online.each{|actor| actor.score_point(5) }
     grue = Alice::Actor.grue
     grue.update_attribute(:points, [grue.points - 5, 0].max)
   end

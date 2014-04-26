@@ -158,6 +158,7 @@ module Alice
         return unless current_user = current_user_from(channel_user)
         if item && current_user.items.include?(item)
           Alice::Util::Mediator.reply_to(channel_user, "#{item.play}.")
+          Alice::Util::Mediator.reply_to(channel_user, current_user.check_score)
         else
           Alice::Util::Mediator.reply_to(channel_user, "You don't have #{game}.")
         end
