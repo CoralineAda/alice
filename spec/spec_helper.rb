@@ -1,3 +1,3 @@
 require 'rubygems'
-require 'alice'
 require 'rspec'
+require_relative '../alice'

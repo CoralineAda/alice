@@ -15,7 +15,8 @@ describe Alice::Listener do
     let(:listener) { Alice::Listener.new(bot) }
     let(:message) { Message.new(raw: "!help crow to fly")}
     it "parses the command" do
-      listener.parse_command(Message.new)
+      listener.parse_command(message, message.raw)
+      expect(listener.message).to eq "!help crow to flys"
     end
 
   end
