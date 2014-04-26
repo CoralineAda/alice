@@ -106,9 +106,7 @@ module Alice
           message = "You cannot move #{direction}!"
         end
         Alice::Util::Mediator.reply_to(channel_user, message)
-        if message =~ /eaten by a grue/i || message =~ /slays the grue/i
-          reset_maze(nil, true)
-        end
+        reset_maze(nil, true) if here.has_grue?
       end
 
       def move_random(channel_user)
@@ -116,10 +114,7 @@ module Alice
         place = Alice::Place.random
         message = "When the room stops spinning... #{Alice::Place.current.describe}"
         Alice::Util::Mediator.reply_to(channel_user, message)
-        if message =~ /eaten by a grue/i
-          message = reset_maze(Alice.bot.bot.nick, true)
-          Alice::Util::Mediator.reply_to(channel_user, message)
-        end
+        reset_maze(nil, true) if here.has_grue?
       end
 
       def reset_maze(channel_user=nil, force=false)

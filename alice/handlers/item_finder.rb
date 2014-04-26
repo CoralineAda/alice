@@ -9,31 +9,24 @@ module Alice
       end
 
       def self.process(sender, command)
-        item ||= Alice::Item.from(command)
-        if item
-          Alice::Handlers::Response.new(content: formatted_response(item), kind: :reply)
-        end
+        return unless thing = Alice::Item.from(command) || Alice::Beverage.from(command) || Alice::Actor.from(command)
+        Alice::Handlers::Response.new(content: formatted_response(thing), kind: :reply)
       end
 
-      def self.formatted_response(item)
-        if item.user
-          [
-            "The #{item.name} belongs to #{item.owner}",
-            "#{item.owner} has been its guardian for #{item.owned_time}.",
-            "#{item.owner} holds the #{item.name}.",
-            "It is said that the #{item.name} resides deep in the pockets of #{item.owner}.",
-            "Don't look at me, look at #{item.owner}.",
-            "Forged long ago in the fires of Mt. Doom, the #{item.name} is now guarded by the fearsome #{item.owner}."
+      def self.formatted_response(thing)
+        if thing.respond_to?(:user) && thing.user
+          message = [
+            "The #{thing.name} belongs to #{thing.owner}",
+            "#{thing.owner} has been its guardian for #{thing.owned_time}.",
+            "#{thing.owner} holds the #{thing.name}.",
+            "It is said that the #{thing.name} resides deep in the pockets of #{thing.owner}.",
+            "Don't look at me, look at #{thing.owner}.",
+            "Forged long ago in the fires of Mt. Doom, the #{thing.name} is now guarded by the fearsome #{thing.owner}."
           ].sample
-        elsif item.place
-          message =[
-            "The #{item.name} may be found in #{item.place.description}. You are at ",
-            "The #{item.name} may be discovered in #{item.place.description}.",
-            "The #{item.name} is located in #{item.place.description}.",
-            "The #{item.name} is hidden away in #{item.place.description}.",
-            "The #{item.name}'s location is not known to me."
-          ].sample
-          message << " That is #{Alice::Place.directions_to(item.place)}."
+        elsif thing.place
+          message = "I would look #{Alice::Locator.new(thing).locate.to_sentence} of here."
+        else
+          message = "I have no idea where #{thing.name} is."
         end
       end
 

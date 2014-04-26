@@ -16,9 +16,9 @@ module Alice
           names = names.map{|g| g.join ' '} << string
           names.uniq.reject!{|name| Alice::Parser::LanguageHelper::IDENTIFIERS.include?(name)}
           objects = names.map do |name|
-            name = (name.split(/\W+/) - Alice::Parser::LanguageHelper::IDENTIFIERS).compact
-            if found = like(name.join(' '))
-              SearchResult.new(term: name, result: found) 
+            name = (name.split(/\W+/) - Alice::Parser::LanguageHelper::IDENTIFIERS).compact.join(' ')
+            if name.present? && found = like(name)
+              SearchResult.new(term: name, result: found)
             end
           end.compact
           objects = objects.select{|obj| obj.result.present?}.uniq || []
@@ -32,7 +32,7 @@ module Alice
           end
           match
         end
-        
+
       end
 
       class SearchResult
