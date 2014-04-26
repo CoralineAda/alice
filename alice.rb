@@ -9,8 +9,6 @@ Dotenv.load
 Bundler.require
 Mongoid.load!("config/mongoid.yml")
 
-module Alice
-
   require_all 'alice'
 
   def self.start
