@@ -114,7 +114,7 @@ module Alice
         place = Alice::Place.random
         message = "When the room stops spinning... #{Alice::Place.current.describe}"
         Alice::Util::Mediator.reply_to(channel_user, message)
-        reset_maze(nil, true) if here.has_grue?
+        reset_maze(nil, true) if Alice::Place.current.has_grue?
       end
 
       def reset_maze(channel_user=nil, force=false)
