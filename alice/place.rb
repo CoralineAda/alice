@@ -51,9 +51,9 @@ class Alice::Place
 
   def self.place_to(direction, party_moving=false)
     if direction == 'north'
-      y = current.y - 1
-    elsif direction == 'south'
       y = current.y + 1
+    elsif direction == 'south'
+      y = current.y - 1
     else
       y = current.y
     end
@@ -102,7 +102,6 @@ class Alice::Place
     excludes(last_visited: nil)
   end
 
-
   def already_visited?
     self.last_visited.present?
   end
@@ -117,10 +116,6 @@ class Alice::Place
     contents_text << "You notice #{self.actors.map(&:name).to_sentence} #{Alice::Util::Randomizer.action}. " if self.has_actor?
     contents_text << "Contents: #{stuff.map(&:name).to_sentence}. " if stuff.present?
     contents_text
-  end
-
-  def stuff
-    @stuff ||= self.items + self.beverages + self.machines
   end
 
   def coords
@@ -237,6 +232,10 @@ class Alice::Place
     if Alice::Util::Randomizer.one_chance_in(10) && actor = Alice::Actor.in_play.unplaced.sample
       actor.update_attribute(:place_id, self.id)
     end
+  end
+
+  def stuff
+    @stuff ||= self.items + self.beverages + self.machines
   end
 
   def unlock

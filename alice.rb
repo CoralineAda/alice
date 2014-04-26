@@ -62,6 +62,7 @@ module Alice
   require_relative 'alice/dungeon'
   require_relative 'alice/factoid'
   require_relative 'alice/item'
+  require_relative 'alice/locator'
   require_relative 'alice/machine'
   require_relative 'alice/oh'
   require_relative 'alice/leaderboard'

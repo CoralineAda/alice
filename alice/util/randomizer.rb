@@ -1236,7 +1236,7 @@ module Alice
 
       def self.room_description
         [
-          "with a locked door on the far wall",
+          "with a boarded-up window on the far wall",
           "with scratches along the floor",
           "with claw marks on the wall",
           "with bare shelves lining the walls",
