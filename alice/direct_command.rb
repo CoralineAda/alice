@@ -16,8 +16,8 @@ module Alice
 
     attr_accessor :raw_command
 
-    def self.parse(message)
-      where(verb: verb).first
+    def self.process(message)
+      where(verb: message.verb).first
     end
 
     def invoke!

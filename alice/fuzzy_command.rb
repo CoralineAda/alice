@@ -8,6 +8,7 @@ module Alice
     field :indicators, type: Array, default: []
     field :stop_words, type: Array, default: []
     field :handler_class
+    field :handler_method
     field :response_kind, default: :message
 
     index({ indicators: 1 }, { unique: true })
