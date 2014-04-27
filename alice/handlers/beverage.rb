@@ -20,11 +20,11 @@ module Alice
       private
 
       def response_method
-        self.method.to_sym || self.command.response_method.to_sym
+        parsed_command.handler_method
       end
 
       def brew
-        { content: Alice::Beverage.total_inventory, kind: :reply }
+        Alice.bot.log "BREWING"
       end
 
       def drink

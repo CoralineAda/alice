@@ -17,13 +17,11 @@ module Alice
     end
 
     def process_direct_command(channel_user, message)
-      return unless direct_command
-      direct_command.process(command_string)
+      direct_command.invoke!
     end
 
     def process_fuzzy_command(channel_user, message)
-      return unless fuzzy_command
-      return unless parsed_command
+      return unless fuzzy_command && parsed_command
       fuzzy_command.process(
         sender: channel_user.user.nick,
         command: parsed_command,
@@ -38,6 +36,7 @@ module Alice
 
     def fuzzy_command
       return if param[0] == "!"
+      return unless param =~ /alice/i
       Alice::FuzzyCommand.process(command_string)
     end
 
@@ -57,8 +56,8 @@ module Alice
 
     def response
       return @response if @response.present?
-      @response = direct_command && direct_command.process
-      @response ||= fuzzy_command && fuzzy_command.process
+      @response = direct_command && direct_command.invoke!
+      @response ||= fuzzy_command && fuzzy_command.invoke!
     end
 
     def track

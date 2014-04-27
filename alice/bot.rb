@@ -29,6 +29,10 @@ module Alice
       self.bot.channels.select{|c| c.name == channel_name}.first.part
     end
 
+    def log(message)
+      bot.loggers.warn "#{Time.now} - #{message}"
+    end
+
     def start
       self.bot.start
       self.bot
