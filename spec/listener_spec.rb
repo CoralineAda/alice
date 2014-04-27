@@ -64,14 +64,14 @@ describe Alice::Listener do
     it "processes a direct command" do
       listener.stub(:direct_command) { command }
       listener.stub(:fuzzy_command) { nil }
-      command.should_receive(:process)
+      command.should_receive(:invoke!)
       listener.response
     end
 
     it "processes a fuzzy command" do
       listener.stub(:direct_command) { nil }
       listener.stub(:fuzzy_command) { command }
-      command.should_receive(:process)
+      command.should_receive(:invoke!)
       listener.response
     end
 
