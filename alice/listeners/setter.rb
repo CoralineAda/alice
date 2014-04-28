@@ -23,7 +23,7 @@ module Alice
         return unless text.present?
         current_user = current_user_from(channel_user)
         current_user.bio.try(:delete)
-        current_user.bio = Alice::Bio.create(text: text) 
+        current_user.bio = Alice::Bio.create(text: text)
         Alice::Util::Mediator.emote_to(channel_user, positive_response(channel_user.user.nick))
       end
 
@@ -31,7 +31,7 @@ module Alice
         return unless text.size > 0
         if text.split(' ').count > 1
           current_user = current_user_from(channel_user)
-          if text =~ /^!fact I /i
+          if text =~ /^!*fact:* I /i
             current_user.factoids.create(text: text)
           else
             Alice::Factoid.create(text: text)
