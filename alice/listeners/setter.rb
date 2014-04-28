@@ -31,7 +31,7 @@ module Alice
         return unless text.size > 0
         if text.split(' ').count > 1
           current_user = current_user_from(channel_user)
-          if text =~ /^!*fact:* I /i
+          if text =~ / I /i
             current_user.factoids.create(text: text)
           else
             Alice::Factoid.create(text: text)
