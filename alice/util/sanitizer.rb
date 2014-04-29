@@ -1,7 +1,7 @@
 module Alice
 
   module Util
-    
+
     class Sanitizer
 
       def self.filter_for(user, text)
@@ -32,6 +32,7 @@ module Alice
         text.gsub!(/ a i/i, " an i")
         text.gsub!(/ a o/i, " an o")
         text.gsub!(/^am /i, 'is ')
+        text.gsub!('..', '.')
         text.gsub!('..', '.')
         text.gsub!(',,', ',')
         text.gsub!('!.', '!')
