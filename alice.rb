@@ -17,6 +17,7 @@ module Alice
   require_relative 'alice/behavior/placeable'
   require_relative 'alice/behavior/scorable'
   require_relative 'alice/behavior/searchable'
+  require_relative 'alice/behavior/speaks'
   require_relative 'alice/behavior/steals'
   require_relative 'alice/behavior/tracks_activity'
 

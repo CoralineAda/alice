@@ -15,6 +15,7 @@ class Alice::Bio
   end
 
   def formatted
+    return unless self.user.present?
     "#{self.user.proper_name} is #{self.text}"
   end
 
