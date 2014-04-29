@@ -144,7 +144,7 @@ class Alice::Actor
   end
 
   def proper_name
-    self.name.capitalize
+    self.name =~ /[A-Z]+/ && self.name || self.name.capitalize
   end
 
   def put_in_play
