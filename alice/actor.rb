@@ -5,10 +5,11 @@ class Alice::Actor
   include Alice::Behavior::Searchable
   include Alice::Behavior::Emotes
   include Alice::Behavior::Steals
+  include Alice::Behavior::Speaks
   include Alice::Behavior::Placeable
   include Alice::Behavior::HasInventory
   include Alice::Behavior::Scorable
-  
+
   field :name
   field :description
   field :last_theft, type: DateTime
@@ -156,10 +157,8 @@ class Alice::Actor
   def talk
     if message = Alice::Util::Randomizer.one_chance_in(2) && self.catchphrases.sample
       "says '#{message.text}.'"
-    elsif message = [Alice::Factoid.random.formatted(false), Alice::Oh.random.formatted(false)].compact.sample
-      "says \"#{message}.\""
     else
-      "says nothing."
+      "says \"#{speak}.\""
     end
   end
 
