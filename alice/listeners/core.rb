@@ -147,7 +147,7 @@ module Alice
       end
 
       def say_we_all(channel_user)
-        Alice::Util::Mediator.emote_to(channel_user, "solemny says, 'So say we all.'")
+        Alice::Util::Mediator.emote_to(channel_user, "solemnly intones, 'So say we all.'")
       end
 
       def scores(channel_user)
