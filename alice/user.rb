@@ -116,7 +116,7 @@ class Alice::User
   end
 
   def can_forge?
-    self.items.count < 4
+    self.items.count < 10
   end
 
   def can_play_game?
