@@ -6,8 +6,6 @@ module Alice
 
     class Zork
 
-      include Alice::Behavior::Listens
-      include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
       STOPWORDS = [

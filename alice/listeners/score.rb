@@ -6,8 +6,6 @@ module Alice
 
     class Score
 
-      include Alice::Behavior::Listens
-      include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
       match /\!score$/i,          method: :my_score, use_prefix: false

@@ -67,6 +67,10 @@ class Alice::User
     all.sample
   end
 
+  def self.track(nick)
+    find_or_create(nick).touch
+  end
+
   def self.with_nick_like(nick)
     scrubbed_nick = nick.to_s.gsub('_','').downcase
     found = where(primary_nick: nick.downcase).first || where(primary_nick: scrubbed_nick).first

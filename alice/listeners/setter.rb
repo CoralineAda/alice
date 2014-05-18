@@ -6,8 +6,6 @@ module Alice
 
     class Setter
 
-      include Alice::Behavior::TracksActivity
-      include Alice::Behavior::Listens
       include Cinch::Plugin
 
       match /^\!bio (.+)/i,     method: :set_bio, use_prefix: false

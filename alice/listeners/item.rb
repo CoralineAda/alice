@@ -7,8 +7,6 @@ module Alice
     class Item
 
       include Cinch::Plugin
-      include Alice::Behavior::Listens
-      include Alice::Behavior::TracksActivity
 
       match /^\!forge (.+)/i,    method: :forge, use_prefix: false
       match /^\!steal (.+)/i,    method: :steal, use_prefix: false
