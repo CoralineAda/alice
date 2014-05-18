@@ -6,8 +6,6 @@ module Alice
 
     class Machine
 
-      include Alice::Behavior::Listens
-      include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
       match /^\!catalog$/,      method: :catalog_machines, use_prefix: false

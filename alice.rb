@@ -9,15 +9,18 @@ Dotenv.load
 Bundler.require
 Mongoid.load!("config/mongoid.yml")
 
-  require_all 'alice'
+require_all 'alice'
+
+module Alice
 
   def self.start
-    @@bot = Alice::Bot.new
-    @@bot.start
+    bot.start
   end
 
   def self.bot
     @@bot ||= Alice::Bot.new
+    @@bot.loggers = nil
+    @@bot
   end
 
 end

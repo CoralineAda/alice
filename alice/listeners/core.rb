@@ -6,8 +6,6 @@ module Alice
 
     class Core
 
-      include Alice::Behavior::Listens
-      include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
       match /^\!cast (.+)/,       method: :cast, use_prefix: false

@@ -8,11 +8,11 @@ module Alice
 
     match /(.+)/, method: :parse_command, use_prefix: false
 
-    attr_accessor :message, :param
+    attr_accessor :message, :match
 
     def parse_command(message_obj, match)
       self.message = message_obj
-      self.param = match
+      self.match = match
       track && respond
     end
 
@@ -30,13 +30,13 @@ module Alice
     end
 
     def direct_command
-      return unless param[0] == "!"
+      return unless match[0] == "!"
       Alice::DirectCommand.process(command_string)
     end
 
     def fuzzy_command
-      return if param[0] == "!"
-      return unless param =~ /alice/i
+      return if match[0] == "!"
+      # return unless match =~ /match/i
       Alice::FuzzyCommand.process(command_string)
     end
 
@@ -51,17 +51,18 @@ module Alice
     end
 
     def command_string
-      @command_string ||= Alice::CommandString.new(content: self.param)
+      @command_string ||= Alice::CommandString.new(content: self.match)
     end
 
     def response
       return @response if @response.present?
       @response = direct_command && direct_command.invoke!
       @response ||= fuzzy_command && fuzzy_command.invoke!
+      @response
     end
 
     def track
-      Alice::User.find_or_create(message.user.nick).touch
+      Alice::User.track(message.user.nick)
     end
 
   end

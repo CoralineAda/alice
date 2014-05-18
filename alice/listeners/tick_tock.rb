@@ -6,8 +6,6 @@ module Alice
 
     class TickTock
 
-      include Alice::Behavior::Listens
-      include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
       match /^\!test event/i, method: :trigger_event, use_prefix: false

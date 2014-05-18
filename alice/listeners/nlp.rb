@@ -6,7 +6,6 @@ module Alice
 
     class Nlp
 
-      include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
       match /(.+)/, method: :parse_command, use_prefix: false
@@ -32,17 +31,13 @@ module Alice
         response && response.kind == :action && Alice::Util::Mediator.emote_to(channel_user, response.content)
       end
 
-      def command
-        @command ||= Alice::Command.parse(message)
-      end
-
       def command_string
         @command_string ||= Alice::CommandString.new(message)
       end
 
       def direct_command
         return unless message[0] == "!"
-        Alice::DirectCommand.process(command_string)
+        Alice::Command.process(command_string)
       end
 
       def response

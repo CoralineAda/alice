@@ -6,8 +6,6 @@ module Alice
 
     class NumberWang
 
-      include Alice::Behavior::Listens
-      include Alice::Behavior::TracksActivity
       include Cinch::Plugin
 
       match /^([0-9]+[\.\,]?[0-9]*)$/, method: :check_number, use_prefix: false

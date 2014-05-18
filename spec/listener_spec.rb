@@ -10,6 +10,7 @@ describe Alice::Listener do
 
   before do
     Alice::Listener.any_instance.stub(:track) { true }
+    Cinch::Logger.any_instance.stub(:will_log?) { false }
   end
 
   context "#parse_command" do
@@ -24,10 +25,10 @@ describe Alice::Listener do
       expect(listener.message).to eq message
     end
 
-    it "sets its params" do
+    it "sets its match" do
       listener.stub(:respond)
       listener.parse_command(message, message.raw)
-      expect(listener.param).to eq "!help crow to fly"
+      expect(listener.match).to eq "!help crow to fly"
     end
 
   end
@@ -38,13 +39,13 @@ describe Alice::Listener do
     let(:listener) { Alice::Listener.new(bot) }
 
     it "recognizes a direct command" do
-      listener.param = "!help crow to fly"
+      listener.match = "!help crow to fly"
       Alice::DirectCommand.should_receive(:process)
       listener.direct_command
     end
 
     it "recognizes a fuzzy command" do
-      listener.param = "Alice, please help the crow to fly"
+      listener.match = "Alice, please help the crow to fly"
       Alice::FuzzyCommand.should_receive(:process)
       listener.fuzzy_command
     end
@@ -58,7 +59,7 @@ describe Alice::Listener do
     let(:command) { Struct.new(:process)}
 
     before do
-      listener.param = ""
+      listener.match = ""
     end
 
     it "processes a direct command" do
@@ -82,8 +83,8 @@ describe Alice::Listener do
     let(:bot) { Alice::Bot.new.bot }
     let(:listener) { Alice::Listener.new(bot) }
 
-    it "creates a command string from its param" do
-      listener.param = "!help crow to fly"
+    it "creates a command string from its match" do
+      listener.match = "!help crow to fly"
       expect(listener.command_string.content).to eq "!help crow to fly"
     end
 
