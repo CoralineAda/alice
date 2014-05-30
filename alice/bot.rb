@@ -13,7 +13,7 @@ module Alice
           config.nick = "AliceBot_"
           config.user = "AliceBot"
           config.plugins.plugins = [
-            Alice::Listener
+            Processor
           ]
           config.password = ENV['USER_PASS']
           config.messages_per_second = 1
