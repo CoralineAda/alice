@@ -19,7 +19,7 @@ module Alice
 
   def self.bot
     @@bot ||= Alice::Bot.new
-    @@bot.loggers = nil
+    # @@bot.bot.loggers = nil
     @@bot
   end
 
