@@ -121,7 +121,7 @@ class Alice::User
 
   def play!(points)
     self.score_point(points)
-    self.update_attributes(:last_game, DateTime.now)
+    self.update_attribute(:last_game, DateTime.now)
   end
 
   def can_play_game?

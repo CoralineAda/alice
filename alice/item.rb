@@ -139,7 +139,7 @@ class Alice::Item
       self.user.play!(3)
       "#{owner} #{Alice::Util::Randomizer.play} a game of #{name}."
     else
-      Alice::Util::Randomizer.negative_request_response(owner)
+      "Play time is over."
     end
   end
 
