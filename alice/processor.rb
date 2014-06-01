@@ -20,6 +20,10 @@ class Processor
     Alice::Util::Mediator.reply_to(nick).with(response).do
   end
 
+  def response
+    Response.from(self)
+  end
+
   def track
     Alice::User.track(nick)
   end
