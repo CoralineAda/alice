@@ -135,8 +135,12 @@ class Alice::Item
 
   def play
     return "It's not safe to play with #{name_with_article}!" unless self.is_game?
-    self.user.score_point(3) if self.user.can_play_game?
-    return "#{owner} #{Alice::Util::Randomizer.play} a game of #{name}."
+    if self.user.can_play_game?
+      self.user.play!(3)
+      "#{owner} #{Alice::Util::Randomizer.play} a game of #{name}."
+    else
+      Alice::Util::Randomizer.negative_request_response(owner)
+    end
   end
 
   def randomize_name

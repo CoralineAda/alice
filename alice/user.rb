@@ -119,6 +119,11 @@ class Alice::User
     self.items.count < 10
   end
 
+  def play!(points)
+    self.score_point(points)
+    self.update_attributes(:last_game, DateTime.now)
+  end
+
   def can_play_game?
     self.last_game ||= DateTime.now - 1.day
     self.last_game <= DateTime.now - 13.minutes
@@ -190,5 +195,4 @@ class Alice::User
     return unless self.twitter_handle
     "https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
   end
-
 end
