@@ -22,6 +22,10 @@ describe Processor do
       expect(processor.nick).to eq("fred")
     end
 
+    it "sets its message" do
+      expect(processor.message).to eq("hi there")
+    end
+
   end
 
 end
