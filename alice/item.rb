@@ -108,7 +108,7 @@ class Alice::Item
 
   def creator
     return unless self.creator_id
-    Alice::User.find(self.creator_id)
+    User.find(self.creator_id)
   end
 
   def describe

@@ -39,7 +39,7 @@ module Alice
       end
 
       def self.user_from(channel_user)
-        Alice::User.with_nick_like(channel_user.user.nick)
+        User.with_nick_like(channel_user.user.nick)
       end
 
       def self.reply_to(channel_user, message)

@@ -1,6 +1,6 @@
 class Responder
 
-  def self.to(nick, message)
+  def self.respond_with(message)
 
   end
 

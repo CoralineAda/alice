@@ -16,7 +16,7 @@ class Alice::Factoid
   before_create :extract_keywords
 
   def self.for(nick)
-    Alice::User.with_nick_like(nick).try(:get_factoid)
+    User.with_nick_like(nick).try(:get_factoid)
   end
 
   def self.random

@@ -87,7 +87,7 @@ module Alice
         if here.exits.include?(direction)
           if here.exit_is_locked?(direction)
             message = "The door to the #{direction} is locked tight! "
-            if user_with_key = (Alice::User.with_key & Alice::User.active_and_online).sample
+            if user_with_key = (User.with_key & User.active_and_online).sample
               here.unlock
               message << "Luckily #{user_with_key.proper_name} was able to unlock it with #{user_with_key.items.keys.first.name_with_article}. "
               message << Alice::Place.go(direction)

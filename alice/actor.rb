@@ -79,7 +79,7 @@ class Alice::Actor
   def brew
     beverage = Alice::Beverage.brew_random
     self.beverages << beverage
-    "#{Alice::User.bot.observe_brewing(beverage.name, self.proper_name)}"
+    "#{User.bot.observe_brewing(beverage.name, self.proper_name)}"
   end
 
   def check_action
@@ -131,7 +131,7 @@ class Alice::Actor
   end
 
   def pick_pocket(attempts=0)
-    if thing = Alice::User.active_and_online.map{|user| user.items.sample}.compact.sample
+    if thing = User.active_and_online.map{|user| user.items.sample}.compact.sample
       steal(thing.name)
     else
       "#{proper_name} looks around slyly."
@@ -163,7 +163,7 @@ class Alice::Actor
   end
 
   def target
-    (Alice::User.active | Alice::User.online).sample
+    (User.active | User.online).sample
   end
 
 end

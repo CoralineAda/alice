@@ -2,30 +2,25 @@ require 'cinch'
 
 class Processor
 
-  include Cinch::Plugin
+  attr_reader :message, :user
 
-  attr_accessor :nick, :message
+  def initialize(message)
+    @message = message
+  end
 
-  match /(.+)/, method: :catch, use_prefix: false
-
-  def catch(emitted, message)
-    self.nick = emitted.user.nick
-    self.message = message
-    track && respond
+  def process
+    track_sender
+    Responder.respond_with(response)
   end
 
   private
 
-  def respond
-    Alice::Util::Mediator.reply_to(nick).with(response).do
-  end
-
   def response
-    Response.from(self)
+    Response.from(self.message)
   end
 
-  def track
-    Alice::User.track(nick)
+  def track_sender(nick)
+    self.message.sender.touch
   end
 
 end

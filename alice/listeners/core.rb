@@ -73,7 +73,7 @@ module Alice
         elsif Alice::Util::Randomizer.one_chance_in(5)
           fruitcake = Alice::Item.fruitcake
           if current_user.items.include?(fruitcake)
-            recipient = (Alice::User.active_and_online - [current_user]).sample
+            recipient = (User.active_and_online - [current_user]).sample
             recipient.items << Alice::Item.fruitcake
             Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} loses their precious fruitcake to #{recipient.proper_name}!")
             current_user.score_point
@@ -96,13 +96,13 @@ module Alice
       end
 
       def cookie(channel_user, who)
-        return unless Alice::User.find_or_create(who)
+        return unless User.find_or_create(who)
         Alice::Util::Mediator.emote_to(channel_user, "tempts #{who.proper_name} with a warm cookie.")
       end
 
       def frown(channel_user)
         return unless Alice::Util::Randomizer::one_chance_in(5)
-        if observer == Alice::User.bot
+        if observer == User.bot
           Alice::Util::Mediator.emote_to(channel_user, "#{observer.frown_with(channel_user.user.nick)}")
         else
           Alice::Util::Mediator.reply_to(channel_user, "#{observer.proper_name} #{observer.frown_with(channel_user.user.nick)}")
@@ -118,7 +118,7 @@ module Alice
 
       def laugh(channel_user)
         return unless Alice::Util::Randomizer.one_chance_in(10)
-        if observer == Alice::User.bot
+        if observer == User.bot
           Alice::Util::Mediator.emote_to(channel_user, "#{observer.laugh_with(channel_user.user.nick)}")
         else
           Alice::Util::Mediator.reply_to(channel_user, "#{observer.proper_name} #{actor.laugh_with(channel_user.user.nick)}")
@@ -127,17 +127,17 @@ module Alice
 
       def maybe_say_hi(channel_user)
         return if Alice::Util::Mediator.is_bot?(channel_user.user.nick)
-        if Alice::User.with_nick_like(channel_user.user.nick)
+        if User.with_nick_like(channel_user.user.nick)
           return unless Alice::Util::Randomizer.one_chance_in(10)
           Alice::Util::Mediator.emote_to(channel_user, Alice::Util::Randomizer.greeting(channel_user.user.nick))
         else #new user
-          new_user = Alice::User.create(primary_nick: channel_user.user.nick)
+          new_user = User.create(primary_nick: channel_user.user.nick)
           Alice::Util::Mediator.emote_to(channel_user, "greets the new hacker, #{channel_user.user.nick}!")
         end
       end
 
       def pants(channel_user)
-        if observer == Alice::User.bot
+        if observer == User.bot
           Alice::Util::Mediator.emote_to(channel_user, "#{observer.laugh_with(channel_user.user.nick)}")
         else
           Alice::Util::Mediator.reply_to(channel_user, "#{observer.proper_name} #{observer.laugh_with(channel_user.user.nick)}")
@@ -158,7 +158,7 @@ module Alice
       end
 
       def update_nick(channel_user)
-        Alice::User.update_nick(channel_user.user.nick, channel_user.user.last_nick)
+        User.update_nick(channel_user.user.nick, channel_user.user.last_nick)
       end
 
     end

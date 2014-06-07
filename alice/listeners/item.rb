@@ -80,7 +80,7 @@ module Alice
       end
 
       def forge(channel_user, what)
-        if Alice::Item.already_exists?(what) || Alice::User.with_nick_like(what)
+        if Alice::Item.already_exists?(what) || User.with_nick_like(what)
           Alice::Util::Mediator.reply_to(channel_user, "I'm afraid that a #{what} is a singleton.")
           return
         end
@@ -127,7 +127,7 @@ module Alice
         return if Alice::Place::DIRECTIONS.include?(noun)
         current_user = current_user_from(channel_user)
         place = Alice::Place.current
-        subject = Alice::User.from(noun)
+        subject = User.from(noun)
         subject ||= current_user.items.where(name: /#{noun}$/i).first
         subject ||= current_user.beverages.where(name: /#{noun}$/i).first
         subject ||= place.items.where(name: /#{noun}$/i).first
@@ -172,7 +172,7 @@ module Alice
       end
 
       def steal(channel_user, what)
-        thief = Alice::User.find_or_create(channel_user.user.nick)
+        thief = User.find_or_create(channel_user.user.nick)
         message = thief.steal(what)
         Alice::Util::Mediator.emote_to(channel_user, message)
       end

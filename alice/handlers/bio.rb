@@ -9,7 +9,7 @@ module Alice
       end
 
       def self.process(sender, command)
-        if subject = Alice::User.from(command)
+        if subject = User.from(command)
           if bio = subject.formatted_bio
             Alice::Handlers::Response.new(content: bio, kind: :reply)
           else
