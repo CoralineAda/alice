@@ -10,13 +10,13 @@ class Alice::Dungeon
   end
 
   def self.win!
-    Alice::User.active_and_online.each{|actor| actor.score_point(5) }
+    User.active_and_online.each{|actor| actor.score_point(5) }
     grue = Alice::Actor.grue
     grue.update_attribute(:points, [grue.points - 5, 0].max)
   end
 
   def self.lose!
-    Alice::User.active_and_online.each{|actor| actor.update_attribute(:points, [actor.points - 5, 0].max) }
+    User.active_and_online.each{|actor| actor.update_attribute(:points, [actor.points - 5, 0].max) }
     grue = Alice::Actor.grue
     grue.update_attribute(:points, grue.points + 5)
   end
@@ -34,7 +34,7 @@ class Alice::Dungeon
   end
 
   def self.assign_fruitcake
-    victim = Alice::User.active_and_online.sample
+    victim = User.active_and_online.sample
     victim && victim.items << Alice::Item.fruitcake
   end
 

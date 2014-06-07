@@ -27,14 +27,14 @@
 #           Alice::Util::Mediator.reply_to(channel_user, "Your attempt at brewing failed miserably.")
 #           return
 #         end
-#         if Alice::Beverage.already_exists?(what) || Alice::User.with_nick_like(what)
+#         if Alice::Beverage.already_exists?(what) || User.with_nick_like(what)
 #           Alice::Util::Mediator.reply_to(channel_user, "I'm afraid that there can only be one #{what}.")
 #           return
 #         else
 #           user = current_user_from(channel_user)
 #           if user.can_brew?
 #             beverage = Alice::Beverage.create(name: what.downcase, user: user)
-#             if observer == Alice::User.bot
+#             if observer == User.bot
 #               Alice::Util::Mediator.emote_to(channel_user, "#{observer.observe_brewing(beverage.name, channel_user.user.nick)}")
 #             else
 #               Alice::Util::Mediator.reply_to(channel_user, "#{observer.proper_name} #{actor.observe_brewing(beverage.name, channel_user.user.nick)}")

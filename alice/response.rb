@@ -4,7 +4,7 @@ class Response
 
   attr_accessor :nick, :message
 
-  def self.to(nick, message)
+  def self.from(nick, message)
     new(nick: nick, message:message).command.response
   end
 

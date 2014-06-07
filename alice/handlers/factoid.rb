@@ -9,7 +9,7 @@ module Alice
       end
 
       def self.process(sender, command)
-        if subject = Alice::User.from(command)
+        if subject = User.from(command)
           if factoid = subject.factoids.sample
             Alice::Handlers::Response.new(content: factoid.formatted, kind: :reply)
           end

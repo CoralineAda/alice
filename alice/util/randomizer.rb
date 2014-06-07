@@ -163,11 +163,11 @@ module Alice
           "A portal to the #{type_of_place} flickers into existence!",
           "#{caster} turns into #{actor_description(specific_person)}.",
           "#{caster} takes on the appearance of #{specific_person}.",
-          "#{Alice::User.active_and_online.sample.proper_name} starts speaking in the voice of #{specific_person}.",
-          "#{Alice::User.active_and_online.sample.proper_name}'s #{body_thing} turns #{color}!",
+          "#{User.active_and_online.sample.proper_name} starts speaking in the voice of #{specific_person}.",
+          "#{User.active_and_online.sample.proper_name}'s #{body_thing} turns #{color}!",
           "#{caster} summons a fearsome #{thing}!",
           "#{caster} tries to summon a mighty #{thing}, but manages only #{empty_pockets}.",
-          "#{effect_message('spell', Alice::User.active_and_online.sample.proper_name)}",
+          "#{effect_message('spell', User.active_and_online.sample.proper_name)}",
           "a #{room_type} appears somewhere deep in the dungeon."
         ].sample
       end
@@ -472,10 +472,10 @@ module Alice
           "cooled in a bucket of #{Alice::Util::Randomizer.beverage}",
           "under bright #{color} halogen lights",
           "plucked from the bowels of the #{Alice::Util::Randomizer.type_of_place}",
-          "safe from the prying eyes of #{Alice::User.random.proper_name}",
-          "not unlike the one that #{Alice::User.random.proper_name} always carries",
-          "under the watchful eye of #{Alice::User.random.proper_name}",
-          "according to methods devised by #{Alice::User.random.proper_name}"
+          "safe from the prying eyes of #{User.random.proper_name}",
+          "not unlike the one that #{User.random.proper_name} always carries",
+          "under the watchful eye of #{User.random.proper_name}",
+          "according to methods devised by #{User.random.proper_name}"
         ].sample
       end
 
@@ -1242,9 +1242,9 @@ module Alice
           "with bare shelves lining the walls",
           "with walls covered in paintings depicting #{thing}",
           "covered with posters of #{thing}",
-          "with a portrait of #{Alice::User.random.proper_name} on the wall",
-          "dominated by a large statue of #{Alice::User.random.proper_name}",
-          "with graffiti spelling out #{Alice::User.random.proper_name}'s name on the wall",
+          "with a portrait of #{User.random.proper_name} on the wall",
+          "dominated by a large statue of #{User.random.proper_name}",
+          "with graffiti spelling out #{User.random.proper_name}'s name on the wall",
           "with what appear to be footprints on the ceiling",
           "whose floor is covered in an inch of dust",
           "with a faint smell of gunpowder",

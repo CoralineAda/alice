@@ -15,7 +15,7 @@ module Alice
       match /^(.+)\+\+/,         method: :award, use_prefix: false
 
       def award(channel_user, player)
-        return unless actor = Alice::User.find_or_create(player) || Alice::Actor.from(player).first
+        return unless actor = User.find_or_create(player) || Alice::Actor.from(player).first
         current_user = current_user_from(channel_user)
         if actor == current_user
           Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} is gonna make themselves go blind that way.")
@@ -28,12 +28,12 @@ module Alice
       end
 
       def my_score(channel_user)
-        current_user = Alice::User.with_nick_like(channel_user.user.nick)
+        current_user = User.with_nick_like(channel_user.user.nick)
         Alice::Util::Mediator.reply_to(channel_user, user.check_score)
       end
 
       def pants(channel_user)
-        if observer == Alice::User.bot
+        if observer == User.bot
           Alice::Util::Mediator.emote_to(channel_user, "#{observer.laugh_with(channel_user.user.nick)}")
         else
           Alice::Util::Mediator.reply_to(channel_user, "#{observer.proper_name} #{observer.laugh_with(channel_user.user.nick)}")
@@ -41,7 +41,7 @@ module Alice
       end
 
       def player_score(channel_user, player)
-        if actor = Alice::User.from(player).first || Alice::Actor.from(player).first
+        if actor = User.from(player).first || Alice::Actor.from(player).first
           Alice::Util::Mediator.reply_to(channel_user, actor.check_score)
         else
           Alice::Util::Mediator.reply_to(channel_user, "#{player} isn't even playing the game.")

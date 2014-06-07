@@ -9,7 +9,7 @@ module Alice
       end
 
       def self.process(sender, command)
-        if subject = Alice::User.from(command)
+        if subject = User.from(command)
           Alice::Handlers::Response.new(content: twitter_info_for(subject), kind: :reply)
         end
       end

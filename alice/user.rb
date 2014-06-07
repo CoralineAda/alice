@@ -1,4 +1,4 @@
-class Alice::User
+class User
 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -30,12 +30,16 @@ class Alice::User
   validates_presence_of :primary_nick
   validates_uniqueness_of :primary_nick
 
-  def self.by_nick(nick)
-    where(primary_nick: nick).last
+  def self.bot_name
+    bot.primary_nick
+  end
+
+  def self.default_user
+    online.last
   end
 
   def self.online
-    list = Alice::Util::Mediator.user_list.map(&:nick).map(&:downcase)
+    list = Adapter.user_list.map(&:downcase)
     any_in(primary_nick: list) | any_in(alt_nicks: list)
   end
 
@@ -52,26 +56,18 @@ class Alice::User
   end
 
   def self.fighting
-    (Alice::User.with_weapon & Alice::User.active_and_online)
+    (User.with_weapon & User.active_and_online)
   end
 
   def self.find_or_create(nick)
-    with_nick_like(nick) || Alice::Util::Mediator.exists?(nick) && create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
-  end
-
-  def self.like(arg)
-    with_nick_like(arg)
+    by_nick(nick) || Alice::Util::Mediator.exists?(nick) && create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
   end
 
   def self.random
     all.sample
   end
 
-  def self.track(nick)
-    find_or_create(nick).touch
-  end
-
-  def self.with_nick_like(nick)
+  def self.by_nick(nick)
     scrubbed_nick = nick.to_s.gsub('_','').downcase
     found = where(primary_nick: nick.downcase).first || where(primary_nick: scrubbed_nick).first
     found ||= where(alt_nicks: nick.downcase).first || where(alt_nicks: scrubbed_nick).first
@@ -86,29 +82,8 @@ class Alice::User
     Alice::Item.weapons.excludes(user_id: nil).map(&:user)
   end
 
-  def self.update_nick(old_nick, new_nick)
-    user = with_nick_like(old_nick) || with_nick_like(new_nick)
-    user ||= new(primary_nick: old_nick)
-    user.alt_nicks << new_nick.downcase
-    user.alt_nicks << old_nick.downcase
-    user.alt_nicks = user.alt_nicks.uniq
-    user.save
-  end
-
   def accepts_gifts?
-    ! self.is_bot?
-  end
-
-  def apply_filters(text)
-    if remove_filter?
-      self.update_attribute(:filters, [])
-      return text
-    else
-      self.filters.inject([]) do |processed, filter|
-        processed[0] = eval("Alice::Filters::#{filter.to_s.classify}").new.process(processed.first || text)
-        processed
-      end.first || text
-    end
+    ! self.is_bot? && is_online?
   end
 
   def creations
@@ -126,6 +101,10 @@ class Alice::User
   def can_play_game?
     self.last_game ||= DateTime.now - 1.day
     self.last_game <= DateTime.now - 13.minutes
+  end
+
+  def current_nick
+    (Mediator.user_list.map(&:nick).map(&:downcase) & self.nicks).first
   end
 
   def dazed?
@@ -164,11 +143,15 @@ class Alice::User
   end
 
   def has_nick?(nick)
-    [self.primary_nick, self.alt_nicks].flatten.include?(nick.downcase)
+    nicks.include?(nick.downcase)
   end
 
-  def is_present?
-    true
+  def is_online?
+    (Mediator.user_list.map(&:nick).map(&:downcase) & self.nicks).any?
+  end
+
+  def is_op?
+    (Mediator.channel.ops.map(&:nick) & self.nicks).any?
   end
 
   def formatted_name
@@ -182,8 +165,8 @@ class Alice::User
     "#{self.proper_name} is #{formatted}".gsub("  ", " ")
   end
 
-  def online?
-    Alice::Util::Mediator.user_list.select{|m| Alice::User.with_nick_like(channel_user) == self}.present?
+  def nicks
+    (self.alt_nicks | [self.primary_nick]).map(&:downcase)
   end
 
   def proper_name
@@ -193,6 +176,11 @@ class Alice::User
   def twitter_url
     return unless self.twitter_handle
     "https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
+  end
+
+  def update_nick(new_nick)
+    return if alt_nicks.include?(new_nick.downcase)
+    update_attribute(alt_nicks: self.alt_nicks << new_nick.downcase)
   end
 
 end

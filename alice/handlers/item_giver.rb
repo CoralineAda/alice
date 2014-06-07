@@ -9,16 +9,16 @@ module Alice
       end
 
       def self.process(sender, command)
-        return unless giver = Alice::User.with_nick_like(sender)
+        return unless giver = User.with_nick_like(sender)
         return unless grams = Alice::Parser::NgramFactory.filtered_grams_from(command)
         grams = grams.flatten.map{|g| g.gsub(/[^\w]/, '')}.map(&:downcase).uniq
-        candidates = (Alice::Util::Mediator.user_list.map(&:nick).map(&:downcase) & grams.flatten) - [Alice::User.bot.primary_nick.downcase]
-        return unless recipient = Alice::User.like(candidates.first)
+        candidates = (Alice::Util::Mediator.user_list.map(&:nick).map(&:downcase) & grams.flatten) - [User.bot.primary_nick.downcase]
+        return unless recipient = User.like(candidates.first)
         process_gift(giver, recipient, grams) || process_unknown
       end
 
       def self.process_gift(giver, recipient, grams)
-        
+
         items = grams.map{|g| giver.items.like(g)}.compact
         beverages = grams.map{|g| giver.beverages.like(g)}.compact
         stuff = [items, beverages].flatten.compact.uniq
@@ -61,7 +61,7 @@ module Alice
       def self.process_unknown
         Alice::Handlers::Response.new(content: "I'm pretty sure that you don't have that.", kind: :reply)
       end
-    
+
     end
 
   end

@@ -9,7 +9,7 @@ module Alice
       end
 
       def self.process(sender, command)
-        Alice::Handlers::Response.new(content: Alice::User.find_or_create(sender).inventory, kind: :reply)
+        Alice::Handlers::Response.new(content: User.find_or_create(sender).inventory, kind: :reply)
       end
 
     end
