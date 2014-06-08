@@ -8,6 +8,8 @@ class User
   include Alice::Behavior::Emotes
   include Alice::Behavior::Steals
 
+  store_in collection: "alice_users"
+
   field :primary_nick
   field :alt_nicks,         type: Array, default: []
   field :twitter_handle
@@ -104,7 +106,7 @@ class User
   end
 
   def current_nick
-    (Mediator.user_list.map(&:nick).map(&:downcase) & self.nicks).first
+    (Adapter.user_list.map(&:downcase) & self.nicks).first
   end
 
   def dazed?
@@ -124,13 +126,8 @@ class User
   end
 
   def describe
-    message = ""
-    if self.bio.present?
-      message << "#{self.bio.formatted}. "
-    else
-      message << "It's #{proper_name}! "
-    end
-    message << "Find them on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
+    message = self.bio.formatted
+    message << "They're on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
     message << "#{self.inventory} "
     message << "#{check_score} "
     message << "#{proper_name} is currently feeling a little #{self.filters.map(&:to_s).to_sentence}. " if self.filters.present?
@@ -159,10 +156,7 @@ class User
   end
 
   def formatted_bio
-    return unless self.bio.present?
-    formatted = bio.text.gsub(/^is/, '')
-    formatted = formatted.gsub(/^([a-zA-Z0-9\_]+) is/, '')
-    "#{self.proper_name} is #{formatted}".gsub("  ", " ")
+    bio && bio.formatted || nil
   end
 
   def nicks

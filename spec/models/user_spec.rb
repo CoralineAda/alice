@@ -40,7 +40,32 @@ describe User do
 
   end
 
-  describe "#can_play_games?" do
+  describe "#can_play_game?" do
+
+    before do
+      jack.stub(:last_game) { DateTime.now - 12.minute }
+    end
+
+    it "returns false if game was last played < 13 minutes ago" do
+      expect(jack.can_play_game?).to be_false
+    end
+
+    it "returns true if a game was never played" do
+      expect(jill.can_play_game?).to be_true
+    end
+
+  end
+
+  describe "#current_nick" do
+
+    before do
+      Adapter.stub(:user_list) { ["jack_", "jill", "frederick"] }
+      jack.stub(:nicks) { ["jack", "jack_"] }
+    end
+
+    it "matches nicks to user list nicks" do
+      expect(jack.current_nick).to eq("jack_")
+    end
 
   end
 
