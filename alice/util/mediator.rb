@@ -13,11 +13,11 @@ module Alice
       end
 
       def self.op?(channel_user)
-        channel_user.channel.ops.map(&:nick).include?(channel_user.user.nick)
+        op_nicks.include?(channel_user.user.nick)
       end
 
       def self.exists?(nick)
-        Alice.bot.bot.user_list.map(&:nick).select{|n| n =~ /^#{nick}$/i}.compact.present?
+        user_nicks.any?{|n| n =~ /^#{nick}$/i}
       end
 
       def self.user_list
@@ -28,8 +28,20 @@ module Alice
         Alice.bot.bot.nick == nick
       end
 
+      def self.default_channel
+        Alice.bot.bot.channels.last
+      end
+
       def self.default_user
-        Alice.bot.bot.channels.last.users.keys.last
+        default_channel.users.keys.last
+      end
+
+      def self.user_nicks
+        channel.user_list.map(&:nick).map(&:downcase)
+      end
+
+      def self.op_nicks
+        channel.ops.map(&:nick).map(&:downcase)
       end
 
       def self.send_raw(message)
