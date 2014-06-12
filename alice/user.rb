@@ -121,10 +121,6 @@ class User
     self.filters.include?(:drunk)
   end
 
-  def description
-    describe
-  end
-
   def describe
     message = self.bio.formatted
     message << "They're on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
@@ -134,29 +130,24 @@ class User
     message
   end
 
-  def remove_filter?
-    self.filter_applied ||= DateTime.now - 1.day
-    self.filter_applied <= DateTime.now - 13.minutes
-  end
-
   def has_nick?(nick)
     nicks.include?(nick.downcase)
   end
 
   def is_online?
-    (Mediator.user_list.map(&:nick).map(&:downcase) & self.nicks).any?
+    (Mediator.user_nicks & self.nicks).any?
   end
 
   def is_op?
-    (Mediator.channel.ops.map(&:nick) & self.nicks).any?
-  end
-
-  def formatted_name
-    self.proper_name
+    (Mediator.op_nicks & self.nicks).any?
   end
 
   def formatted_bio
     bio && bio.formatted || nil
+  end
+
+  def filter_applied_date
+    self.filter_applied || DateTime.now - 1.day
   end
 
   def nicks
@@ -167,14 +158,21 @@ class User
     self.primary_nick.capitalize
   end
 
+  def remove_filter?
+    filter_applied_date <= DateTime.now - 13.minutes
+  end
+
   def twitter_url
     return unless self.twitter_handle
     "https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
   end
 
   def update_nick(new_nick)
-    return if alt_nicks.include?(new_nick.downcase)
-    update_attribute(alt_nicks: self.alt_nicks << new_nick.downcase)
+    return false if has_nick?(new_nick)
+    update_attribute(:alt_nicks, [self.alt_nicks, new_nick.downcase].flatten.uniq)
   end
+
+  alias_method :description, :describe
+  alias_method :formatted_name, :proper_name
 
 end

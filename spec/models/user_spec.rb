@@ -69,4 +69,69 @@ describe User do
 
   end
 
+  describe "#filter_applied_date" do
+
+    it "returns #filter_applied if it exists" do
+      now = DateTime.now
+      jack.filter_applied = now
+      jack.filter_applied_date.should == now
+    end
+
+    it "returns yesterday if filter_applied is nil" do
+      now = DateTime.now
+      DateTime.stub(:now) { now }
+      jack.filter_applied = nil
+      jack.filter_applied_date.should eq(now - 1.day)
+    end
+
+  end
+
+  describe "#has_nick?" do
+
+    before do
+      jill.alt_nicks = ["jilla", "jilly"]
+    end
+
+    it "finds based on primary nick" do
+      expect(jill.has_nick?("jill")).to be_true
+    end
+
+    it "finds based on alt nicks" do
+      expect(jill.has_nick?("jilla")).to be_true
+    end
+
+  end
+
+  describe "#remove_filter?" do
+
+    it "returns true if the last filter was applied more than 13 minutes ago" do
+      jack.filter_applied = DateTime.now - 15.minutes
+      expect(jack.remove_filter?).to be_true
+    end
+
+    it "returns false if the last filter was applied within the last 13 minutes" do
+      jack.filter_applied = DateTime.now - 11.minutes
+      expect(jack.remove_filter?).to be_false
+    end
+
+  end
+
+  describe "#update_nick" do
+
+    before do
+      jill.alt_nicks = ["jilla", "jilly"]
+    end
+
+    it "does not duplicate a nick" do
+      jill.should_not_receive(:update_attribute)
+      jill.update_nick("jilly")
+    end
+
+    it "adds a new nick" do
+      jill.should_receive(:update_attribute).with(:alt_nicks, ["jilla", "jilly", "nancy"])
+      jill.update_nick("Nancy")
+    end
+
+  end
+
 end
