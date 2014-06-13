@@ -1,4 +1,4 @@
-class Alice::Actor
+class Actor
 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -38,19 +38,15 @@ class Alice::Actor
   end
 
   def self.observer
-    Alice::Actor.is_present.sample
+    present.random
   end
 
-  def self.is_present
+  def self.present
     where(place_id: Alice::Place.current.id)
   end
 
   def self.in_play
     where(in_play: true)
-  end
-
-  def self.malleable
-    where(permanent: false)
   end
 
   def self.reset_all
@@ -96,7 +92,7 @@ class Alice::Actor
   end
 
   def do_something
-    self.public_send(Alice::Actor.actions.sample)
+    self.public_send(Actor.actions.sample)
   end
 
   def ensure_description

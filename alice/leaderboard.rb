@@ -7,7 +7,7 @@ class Alice::Leaderboard
   end
 
   def self.players
-    (User.where(:points.gt => 0) + Alice::Actor.where(:points.gt => 0)).sort_by(&:points).reverse
+    (User.where(:points.gt => 0) + Actor.where(:points.gt => 0)).sort_by(&:points).reverse
   end
 
 end

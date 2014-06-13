@@ -11,18 +11,18 @@ class Alice::Dungeon
 
   def self.win!
     User.active_and_online.each{|actor| actor.score_point(5) }
-    grue = Alice::Actor.grue
+    grue = Actor.grue
     grue.update_attribute(:points, [grue.points - 5, 0].max)
   end
 
   def self.lose!
     User.active_and_online.each{|actor| actor.update_attribute(:points, [actor.points - 5, 0].max) }
-    grue = Alice::Actor.grue
+    grue = Actor.grue
     grue.update_attribute(:points, grue.points + 5)
   end
 
   def self.cleanup
-    Alice::Actor.reset_all
+    Actor.reset_all
     Alice::Item.reset_cursed
     Alice::Beverage.sweep
     Alice::Item.sweep
@@ -39,7 +39,7 @@ class Alice::Dungeon
   end
 
   def self.ensure_grue
-    Alice::Actor.grue || Alice::Actor.create(name: 'Grue', is_grue: true)
+    Actor.grue || Actor.create(name: 'Grue', is_grue: true)
   end
 
   def self.however_many
