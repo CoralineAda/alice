@@ -22,7 +22,7 @@ module Alice
       end
 
       def pass_to(actor)
-        if recipient = Alice::Actor::where(name: actor) || User.find_or_create(actor)
+        if recipient = Actor::where(name: actor) || User.find_or_create(actor)
           if recipient.is_bot?
             self.message = "#{recipient.proper_name} does not accept drinks."
           else

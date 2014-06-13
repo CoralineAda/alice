@@ -1,4 +1,4 @@
-class Alice::Place
+class Place
 
   include Mongoid::Document
 
@@ -155,7 +155,7 @@ class Alice::Place
   end
 
   def handle_grue
-    if self.actors.include? Alice::Actor.grue
+    if self.actors.include? Actor.grue
       if user = User.fighting.sample
         Alice::Dungeon.win!
         "Huzzah! After a difficult fight and against all odds, #{user.proper_name} brandishes their #{user.items.weapons.sample.name} and slays the grue!"
@@ -215,7 +215,7 @@ class Alice::Place
     return false if self.origin_square?
     return true if has_grue?
     odds = self.is_dark? ? 7 : 20
-    if Alice::Util::Randomizer.one_chance_in(odds) && actor = Alice::Actor.unplaced.grue
+    if Alice::Util::Randomizer.one_chance_in(odds) && actor = Actor.unplaced.grue
       actor.update_attribute(:place_id, self.id)
     end
   end
@@ -229,7 +229,7 @@ class Alice::Place
 
   def place_actor
     return false if self.origin_square?
-    if Alice::Util::Randomizer.one_chance_in(10) && actor = Alice::Actor.in_play.unplaced.sample
+    if Alice::Util::Randomizer.one_chance_in(10) && actor = Actor.in_play.unplaced.sample
       actor.update_attribute(:place_id, self.id)
     end
   end
