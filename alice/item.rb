@@ -1,4 +1,4 @@
-class Alice::Item
+class Item
 
   include Mongoid::Document
   include Mongoid::Timestamps

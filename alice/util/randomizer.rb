@@ -950,7 +950,7 @@ module Alice
           "You shouldn't examine your drinks so closely.",
           "It's giving off an otherworldly glow but otherwise seems normal.",
           "Is it supposed to have bubbles like that?",
-          "Pretty tamd as far as #{thing.pluralize} go.",
+          "Pretty tame as far as #{thing.pluralize} go.",
           "I think that #{thing} is an acquired taste.",
           "It looks deliious!",
           "You're getting thirsty just looking at it.",
