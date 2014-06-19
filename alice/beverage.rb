@@ -55,8 +55,15 @@ class Beverage
     like(name).present?
   end
 
-  def self.sweep
-    all.map{|item| item.delete unless item.actor? || item.user?}
+  def self.brew_random
+    new.tap do |beverage, beer = Beer.random|
+      beverage.name = "#{beer.container} of #{beer.name}",
+      beverage.description = beer.description
+    end
+  end
+
+  def self.for_user(user)
+    where(user_id: user.id)
   end
 
   def self.inventory_from(owner, list)
@@ -64,29 +71,8 @@ class Beverage
     "#{owner.proper_name}'s cooler is stocked with #{stuff}"
   end
 
-  def self.total_inventory
-    return "Someone needs to brew some drinks, we're dry!" if count == 0
-    "Our beverage collection includes #{with_owner_names.map(&:name_with_article).to_sentence}."
-  end
-
-  def self.brew_random
-    beer = Beer.random
-    new(
-      name: "#{beer.container} of #{beer.name}",
-      description: beer.description
-    )
-  end
-
-  def self.for_user(user)
-    where(user_id: user.id)
-  end
-
   def self.sorted
-    all.sort_by(&:name)
-  end
-
-  def self.with_owner_names
-    sorted.map(&:user).compact.uniq.map(&:beverages).flatten
+    all.asc(&:name)
   end
 
   def drink

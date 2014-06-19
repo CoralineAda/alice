@@ -46,12 +46,12 @@ class Beer
   def description
     return "Hmm, a mysterious brew to be sure." unless self.beer
     text = []
-    # text << beer.description
-    # text << brewery
-    # text << availability
-    # text << pairing
-    # text << abv
-    # text << serving_temperature
+    text << beer.description
+    text << brewery
+    text << availability
+    text << pairing
+    text << abv
+    text << serving_temperature
     text.compact.join('. ').gsub('..', '.')
   end
 
