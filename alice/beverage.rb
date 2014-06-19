@@ -1,4 +1,4 @@
-class Alice::Beverage
+class Beverage
 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -70,8 +70,10 @@ class Alice::Beverage
   end
 
   def self.brew_random
+    beer = Beer.random
     new(
-      name: "#{Alice::Util::Randomizer.beverage_container} of #{Alice::Util::Randomizer.beverage}"
+      name: "#{beer.container} of #{beer.name}",
+      description: beer.description
     )
   end
 

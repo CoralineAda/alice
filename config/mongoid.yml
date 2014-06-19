@@ -1,3 +1,10 @@
+development:
+  sessions:
+    default:
+      database: alice_dev
+      hosts:
+        - localhost:27017
+
 production:
   sessions:
     # Define the default session.

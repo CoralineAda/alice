@@ -29,6 +29,16 @@ class Actor
 
   before_create :ensure_description
 
+  ACTIONS = [
+    :brew,
+    :drink,
+    :spill,
+    :drop,
+    :pick_pocket,
+    :move,
+    :talk
+  ]
+
   def self.random
     excludes(is_grue: true).sample
   end
@@ -37,16 +47,16 @@ class Actor
     where(is_grue: true).first
   end
 
+  def self.in_play
+    where(in_play: true)
+  end
+
   def self.observer
     present.random
   end
 
   def self.present
-    where(place_id: Alice::Place.current.id)
-  end
-
-  def self.in_play
-    where(in_play: true)
+    where(place_id: Place.current.id)
   end
 
   def self.reset_all
@@ -56,30 +66,13 @@ class Actor
     grue.put_in_play
   end
 
-  def self.actions
-    [
-      :brew,
-      :drink,
-      :spill,
-      :drop,
-      :pick_pocket,
-      :move,
-      :talk
-    ]
-  end
-
   def add_catchphrase(text)
-    catchphrases.create(text: text)
+    self.catchphrases.create(text: text)
   end
 
   def brew
-    beverage = Alice::Beverage.brew_random
-    self.beverages << beverage
-    "#{User.bot.observe_brewing(beverage.name, self.proper_name)}"
-  end
-
-  def check_action
-    return unless Alice::Util::Randomizer.one_chance_in(10)
+    self.beverages << Beverage.brew_random
+    self.beverages.last
   end
 
   def describe
@@ -100,12 +93,7 @@ class Actor
   end
 
   def is_present?
-    self.place == Alice::Place.current
-  end
-
-  def spill
-    return "#{proper_name } fumbles with an empty cup." unless beverages.present?
-    beverages.sample.spill
+    self.place == Place.current
   end
 
   def drink
@@ -113,17 +101,28 @@ class Actor
     beverages.sample.drink
   end
 
+  def drop
+    return unless self.items.present?
+    self.items.sample.drop
+  end
+
   def is_bot?
     false
   end
 
   def is_present?
-    self.place == Alice::Place.current
+    self.place == Place.current
   end
 
-  def drop
-    return unless self.items.present?
-    self.items.sample.drop
+  def move
+    direction = Place.current.exits.sample
+    self.place = Place.place_to(direction, false)
+  end
+
+  def perform_random_action
+    return unless Alice::Util::Randomizer.one_chance_in(10)
+    action = ACTIONS.sample
+    respond_to?(action) && self.send(action)
   end
 
   def pick_pocket(attempts=0)
@@ -134,32 +133,22 @@ class Actor
     end
   end
 
-  def move
-    direction = Alice::Place.current.exits.sample
-    self.place = Alice::Place.place_to(direction, false)
-  end
-
   def proper_name
-    self.name =~ /[A-Z]+/ && self.name || self.name.capitalize
+    self.name.to_s.split(" ").map(&:capitalize).join(" ")
   end
 
   def put_in_play
     self.in_play = true
+    reset_description && save
+  end
+
+  def reset_description
     self.description = nil
     ensure_description
-    save
   end
 
-  def talk
-    if message = Alice::Util::Randomizer.one_chance_in(2) && self.catchphrases.sample
-      "says '#{message.text}.'"
-    else
-      "says \"#{speak}.\""
-    end
-  end
-
-  def target
-    (User.active | User.online).sample
+  def spill
+    beverages.present? && beverages.sample.spill
   end
 
 end
