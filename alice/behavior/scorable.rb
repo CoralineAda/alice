@@ -7,7 +7,7 @@ module Alice
       def award_point_to(actor)
         if self.can_award_points?
           self.update_attribute(:last_award, DateTime.now)
-          actor.score_point
+          actor.score_points
         end
       end
 
@@ -23,13 +23,13 @@ module Alice
         score_text
       end
 
-      def score_point(value=1)
+      def score_points(value=1)
         self.update_attribute(:points, self.points + value)
       end
 
-      def penalize
+      def penalize(value=-1)
         return if self.points == 0
-        self.update_attribute(:points, self.points - 1)
+        self.update_attribute(:points, self.points - value)
       end
 
       def rank

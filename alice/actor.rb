@@ -39,8 +39,8 @@ class Actor
     :talk
   ]
 
-  def self.random
-    excludes(is_grue: true).sample
+  def self.ensure_grue
+    Actor.grue || Actor.create(name: 'Grue', description: "Fearsome! Loathsome! But cuddly!", is_grue: true)
   end
 
   def self.grue
@@ -57,6 +57,10 @@ class Actor
 
   def self.present
     where(place_id: Place.current.id)
+  end
+
+  def self.random
+    excludes(is_grue: true).sample
   end
 
   def self.reset_all
@@ -76,12 +80,12 @@ class Actor
   end
 
   def describe
-    check_action
-    message = ""
-    message << "#{proper_name} is #{self.description}. "
-    message << "#{self.inventory}. "
+    message = []
+    message << "#{proper_name} is #{self.description}"
+    message << self.inventory_of_items
+    message << self.inventory_of_beverages
     message << check_score
-    message
+    message.compact.join(". ").gsub(/\.\. /, '. ')
   end
 
   def do_something

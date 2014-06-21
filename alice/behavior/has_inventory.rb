@@ -12,11 +12,13 @@ module Alice
       end
 
       def inventory_of_beverages
-        Alice::Beverage.inventory_from(self, self.beverages)
+        return if self.beverages.empty?
+        Beverage.inventory_from(self, self.beverages)
       end
 
       def inventory_of_items
-        Alice::Item.inventory_from(self, self.items)
+        return if self.items.empty?
+        Item.inventory_from(self, self.items)
       end
 
       def add_to_inventory(item)

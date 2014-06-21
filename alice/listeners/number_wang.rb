@@ -14,11 +14,11 @@ module Alice
         if Alice::Util::Randomizer.one_chance_in(8)
           current_user = current_user_from(channel_user)
           if Alice::Util::Randomizer.one_chance_in(5)
-            3.times{current_user.score_point}
+            3.times{current_user.score_points}
             message = "That's the Number Wang triple bonus! "
             message << "And the points go to #{current_user.proper_name}. "
           else
-            current_user.score_point
+            current_user.score_points
             message = "That's Number Wang! "
             message << "We like those decimals. " if number.include?('.')
             message << "And the point goes to #{current_user.proper_name}. "

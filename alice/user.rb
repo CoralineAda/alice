@@ -32,6 +32,10 @@ class User
   validates_presence_of :primary_nick
   validates_uniqueness_of :primary_nick
 
+  def self.award_points_to_active(points=0)
+    active_and_online.each{|actor| actor.score_points(points) }
+  end
+
   def self.bot_name
     bot.primary_nick
   end
