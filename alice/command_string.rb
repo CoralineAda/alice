@@ -4,23 +4,12 @@ class CommandString
 
   attr_accessor :content
 
-  def self.process(command_string)
-    command_string.execute!
-  end
-
   def components
     @components ||= self.content.split(/\W+/).reject{|w| w.blank? }
   end
 
-  def execute!
-  end
-
   def has_predicate?
     predicate_position.present?
-  end
-
-  def is_direct_command?
-     self.content[0] == "!"
   end
 
   def predicate

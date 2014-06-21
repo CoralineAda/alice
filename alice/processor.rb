@@ -6,16 +6,16 @@ class Processor
     @message = message
   end
 
-  def process_command
+  def react
     track_sender
     Responder.respond_to(message)
   end
 
-  def do_greeting
-    User.bot.greet(message.sender_nick)
+  def greet_on_join
+    Responder.greet(message.sender_nick)
   end
 
-  def update_nick
+  def track_nick_change
     User.from_nick(message.sender_nick).update_nick(message.sender_nick)
   end
 
