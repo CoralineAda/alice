@@ -8,6 +8,14 @@ class Adapter
     Alice.bot.bot.user_list
   end
 
+  def self.send_message(message)
+    if message.is_emote?
+      emote_to(message.recipient, message.response_text)
+    else
+      respond_to(message.recipient, message.response_text)
+    end
+  end
+
   def self.send_raw(message)
     text = Alice::Util::Sanitizer.process(message)
     text = Alice::Util::Sanitizer.initial_upcase(text)

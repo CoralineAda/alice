@@ -54,8 +54,8 @@ class Machine
     thing.name = thing.randomize_name
     thing.save
     self.just_made = thing
-    Place.current.items << thing if thing.is_a? Alice::Item
-    Place.current.beverages << thing if thing.is_a? Alice::Beverage
+    Place.current.items << thing if thing.is_a? Item
+    Place.current.beverages << thing if thing.is_a? Beverage
   end
 
 end
