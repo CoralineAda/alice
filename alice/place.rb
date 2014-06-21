@@ -66,8 +66,8 @@ class Place
       x = current.x
     end
 
-    room = Alice::Place.where(x: x, y: y).first
-    room ||= Alice::Place.generate!(x: x, y:y, entered_from: opposite_direction(direction))
+    room = Place.where(x: x, y: y).first
+    room ||= Place.generate!(x: x, y:y, entered_from: opposite_direction(direction))
     return room.enter if party_moving
     return room
   end
@@ -94,7 +94,7 @@ class Place
   end
 
   def self.set_current_room(room)
-    Alice::Place.current.update_attribute(:is_current, false)
+    Place.current.update_attribute(:is_current, false)
     room.update_attribute(:is_current, true)
   end
 
@@ -138,12 +138,12 @@ class Place
 
   def ensure_description
     return true if self.description.present? && self.view_from_afar.present?
-    self.description ||= Alice::Place.random_description(self)
+    self.description ||= Place.random_description(self)
     self.view_from_afar ||= Alice::Util::Randomizer.view_from_afar
   end
 
   def enter
-    Alice::Place.set_current_room(self)
+    Place.set_current_room(self)
     self.update_attribute(:last_visited, DateTime.now)
     place_grue
     place_item
@@ -157,10 +157,10 @@ class Place
   def handle_grue
     if self.actors.include? Actor.grue
       if user = User.fighting.sample
-        Alice::Dungeon.win!
+        Dungeon.win!
         "Huzzah! After a difficult fight and against all odds, #{user.proper_name} brandishes their #{user.items.weapons.sample.name} and slays the grue!"
       else
-        Alice::Dungeon.lose!
+        Dungeon.lose!
         "Eep! After wandering around in the dark room for a moment, the party has been eaten by a grue!"
       end
     end
@@ -185,7 +185,7 @@ class Place
     if Alice::Util::Randomizer.one_chance_in(2)
       self.update_attribute(:locked_exit, candidates.sample)
       if room = neighbors.select{|n| n[:direction] == self.locked_exit}.first
-        room[:room].lock_door(Alice::Place.opposite_direction(locked_exit))
+        room[:room].lock_door(Place.opposite_direction(locked_exit))
       end
     end
   end
@@ -198,10 +198,10 @@ class Place
 
   def neighbors
     self.exits.inject([]) do |rooms, exit|
-      room =   exit == 'north' && Alice::Place.place_to('north', false)
-      room ||= exit == 'south' && Alice::Place.place_to('south', false)
-      room ||= exit == 'east'  && Alice::Place.place_to('east', false)
-      room ||= exit == 'west'  && Alice::Place.place_to('west', false)
+      room =   exit == 'north' && Place.place_to('north', false)
+      room ||= exit == 'south' && Place.place_to('south', false)
+      room ||= exit == 'east'  && Place.place_to('east', false)
+      room ||= exit == 'west'  && Place.place_to('west', false)
       rooms << { direction: exit, room: room }
       rooms
     end
@@ -222,7 +222,7 @@ class Place
 
   def place_item
     return false if self.origin_square?
-    if Alice::Util::Randomizer.one_chance_in(5) && item = Alice::Item.unplaced.unclaimed.sample
+    if Alice::Util::Randomizer.one_chance_in(5) && item = Item.unplaced.unclaimed.sample
       item.update_attribute(:place_id, self.id)
     end
   end

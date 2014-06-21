@@ -15,12 +15,12 @@ module Alice
         item = what.respond_to?(:name) && item
         item ||= Alice::Item.where(name: what.downcase).last || Alice::Beverage.where(name: what.downcase).last
         return "eyes #{proper_name} curiously." unless item
-        return "#{Alice::Util::Randomizer.laugh} as #{proper_name} tries to steal their own #{item.name}!" if item.owner == self.proper_name
+        return "#{Alice::Util::Randomizer.laugh} as #{proper_name} tries to steal their own #{item.name}!" if item.owner == self
 
         update_thefts
 
         if Alice::Util::Randomizer.one_chance_in(5)
-          message = "watches in awe as #{proper_name} steals the #{item.name} from #{item.owner}!"
+          message = "watches in awe as #{proper_name} steals the #{item.name} from #{item.owner_name}!"
           item.user_id = nil
           item.actor_id = nil
           item.place_id = nil
@@ -28,7 +28,7 @@ module Alice
           self.items << item
           self.score_points if self.respond_to?(:score_points)
         else
-          message = "sees #{proper_name} try and fail to snatch the #{item.name} from #{item.owner}."
+          message = "sees #{proper_name} try and fail to snatch the #{item.name} from #{item.owner_name}."
           self.penalize if self.respond_to?(:penalize)
         end
         message

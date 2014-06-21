@@ -18,7 +18,11 @@ module Alice
       end
 
       def owner
-        self.user && self.user.proper_name || self.actor && self.actor.proper_name || nil
+        self.user || self.actor && self.actor.proper_name || Actor.new(name: "Edwin Nobody")
+      end
+
+      def owner_name
+        owner.proper_name
       end
 
       def pass_to(actor)
@@ -26,7 +30,7 @@ module Alice
           if recipient.is_bot?
             self.message = "#{recipient.proper_name} does not accept drinks."
           else
-            self.message = "#{owner} passes the #{self.name} to #{recipient.proper_name}. Cheers!"
+            self.message = "#{owner.name} passes the #{self.name} to #{recipient.proper_name}. Cheers!"
             self.user = recipient
             self.save
           end
