@@ -30,14 +30,14 @@ module Alice
 
     def relative_x
       return "Nowhere" unless object_position
-      return "here" if object_position.x == current_position.x
+      return "there" if object_position.x == current_position.x
       return "west" if object_position.x < current_position.x
       return "east"
     end
 
     def relative_y
       return unless object_position
-      return if object_position.y == current_position.y
+      return "here" if object_position.y == current_position.y
       return "north" if object_position.y < current_position.y
       return "south"
     end
