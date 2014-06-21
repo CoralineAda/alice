@@ -6,6 +6,8 @@ class Item
   include Alice::Behavior::Ownable
   include Alice::Behavior::Placeable
 
+  store_in collection: "alice_items"
+
   field :name
   field :description
   field :is_cursed, type: Boolean
@@ -91,7 +93,7 @@ class Item
   def self.inventory_from(owner, list)
     stuff = Alice::Util::Randomizer.empty_pockets if list.empty?
     stuff ||= list.map(&:name_with_article).to_sentence
-    "#{owner.proper_name}'s #{Alice::Util::Randomizer.item_container} #{stuff}."
+    "#{owner_name}'s #{Alice::Util::Randomizer.item_container} #{stuff}."
   end
 
   def self.reading_material
@@ -122,18 +124,18 @@ class Item
   end
 
   def creator
-    return unless self.creator_id
-    User.find(self.creator_id)
+    User.where(id: self.creator_id).first || User.new
   end
 
   def describe
-    text = self.description
-    text << " #{creator.proper_name} was its creator, judging by the maker's mark." if creator
-    text << " Might be fun to read." if self.is_readable?
-    text << " Might make a decent weapon." if self.is_weapon?
-    text << " Might be fun to play." if self.is_game?
-    text << " Could come in handy with those pesky locked doors." if self.is_key?
-    text
+    text = []
+    text << self.description
+    text << "#{creator.proper_name} was its creator, judging by the maker's mark." if creator.id
+    text << "Might be fun to read." if self.is_readable?
+    text << "Might make a decent weapon." if self.is_weapon?
+    text << "Might be fun to play." if self.is_game?
+    text << "Could come in handy with those pesky locked doors." if self.is_key?
+    text.join(" ").gsub(/\.\. /, '. ')
   end
 
   def ensure_description
@@ -150,8 +152,13 @@ class Item
 
   def play
     return "It's not safe to play with #{name_with_article}!" unless self.is_game?
-    self.user.score_points(3) if self.user.can_play_game?
-    return "#{owner} #{Alice::Util::Randomizer.play} a game of #{name}."
+    if self.user.can_play_game?
+      self.user.score_points(3)
+      "#{owner_name} #{Alice::Util::Randomizer.play} wins a game of #{name}!"
+    else
+      self.user.score_points(-3)
+      "#{owner_name} #{Alice::Util::Randomizer.play} loses badly at a game of #{name}."
+    end
   end
 
   def randomize_name

@@ -16,12 +16,12 @@ module Alice
       def self.formatted_response(thing)
         if thing.respond_to?(:user) && thing.user
           message = [
-            "The #{thing.name} belongs to #{thing.owner}",
-            "#{thing.owner} has been its guardian for #{thing.owned_time}.",
-            "#{thing.owner} holds the #{thing.name}.",
-            "It is said that the #{thing.name} resides deep in the pockets of #{thing.owner}.",
-            "Don't look at me, look at #{thing.owner}.",
-            "Forged long ago in the fires of Mt. Doom, the #{thing.name} is now guarded by the fearsome #{thing.owner}."
+            "The #{thing.name} belongs to #{thing.owner_name}",
+            "#{thing.owner_name} has been its guardian for #{thing.owned_time}.",
+            "#{thing.owner_name} holds the #{thing.name}.",
+            "It is said that the #{thing.name} resides deep in the pockets of #{thing.owner_name}.",
+            "Don't look at me, look at #{thing.owner_name}.",
+            "Forged long ago in the fires of Mt. Doom, the #{thing.name} is now guarded by the fearsome #{thing.owner_name}."
           ].sample
         elsif thing.place
           message = "I would look #{Alice::Locator.new(thing).locate.to_sentence} of here."

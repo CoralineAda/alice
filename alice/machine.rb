@@ -1,4 +1,4 @@
-class Alice::Machine
+class Machine
 
   include Mongoid::Document
   include Alice::Behavior::Searchable
@@ -54,8 +54,8 @@ class Alice::Machine
     thing.name = thing.randomize_name
     thing.save
     self.just_made = thing
-    Alice::Place.current.items << thing if thing.is_a? Alice::Item
-    Alice::Place.current.beverages << thing if thing.is_a? Alice::Beverage
+    Place.current.items << thing if thing.is_a? Alice::Item
+    Place.current.beverages << thing if thing.is_a? Alice::Beverage
   end
 
 end

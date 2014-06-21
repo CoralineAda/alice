@@ -7,12 +7,21 @@ module Alice
       self.object = object
     end
 
+    def object_place
+      if owner = object.owner
+        Place.current
+      else
+        object.place
+      end
+    end
+
     def object_position
-      @object_position ||= Coord.new(self.object.place.coords)
+      return unless object_place
+      @object_position ||= Coord.new(self.object_place.coords)
     end
 
     def current_position
-      @current_position ||= Coord.new(Alice::Place.current.coords)
+      @current_position ||= Coord.new(Place.current.coords)
     end
 
     def locate
@@ -20,12 +29,14 @@ module Alice
     end
 
     def relative_x
-      return if object_position.x == current_position.x
+      return "Nowhere" unless object_position
+      return "here" if object_position.x == current_position.x
       return "west" if object_position.x < current_position.x
       return "east"
     end
 
     def relative_y
+      return unless object_position
       return if object_position.y == current_position.y
       return "north" if object_position.y < current_position.y
       return "south"
