@@ -1,6 +1,9 @@
 class Alice::Factoid
 
   include Mongoid::Document
+  include Behavior::Samples
+
+  store_in collection: "alice_factoids"
 
   field :text
   field :keywords, type: Array, default: []
@@ -17,10 +20,6 @@ class Alice::Factoid
 
   def self.for(nick)
     User.with_nick_like(nick).try(:get_factoid)
-  end
-
-  def self.random
-    all.sample
   end
 
   def self.about(subject)

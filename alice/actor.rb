@@ -10,6 +10,8 @@ class Actor
   include Alice::Behavior::HasInventory
   include Alice::Behavior::Scorable
 
+  store_in collection: "alice_actors"
+
   field :name
   field :description
   field :last_theft, type: DateTime
