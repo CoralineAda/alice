@@ -1,12 +1,9 @@
 class Alice::Oh
 
   include Mongoid::Document
+  include Behavior::Samples
 
   field :text
-
-  def self.random
-    all.sample
-  end
 
   def formatted(prefix=true)
     message = ""
