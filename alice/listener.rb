@@ -4,21 +4,25 @@ class Listener
 
   include Cinch::Plugin
 
-  match /(.+)/, method: :catch, use_prefix: false
+  match /(.+)/, method: :process, use_prefix: false
 
   listen_to :join, method: :greet
   listen_to :nick, method: :update_nick
 
-  def catch(emitted, trigger)
-    Processor.new(message(emitted, trigger)).react
+  def processor(emitted, trigger)
+    Processor.new(message(emitted, trigger))
+  end
+
+  def process(emitted, trigger)
+    processor(emitted, trigger).react
   end
 
   def greet(emitted)
-    Processor.new(message(emitted, :join)).do_greeting
+    processor(emitted, :join).greet_on_join
   end
 
   def update_nick(emitted)
-    Processor.new(message(emitted, :nick)).update_nick
+    processor(emitted, :update_nick).track_nick_change
   end
 
   private
