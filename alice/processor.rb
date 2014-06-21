@@ -1,5 +1,3 @@
-require 'cinch'
-
 class Processor
 
   attr_reader :message, :user
@@ -8,16 +6,20 @@ class Processor
     @message = message
   end
 
-  def process
+  def process_command
     track_sender
-    Responder.respond_with(response)
+    Responder.respond_to(message)
+  end
+
+  def do_greeting
+    User.bot.greet(message.sender_nick)
+  end
+
+  def update_nick
+    User.from_nick(message.sender_nick).update_nick(message.sender_nick)
   end
 
   private
-
-  def response
-    Response.from(self.message)
-  end
 
   def track_sender(nick)
     self.message.sender.touch

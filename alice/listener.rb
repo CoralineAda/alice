@@ -10,15 +10,21 @@ class Listener
   listen_to :nick, method: :update_nick
 
   def catch(emitted, trigger)
-    Processor.new(Message.new(sender_nick: emitted.user.nick, trigger: trigger)).process
+    Processor.new(message(emitted, trigger)).react
   end
 
   def greet(emitted)
-    User.bot.greet(emitted.user.nick)
+    Processor.new(message(emitted, :join)).do_greeting
   end
 
   def update_nick(emitted)
-    User.from_nick(emitted.user.nick).update_nick(emitted.user.nick)
+    Processor.new(message(emitted, :nick)).update_nick
+  end
+
+  private
+
+  def message(emitted, trigger)
+    Message.new(sender_nick: emitted.user.nick, trigger: trigger)
   end
 
 end

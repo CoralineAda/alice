@@ -10,10 +10,6 @@ class Alice::Bio
     all.sample
   end
 
-  def anonymized
-    "This person #{self.text}"
-  end
-
   def formatted
     return "It's #{self.user.proper_name}! " unless self.user.present?
     formatted_text = self.text.gsub(/^is /, ' ')

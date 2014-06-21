@@ -4,49 +4,51 @@ class Beer
 
   include PoroPlus
 
-  attr_accessor :name, :beer
+  attr_accessor :name, :full_name
 
   def self.random
     beer = new
-    beer.beer = beer.brewery_db.beers.random
+    beer.beer_result = beer.brewery_db.beers.random
     beer
   end
 
   def self.search(name)
-    beer = new
-    beer.name = name
-    beer.description
+    new(name: name)
   end
 
   def brewery_db
     @brewery_db ||= BreweryDB::Client.new{ |config| config.api_key = ENV['BREWERY_DB_TOKEN'] }
   end
 
-  def beer
-    @beer ||= brewery_db.search.beers(q: self.name, withBreweries: 'Y').take(1).first
+  def beer_result
+    @beer_result ||= brewery_db.search.beers(q: self.name, withBreweries: 'Y').take(1).first
   end
 
   def abv
-    return unless beer.abv
-    sprintf("%0.1f%", beer.abv.to_f) + " alcohol."
+    return unless beer_result.abv
+    sprintf("%0.1f%", beer_result.abv.to_f) + " alcohol."
   end
 
   def availability
-    beer.available && beer.available.description
+    beer_result.available && beer_result.available.description
   end
 
   def brewery
-    beer.breweries && "Brewed by #{beer.breweries.first.name}."
+    beer_result.breweries && "Brewed by #{beer_result.breweries.first.name}."
   end
 
   def container
-    beer.glass && beer.glass.name || "Glass"
+    beer_result.glass && beer_result.glass.name || "Glass"
+  end
+
+  def name
+    @name ||= beer.name
   end
 
   def description
-    return "Hmm, a mysterious brew to be sure." unless self.beer
+    return "Hmm, a mysterious brew to be sure." unless beer_result
     text = []
-    text << beer.description
+    text << beer_result.description
     text << brewery
     text << availability
     text << pairing
@@ -55,16 +57,12 @@ class Beer
     text.compact.join('. ').gsub('..', '.')
   end
 
-  def name
-    beer.name
-  end
-
   def serving_temperature
-    beer.serving_temperature && "Serve #{beer.serving_temperature}."
+    beer_result.serving_temperature && "Serve #{beer_result.serving_temperature}."
   end
 
   def pairing
-    beer.food_pairings && "Goes well with: #{beer.food_pairings}"
+    beer_result.food_pairings && "Goes well with: #{beer_result.food_pairings}"
   end
 
 end

@@ -16,7 +16,8 @@ module Alice
 
     attr_accessor :raw_command
 
-    def self.process(message)
+    def self.process(command_string)
+      return unless command_string.is_direct_command?
       where(verb: message.verb).first
     end
 
