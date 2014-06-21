@@ -42,28 +42,42 @@ class Item
     where(name: name).present?
   end
 
+  def self.create_defaults
+    create(name: Alice::Util::Randomizer.game, is_game: true)
+    (rand(10) + 2).times {|i| create(name: Alice::Util::Randomizer.item) }
+    (rand(10) + 2).times {|i| create(name: Alice::Util::Randomizer.reading_material, is_readable: true) }
+    (rand(10) + 2 / 2).times {|i| create(name: Alice::Util::Randomizer.weapon, is_weapon: true) }
+    (rand(10) + 2 / 2).times {|i| create(name: Alice::Util::Randomizer.keys, is_key: true) }
+  end
+
   def self.cursed
     where(is_cursed: true).excludes(name: 'fruitcake')
   end
 
+  def self.deliver_fruitcake
+    victim = User.active_and_online.sample
+    victim && victim.items << Alice::Item.fruitcake
+  end
+
   def self.forge(args={})
-    if new_item = create(
-        name: args[:name].downcase,
-        user: args[:user],
-        actor: args[:actor],
-        creator_id: args[:user].try(:id)
-      )
-      new_item.creator && new_item.creator.score_point
-      new_item
-    end
+    new_item = new(
+      name: args[:name].downcase,
+      user: args[:user],
+      actor: args[:actor],
+      creator_id: args[:user].try(:id),
+    )
+    new_item.creator && new_item.creator.score_points
+    new_item.check_if_cursed
+    new_item.ensure_description
+    new_item.save
   end
 
   def self.fruitcake
-    where(name: 'fruitcake').last || create(name: 'fruitcake', is_cursed: true)
-  end
-
-  def self.sweep
-    all.map{|item| item.delete unless item.actor? || item.user?}
+    where(name: 'fruitcake').last || create(
+      name: 'fruitcake',
+      description: "It's the dread fruitcake!",
+      is_cursed: true
+    )
   end
 
   def self.games
@@ -74,34 +88,35 @@ class Item
     where(is_key: true)
   end
 
-  def self.reading_material
-    where(is_readable: true)
-  end
-
-  def self.weapons
-    where(is_weapon: true)
-  end
-
   def self.inventory_from(owner, list)
     stuff = Alice::Util::Randomizer.empty_pockets if list.empty?
     stuff ||= list.map(&:name_with_article).to_sentence
     "#{owner.proper_name}'s #{Alice::Util::Randomizer.item_container} #{stuff}."
   end
 
-  def self.reset_cursed
-    cursed.update_all(is_cursed: false)
+  def self.reading_material
+    where(is_readable: true)
   end
 
-  def self.total_inventory
-    return "We have nothing! Someone needs to forge some stuff, possibly some things as well!" if count == 0
-    "Our equipment includes #{sorted.map(&:name_with_article).to_sentence}."
+  def self.reset_cursed
+    cursed.update_all(is_cursed: false)
   end
 
   def self.sorted
     all.sort_by(&:name)
   end
 
-  def check_cursed
+  def self.sweep
+    all.map{|item| item.delete unless item.actor? || item.user?}
+    keys.map(&:delete)
+    weapons.map(&:delete)
+  end
+
+  def self.weapons
+    where(is_weapon: true)
+  end
+
+  def check_if_cursed
     self.is_cursed ||= rand(10) == 1
     true
   end
@@ -135,7 +150,7 @@ class Item
 
   def play
     return "It's not safe to play with #{name_with_article}!" unless self.is_game?
-    self.user.score_point(3) if self.user.can_play_game?
+    self.user.score_points(3) if self.user.can_play_game?
     return "#{owner} #{Alice::Util::Randomizer.play} a game of #{name}."
   end
 

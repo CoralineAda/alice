@@ -26,7 +26,7 @@ module Alice
           item.place_id = nil
           item.save
           self.items << item
-          self.score_point if self.respond_to?(:score_point)
+          self.score_points if self.respond_to?(:score_points)
         else
           message = "sees #{proper_name} try and fail to snatch the #{item.name} from #{item.owner}."
           self.penalize if self.respond_to?(:penalize)
