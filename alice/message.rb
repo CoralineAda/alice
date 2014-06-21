@@ -17,6 +17,10 @@ class Message
     @filters ||= self.sender.filters.any?
   end
 
+  def is_emote?
+    self.response.is_emote?
+  end
+
   def sender
     @sender ||= User.find_or_create(self.sender_nick)
   end

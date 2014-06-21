@@ -8,11 +8,11 @@ class Catchphrase
   belongs_to :actor
 
   def self.sample
-    catchphrase = sample.asc(:last_spoken_at).first
-    catchphrase.touch && catchphrase
+    catchphrase = all.asc(:last_spoken_at)[0..-2].sample
+    catchphrase.update_spoken_at && catchphrase
   end
 
-  def touch
+  def update_spoken_at
     update_attribute(:last_spoken_at, DateTime.now)
   end
 

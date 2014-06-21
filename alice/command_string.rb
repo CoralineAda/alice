@@ -1,36 +1,43 @@
-module Alice
+class CommandString
 
-  class CommandString
+  include PoroPlus
 
-    include PoroPlus
+  attr_accessor :content
 
-    attr_accessor :content
+  def self.process(command_string)
+    command_string.execute!
+  end
 
-    def verb
-      components[0]
-    end
+  def components
+    @components ||= self.content.split(/\W+/).reject{|w| w.blank? }
+  end
 
-    def subject
-      return components[1..-1].join(' ') unless has_predicate?
-      return components[1..(predicate_position - 1)].join(' ')
-    end
+  def execute!
+  end
 
-    def has_predicate?
-      predicate_position.present?
-    end
+  def has_predicate?
+    predicate_position.present?
+  end
 
-    def predicate
-      components[(predicate_position + 1)..-1].join(' ')
-    end
+  def is_direct_command?
+     self.content[0] == "!"
+  end
 
-    def predicate_position
-      components.index('to')
-    end
+  def predicate
+    components[(predicate_position + 1)..-1].join(' ')
+  end
 
-    def components
-      @components ||= self.content.split(/\W+/).reject{|w| w.blank? }
-    end
+  def predicate_position
+    components.index('to') || components.index('from')
+  end
 
+  def subject
+    return components[1..-1].join(' ') unless has_predicate?
+    return components[1..(predicate_position - 1)].join(' ')
+  end
+
+  def verb
+    components[0]
   end
 
 end

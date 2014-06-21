@@ -18,30 +18,29 @@ module Alice
 
       private
 
-      def process_direct_command(channel_user, message)
-        response = direct_command && direct_command.process(command_string)
+      def command_string
+        @command_string ||= Alice::CommandString.new(message)
       end
 
-      def process_fuzzy_command(channel_user, message)
-        command.klass.process(sender: channel_user.user.nick, command: command, raw_command: command_string)
+      def direct_command
+        CommandString.process(command_string)
       end
+
+      # def process_direct_command(channel_user, message)
+      #   response = direct_command && direct_command.process(command_string)
+      # end
+
+      # def process_fuzzy_command(channel_user, message)
+      #   command.klass.process(sender: channel_user.user.nick, command: command, raw_command: command_string)
+      # end
 
       def respond
         response && response.kind == :reply && Alice::Util::Mediator.reply_to(channel_user, response.content)
         response && response.kind == :action && Alice::Util::Mediator.emote_to(channel_user, response.content)
       end
 
-      def command_string
-        @command_string ||= Alice::CommandString.new(message)
-      end
-
-      def direct_command
-        return unless message[0] == "!"
-        Alice::Command.process(command_string)
-      end
-
       def response
-        direct_command || command || nil
+        direct_command || parsed_command || nil
       end
 
     end
