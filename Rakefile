@@ -1,6 +1,8 @@
 require 'rake'
 require 'bundler'
-Dir.glob('tasks/*.rake').each { |r| import r }
+require './alice'
+
+Dir.glob('tasks/*.rake').each {|rakefile| import rakefile }
 
 begin
   Bundler.setup(:default, :development)
@@ -9,6 +11,3 @@ rescue Bundler::BundlerError => e
   $stderr.puts "Run `bundle install` to install missing gems"
   exit e.status_code
 end
-
-# Run `rake -T` for the complete task list
-#Alice::Tasks.new.define_tasks!
