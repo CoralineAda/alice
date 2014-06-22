@@ -27,6 +27,7 @@ describe "Message Round Trip" do
   end
 
   it "response to a name change message" do
+    User.stub(:find_or_create) { User.new(primary_nick: "fooster") }
     response_message = Processor.process(message, :track_nick_change)
     expect(response_message.response).to eq("notes the name change.")
   end

@@ -28,7 +28,7 @@ class Processor
 
   def track_nick_change
     track_sender
-    user = User.by_nick(message.sender_nick)
+    user = User.find_or_create(message.sender_nick)
     user.update_nick(message.sender_nick)
     Response.name_change(message)
   end
