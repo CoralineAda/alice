@@ -14,16 +14,22 @@ class Command
     index({ stop_words: 1 }, { unique: true })
 
     validates_uniqueness_of :name
-    validates_presence_of :name, :indicators, :handler_class
+    validates_presence_of :name, :handler_class
 
     attr_accessor :message, :terms
 
     def self.default
-      Command.new(handler_class: Handlers::Unknown)
+      Command.new(handler_class: 'Handlers::Unknown')
     end
 
     def self.indicators_from(message)
       Alice::Parser::NgramFactory.omnigrams_from(message)
+    end
+
+    def self.verb_from(message)
+      if verb = message.split(' ').select{|w| w[0] == "!"}.first
+        verb[1..-1]
+      end
     end
 
     def self.best_match(matches, indicators)
@@ -34,9 +40,15 @@ class Command
 
     def self.from(message)
       trigger = message.trigger.downcase.gsub(/[^a-zA-Z0-9\!\/\\\s]/, ' ')
-      indicators = indicators_from(trigger)
-      matches = with_indicators(indicators).without_stopwords(indicators)
-      match = best_match(matches, indicators) || default
+
+      if verb = verb_from(trigger)
+        match = any_in(verbs: verb).first
+      elsif indicators = indicators_from(trigger)
+        matches = with_indicators(indicators).without_stopwords(indicators)
+        match = best_match(matches, indicators)
+      end
+
+      match ||= default
       match.message = message
       match
     end
@@ -55,11 +67,7 @@ class Command
 
     def invoke!
       return message unless self.handler_class
-      eval(self.handler_class).new(
-        message: message,
-        method: self.handler_method || :process,
-        raw_command: self.message
-      ).process
+      eval(self.handler_class).process(message, self.handler_method || :process)
     end
 
     def terms

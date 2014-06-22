@@ -1,42 +1,38 @@
-module Alice
+module Handlers
 
-  module Handlers
+  class Beverage
 
-    class Beverage
+    include PoroPlus
+    include Behavior::HandlesCommands
 
-      include PoroPlus
+    def brew
+      message.response = ::Beverage.brew(command_string.predicate, message.sender)
+      message
+    end
 
-      attr_accessor :parsed_command, :raw_command
-
-      def self.minimum_indicators
-        3
+    def drink
+      if beverage = ::Beverage.for_user(message.sender).from(command_string.predicate)
+        message.response = beverage.drink
+      else
+        message.response = not_here_response
       end
+      message
+    end
 
-      def process
-        return unless self.respond_to? response_method
-        Alice::Handlers::Response.new(send(response_method))
-      end
+    def spill
+      message.response = "SPILLING for #{message.sender_nick}"
+      message
+    end
 
-      private
+    def list
+      message.response = "LISTING for #{message.sender_nick}"
+      message
+    end
 
-      def response_method
-        parsed_command.handler_method
-      end
+    private
 
-      def brew
-        Alice.bot.log "BREWING"
-      end
-
-      def drink
-      end
-
-      def spill
-      end
-
-      def list
-        { content: Alice::Beverage.total_inventory, kind: :reply }
-      end
-
+    def not_here_response
+      Alice::Util::Randomizer.not_here(command_string.predicate)
     end
 
   end

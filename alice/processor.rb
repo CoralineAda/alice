@@ -4,11 +4,11 @@ class Processor
 
   attr_accessor :message, :response_method, :trigger
 
-  def self.process(message, response_method, trigger=nil)
+  def self.process(message, response_method)
     new(
       message: message,
       response_method: response_method,
-      trigger: trigger
+      trigger: message.trigger
     ).react
   end
 

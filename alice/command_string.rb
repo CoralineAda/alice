@@ -1,15 +1,17 @@
 class CommandString
 
-  include PoroPlus
-
   attr_accessor :content
+
+  def initialize(content)
+    self.content = content
+  end
 
   def components
     @components ||= self.content.split(/\W+/).reject{|w| w.blank? }
   end
 
   def has_predicate?
-    predicate_position.present?
+    predicate_position > 0
   end
 
   def predicate
@@ -17,7 +19,7 @@ class CommandString
   end
 
   def predicate_position
-    components.index('to') || components.index('from')
+    components.index('to') || components.index('from') || 0
   end
 
   def subject

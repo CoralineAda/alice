@@ -6,12 +6,22 @@ namespace :commands do
   task :create_defaults do
 
    Command.create(
-      name: 'beverage',
-      verbs: ["spill","pour","brew","drink","quaff","sip","swallow","gulp","down","chug","drinks","fridge", "cooler"],
-      indicators: ["drinks", "beverages", "have", "what", "stocked", "which", "drink", "beverag", "stock", "provisions", "supplies"],
+      name: 'brew',
+      verbs: ["brew", "distill", "pour"],
+      indicators: [],
       stop_words: [],
       handler_class: 'Handlers::Beverage',
-      response_kind: :message
+      handler_method: :brew,
+      response_kind: :emote
+    )
+   Command.create(
+      name: 'beverage',
+      verbs: ["spill","pour","drink","quaff","sip","swallow","gulp","down","chug"],
+      indicators: [],
+      stop_words: [],
+      handler_class: 'Handlers::Beverage',
+      handler_method: :drink,
+      response_kind: :emote
     )
     Command.create(
       name: 'twitter',

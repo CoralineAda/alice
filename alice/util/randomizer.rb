@@ -185,7 +185,7 @@ module Alice
           "Shouldn't you be hunting the grue instead of messing around with #{noun.pluralize}?",
           "It's been established that if you #{verb} #{noun.pluralize}, you are likely to attract a grue.",
           "I'm not sure that you should really #{verb} a #{noun}.",
-          "Are you saying that a #{noun} is a clown here for your amusement?",
+          "Are you saying that the #{noun} is a clown here for your amusement?",
           "Fine, if I let you #{verb} the #{noun} can we get on with our lives?",
           "She who #{verb.pluralize} the #{noun} must also #{verb} herself.",
           "It's a crazy world where people go around #{verb}ing all the #{noun.pluralize} they see.",
@@ -1178,7 +1178,7 @@ module Alice
           "#{actor_name} pockets the #{item_name}.",
           "The #{item_name} now belongs to #{actor_name}!",
           "#{actor_name} now has the #{item_name}.",
-          "Now #{actor_name}'s #{item_container} the #{item_name}."
+          "Now #{actor_name}'s #{item_container} holds the #{item_name}."
         ].sample
       end
 

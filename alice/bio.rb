@@ -1,4 +1,4 @@
-class Alice::Bio
+class Bio
 
   include Mongoid::Document
 

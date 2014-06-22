@@ -23,7 +23,7 @@ class Listener
   private
 
   def message(emitted, trigger)
-    Message.new(sender_nick: emitted.user.nick, trigger: trigger)
+    Message.new(emitted.user.nick, trigger)
   end
 
 end
