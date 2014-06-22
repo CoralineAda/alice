@@ -3,8 +3,7 @@ module Handlers
   class ItemGiver
 
     include PoroPlus
-
-    attr_accessor :message, :method, :raw_command
+    include Behavior::HandlesCommands
 
     def self.process_gift(giver, recipient, grams)
 

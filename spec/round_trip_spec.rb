@@ -16,7 +16,7 @@ describe "Message Round Trip" do
   end
 
   it "returns a response to a known command" do
-    response_message = Processor.process(message, :respond, trigger)
+    response_message = Processor.process(message, :respond)
     expect(response_message.response).to eq("Lydia hands the thing over to someone.")
   end
 

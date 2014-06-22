@@ -23,6 +23,10 @@ module Alice
 
       IDENTIFIERS = NUMBERS.keys + NUMBERS.values + ARTICLES
 
+      def self.similar_to(original_word, test_word)
+        RubyFish::Hamming.distance(original_word, test_word) <= 5
+      end
+
     end
 
   end

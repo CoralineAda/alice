@@ -1,24 +1,24 @@
-require 'cinch'
+# require 'cinch'
 
-module Alice
+# module Alice
 
-  module Listeners
+#   module Listeners
 
-    class TickTock
+#     class TickTock
 
-      include Cinch::Plugin
+#       include Cinch::Plugin
 
-      match /^\!test event/i, method: :trigger_event, use_prefix: false
+#       match /^\!test event/i, method: :trigger_event, use_prefix: false
 
-      timer 60, method: :trigger_event
+#       timer 60, method: :trigger_event
 
-      def trigger_event(message=nil)
-        
-        Alice::Util::Mediator.send_raw(message)
-      end
+#       def trigger_event(message=nil)
 
-    end
+#         Alice::Util::Mediator.send_raw(message)
+#       end
 
-  end
+#     end
 
-end
+#   end
+
+# end

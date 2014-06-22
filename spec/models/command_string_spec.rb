@@ -3,13 +3,13 @@ require 'spec_helper'
 describe CommandString do
 
   let(:command) {
-    CommandString.new(content: "!drop the object")
+    CommandString.new("!drop the object")
   }
   let(:predicate_command) {
-    CommandString.new(content: "!give the relic to Indie")
+    CommandString.new("!give the relic to Indie")
   }
   let(:alt_predicate_command) {
-    CommandString.new(content: "!take the gold from the rich")
+    CommandString.new("!take the gold from the rich")
   }
 
   describe "#components" do

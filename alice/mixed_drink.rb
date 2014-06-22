@@ -7,12 +7,15 @@ class MixedDrink
   attr_accessor :name, :ingredients, :flavors
 
   def self.search(name)
-    result = Yummly.search(name, maxResult: 1, allowedCourse: "course^course-Cocktails").first
-    drink = new(
-      name: result.name,
-      ingredients: result.ingredients,
-      flavors: result.json['flavors']
-    )
+    new(name: name)
+  end
+
+  def canonical_name
+    result.name
+  end
+
+  def container
+    "glass"
   end
 
   def description
@@ -22,9 +25,29 @@ class MixedDrink
     text.compact.join(" ")
   end
 
+  def ingredients
+    result.ingredients
+  end
+
   def flavor
     return unless self.flavors.present?
     self.flavors.select{|k,v| v > 0}.keys.to_sentence
+  end
+
+  def flavors
+    result.json['flavors']
+   end
+
+  def result
+    results.sort do |a,b|
+      RubyFish::Hamming.distance(self.name, a.name) <=> RubyFish::Hamming.distance(self.name, b.name)
+    end.first
+  end
+
+  private
+
+  def results
+    @results ||= Yummly.search(self.name, maxResult: 5, allowedCourse: "course^course-Cocktails")
   end
 
 end

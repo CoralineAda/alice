@@ -9,8 +9,11 @@ class Beverage
   field :name
   field :description
   field :is_hidden, type: Boolean
+  field :is_alcohol, type: Boolean
   field :picked_up_at, type: DateTime
   field :creator_id
+
+  store_in collection: "alice_beverages"
 
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -23,36 +26,22 @@ class Beverage
   belongs_to :user
   belongs_to :place
 
+  before_create :set_alchohol
   before_create :ensure_description
-
-  attr_accessor :message
-
-  ALCOHOL_INDICATORS = [
-    "ale",
-    "beer",
-    "chablis",
-    "gin",
-    "lager",
-    "martini",
-    "merlot",
-    "mimosa",
-    "mixed",
-    "porter",
-    "rum",
-    "rumchata",
-    "rye",
-    "scotch",
-    "snifter",
-    "stout",
-    "tequila",
-    "vodka",
-    "whisky",
-    "whiskey",
-    "wine"
-  ]
 
   def self.already_exists?(name)
     like(name).present?
+  end
+
+  def self.brew(name, user)
+    return "I'm afraid that there can be only one #{name}." if user.beverages.already_exists?(name)
+    return "#{user.current_nick} has enough beverages for now." unless user.can_brew?
+    beverage = user.beverages.create(name: name, user: user)
+    if beverage.is_alcohol?
+      User.bot.observe_brewing(name, user.current_nick) + " It looks potent!"
+    else
+      User.bot.observe_brewing(name, user.current_nick)
+    end
   end
 
   def self.brew_random
@@ -75,13 +64,31 @@ class Beverage
     all.asc(&:name)
   end
 
+  def tea_or_coffee?
+    return true if self.name =~ /cup/i
+    return true if self.name =~ /cuppa/i
+    return true if self.name =~ /thermos/i
+    false
+  end
+
+  def set_alchohol
+    return if self.tea_or_coffee?
+    beer = Beer.search(self.name)
+    cocktail = MixedDrink.search(self.name)
+     if drink = Alice::Parser::LanguageHelper.similar_to(self.name, beer.canonical_name) && beer ||
+                Alice::Parser::LanguageHelper.similar_to(self.name, cocktail.canonical_name) && cocktail
+      self.name = "#{drink.container.downcase} of #{self.name}"
+      self.description = drink.description
+      self.is_alcohol = true
+    end
+  end
+
   def drink
     message = Alice::Util::Randomizer.drink_message(self.name, owner_name)
-    if self.is_potion? || self.is_alcohol? || Alice::Util::Randomizer.one_chance_in(4)
+    if self.is_potion? || self.is_alcohol?
       effect = [:drunk, :dazed, :disoriented].sample
       message << " In addition to feeling a little #{effect.to_s}, " + Alice::Util::Randomizer.effect_message(self.name, owner_name)
       self.user.filters << effect
-      self.user.save
     end
     self.delete
     message
@@ -93,10 +100,6 @@ class Beverage
 
   def ensure_description
     self.description ||= Alice::Util::Randomizer.drink_description(self.name)
-  end
-
-  def is_alcohol?
-    self.name =~ /#{ALCOHOL_INDICATORS * '|'}/i
   end
 
   def is_cursed?

@@ -110,7 +110,7 @@ class User
   end
 
   def current_nick
-    (Adapter.user_list.map(&:downcase) & self.nicks).first
+    (Adapter.user_list.map(&:downcase) & self.nicks).first || self.primary_nick
   end
 
   def dazed?
