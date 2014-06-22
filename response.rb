@@ -6,9 +6,11 @@ class Response
     Command.process(message)
   end
 
+  def self.name_change(message)
+  end
+
   def self.greeting(message)
-    message.response = Alice::Util::Randomizer.greeting(message.sender_nick)
-    message
+    Alice::Util::Randomizer.greeting(message.sender_nick)
   end
 
 end

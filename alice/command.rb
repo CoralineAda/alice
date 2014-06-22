@@ -33,8 +33,8 @@ class Command
     end
 
     def self.from(message)
-      message = message.downcase.gsub(/[^a-zA-Z0-9\!\/\\\s]/, ' ')
-      indicators = indicators_from(message)
+      trigger = message.trigger.downcase.gsub(/[^a-zA-Z0-9\!\/\\\s]/, ' ')
+      indicators = indicators_from(trigger)
       matches = with_indicators(indicators).without_stopwords(indicators)
       match = best_match(matches, indicators) || default
       match.message = message
@@ -54,8 +54,9 @@ class Command
     end
 
     def invoke!
-      return false unless self.handler_class
+      return message unless self.handler_class
       eval(self.handler_class).new(
+        message: message,
         method: self.handler_method || :process,
         raw_command: self.message
       ).process

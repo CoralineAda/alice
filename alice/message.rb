@@ -1,8 +1,11 @@
 class Message
 
-  include PoroPlus
-
   attr_accessor :sender_nick, :recipient_nick, :type, :response, :trigger
+
+  def initialize(sender_nick, trigger)
+    self.sender_nick = sender_nick
+    self.trigger = trigger
+  end
 
   def filtered
     return self.response unless sender.remove_filter?
