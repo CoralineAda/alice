@@ -27,14 +27,14 @@ describe Command do
       Command.stub_chain(:with_indicators, :without_stopwords) {
         [command_1, command_2, command_3]
       }
-      result = Command.from("Alice, make the cat jump over the lazy dog!")
+      result = Command.from(Message.new("aleister", "Alice, make the cat jump over the lazy dog!"))
       expect(result).to eq(command_2)
     end
 
     it "defaults to a blank command if there are no matches" do
       Command.stub_chain(:with_indicators, :without_stopwords) { [] }
       Command.stub(:default) { command_4 }
-      result = Command.from("Alice, put the coffee down and back away.")
+      result = Command.from(Message.new("aleister", "Alice, put the coffee down and back away."))
       expect(result).to eq(command_4)
     end
 

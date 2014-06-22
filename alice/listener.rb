@@ -12,14 +12,12 @@ class Listener
     Processor.process(message(emitted, trigger), :respond, trigger)
   end
 
-  def greet(emitted)
+  def greet(emitted, trigger)
     Processor.process(message(emitted, trigger), :greet_on_join)
-    #processor(emitted, :join).greet_on_join
   end
 
-  def update_nick(emitted)
-    Processor.process(message(emitted, trigger), :update_nick)
-#    processor(emitted, :update_nick).track_nick_change
+  def update_nick(emitted, trigger)
+    Processor.process(message(emitted, emitted.user.last_nick), :track_nick_change)
   end
 
   private
