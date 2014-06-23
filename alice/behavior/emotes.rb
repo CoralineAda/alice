@@ -1,25 +1,8 @@
 module Alice
 
   module Behavior
-  
-    module Emotes
 
-      def observe_brewing(item, actor)
-        [
-          "looks on in wonder as #{actor} brews a perfect #{item}.",
-          "watches #{actor} whip up #{item}.",
-          "watches #{actor} brew a nice #{item}.",
-          "watches #{actor} brew a #{item}.",
-          "watches as #{actor} makes a #{item}.",
-          "watches #{actor} brew a decent #{item}.",
-          "notices #{actor} brewing a #{item}.",
-          "applauds as #{actor} makes a #{item}.",
-          "nods approvingly as #{actor} brews a #{item}.",
-          "admires #{actor}'s ability to whip up a mean #{item}.",
-          "smiles and says, 'That's a fine #{item}!'",
-          "admires #{actor}'s brewing prowess."
-        ].sample
-      end
+    module Emotes
 
       def frown_with(actor)
         [

@@ -8,6 +8,25 @@ module Alice
         rand(number) == 1
       end
 
+      def self.brew_observation(what, who, args={})
+        message = [
+          "looks on in wonder as #{who} brews a perfect #{what}.",
+          "watches #{who} whip up #{what}.",
+          "watches #{who} brew a nice #{what}.",
+          "watches #{who} brew a #{what}.",
+          "watches as #{who} makes a #{what}.",
+          "watches #{who} brew a decent #{what}.",
+          "notices #{who} brewing a #{what}.",
+          "applauds as #{who} makes a #{what}.",
+          "nods approvingly as #{who} brews a #{what}.",
+          "admires #{who}'s ability to whip up a mean #{what}.",
+          "smiles and says, 'That's a fine #{what}!'",
+          "admires #{who}'s brewing prowess."
+        ].sample
+        message << " It looks rather potent." if args[:is_alcohol]
+        message
+      end
+
       def self.summon_failure(who, whom)
         [
           "#{who} looks crestfallen when #{whom} fails to appear.",
