@@ -12,8 +12,7 @@ module Behavior
     end
 
     module ClassMethods
-
-      def process(message, method)
+      def process(message, method=:process)
         new(message: message).public_send(method)
       end
     end

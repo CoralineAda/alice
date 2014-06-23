@@ -19,11 +19,6 @@ module Handlers
       message
     end
 
-    def spill
-      message.response = "SPILLING for #{message.sender_nick}"
-      message
-    end
-
     def list
       message.response = "LISTING for #{message.sender_nick}"
       message

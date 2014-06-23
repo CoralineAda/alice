@@ -10,6 +10,11 @@ module Alice
 
       module ClassMethods
 
+        def self.search_attr
+          :name
+        end
+
+        # Use when there are multiple words to parse. May be deprecated.
         def from(string)
           return [] unless string.present?
           names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\-\_\ ]/, '')).omnigrams
@@ -25,10 +30,11 @@ module Alice
           objects.sort{|b,a| b.term.length <=> a.term.length}.map(&:result).last
         end
 
+        # Use when you need to do a case-insensitive match
         def like(name)
           name = name.respond_to?(:join) && name.join(' ') || name
-          unless match = where(name: /^#{Regexp.escape(name)}$/i).first
-            match = where(name: /\b#{Regexp.escape(name)}\b/i).first
+          unless match = where("#{search_attr}" => /^#{Regexp.escape(name)}$/i).first
+            match = where("#{search_attr}" => /\b#{Regexp.escape(name)}\b/i).first
           end
           match
         end
