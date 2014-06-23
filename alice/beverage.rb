@@ -34,13 +34,12 @@ class Beverage
   end
 
   def self.brew(name, user)
-    return "I'm afraid that there can be only one #{name}." if user.beverages.already_exists?(name)
-    return "#{user.current_nick} has enough beverages for now." unless user.can_brew?
-    beverage = user.beverages.create(name: name, user: user)
-    if beverage.is_alcohol?
-      User.bot.observe_brewing(name, user.current_nick) + " It looks potent!"
+    return Constants::THERE_CAN_BE_ONLY_ONE if user.beverages.already_exists?(name)
+    return Constants::THATS_ENOUGH_DONTCHA_THINK unless user.can_brew?
+    if beverage = user.beverages.create(name: name, user: user)
+      Alice::Util::Randomizer.brew_observation(name, user.current_nick, alcohol: beverage.is_alcohol?)
     else
-      User.bot.observe_brewing(name, user.current_nick)
+      Constants::UH_OH
     end
   end
 
