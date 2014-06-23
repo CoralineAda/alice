@@ -10,7 +10,7 @@ module Alice
 
       module ClassMethods
 
-        def self.search_attr
+        def search_attr
           :name
         end
 

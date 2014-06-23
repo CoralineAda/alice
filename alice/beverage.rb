@@ -50,6 +50,14 @@ class Beverage
     end
   end
 
+  def self.consume(name, user)
+    if beverage = user.beverages.like(name)
+      beverage.drink
+    else
+      Constants::NO_SUCH_DRINK
+    end
+  end
+
   def self.for_user(user)
     where(user_id: user.id)
   end
