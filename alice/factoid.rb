@@ -1,4 +1,4 @@
-class Alice::Factoid
+class Factoid
 
   include Mongoid::Document
   include Behavior::Samples
@@ -18,22 +18,23 @@ class Alice::Factoid
 
   before_create :extract_keywords
 
-  def self.for(nick)
-    User.with_nick_like(nick).try(:get_factoid)
-  end
-
   def self.about(subject)
-    keywords = subject.split.map(&:downcase).uniq.map{|w| w.gsub!(/[^a-zA-Z0-9\_\-]/, '')}.compact
+    if user = User.from(subject)
+      return user.factoids && user.factoids.sample || Factoid.new
+    end
+    keywords = subject.downcase.split.map{|w| w.gsub(/[^a-zA-Z0-9\_\-]/, '')}
     keywords << keywords.map{|word| Lingua.stemmer(word.downcase)}
     keywords = keywords.flatten.uniq
-    any_in(keywords: keywords).sample
+    factoid = any_in(keywords: keywords).sample
+    factoid || Factoid.new
   end
 
   def extract_keywords
     self.keywords = Alice::Parser::NgramFactory.filtered_grams_from(self.text).flatten.uniq
   end
 
-  def formatted(with_prefix=true)
+  def formatted(with_prefix=false)
+    return Constants::FAX_NOT_FOUND unless self.text.present?
     fact = self.text
     fact = Alice::Util::Sanitizer.strip_pronouns(fact)
     fact = Alice::Util::Sanitizer.make_third_person(fact)
@@ -41,7 +42,7 @@ class Alice::Factoid
 
     message = ""
     message << "#{Alice::Util::Randomizer.fact_prefix}" if with_prefix
-    message << " #{self.user.try(:proper_name)} #{fact}."
+    message << " #{self.user.try(:proper_name)} #{fact}"
     message
   end
 

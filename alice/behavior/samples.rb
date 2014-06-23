@@ -9,7 +9,9 @@ module Behavior
 
     module ClassMethods
       def sample
-        return unless sample = all.asc(:last_sampled_at)[0..-2].sample
+        return unless samples = asc(:last_sampled_at)
+        return samples.first if samples.count == 1
+        sample = samples[0..-2].sample
         sample.update_attribute(:last_sampled_at, DateTime.now)
         sample
       end
