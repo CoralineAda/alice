@@ -63,19 +63,12 @@ class Beverage
     all.asc(&:name)
   end
 
-  def tea_or_coffee?
-    return true if self.name =~ /cup/i
-    return true if self.name =~ /cuppa/i
-    return true if self.name =~ /thermos/i
-    false
-  end
-
   def set_alchohol
-    return if self.tea_or_coffee?
+    return if Dictionary.is_a?(:tea_or_coffee, self.name)
     beer = Beer.search(self.name)
     cocktail = MixedDrink.search(self.name)
-     if drink = Alice::Parser::LanguageHelper.similar_to(self.name, beer.canonical_name) && beer ||
-                Alice::Parser::LanguageHelper.similar_to(self.name, cocktail.canonical_name) && cocktail
+    if drink = Alice::Parser::LanguageHelper.similar_to(self.name, beer.canonical_name) && beer ||
+               Alice::Parser::LanguageHelper.similar_to(self.name, cocktail.canonical_name) && cocktail
       self.name = "#{drink.container.downcase} of #{self.name}"
       self.description = drink.description
       self.is_alcohol = true
