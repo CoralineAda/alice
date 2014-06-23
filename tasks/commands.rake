@@ -16,7 +16,7 @@ namespace :commands do
     )
    Command.create(
       name: 'beverage',
-      verbs: ["spill","pour","drink","quaff","sip","swallow","gulp","down","chug"],
+      verbs: ["pour","drink","quaff","sip","swallow","gulp","down","chug"],
       indicators: [],
       stop_words: [],
       handler_class: 'Handlers::Beverage',

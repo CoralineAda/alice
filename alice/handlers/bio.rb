@@ -1,25 +1,13 @@
-module Alice
+module Handlers
 
-  module Handlers
+  class Bio
 
-    class Bio
+    include PoroPlus
+    include Behavior::HandlesCommands
 
-      def self.minimum_indicators
-        1
-      end
-
-      def self.process(sender, command)
-        if subject = User.from(command)
-          if bio = subject.formatted_bio
-            Alice::Handlers::Response.new(content: bio, kind: :reply)
-          else
-            Alice::Handlers::Response.new(content: Alice::Util::Randomizer.dunno_response(subject, kind: :reply))
-          end
-        else
-          Alice::Handlers::Factoid.process(sender, command)
-        end
-      end
-
+    def process
+      message.response = ::Bio.for(message.trigger).formatted
+      message
     end
 
   end
