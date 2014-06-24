@@ -1,17 +1,13 @@
-module Alice
+module Handlers
 
-  module Handlers
+  class Inventory
 
-    class Inventory
+    include PoroPlus
+    include Behavior::HandlesCommands
 
-      def self.minimum_indicators
-        2
-      end
-
-      def self.process(sender, command)
-        Alice::Handlers::Response.new(content: User.find_or_create(sender).inventory, kind: :reply)
-      end
-
+    def process
+      message.response = ::Inventory.for(message)
+      message
     end
 
   end
