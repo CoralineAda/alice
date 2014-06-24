@@ -1,13 +1,13 @@
-module Alice
+module Handlers
 
-  module Handlers
+  class Greeting
 
-    class Greeting
+    include PoroPlus
+    include Behavior::HandlesCommands
 
-      def self.process(sender, command)
-        Alice::Handlers::Response.new(content: Alice::Util::Randomizer.greeting(sender), kind: :action)
-      end
-
+    def process
+      message.response = ::Greeting.greet(message)
+      message
     end
 
   end
