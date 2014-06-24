@@ -93,7 +93,7 @@ class Item
   def self.inventory_from(owner, list)
     stuff = Alice::Util::Randomizer.empty_pockets if list.empty?
     stuff ||= list.map(&:name_with_article).to_sentence
-    "#{owner_name}'s #{Alice::Util::Randomizer.item_container} #{stuff}."
+    "#{owner.proper_name}'s #{Alice::Util::Randomizer.item_container} #{stuff}."
   end
 
   def self.reading_material
