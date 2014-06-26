@@ -1,19 +1,13 @@
-module Alice
+module Handlers
 
-  module Handlers
+  class Oh
 
-    class Oh
+    include PoroPlus
+    include Behavior::HandlesCommands
 
-      def self.minimum_indicators
-        2
-      end
-
-      def self.process(sender, command)
-        if oh = Alice::Oh.random
-          Alice::Handlers::Response.new(content: oh.formatted, kind: :reply)
-        end
-      end
-
+    def process
+      message.response = ::Oh.random
+      message
     end
 
   end

@@ -1,7 +1,7 @@
 module Alice
 
   module Behavior
-  
+
     module Steals
 
       def recently_stole?
@@ -13,7 +13,7 @@ module Alice
         return "thinks that #{proper_name} shouldn't press their luck on the thievery front." if recently_stole?
 
         item = what.respond_to?(:name) && item
-        item ||= Alice::Item.where(name: what.downcase).last || Alice::Beverage.where(name: what.downcase).last
+        item ||= Item.where(name: what.downcase).last || Beverage.where(name: what.downcase).last
         return "eyes #{proper_name} curiously." unless item
         return "#{Alice::Util::Randomizer.laugh} as #{proper_name} tries to steal their own #{item.name}!" if item.owner == self
 

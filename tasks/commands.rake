@@ -38,13 +38,6 @@ namespace :commands do
       response_kind: :message
     )
     Command.create(
-      name: 'treasure_lister',
-      indicators: ["what", "artifact", "treasure", "exist", "treasur"],
-      stop_words: [],
-      handler_class: 'Handlers::ItemLister',
-      response_kind: :message
-    )
-    Command.create(
       name: 'inventory',
       indicators: ["inventory", "pockets", "purse", "satchel", "backpack", "back pack", "bag", "holding", "stuff", "carry", "inventori", "pocket", "purs", "hold", "carri", "what"],
       stop_words: [],
@@ -59,22 +52,33 @@ namespace :commands do
       response_kind: :message
     )
     Command.create(
-      name: 'treasure_finder',
-      indicators: ["find", "dungeon", "maze", "where"],
+      name: 'find',
+      indicators: ["find", "dungeon", "maze", "where", "is"],
       stop_words: ["fact", "something", "about"],
-      handler_class: 'Handlers::ItemFinder',
+      handler_class: 'Handlers::Item',
+      handler_method: :find,
       response_kind: :message
     )
     Command.create(
-      name: 'treasure_giver',
+      name: 'give',
       indicators: ["give", "hand", "to", "pass", "please"],
       stop_words: [],
-      handler_class: 'Handlers::ItemGiver',
+      handler_class: 'Handlers::Item',
+      handler_method: :give,
       response_kind: :message
+    )
+    Command.create(
+      name: 'steal',
+      verbs: ["steal"],
+      indicators: [],
+      stop_words: [],
+      handler_class: 'Handlers::Item',
+      handler_method: :steal,
+      response_kind: :emote
     )
     Command.create(
       name: 'oh',
-      indicators: ["what", "heard", "ohohs", "word", "saying", "talking", "ohoh", "say", "talk", "hear", "up", "going on", "overheard", "OH"],
+      indicators: ["what", "heard", "ohs", "word", "saying", "talking", "oh", "say", "talk", "hear", "up", "going on", "overheard", "OH"],
       stop_words: [],
       handler_class: 'Handlers::Oh',
       response_kind: :message
