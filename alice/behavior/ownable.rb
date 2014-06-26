@@ -41,6 +41,7 @@ module Alice
       end
 
       def transfer_to(recipient)
+        return unless recipient
         self.user_id = recipient.id
         self.picked_up_at = DateTime.now
         self.save
