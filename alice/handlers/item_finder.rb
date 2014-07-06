@@ -9,7 +9,7 @@
 #       end
 
 #       def self.process(sender, command)
-#         return unless thing = Alice::Item.from(command) || Alice::Beverage.from(command) || Actor.from(command)
+#         return unless thing = Item.from(command) || Alice::Beverage.from(command) || Actor.from(command)
 #         Alice::Handlers::Response.new(content: formatted_response(thing), kind: :reply)
 #       end
 

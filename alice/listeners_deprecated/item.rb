@@ -40,7 +40,7 @@
 #       end
 
 #       def destroy(channel_user, what)
-#         return unless item = Alice::Item.from(what)
+#         return unless item = Item.from(what)
 #         if item.is_cursed?
 #           Alice::Util::Mediator.reply_to(channel_user, "It seems that the #{item.name} is cursed and cannot be destroyed!")
 #           return
@@ -50,7 +50,7 @@
 #       end
 
 #       def drop(channel_user, what)
-#         return unless item = Alice::Item.from(what)
+#         return unless item = Item.from(what)
 #         return unless current_user = current_user_from(channel_user)
 #         return unless current_user_from(channel_user).items.include?(item)
 #         if item.is_cursed?
@@ -61,7 +61,7 @@
 #       end
 
 #       def eat(channel_user, what)
-#         return unless item = Alice::Item.from(what)
+#         return unless item = Item.from(what)
 #         if item.is_cursed?
 #           Alice::Util::Mediator.reply_to(channel_user, "The #{item.name} is cursed and should really not go in your mouth.")
 #           return
@@ -80,7 +80,7 @@
 #       end
 
 #       def forge(channel_user, what)
-#         if Alice::Item.already_exists?(what) || User.with_nick_like(what)
+#         if Item.already_exists?(what) || User.with_nick_like(what)
 #           Alice::Util::Mediator.reply_to(channel_user, "I'm afraid that a #{what} is a singleton.")
 #           return
 #         end
@@ -88,7 +88,7 @@
 #         current_user = current_user_from(channel_user)
 
 #         if current_user.can_forge?
-#           Alice::Item.forge(name: what.downcase, user: current_user, creator_id: current_user.id)
+#           Item.forge(name: what.downcase, user: current_user, creator_id: current_user.id)
 #           Alice::Util::Mediator.emote_to(channel_user, ", at #{channel_user.user.nick}'s request, forges a #{what} #{Alice::Util::Randomizer.forge}.")
 #         else
 #           Alice::Util::Mediator.emote_to(channel_user, "thinks that #{channel_user.user.nick} can't carry more stuff right now.")
@@ -96,7 +96,7 @@
 #       end
 
 #       def get(channel_user, item)
-#         noun = Alice::Item.from(item) || Alice::Beverage.from(item)
+#         noun = Item.from(item) || Alice::Beverage.from(item)
 #         if noun && Alice::Place.current.contains?(noun)
 #           current_user_from(channel_user).add_to_inventory(noun)
 #           Alice::Util::Mediator.reply_to(channel_user, Alice::Util::Randomizer.pickup_message(noun.name, channel_user.user.nick))
@@ -113,7 +113,7 @@
 
 #       def hide(channel_user, what)
 #         current_user = current_user_from(channel_user)
-#         return unless item = Alice::Item.from(what)
+#         return unless item = Item.from(what)
 #         return unless item.user == current_user
 #         return unless current_user = current_user_from(channel_user).items.include?(item)
 #         if item.is_cursed?
@@ -152,7 +152,7 @@
 #       end
 
 #       def play(channel_user, game)
-#         item = Alice::Item.from(game)
+#         item = Item.from(game)
 #         return unless current_user = current_user_from(channel_user)
 #         if item && current_user.items.include?(item)
 #           Alice::Util::Mediator.reply_to(channel_user, "#{item.play}.")
@@ -163,7 +163,7 @@
 #       end
 
 #       def read(channel_user, what)
-#         item = Alice::Item.where(name: /#{what}/i).last
+#         item = Item.where(name: /#{what}/i).last
 #         if item && current_user_from(channel_user).items.include?(item)
 #           Alice::Util::Mediator.reply_to(channel_user, "#{item.read}.")
 #         else

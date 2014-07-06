@@ -59,7 +59,7 @@
 #       def cast(channel_user, spell)
 #         current_user = current_user_from(channel_user)
 #         if Alice::Util::Randomizer.one_chance_in(20)
-#           if weapon = Alice::Item.weapons.unclaimed.sample
+#           if weapon = Item.weapons.unclaimed.sample
 #             Alice::Place.current.items << weapon
 #             current_user.score_points
 #             Alice::Util::Mediator.reply_to(channel_user, "#{weapon.name_with_article} appears at #{current_user.proper_name}'s feet!")
@@ -71,15 +71,15 @@
 #             Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} magically appears before #{current_user.proper_name}!")
 #           end
 #         elsif Alice::Util::Randomizer.one_chance_in(5)
-#           fruitcake = Alice::Item.fruitcake
+#           fruitcake = Item.fruitcake
 #           if current_user.items.include?(fruitcake)
 #             recipient = (User.active_and_online - [current_user]).sample
-#             recipient.items << Alice::Item.fruitcake
+#             recipient.items << Item.fruitcake
 #             Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} loses their precious fruitcake to #{recipient.proper_name}!")
 #             current_user.score_points
 #           else
 #             Alice::Util::Mediator.reply_to(channel_user, "#{current_user.proper_name} is rewarded with the fruitcake!")
-#             current_user.items << Alice::Item.fruitcake
+#             current_user.items << Item.fruitcake
 #             current_user.penalize
 #           end
 #         else

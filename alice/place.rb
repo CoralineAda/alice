@@ -30,6 +30,7 @@ class Place
     where(:is_current => true).last || all.sample || generate!
   end
 
+  # TODO FIXME exits to existing non-entered-from rooms don't always connect!
   def self.generate!(args={})
     x = args[:x] || 0
     y = args[:y] || 0
@@ -41,6 +42,7 @@ class Place
       is_dark: x == 0 && y == 0 || Alice::Util::Randomizer.one_chance_in(5)
     )
     room.update_attribute(:description, random_description(room))
+    Mapper.new.create
     room
   end
 
@@ -51,9 +53,9 @@ class Place
 
   def self.place_to(direction, party_moving=false)
     if direction == 'north'
-      y = current.y + 1
-    elsif direction == 'south'
       y = current.y - 1
+    elsif direction == 'south'
+      y = current.y + 1
     else
       y = current.y
     end
@@ -145,6 +147,7 @@ class Place
   def enter
     Place.set_current_room(self)
     self.update_attribute(:last_visited, DateTime.now)
+    Mapper.new.create
     place_grue
     place_item
     handle_grue || describe
