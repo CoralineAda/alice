@@ -71,6 +71,10 @@ class Beverage
     all.asc(&:name)
   end
 
+  def self.sweep
+    all.map{|item| item.delete unless item.actor? || item.user?}
+  end
+
   def set_alchohol
     return if Dictionary.is_a?(:tea_or_coffee, self.name)
     beer = Beer.search(self.name)

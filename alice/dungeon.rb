@@ -1,4 +1,4 @@
-class Alice::Dungeon
+class Dungeon
 
   def self.reset!
     Actor.reset_all

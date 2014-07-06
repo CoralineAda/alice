@@ -31,13 +31,14 @@ class Item
   validates_uniqueness_of :name
   validates_presence_of :name
 
-  attr_accessor :message
+  attr_accessor :is_ephemeral, :message
 
   belongs_to  :actor
   belongs_to  :user, inverse_of: :items
   belongs_to  :place
 
-  before_create :check_cursed
+  before_create :check_if_cursed
+  before_create :check_if_not_ephemeral
   before_create :ensure_description
 
   def self.already_exists?(name)
@@ -58,7 +59,11 @@ class Item
 
   def self.deliver_fruitcake
     victim = User.active_and_online.sample
-    victim && victim.items << Alice::Item.fruitcake
+    victim && victim.items << Item.fruitcake
+  end
+
+  def ephemeral
+    new(name: "thing that doesn't exist", ephemeral: true)
   end
 
   def self.forge(args={})
@@ -123,19 +128,38 @@ class Item
     true
   end
 
+  def check_if_not_ephemeral
+    ! self.is_ephemeral
+  end
+
   def creator
-    User.where(id: self.creator_id).first || User.new
+    User.where(id: self.creator_id).first || User.new(primary_nick: "nobody")
   end
 
   def describe
     text = []
     text << self.description
-    text << "#{creator.proper_name} was its creator, judging by the maker's mark." if creator.id
+    text << "#{creator.proper_name} was its creator, "
+    text << "judging by the #{creator.new_record? ? 'lack of a' : ''} maker's mark."
     text << "Might be fun to read." if self.is_readable?
     text << "Might make a decent weapon." if self.is_weapon?
     text << "Might be fun to play." if self.is_game?
     text << "Could come in handy with those pesky locked doors." if self.is_key?
-    text.join(" ").gsub(/\.\. /, '. ')
+    text.join(" ").gsub(/\.\. /, '. ').gsub(/^ /,'')
+  end
+
+  def destruct
+    return "The #{self.name} is cursed and cannot be destroyed so easily." if self.is_cursed
+    self.delete
+    "#{owner_name} #{Alice::Util::Randomizer.destroy_message(self.name)}"
+  end
+
+  def drink
+    "It's undrinkable."
+  end
+
+  def eat
+    "Please don't put that in your mouth."
   end
 
   def ensure_description
@@ -163,8 +187,8 @@ class Item
 
   def randomize_name
     new_name = self.name
-    new_name = "#{Alice::Util::Randomizer.material} #{new_name}" if Alice::Item.where(name: new_name).first
-    new_name = "#{new_name} with SN #{Time.now.to_i}" if Alice::Item.where(name: new_name).first
+    new_name = "#{Alice::Util::Randomizer.material} #{new_name}" if Item.where(name: new_name).first
+    new_name = "#{new_name} with SN #{Time.now.to_i}" if Item.where(name: new_name).first
     self.name = new_name
   end
 

@@ -120,7 +120,7 @@
 #         Alice::Util::Mediator.send_raw("Everything goes black and you feel like you are suddenly somewhere else!")
 #         Alice::Util::Mediator.send_raw("Please wait while we regenerate the matrix.")
 #         Alice::Dungeon.reset!
-#         Alice::Util::Mediator.send_raw("#{Alice::Item.fruitcake.user.proper_name} has been given a special gift.")
+#         Alice::Util::Mediator.send_raw("#{Item.fruitcake.user.proper_name} has been given a special gift.")
 #         Alice::Util::Mediator.send_raw(Alice::Place.current.describe)
 #       end
 

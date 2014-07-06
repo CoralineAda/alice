@@ -85,11 +85,11 @@ class User
   end
 
   def self.with_key
-    Alice::Item.keys.excludes(user_id: nil).map(&:user)
+    Item.keys.excludes(user_id: nil).map(&:user)
   end
 
   def self.with_weapon
-    Alice::Item.weapons.excludes(user_id: nil).map(&:user)
+    Item.weapons.excludes(user_id: nil).map(&:user)
   end
 
   def accepts_gifts?
@@ -97,7 +97,7 @@ class User
   end
 
   def creations
-    Alice::Item.where(creator_id: self.id)
+    Item.where(creator_id: self.id)
   end
 
   def can_brew?
