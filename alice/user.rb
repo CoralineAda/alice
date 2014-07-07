@@ -178,6 +178,17 @@ class User
     self.factoids.create(text: text)
   end
 
+  # TODO Extract twitter info into object
+  def set_twitter_handle(handle)
+    handle = handle.split[0].gsub("@", "")
+    self.update_attribute(:twitter_handle, handle)
+  end
+
+  def formatted_twitter_handle
+    return unless self.twitter_handle
+    "#{proper_name} is on Twitter as @#{self.twitter_handle.gsub('@','')}. Find them at https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
+  end
+
   def twitter_url
     return unless self.twitter_handle
     "https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"

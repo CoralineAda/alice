@@ -16,7 +16,7 @@ describe "Handlers::Greeting" do
       expect(::Greeting.respond_to?(:greet)).to be_true
     end
     it "calls the correct method" do
-      expect(::Greeting.respond_to?(:greet)).to be_true
+      expect(::Greeting).to receive(:greet)
       handler.greet_sender
     end
   end
@@ -26,7 +26,7 @@ describe "Handlers::Greeting" do
       expect(::Greeting.respond_to?(:greet)).to be_true
     end
     it "calls the correct method" do
-      expect(::Greeting.respond_to?(:greet)).to be_true
+      expect(::Greeting).to receive(:greet)
       handler.greet_other
     end
   end
