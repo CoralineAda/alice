@@ -24,6 +24,10 @@ class Message
     self.response.is_emote?
   end
 
+  def is_sudo?
+    Alice::Util::Mediator.op?(sender_nick)
+  end
+
   def sender
     @sender ||= User.find_or_create(self.sender_nick)
   end
