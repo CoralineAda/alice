@@ -166,8 +166,16 @@ class User
     self.primary_nick.capitalize
   end
 
+  def random_factoid
+    self.factoids.sample
+  end
+
   def remove_filter?
     filter_applied_date <= DateTime.now - 13.minutes
+  end
+
+  def set_factoid(text)
+    self.factoids.create(text: text)
   end
 
   def twitter_url

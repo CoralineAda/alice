@@ -5,9 +5,18 @@ module Handlers
     include PoroPlus
     include Behavior::HandlesCommands
 
-    def process
-      message.response = ::Factoid.about(message.trigger).formatted
-      message
+    def set
+      message.set_response(message.sender.set_factoid(command_string.predicate))
+    end
+
+    def get
+      message.set_response(subject.random_factoid.formatted)
+    end
+
+    private
+
+    def subject
+      ::User.from(command_string.subject) || ::User.new
     end
 
   end
