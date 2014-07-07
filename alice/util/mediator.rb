@@ -13,7 +13,8 @@ module Alice
       end
 
       def self.op?(channel_user)
-        op_nicks.include?(channel_user.user.nick)
+        nick = channel_user.respond_to?(:user) ? channel_user.user.nick : channel_user
+        op_nicks.include?(nick)
       end
 
       def self.exists?(nick)

@@ -161,4 +161,17 @@ class Actor
     beverages.present? && beverages.sample.spill
   end
 
+  def summon_for(summoner, force=false)
+    return if self.is_bot?
+    if self.is_grue?
+      return "The image of a fearsome grue appears for a moment, then vanishes, leaving a musky scent lingering in the air."
+    end
+    if force || Alice::Util::Randomizer.one_chance_in(2)
+      put_in_play && self.place = Place::Current && self.save
+      return "#{actor.proper_name} appears before #{summoner}!"
+    else
+      Alice::Util::Randomizer.summon_failure(current_user.proper_name, actor_name)
+    end
+  end
+
 end
