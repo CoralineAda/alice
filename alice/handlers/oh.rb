@@ -1,13 +1,16 @@
 module Handlers
 
-  class Oh
+  class OH
 
     include PoroPlus
     include Behavior::HandlesCommands
 
-    def process
-      message.response = ::Oh.random
-      message
+    def set
+      message.set_response(::OH.from(command_string.predicate))
+    end
+
+    def get
+      message.set_response(::OH.sample)
     end
 
   end

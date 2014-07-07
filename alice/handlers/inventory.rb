@@ -5,9 +5,8 @@ module Handlers
     include PoroPlus
     include Behavior::HandlesCommands
 
-    def process
-      message.response = ::Inventory.for(message)
-      message
+    def inventory
+      message.set_response(message.sender.inventory)
     end
 
   end

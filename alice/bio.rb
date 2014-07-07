@@ -2,10 +2,19 @@ class Bio
 
   include Mongoid::Document
 
-  field :text
-
   store_in collection: :alice_bios
+
+  field :text
+  field :keywords, type: Array, default: []
+
+  index({ text: 1 }, { unique: false })
+  index({ keywords: 1 }, { unique: false })
+
   belongs_to :user
+
+  validates_presence_of :text
+
+  before_create :extract_keywords
 
   def self.for(name)
     user = User.from(name)
@@ -14,6 +23,11 @@ class Bio
 
   def self.random
     all.sample
+  end
+
+  # TODO extract into module. Repeated in bio, factoid, OH
+  def extract_keywords
+    self.keywords = Alice::Parser::NgramFactory.filtered_grams_from(self.text).flatten.uniq
   end
 
   def formatted
