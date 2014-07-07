@@ -45,6 +45,10 @@ class Actor
     Actor.grue || Actor.create(name: 'Grue', description: "Fearsome! Loathsome! But cuddly!", is_grue: true)
   end
 
+  def self.unknown
+    Actor.new(name: "Nobody", description: "Nothing to see here.")
+  end
+
   def self.grue
     where(is_grue: true).first
   end

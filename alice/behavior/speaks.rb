@@ -9,9 +9,9 @@ module Alice
       end
 
       def prepare
-        corpus = Alice::Factoid.all.map(&:formatted)
-        corpus << Alice::Oh.all.map(&:formatted)
-        corpus << Alice::Bio.all.map(&:formatted)
+        corpus =  ::Factoid.all.map(&:formatted)
+        corpus << ::OH.all.map(&:formatted)
+        corpus << ::Bio.all.map(&:formatted)
         @prepared = corpus.flatten.map{|sentence| dictionary.parse_string(sentence)}
       end
 
