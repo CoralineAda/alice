@@ -8,18 +8,15 @@ module Handlers
     include Behavior::HandlesCommands
 
     def destroy
-      message.response = item.destruct
-      message
+      message.set_response(item_for_user.destruct)
     end
 
     def drop
-      message.response = item_for_user.drop
-      message
+      message.set_response(item_for_user.drop)
     end
 
     def examine
-      message.response = item.describe
-      message
+      message.set_response(item.describe)
     end
 
     # def find
@@ -28,13 +25,11 @@ module Handlers
     # end
 
     def forge
-      message.response = ::Item.forge(command_string.predicate, message.sender)
-      message
+      message.set_response(::Item.forge(command_string.predicate, message.sender))
     end
 
     def give
-      message.response = item_for_user.transfer_to(command_string.predicate)
-      message
+      message.set_response(item_for_user.transfer_to(command_string.predicate))
     end
 
     # def hide
@@ -43,23 +38,29 @@ module Handlers
     # end
 
     def play
-      message.response = item_for_user.play
-      message
+      message.set_response((loose_item || item_for_user).play)
+    end
+
+    def read
+      message.set_response((loose_item || item_for_user).read)
     end
 
     def steal
-      message.response = message.sender.steal(command_string.predicate)
-      message
+      message.set_response(message.sender.steal(command_string.predicate))
     end
 
     private
 
+    def loose_item
+      item.place.items.include?(item) ? item : ::Item.ephemeral
+    end
+
     def item_for_user
-      message.sender.items.include?(item) ? item : Item.ephemeral
+      message.sender.items.include?(item) ? item : ::Item.ephemeral
     end
 
     def item
-      @item ||= ::Item.from(command_string.subject) || Item.ephemeral
+      @item ||= ::Item.from(command_string.subject) || ::Item.ephemeral
     end
 
   end
