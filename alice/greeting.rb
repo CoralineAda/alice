@@ -1,7 +1,7 @@
 class Greeting
 
-  def self.greet(message)
-    Alice::Util::Randomizer.greeting(message.sender_nick)
+  def self.greet(nick)
+    Alice::Util::Randomizer.greeting(nick)
   end
 
 end
