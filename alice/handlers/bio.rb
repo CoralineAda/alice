@@ -5,9 +5,18 @@ module Handlers
     include PoroPlus
     include Behavior::HandlesCommands
 
-    def process
-      message.response = ::Bio.for(message.trigger).formatted
-      message
+    def set
+      message.set_response(message.sender.update_bio(command_string.predicate))
+    end
+
+    def get
+      message.set_response(subject.formatted_bio)
+    end
+
+    private
+
+    def subject
+      ::User.from(command_string.predicate) || ::User.new
     end
 
   end

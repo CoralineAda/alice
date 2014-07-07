@@ -175,6 +175,12 @@ class User
     "https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
   end
 
+  def update_bio(content)
+    bio = self.bio || self.bio.new
+    bio.text = content
+    bio.save
+  end
+
   def update_nick(new_nick)
     return false if has_nick?(new_nick)
     update_attribute(:alt_nicks, [self.alt_nicks, new_nick.downcase].flatten.uniq)

@@ -6,13 +6,11 @@ module Handlers
     include Behavior::HandlesCommands
 
     def brew
-      message.response = ::Beverage.brew(command_string.predicate, message.sender)
-      message
+      message.set_response(::Beverage.brew(command_string.predicate, message.sender))
     end
 
     def drink
-      message.response = ::Beverage.consume(command_string.predicate, message.sender)
-      message
+      message.set_response(::Beverage.consume(command_string.predicate, message.sender))
     end
 
   end
