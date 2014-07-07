@@ -62,8 +62,8 @@ class Item
     victim && victim.items << Item.fruitcake
   end
 
-  def ephemeral
-    new(name: "thing that doesn't exist", ephemeral: true)
+  def self.ephemeral
+    new(name: "thing that you don't have", ephemeral: true)
   end
 
   def self.forge(args={})

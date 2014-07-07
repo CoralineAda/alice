@@ -28,4 +28,10 @@ class Message
     @sender ||= User.find_or_create(self.sender_nick)
   end
 
+  def set_response(content)
+    self.response = content
+    self
+
+  end
+
 end
