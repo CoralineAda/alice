@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Item" do
+describe "Handlers::Item" do
 
   let(:user)    { User.new(primary_nick: "Lydia") }
   let(:item)    { user.items.new(name: "Book") }

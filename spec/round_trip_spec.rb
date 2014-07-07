@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "Message Round Trip" do
 
-  let(:trigger)        { "!steal hair from lex_luther" }
+  let(:trigger)        { "!steal hair from lex_luthor" }
   let(:emitted_struct) { Struct.new(:user) }
   let(:sender)         { User.new(primary_nick: "Lydia") }
   let(:emitted)        { emitted_struct.new(sender) }
