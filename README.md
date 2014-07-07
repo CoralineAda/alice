@@ -1,16 +1,27 @@
 alice
 =====
 
+Architecture
+------------
+
+## Listener
+This is effectively a dynamic router. It matches an incoming message to a corresponding `Command` object, which in turn indicates the handler and handler method that should be used to create a response.
+
+## Handlers
+Handlers are like controllers: they connect incoming messages to the correct methods on the correct models.
+
 ToDo
 ----
 
 * !seen function
 * Devil's Advocate actor with dudebro logic extension
-* Coffee machine in the dungeon that makes real coffee that clears effects
+* Coffee clears dazed, etc. effects
 * Bio/factoid game
+* Juke box function (provide a url to queue)
 * Hide-and-seek game where a person !hides an item, someone else finds it
-* Potions
+* Potions with specific effects
 * Other machines
-  * Alchemist lab that produces potions
+  * Alchemist lab (produces potions)
   * Beer tap
+  * Wet bar
   * Boom box

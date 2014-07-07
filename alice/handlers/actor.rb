@@ -1,4 +1,3 @@
-# FIXME TODO
 module Handlers
 
   class Actor
@@ -7,9 +6,13 @@ module Handlers
     include Behavior::HandlesCommands
 
     def talk
+      message.set_response(subject.speak)
     end
 
-    def dance
+    private
+
+    def subject
+      ::Actor.from(command_string.predicate) || ::Actor.unknown
     end
 
   end
