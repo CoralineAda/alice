@@ -40,6 +40,59 @@ describe Command do
 
   end
 
+  describe "#meets_odds?" do
+
+    let(:times) { 1000 }
+
+    it "always meets odds if its odds are 1 in 1" do
+      command = Command.new(one_in_x_odds: 1)
+      results = (1..times).to_a.inject([]){ |a, i| a << (command.meets_odds? ? 1 : nil); a}.compact
+      expect(results.count).to eq times
+    end
+
+    it "sometimes meets odds" do
+      command = Command.new(one_in_x_odds: 2)
+      results = (1..times).to_a.inject([]){ |a, i| a << (command.meets_odds? ? 1 : nil); a}.compact
+      expect(results.count > 0).to be_true
+    end
+
+    it "doesn't always meet odds" do
+      command = Command.new(one_in_x_odds: 2)
+      results = (1..times).to_a.inject([]){ |a, i| a << (command.meets_odds? ? 1 : nil); a}.compact
+      expect(results.count < times).to be_true
+    end
+
+  end
+
+  describe "#needs_cooldown?" do
+
+    let(:command) { Command.new }
+
+    it "returns false if the command was never triggered before" do
+      command.stub(:last_said_at) { nil }
+      expect(command.needs_cooldown?).to be_false
+    end
+
+    it "returns false if there is no cooldown set" do
+      command.stub(:last_said_at) { Time.now }
+      command.stub(:cooldown_minutes) { 0 }
+      expect(command.needs_cooldown?).to be_false
+    end
+
+    it "returns false if the cooldown period has passed" do
+      command.stub(:last_said_at) { Time.now - 10.minutes }
+      command.stub(:cooldown_minutes) { 9 }
+      expect(command.needs_cooldown?).to be_false
+    end
+
+    it "returns true if the cooldown period has not passed" do
+      command.stub(:last_said_at) { Time.now - 5.minutes }
+      command.stub(:cooldown_minutes) { 9 }
+      expect(command.needs_cooldown?).to be_true
+    end
+
+  end
+
   describe "#terms" do
 
     let(:command_1) { Command.new(indicators: ["QUICK", "Brown", "fox", "jumped"]) }
