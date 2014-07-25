@@ -35,7 +35,6 @@ class Message
   def set_response(content)
     self.response = content
     self
-
   end
 
 end
