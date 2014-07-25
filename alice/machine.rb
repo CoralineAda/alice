@@ -19,12 +19,22 @@ class Machine
 
   attr_accessor :just_made
 
+  def self.catalog
+    "The following machines are available to !install: #{Machine.all.map(&:name).to_sentence}."
+  end
+
   def self.sweep
     all.map{|i| i.place = nil; i.save}
   end
 
   def describe
     self.description
+  end
+
+  def install(installer="A friend")
+    self.place = Place.current
+    self.save
+    return "#{installer} installs a shiny new #{self.name}!"
   end
 
   def name_with_article
