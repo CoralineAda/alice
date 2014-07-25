@@ -116,9 +116,9 @@ class Beverage
 
   def randomize_name
     new_name = self.name
-    new_name = "#{Alice::Util::Randomizer.beverage_container} of #{self.name}" if Alice::Beverage.where(name: new_name).first
-    new_name = "#{Alice::Util::Randomizer.material} #{new_name}" if Alice::Beverage.where(name: new_name).first
-    new_name = "#{new_name} with SN #{Time.now.to_i}" if Alice::Beverage.where(name: new_name).first
+    new_name = "#{Alice::Util::Randomizer.beverage_container} of #{self.name}" if Beverage.where(name: new_name).first
+    new_name = "#{Alice::Util::Randomizer.material} #{new_name}" if Beverage.where(name: new_name).first
+    new_name = "#{new_name} with SN #{Time.now.to_i}" if Beverage.where(name: new_name).first
     self.name = new_name
   end
 
