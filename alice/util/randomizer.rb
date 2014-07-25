@@ -5,7 +5,7 @@ module Alice
     class Randomizer
 
       def self.one_chance_in(number)
-        rand(number) == 1
+        rand(number) == 0
       end
 
       def self.brew_observation(what, who, args={})
