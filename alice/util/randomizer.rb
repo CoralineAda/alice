@@ -856,7 +856,7 @@ module Alice
           "Senator Dianne Feinstein (D, California)",
           "Rep. Luis Gutierrez (D, Illinois)",
           "Napoleon",
-          "Julius Caeser",
+          "Julius Caesar",
           "Colonel Sanders",
           "Dave Thomas",
           "Martin Fowler",
