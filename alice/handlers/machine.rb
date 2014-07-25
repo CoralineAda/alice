@@ -5,6 +5,14 @@ module Handlers
     include PoroPlus
     include Behavior::HandlesCommands
 
+    def catalog
+      message.set_response(Machine.catalog)
+    end
+
+    def install
+      message.set_response(machine.install)
+    end
+
     def use
       message.set_response(machine.use(action))
     end
