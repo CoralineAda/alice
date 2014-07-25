@@ -2,6 +2,10 @@ class CommandString
 
   attr_accessor :content
 
+  PREDICATE_INDICATORS = [
+    "to", "from", "with", "on", "in"
+  ]
+
   def initialize(content)
     self.content = content
   end
@@ -15,16 +19,20 @@ class CommandString
   end
 
   def predicate
-    components[(predicate_position + 1)..-1].join(' ')
+    components[(predicate_positions.max + 1)..-1].join(' ')
+  end
+
+  def predicate_positions
+    PREDICATE_INDICATORS.map{ |indicator| components.index(indicator) }.compact
   end
 
   def predicate_position
-    components.index('to') || components.index('from') || 0
+    predicate_positions.max || 0
   end
 
   def subject
     return components[1..-1].join(' ') unless has_predicate?
-    return components[1..(predicate_position - 1)].join(' ')
+    return components[1..(predicate_positions.min - 1)].join(' ')
   end
 
   def verb
