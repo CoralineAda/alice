@@ -229,7 +229,7 @@ module Alice
           "whispering softly.",
           "hissing like a snake.",
           "standing around listlessly.",
-          "playing a quiet came of Chutes and Ladders.",
+          "playing a quiet game of Chutes and Ladders.",
           "pretending to read a book.",
           "talking fervently about the best way to brew a #{beverage}.",
           "trying to start a fire.",
