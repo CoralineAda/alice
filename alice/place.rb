@@ -170,6 +170,10 @@ class Place
     end
   end
 
+  def has_exit?(direction)
+    self.exits.include?(direction)
+  end
+
   def has_item?
     return true if self.items.present?
   end
