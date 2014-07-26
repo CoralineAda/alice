@@ -19,6 +19,7 @@ class CommandString
   end
 
   def predicate
+    return unless predicate_positions.max
     components[(predicate_positions.max + 1)..-1].join(' ')
   end
 
