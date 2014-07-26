@@ -31,7 +31,6 @@ module Alice
 
       def remove_from_inventory(item)
         return unless item
-        p item.inspect
         item.drop
         item.save
       end
