@@ -5,6 +5,7 @@ class Dungeon
     Item.reset_cursed
     Beverage.sweep
     Item.sweep
+    Wand.sweep
     Machine.sweep
     Place.delete_all
     Place.generate!(is_current: true)

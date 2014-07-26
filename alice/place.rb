@@ -22,6 +22,7 @@ class Place
 
   after_create  :place_item
   after_create  :place_actor
+  after_create  :place_wand
   before_create :ensure_description
 
   DIRECTIONS = ['north', 'south', 'east', 'west']
@@ -193,6 +194,14 @@ class Place
     end
   end
 
+  def illuminate
+    update_attributes(is_dark: false)
+  end
+
+  def lights_out
+    update_attributes(is_dark: true)
+  end
+
   def lock_door(direction)
     self.exits ||= (random_exits | ['direction']).flatten.compact.uniq
     self.locked_exit = direction
@@ -220,6 +229,13 @@ class Place
     odds = self.is_dark? ? 7 : 20
     if Alice::Util::Randomizer.one_chance_in(odds) && actor = Actor.unplaced.grue
       actor.update_attribute(:place_id, self.id)
+    end
+  end
+
+  def place_wand
+    return false if self.origin_square?
+    if Alice::Util::Randomizer.one_chance_in(10) && wand = Wand.unplaced.unclaimed.sample
+      wand.update_attribute(:place_id, self.id)
     end
   end
 
