@@ -5,19 +5,37 @@ namespace :commands do
   desc "Create default commands"
   task :create_defaults do
 
-   Command.create(
+    # Actor handler
+
+    Command.create(
+      name: 'summon',
+      verbs: ["summon", "invite", "call"],
+      stop_words: [],
+      handler_class: 'Handlers::Actor',
+      handler_method: :summon,
+      response_kind: :message
+     )
+
+    Command.create(
+      name: 'talk',
+      verbs: ["talk", "chat", "ask"],
+      stop_words: [],
+      handler_class: 'Handlers::Actor',
+      handler_method: :talk,
+      response_kind: :message
+     )
+
+    Command.create(
       name: 'brew',
       verbs: ["brew", "distill", "pour"],
-      indicators: [],
       stop_words: [],
       handler_class: 'Handlers::Beverage',
       handler_method: :brew,
       response_kind: :emote
     )
-   Command.create(
+    Command.create(
       name: 'beverage',
       verbs: ["pour","drink","quaff","sip","swallow","gulp","down","chug"],
-      indicators: [],
       stop_words: [],
       handler_class: 'Handlers::Beverage',
       handler_method: :drink,
@@ -70,7 +88,6 @@ namespace :commands do
     Command.create(
       name: 'steal',
       verbs: ["steal"],
-      indicators: [],
       stop_words: [],
       handler_class: 'Handlers::Item',
       handler_method: :steal,

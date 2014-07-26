@@ -18,7 +18,7 @@ class Processor
   end
 
   def respond
-    Response.from(self.message)
+    Alice::Util::Mediator.send_raw(Response.from(self.message).response)
   end
 
   def greet_on_join

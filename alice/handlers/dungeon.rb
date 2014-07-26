@@ -46,7 +46,7 @@ module Handlers
     private
 
     def direction
-      @direction ||= Dungeon.direction_from(message.trigger)
+      @direction ||= ::Dungeon.direction_from(message.trigger)
     end
 
     def reset_maze

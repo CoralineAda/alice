@@ -5,11 +5,12 @@ class Listener
   include Cinch::Plugin
 
   match /(.+)/, method: :process, use_prefix: false
+
   listen_to :join, method: :greet
   listen_to :nick, method: :update_nick
 
   def process(emitted, trigger)
-    Processor.process(message(emitted, trigger), :respond, trigger)
+    Processor.process(message(emitted, trigger), :respond)
   end
 
   def greet(emitted, trigger)
