@@ -1,4 +1,3 @@
-# FIXME
 module Handlers
 
   class Emotes
@@ -11,11 +10,20 @@ module Handlers
     end
 
     def help
-      response = ""
+      response = []
       response << "For most things you can ask me or tell me something in plain English."
       response << "!bio sets you bio, !fact sets a fact about yourself, and !twitter sets your Twitter handle."
       response << "!look, !inventory, !forge, and !brew can come in handy sometimes."
       response << "Also: beware the fruitcake. You've been warned."
+      message.set_response(response.join("\r\n"))
+    end
+
+    def stats
+      response = []
+      response << "I'm currently managing #{::User.count} users, #{::Item.count} items, #{::Actor.count} actors, and #{::Place.count} rooms."
+      response << "I'm capable of responding to #{::Command.count} distinct commands."
+      response << "I've overheard #{::OH.count} things and I know #{::Factoid.count} facts."
+      response << "Pretty cool, huh?"
       message.set_response(response.join("\r\n"))
     end
 
