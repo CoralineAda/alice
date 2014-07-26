@@ -4,7 +4,6 @@ class Command
 
   field :name
   field :verbs, type: Array, default: []
-  field :indicators, type: Array, default: []
   field :stop_words, type: Array, default: []
   field :handler_class
   field :handler_method
@@ -14,7 +13,7 @@ class Command
   field :one_in_x_odds, type: Integer, default: 1
   field :last_said_at, type: DateTime
 
-  index({ indicators: 1 }, { unique: true })
+  index({ verbs: 1 }, { unique: true })
   index({ stop_words: 1 }, { unique: true })
 
   validates_uniqueness_of :name
@@ -26,7 +25,7 @@ class Command
     Command.new(handler_class: 'Handlers::Unknown')
   end
 
-  def self.indicators_from(message)
+  def self.verbs_from(message)
     Alice::Parser::NgramFactory.omnigrams_from(message)
   end
 
@@ -36,9 +35,9 @@ class Command
     end
   end
 
-  def self.best_match(matches, indicators)
+  def self.best_match(matches, verbs)
     matches.sort do |a,b|
-      (a.indicators & indicators).count <=> (b.indicators & indicators).count
+      (a.verbs & verbs).count <=> (b.verbs & verbs).count
     end.last
   end
 
@@ -47,9 +46,9 @@ class Command
     match = nil
     if verb = verb_from(trigger)
       match = any_in(verbs: verb).first
-    elsif indicators = indicators_from(trigger)
-      matches = with_indicators(indicators).without_stopwords(indicators)
-      match = best_match(matches, indicators)
+    elsif verbs = verbs_from(trigger)
+      matches = with_verbs(verbs).without_stopwords(verbs)
+      match = best_match(matches, verbs)
     end
     match ||= default
     match.message = message
@@ -60,12 +59,12 @@ class Command
     from(message).invoke!
   end
 
-  def self.with_indicators(indicators)
-    Command.in(indicators: indicators)
+  def self.with_verbs(verbs)
+    Command.in(verbs: verbs)
   end
 
-  def self.without_stopwords(indicators)
-    Command.not_in(stop_words: indicators)
+  def self.without_stopwords(verbs)
+    Command.not_in(stop_words: verbs)
   end
 
   def needs_cooldown?
@@ -86,7 +85,7 @@ class Command
   end
 
   def terms
-    @terms || TermList.new(self.indicators)
+    @terms || TermList.new(self.verbs)
   end
 
   def terms=(words)
