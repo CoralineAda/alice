@@ -46,7 +46,7 @@ module Handlers
     end
 
     def steal
-      message.set_response(message.sender.steal(command_string.predicate))
+      message.set_response(message.sender.steal(command_string.subject))
     end
 
     private

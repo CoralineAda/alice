@@ -44,14 +44,13 @@ class Command
 
   def self.from(message)
     trigger = message.trigger.downcase.gsub(/[^a-zA-Z0-9\!\/\\\s]/, ' ')
-
+    match = nil
     if verb = verb_from(trigger)
       match = any_in(verbs: verb).first
     elsif indicators = indicators_from(trigger)
       matches = with_indicators(indicators).without_stopwords(indicators)
       match = best_match(matches, indicators)
     end
-
     match ||= default
     match.message = message
     match
@@ -80,10 +79,9 @@ class Command
   end
 
   def invoke!
-    return message unless self.handler_class
-    return message if needs_cooldown?
-    return message if meets_odds?
-    set_last_said
+    return unless self.handler_class
+    return if needs_cooldown?
+    return unless meets_odds?
     eval(self.handler_class).process(message, self.handler_method || :process)
   end
 
