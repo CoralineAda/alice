@@ -43,9 +43,6 @@ module Handlers
       reset_maze
     end
 
-    def bear
-    end
-
     private
 
     def direction
