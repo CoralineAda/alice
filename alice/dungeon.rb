@@ -15,6 +15,15 @@ class Dungeon
     true
   end
 
+  def self.direction_from(string)
+    case string
+      when "east", "e"; return "east"
+      when "west", "w"; return "west"
+      when "south", "s"; return "south"
+      when "north", "n"; return "north"
+    end
+  end
+
   def self.win!
     User.award_points_to_active(5)
     Actor.grue.penalize(5)
