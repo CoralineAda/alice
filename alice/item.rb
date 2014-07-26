@@ -57,8 +57,8 @@ class Item
     where(is_cursed: true).excludes(name: 'fruitcake')
   end
 
-  def self.deliver_fruitcake
-    victim = User.active_and_online.sample
+  def self.deliver_fruitcake(victim=nil)
+    victim ||= User.active_and_online.sample
     victim && victim.items << Item.fruitcake
   end
 

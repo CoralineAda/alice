@@ -21,6 +21,10 @@ class Wand
 
   validates_uniqueness_of :name
 
+  EFFECT_METHODS = [
+    :light, :dark, :summon, :appear, :teleport, :fruitcake
+  ]
+
   def self.sweep
     all.map{|wand| wand.remove unless item.actor? || item.user?}
     weapons.map(&:remove)
@@ -31,19 +35,21 @@ class Wand
   end
 
   def employ
+    return unless EFFECT_METHODS.include?(self.effect_method)
     message = self.send(self.effect_method)
     self.update_attributes(charges: self.charges - 1)
     if self.charges == 0
-      message << "The wand fizzles out and crumbles."
+      message << " The wand fizzles and crumbles."
       remove
       self.update_attributes(charges: 3)
     end
     message
   end
 
-  def light
-    Place.current.illuminate
-    "The room is suddenly illuminated as if by magic!"
+  def appear
+    item = Item.unclaimed.unplaced.sample
+    Place.current.items << item
+    "#{item.name_with_article} appears out of nowhere."
   end
 
   def dark
@@ -51,14 +57,18 @@ class Wand
     "The room suddenly goes pitch black!"
   end
 
-  def summon
-    Actor.random.summon_for(self.owner.primary_nick, true)
+  def fruitcake
+    Item.deliver_fruitcake(self.owner)
+    "#{self.owner.current_nick} has received a special gift!"
   end
 
-  def appear
-    item = Item.unclaimed.unplaced.sample
-    Place.current.items << item
-    "#{item.name_with_article} appears out of nowhere."
+  def light
+    Place.current.illuminate
+    "The room is suddenly illuminated!"
+  end
+
+  def summon
+    Actor.random.summon_for(self.owner.primary_nick, true)
   end
 
   def teleport
