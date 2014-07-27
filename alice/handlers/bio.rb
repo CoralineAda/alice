@@ -6,7 +6,8 @@ module Handlers
     include Behavior::HandlesCommands
 
     def set
-      message.set_response(message.sender.update_bio(command_string.predicate))
+      message.sender.update_bio(command_string.subject)
+      message.set_response("records the details in her notebook.")
     end
 
     def get
