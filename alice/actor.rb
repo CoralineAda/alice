@@ -1,4 +1,4 @@
-class Alice::Actor
+class Actor
 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -9,6 +9,8 @@ class Alice::Actor
   include Alice::Behavior::Placeable
   include Alice::Behavior::HasInventory
   include Alice::Behavior::Scorable
+
+  store_in collection: "alice_actors"
 
   field :name
   field :description
@@ -29,28 +31,42 @@ class Alice::Actor
 
   before_create :ensure_description
 
-  def self.random
-    excludes(is_grue: true).sample
+  ACTIONS = [
+    :brew,
+    :drink,
+    :spill,
+    :drop,
+    :pick_pocket,
+    :move,
+    :talk
+  ]
+
+  def self.ensure_grue
+    Actor.grue || Actor.create(name: 'Grue', description: "Fearsome! Loathsome! But cuddly!", is_grue: true)
+  end
+
+  def self.unknown
+    Actor.new(name: "Nobody", description: "Nothing to see here.")
   end
 
   def self.grue
     where(is_grue: true).first
   end
 
-  def self.observer
-    Alice::Actor.is_present.sample
-  end
-
-  def self.is_present
-    where(place_id: Alice::Place.current.id)
-  end
-
   def self.in_play
     where(in_play: true)
   end
 
-  def self.malleable
-    where(permanent: false)
+  def self.observer
+    present.random
+  end
+
+  def self.present
+    where(place_id: Place.current.id)
+  end
+
+  def self.random
+    excludes(is_grue: true).sample
   end
 
   def self.reset_all
@@ -60,43 +76,26 @@ class Alice::Actor
     grue.put_in_play
   end
 
-  def self.actions
-    [
-      :brew,
-      :drink,
-      :spill,
-      :drop,
-      :pick_pocket,
-      :move,
-      :talk
-    ]
-  end
-
   def add_catchphrase(text)
-    catchphrases.create(text: text)
+    self.catchphrases.create(text: text)
   end
 
   def brew
-    beverage = Alice::Beverage.brew_random
-    self.beverages << beverage
-    "#{Alice::User.bot.observe_brewing(beverage.name, self.proper_name)}"
-  end
-
-  def check_action
-    return unless Alice::Util::Randomizer.one_chance_in(10)
+    self.beverages << Beverage.brew_random
+    self.beverages.last
   end
 
   def describe
-    check_action
-    message = ""
-    message << "#{proper_name} is #{self.description}. "
-    message << "#{self.inventory}. "
+    message = []
+    message << "#{proper_name} is #{self.description}"
+    message << self.inventory_of_items
+    message << self.inventory_of_beverages
     message << check_score
-    message
+    message.compact.join(". ").gsub(/\.\. /, '. ')
   end
 
   def do_something
-    self.public_send(Alice::Actor.actions.sample)
+    self.public_send(Actor.actions.sample)
   end
 
   def ensure_description
@@ -104,12 +103,7 @@ class Alice::Actor
   end
 
   def is_present?
-    self.place == Alice::Place.current
-  end
-
-  def spill
-    return "#{proper_name } fumbles with an empty cup." unless beverages.present?
-    beverages.sample.spill
+    self.place == Place.current
   end
 
   def drink
@@ -117,53 +111,67 @@ class Alice::Actor
     beverages.sample.drink
   end
 
-  def is_bot?
-    false
-  end
-
-  def is_present?
-    self.place == Alice::Place.current
-  end
-
   def drop
     return unless self.items.present?
     self.items.sample.drop
   end
 
+  def is_bot?
+    false
+  end
+
+  def is_present?
+    self.place == Place.current
+  end
+
+  def move
+    direction = Place.current.exits.sample
+    self.place = Place.place_to(direction, false)
+  end
+
+  def perform_random_action
+    return unless Alice::Util::Randomizer.one_chance_in(10)
+    action = ACTIONS.sample
+    respond_to?(action) && self.send(action)
+  end
+
   def pick_pocket(attempts=0)
-    if thing = Alice::User.active_and_online.map{|user| user.items.sample}.compact.sample
+    if thing = User.active_and_online.map{|user| user.items.sample}.compact.sample
       steal(thing.name)
     else
       "#{proper_name} looks around slyly."
     end
   end
 
-  def move
-    direction = Alice::Place.current.exits.sample
-    self.place = Alice::Place.place_to(direction, false)
-  end
-
   def proper_name
-    self.name =~ /[A-Z]+/ && self.name || self.name.capitalize
+    self.name.to_s.split(" ").map(&:capitalize).join(" ")
   end
 
   def put_in_play
     self.in_play = true
+    reset_description && save
+  end
+
+  def reset_description
     self.description = nil
     ensure_description
-    save
   end
 
-  def talk
-    if message = Alice::Util::Randomizer.one_chance_in(2) && self.catchphrases.sample
-      "says '#{message.text}.'"
-    else
-      "says \"#{speak}.\""
+  def spill
+    beverages.present? && beverages.sample.spill
+  end
+
+  def summon_for(summoner, force=false)
+    return if self.is_bot?
+    if self.is_grue?
+      return "The image of a fearsome grue appears for a moment, then vanishes, leaving a musky scent lingering in the air."
     end
-  end
-
-  def target
-    (Alice::User.active | Alice::User.online).sample
+    if force || Alice::Util::Randomizer.one_chance_in(2)
+      put_in_play && Place.current.actors << self
+      return "#{proper_name} appears before #{summoner}!"
+    else
+      Alice::Util::Randomizer.summon_failure(summoner, proper_name)
+    end
   end
 
 end

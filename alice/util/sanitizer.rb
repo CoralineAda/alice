@@ -32,8 +32,10 @@ module Alice
         text.gsub!(/ a i/i, " an i")
         text.gsub!(/ a o/i, " an o")
         text.gsub!(/^am /i, 'is ')
+        text.gsub!('...', '•••')
         text.gsub!('..', '.')
         text.gsub!('..', '.')
+        text.gsub!('•••', '...')
         text.gsub!(',,', ',')
         text.gsub!('!.', '!')
         text.gsub!('. .', '.')
@@ -61,8 +63,10 @@ module Alice
       end
 
       def self.make_third_person(text)
-        text.gsub!(/ I /i, ' they ')
-        text.gsub!(/ me /i, ' they ')
+        text.gsub!(/[ ]?I /i, ' they ')
+        text.gsub!(/ me /i, ' them ')
+        text.gsub!(/ am /i, ' is ')
+        text.gsub!(/[ ]?I've /i, 'has ')
         text
       end
 

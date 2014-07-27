@@ -1,4 +1,4 @@
-class Alice::Beverage
+class Beverage
 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -9,8 +9,11 @@ class Alice::Beverage
   field :name
   field :description
   field :is_hidden, type: Boolean
+  field :is_alcohol, type: Boolean
   field :picked_up_at, type: DateTime
   field :creator_id
+
+  store_in collection: "alice_beverages"
 
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -23,40 +26,40 @@ class Alice::Beverage
   belongs_to :user
   belongs_to :place
 
+  before_create :set_alcohol
   before_create :ensure_description
 
-  attr_accessor :message
-
-  ALCOHOL_INDICATORS = [
-    "ale",
-    "beer",
-    "chablis",
-    "gin",
-    "lager",
-    "martini",
-    "merlot",
-    "mimosa",
-    "mixed",
-    "porter",
-    "rum",
-    "rumchata",
-    "rye",
-    "scotch",
-    "snifter",
-    "stout",
-    "tequila",
-    "vodka",
-    "whisky",
-    "whiskey",
-    "wine"
-  ]
-
   def self.already_exists?(name)
-    like(name).present?
+    where(name: /name/i).present?
   end
 
-  def self.sweep
-    all.map{|item| item.delete unless item.actor? || item.user?}
+  def self.brew(name, user)
+    return Constants::THERE_CAN_BE_ONLY_ONE if user.beverages.already_exists?(name)
+    return Constants::THATS_ENOUGH_DONTCHA_THINK unless user.can_brew?
+    if beverage = user.beverages.create(name: name, user: user)
+      Alice::Util::Randomizer.brew_observation(name, user.current_nick, alcohol: beverage.is_alcohol?)
+    else
+      Constants::UH_OH
+    end
+  end
+
+  def self.brew_random
+    new.tap do |beverage, beer = Beer.random|
+      beverage.name = "#{beer.container} of #{beer.name}",
+      beverage.description = beer.description
+    end
+  end
+
+  def self.consume(name, user)
+    if beverage = user.beverages.like(name)
+      beverage.drink
+    else
+      Constants::NO_SUCH_DRINK
+    end
+  end
+
+  def self.for_user(user)
+    where(user_id: user.id)
   end
 
   def self.inventory_from(owner, list)
@@ -64,36 +67,32 @@ class Alice::Beverage
     "#{owner.proper_name}'s cooler is stocked with #{stuff}"
   end
 
-  def self.total_inventory
-    return "Someone needs to brew some drinks, we're dry!" if count == 0
-    "Our beverage collection includes #{with_owner_names.map(&:name_with_article).to_sentence}."
-  end
-
-  def self.brew_random
-    new(
-      name: "#{Alice::Util::Randomizer.beverage_container} of #{Alice::Util::Randomizer.beverage}"
-    )
-  end
-
-  def self.for_user(user)
-    where(user_id: user.id)
-  end
-
   def self.sorted
-    all.sort_by(&:name)
+    all.asc(&:name)
   end
 
-  def self.with_owner_names
-    sorted.map(&:user).compact.uniq.map(&:beverages).flatten
+  def self.sweep
+    all.map{|item| item.delete unless item.actor? || item.user?}
+  end
+
+  def set_alcohol
+    return if Dictionary.is_a?(:tea_or_coffee, self.name) == true
+    beer = Beer.search(self.name)
+    cocktail = MixedDrink.search(self.name)
+    if drink = Alice::Parser::LanguageHelper.similar_to(self.name, beer.canonical_name) && beer ||
+               Alice::Parser::LanguageHelper.similar_to(self.name, cocktail.canonical_name) && cocktail.result
+      self.name = "#{drink.container.downcase} of #{self.name}"
+      self.description = drink.description
+      self.is_alcohol = true
+    end
   end
 
   def drink
-    message = Alice::Util::Randomizer.drink_message(self.name, self.owner)
-    if self.is_potion? || self.is_alcohol? || Alice::Util::Randomizer.one_chance_in(4)
+    message = Alice::Util::Randomizer.drink_message(self.name, owner_name)
+    if self.is_potion? || self.is_alcohol?
       effect = [:drunk, :dazed, :disoriented].sample
-      message << " In addition to feeling a little #{effect.to_s}, " + Alice::Util::Randomizer.effect_message(self.name, self.owner)
+      message << " In addition to feeling a little #{effect.to_s}, " + Alice::Util::Randomizer.effect_message(self.name, owner_name)
       self.user.filters << effect
-      self.user.save
     end
     self.delete
     message
@@ -107,10 +106,6 @@ class Alice::Beverage
     self.description ||= Alice::Util::Randomizer.drink_description(self.name)
   end
 
-  def is_alcohol?
-    self.name =~ /#{ALCOHOL_INDICATORS * '|'}/i
-  end
-
   def is_cursed?
     false
   end
@@ -121,14 +116,14 @@ class Alice::Beverage
 
   def randomize_name
     new_name = self.name
-    new_name = "#{Alice::Util::Randomizer.beverage_container} of #{self.name}" if Alice::Beverage.where(name: new_name).first
-    new_name = "#{Alice::Util::Randomizer.material} #{new_name}" if Alice::Beverage.where(name: new_name).first
-    new_name = "#{new_name} with SN #{Time.now.to_i}" if Alice::Beverage.where(name: new_name).first
+    new_name = "#{Alice::Util::Randomizer.beverage_container} of #{self.name}" if Beverage.where(name: new_name).first
+    new_name = "#{Alice::Util::Randomizer.material} #{new_name}" if Beverage.where(name: new_name).first
+    new_name = "#{new_name} with SN #{Time.now.to_i}" if Beverage.where(name: new_name).first
     self.name = new_name
   end
 
   def spill
-    self.destroy && Alice::Util::Randomizer.spill_message(self.name, owner)
+    self.destroy && Alice::Util::Randomizer.spill_message(self.name, owner_name)
   end
 
   def name_with_article

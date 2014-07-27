@@ -4,19 +4,28 @@ module Alice
 
     module Speaks
 
-      def speak
-        prepare && dictionary.generate_1_sentence(3)
-      end
-
       def dictionary
         @dictionary ||= MarkyMarkov::TemporaryDictionary.new
       end
 
       def prepare
-        corpus = Alice::Factoid.all.map(&:formatted)
-        corpus << Alice::Oh.all.map(&:formatted)
-        corpus << Alice::Bio.all.map(&:formatted)
+        corpus =  ::Factoid.all.map(&:formatted)
+        corpus << ::OH.all.map(&:formatted)
+        corpus << ::Bio.all.map(&:formatted)
         @prepared = corpus.flatten.map{|sentence| dictionary.parse_string(sentence)}
+      end
+
+      def generated_message
+        prepare && dictionary.generate_1_sentence(3)
+      end
+
+      def random_message
+        return unless Alice::Util::Randomizer.one_chance_in(2)
+        self.catchphrases.sample
+      end
+
+      def speak
+        random_message || generated_message
       end
 
     end

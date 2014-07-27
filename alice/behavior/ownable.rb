@@ -18,28 +18,24 @@ module Alice
       end
 
       def owner
-        self.user && self.user.proper_name || self.actor && self.actor.proper_name || nil
+        self.user || self.actor && self.actor.proper_name || Actor.new(name: "Edwina Nobody")
       end
 
-      def pass_to(actor)
-        if recipient = Alice::Actor::where(name: actor) || Alice::User.find_or_create(actor)
-          if recipient.is_bot?
-            self.message = "#{recipient.proper_name} does not accept drinks."
-          else
-            self.message = "#{owner} passes the #{self.name} to #{recipient.proper_name}. Cheers!"
-            self.user = recipient
-            self.save
-          end
-        else
-          self.message = "You can't share the #{self.name} with an imaginary friend."
-        end
-        self
+      def owner_name
+        owner.proper_name
       end
 
       def transfer_to(recipient)
+        return unless recipient
+        original_owner = self.user
         self.user_id = recipient.id
         self.picked_up_at = DateTime.now
         self.save
+        if original_owner
+          Alice::Util::Randomizer.give_message(original_owner.current_nick, recipient.current_nick, self.name_with_article)
+        else
+          "#{self.user.current_nick} now has the #{self.name}."
+        end
       end
 
     end

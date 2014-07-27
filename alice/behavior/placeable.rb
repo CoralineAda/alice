@@ -9,11 +9,13 @@ module Alice
       end
 
       def drop
-        self.place = Alice::Place.current
+        return "It seems that the #{name} is cursed and cannot be dropped!" if self.is_cursed?
+        self.place = Place.current
         self.user = nil if self.respond_to?(:user)
         self.is_hidden = false if self.respond_to?(:is_hidden)
         self.picked_up_at = nil if self.respond_to?(:picked_up_at)
         self.save
+        Alice::Util::Randomizer.drop_message(name_with_article, owner_name)
       end
 
       def hide
@@ -22,6 +24,7 @@ module Alice
         self.is_hidden = true if self.respond_to?(:is_hidden)
         self.picked_up_at = nil if self.respond_to?(:picked_up_at)
         self.save
+        Alice::Util::Randomizer.hide_message(name_with_article, owner_name)
       end
 
       def remove

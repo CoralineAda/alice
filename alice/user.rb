@@ -1,4 +1,4 @@
-class Alice::User
+class User
 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -7,6 +7,8 @@ class Alice::User
   include Alice::Behavior::HasInventory
   include Alice::Behavior::Emotes
   include Alice::Behavior::Steals
+
+  store_in collection: "alice_users"
 
   field :primary_nick
   field :alt_nicks,         type: Array, default: []
@@ -26,16 +28,29 @@ class Alice::User
   has_many :factoids
   has_many :items
   has_many :beverages
+  has_many :wands
 
   validates_presence_of :primary_nick
   validates_uniqueness_of :primary_nick
 
-  def self.by_nick(nick)
-    where(primary_nick: nick).last
+  def self.search_attr
+    :primary_nick
+  end
+
+  def self.award_points_to_active(points=0)
+    active_and_online.each{|actor| actor.score_points(points) }
+  end
+
+  def self.bot_name
+    bot.primary_nick
+  end
+
+  def self.default_user
+    online.last
   end
 
   def self.online
-    list = Alice::Util::Mediator.user_list.map(&:nick).map(&:downcase)
+    list = Adapter.user_list.map(&:downcase)
     any_in(primary_nick: list) | any_in(alt_nicks: list)
   end
 
@@ -52,22 +67,18 @@ class Alice::User
   end
 
   def self.fighting
-    (Alice::User.with_weapon & Alice::User.active_and_online)
+    (User.with_weapon & User.active_and_online)
   end
 
   def self.find_or_create(nick)
-    with_nick_like(nick) || Alice::Util::Mediator.exists?(nick) && create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
-  end
-
-  def self.like(arg)
-    with_nick_like(arg)
+    by_nick(nick) || Alice::Util::Mediator.exists?(nick) && create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
   end
 
   def self.random
     all.sample
   end
 
-  def self.with_nick_like(nick)
+  def self.by_nick(nick)
     scrubbed_nick = nick.to_s.gsub('_','').downcase
     found = where(primary_nick: nick.downcase).first || where(primary_nick: scrubbed_nick).first
     found ||= where(alt_nicks: nick.downcase).first || where(alt_nicks: scrubbed_nick).first
@@ -75,40 +86,19 @@ class Alice::User
   end
 
   def self.with_key
-    Alice::Item.keys.excludes(user_id: nil).map(&:user)
+    Item.keys.excludes(user_id: nil).map(&:user)
   end
 
   def self.with_weapon
-    Alice::Item.weapons.excludes(user_id: nil).map(&:user)
-  end
-
-  def self.update_nick(old_nick, new_nick)
-    user = with_nick_like(old_nick) || with_nick_like(new_nick)
-    user ||= new(primary_nick: old_nick)
-    user.alt_nicks << new_nick.downcase
-    user.alt_nicks << old_nick.downcase
-    user.alt_nicks = user.alt_nicks.uniq
-    user.save
+    Item.weapons.excludes(user_id: nil).map(&:user)
   end
 
   def accepts_gifts?
-    ! self.is_bot?
-  end
-
-  def apply_filters(text)
-    if remove_filter?
-      self.update_attribute(:filters, [])
-      return text
-    else
-      self.filters.inject([]) do |processed, filter|
-        processed[0] = eval("Alice::Filters::#{filter.to_s.classify}").new.process(processed.first || text)
-        processed
-      end.first || text
-    end
+    ! self.is_bot? && is_online?
   end
 
   def creations
-    Alice::Item.where(creator_id: self.id)
+    Item.where(creator_id: self.id)
   end
 
   def can_brew?
@@ -129,6 +119,10 @@ class Alice::User
     self.last_game <= DateTime.now - 13.minutes
   end
 
+  def current_nick
+    (Adapter.user_list.map(&:downcase) & self.nicks).first || self.primary_nick
+  end
+
   def dazed?
     self.filters.include?(:dazed)
   end
@@ -141,58 +135,83 @@ class Alice::User
     self.filters.include?(:drunk)
   end
 
-  def description
-    describe
-  end
-
   def describe
-    message = ""
-    if self.bio.present?
-      message << "#{self.bio.formatted}. "
-    else
-      message << "It's #{proper_name}! "
-    end
-    message << "Find them on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
+    message = self.bio && self.bio.formatted || ""
+    message << "They're on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
     message << "#{self.inventory} "
     message << "#{check_score} "
     message << "#{proper_name} is currently feeling a little #{self.filters.map(&:to_s).to_sentence}. " if self.filters.present?
     message
   end
 
-  def remove_filter?
-    self.filter_applied ||= DateTime.now - 1.day
-    self.filter_applied <= DateTime.now - 13.minutes
-  end
-
   def has_nick?(nick)
-    [self.primary_nick, self.alt_nicks].flatten.include?(nick.downcase)
+    nicks.include?(nick.downcase)
   end
 
-  def is_present?
-    true
+  def is_online?
+    (Mediator.user_nicks & self.nicks).any?
   end
 
-  def formatted_name
-    self.proper_name
+  def is_op?
+    (Mediator.op_nicks & self.nicks).any?
   end
 
   def formatted_bio
-    return unless self.bio.present?
-    formatted = bio.text.gsub(/^is/, '')
-    formatted = formatted.gsub(/^([a-zA-Z0-9\_]+) is/, '')
-    "#{self.proper_name} is #{formatted}".gsub("  ", " ")
+    bio && bio.formatted || nil
   end
 
-  def online?
-    Alice::Util::Mediator.user_list.select{|m| Alice::User.with_nick_like(channel_user) == self}.present?
+  def filter_applied_date
+    self.filter_applied || DateTime.now - 1.day
+  end
+
+  def nicks
+    (self.alt_nicks | [self.primary_nick]).map(&:downcase)
   end
 
   def proper_name
     self.primary_nick.capitalize
   end
 
+  def random_factoid
+    self.factoids.sample
+  end
+
+  def remove_filter?
+    filter_applied_date <= DateTime.now - 13.minutes
+  end
+
+  def set_factoid(text)
+    self.factoids.create(text: text)
+  end
+
+  # TODO Extract twitter info into object
+  def set_twitter_handle(handle)
+    handle = handle.split[0].gsub("@", "")
+    self.update_attribute(:twitter_handle, handle)
+  end
+
+  def formatted_twitter_handle
+    return unless self.twitter_handle
+    "#{proper_name} is on Twitter as @#{self.twitter_handle.gsub('@','')}. Find them at https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
+  end
+
   def twitter_url
     return unless self.twitter_handle
     "https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
   end
+
+  def update_bio(content)
+    bio = self.bio || Bio.new(user: self)
+    bio.text = content
+    bio.save
+  end
+
+  def update_nick(new_nick)
+    return false if has_nick?(new_nick)
+    update_attribute(:alt_nicks, [self.alt_nicks, new_nick.downcase].flatten.uniq)
+  end
+
+  alias_method :description, :describe
+  alias_method :formatted_name, :proper_name
+
 end

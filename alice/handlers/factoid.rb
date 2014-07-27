@@ -1,34 +1,25 @@
-module Alice
+module Handlers
 
-  module Handlers
+  class Factoid
 
-    class Factoid
+    include PoroPlus
+    include Behavior::HandlesCommands
 
-      def self.minimum_indicators
-        3
-      end
+    def set
+      message.sender.set_factoid(command_string.predicate)
+      message.set_response("Got it!")
+    end
 
-      def self.process(sender, command)
-        if subject = Alice::User.from(command)
-          if factoid = subject.factoids.sample
-            Alice::Handlers::Response.new(content: factoid.formatted, kind: :reply)
-          end
-        elsif command =~ /about (.+)$/
-          subject = command.split('about')[-1].strip
-          if response = Alice::Factoid.about(subject)
-            Alice::Handlers::Response.new(content: response.formatted, kind: :reply)
-          else
-            Alice::Handlers::Response.new(content: Alice::Util::Randomizer.negative_response, kind: :reply)
-          end
-        else
-          Alice::Handlers::Response.new(content: random.formatted, kind: :reply)
-        end
-      end
+    def get
+      factoid = ::Factoid.about(command_string.predicate)
+      factoid ||= ::Factoid.about(command_string.subject)
+      message.set_response(factoid.formatted) if factoid
+    end
 
-      def self.random
-        Alice::Factoid.random
-      end
+    private
 
+    def subject
+      ::User.from(command_string.subject)
     end
 
   end

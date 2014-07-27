@@ -1,4 +1,4 @@
-class Alice::Action
+class Action
 
   include Mongoid::Document
 
@@ -12,6 +12,8 @@ class Alice::Action
   validates_presence_of :trigger, :description
 
   belongs_to :machine
+
+  store_in collection: "alice_actions"
 
   def self.triggered_by(action)
     where(trigger: action)
