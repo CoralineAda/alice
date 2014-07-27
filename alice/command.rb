@@ -46,7 +46,6 @@ class Command
 
   def self.best_indicator_match(matches, indicators=[])
     matches.sort do |a,b|
-      binding.pry
       (a.indicators.to_a & indicators).count <=> (b.indicators.to_a & indicators).count
     end.last
   end
@@ -58,6 +57,7 @@ class Command
     match ||= find_indicators(trigger)
     match ||= default
     match.message = message
+    p "*** Executing #{match.name} ***"
     match
   end
 
@@ -109,7 +109,7 @@ class Command
     return if needs_cooldown?
     return unless meets_odds?
     self.update_attribute(:last_said_at, Time.now)
-    eval(self.handler_class).process(message, self.handler_method || :process)
+    eval(self.handler_class).process(message, self.handler_method)
   end
 
   def terms
