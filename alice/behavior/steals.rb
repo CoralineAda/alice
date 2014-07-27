@@ -1,3 +1,5 @@
+require 'pry'
+
 module Alice
 
   module Behavior
@@ -12,8 +14,8 @@ module Alice
       def steal(what)
         return "thinks that #{proper_name} shouldn't press their luck on the thievery front." if recently_stole?
 
-        item = what.respond_to?(:name) && item
-        item ||= Item.where(name: what.downcase).last || Beverage.where(name: what.downcase).last
+        item = what if what.respond_to?(:name)
+        item ||= Item.from(name: what.downcase).last || Beverage.from(name: what.downcase).last
         return "eyes #{proper_name} curiously." unless item
         return "#{Alice::Util::Randomizer.laugh} as #{proper_name} tries to steal their own #{item.name}!" if item.owner == self
 
