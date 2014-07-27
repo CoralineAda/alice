@@ -81,6 +81,7 @@ class Command
     return unless self.handler_class
     return if needs_cooldown?
     return unless meets_odds?
+    self.update_attribute(:last_said_at, Time.now)
     eval(self.handler_class).process(message, self.handler_method || :process)
   end
 

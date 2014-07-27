@@ -19,7 +19,9 @@ class Processor
 
   def respond
     track_sender
-    Alice::Util::Mediator.reply_with(Response.from(self.message).response)
+    if response = Response.from(self.message)
+      Alice::Util::Mediator.reply_with(response.response)
+    end
   end
 
   def greet_on_join
