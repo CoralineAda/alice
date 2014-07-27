@@ -28,7 +28,9 @@ class Place
   DIRECTIONS = ['north', 'south', 'east', 'west']
 
   def self.current
-    where(:is_current => true).last || all.sample || generate!
+    place = where(:is_current => true).last || generate!
+    place.update_attribute(:is_current, true) unless place.is_current?
+    place
   end
 
   # TODO FIXME exits to existing non-entered-from rooms don't always connect!
