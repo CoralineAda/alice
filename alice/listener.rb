@@ -5,6 +5,7 @@ class Listener
   include Cinch::Plugin
 
   match /^([0-9]+)/, method: :process_number, use_prefix: false
+  match /(.+)\+\+$/, method: :process_points, use_prefix: false
   match /(.+)/, method: :process, use_prefix: false
 
   listen_to :join, method: :greet
@@ -12,6 +13,10 @@ class Listener
 
   def process_number(emitted, trigger)
     Processor.process(message(emitted, "13"), :respond)
+  end
+
+  def process_points(emitted, trigger)
+    Processor.process(message(emitted, trigger), :respond)
   end
 
   def process(emitted, trigger)

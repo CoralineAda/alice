@@ -32,9 +32,11 @@ class Command
     Alice::Parser::NgramFactory.filtered_grams_from(message)
   end
 
-  def self.verb_from(message)
-    if verb = message.split(' ').select{|w| w[0] == "!"}.first
+  def self.verb_from(trigger)
+    if verb = trigger.split(' ').select{|w| w[0] == "!"}.first
       verb[1..-1]
+    elsif verb = trigger.split(' ').select{|w| w[-1] == "+"}.first
+      "+"
     end
   end
 
@@ -51,7 +53,7 @@ class Command
   end
 
   def self.from(message)
-    trigger = message.trigger.downcase.gsub(/[^a-zA-Z0-9\!\/\\\s]/, ' ')
+    trigger = message.trigger.downcase.gsub(/[^a-zA-Z0-9\+\!\/\\\s]/, ' ')
     match = nil
     match = find_verb(trigger)
     match ||= find_indicators(trigger)
