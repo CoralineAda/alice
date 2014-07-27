@@ -5,19 +5,26 @@ module Handlers
     include PoroPlus
     include Behavior::HandlesCommands
 
-    def set
-      message.sender.update_bio(command_string.subject)
-      message.set_response("records the details in her notebook.")
-    end
-
-    def get
-      message.set_response(subject.formatted_bio)
+    def process
+      if quoted = command_string.quoted_text
+        if quoted.length > 0
+          message.sender.update_bio(quoted)
+          message.set_response("I've recorded the details in my notebook.")
+        else
+          message.sender.bio.delete
+          message.set_response("I've erased your bio from my notebook.")
+        end
+      elsif bio = subject.formatted_bio
+        message.set_response(bio)
+      else
+        message.set_response("I can't seem to find anything about that.")
+      end
     end
 
     private
 
     def subject
-      ::User.from(command_string.predicate) || ::User.new
+      ::User.from(command_string.content) || message.sender
     end
 
   end

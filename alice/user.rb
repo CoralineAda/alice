@@ -195,7 +195,7 @@ class User
   end
 
   def update_bio(content)
-    bio = self.bio || self.bio.new
+    bio = self.bio || Bio.new(user: self)
     bio.text = content
     bio.save
   end

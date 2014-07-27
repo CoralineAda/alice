@@ -31,6 +31,12 @@ class CommandString
     predicate_positions.max || 0
   end
 
+  def quoted_text
+    return unless content =~ /"/
+    return "" if content =~ /""/
+    content.gsub(/.*"(.*)".*/, '\1')
+  end
+
   def subject
     return components[1..-1].join(' ') unless has_predicate?
     return components[1..(predicate_positions.min - 1)].join(' ')
