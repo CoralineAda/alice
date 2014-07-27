@@ -3,7 +3,7 @@ class CommandString
   attr_accessor :content
 
   PREDICATE_INDICATORS = [
-    "to", "from", "with", "on", "in"
+    "to", "from", "with", "on", "in", "about"
   ]
 
   def initialize(content)

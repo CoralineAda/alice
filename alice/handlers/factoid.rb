@@ -6,17 +6,20 @@ module Handlers
     include Behavior::HandlesCommands
 
     def set
-      message.set_response(message.sender.set_factoid(command_string.predicate))
+      message.sender.set_factoid(command_string.predicate)
+      message.set_response("Got it!")
     end
 
     def get
-      message.set_response(subject.random_factoid.formatted)
+      factoid = ::Factoid.about(command_string.predicate)
+      factoid ||= ::Factoid.about(command_string.subject)
+      message.set_response(factoid.formatted) if factoid
     end
 
     private
 
     def subject
-      ::User.from(command_string.subject) || ::User.new
+      ::User.from(command_string.subject)
     end
 
   end
