@@ -30,7 +30,7 @@ module Handlers
           response = "A lovely wall you've found there."
         end
       elsif command_string.subject.length > 0 && subject = command_string.subject
-        if obj = (::User.from(subject) || ::Item.from(subject) || ::Beverage.from(subject) || ::Machine.from(subject))
+        if obj = (::User.from(subject) || ::Item.from(subject) || ::Beverage.from(subject) || ::Machine.from(subject) || ::Actor.from(subject)) 
           response = obj.describe
         else
           response = "I don't see that here."

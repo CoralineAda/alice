@@ -21,10 +21,7 @@ module Alice
 
         if Alice::Util::Randomizer.one_chance_in(5)
           message = "watches in awe as #{proper_name} steals the #{item.name} from #{item.owner_name}!"
-          item.user_id = nil
-          item.actor_id = nil
-          item.place_id = nil
-          item.save
+          item.remove
           self.items << item
           self.score_points if self.respond_to?(:score_points)
         else

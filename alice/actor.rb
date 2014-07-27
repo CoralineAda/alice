@@ -167,10 +167,10 @@ class Actor
       return "The image of a fearsome grue appears for a moment, then vanishes, leaving a musky scent lingering in the air."
     end
     if force || Alice::Util::Randomizer.one_chance_in(2)
-      put_in_play && self.place = Place::Current && self.save
-      return "#{actor.proper_name} appears before #{summoner}!"
+      put_in_play && Place.current.actors << self
+      return "#{proper_name} appears before #{summoner}!"
     else
-      Alice::Util::Randomizer.summon_failure(current_user.proper_name, actor_name)
+      Alice::Util::Randomizer.summon_failure(summoner, proper_name)
     end
   end
 
