@@ -7,7 +7,7 @@ class Dictionary
   end
 
   def self.coffee_or_tea(thing)
-    (['cup', 'cuppa', 'pot', 'kettle', 'mug'] & thing).count > 0
+    (['cup', 'cuppa', 'pot', 'kettle', 'mug', 'coffee', 'tea', 'latte', 'cappuccino', 'joe', 'mud'] & thing).count > 0
   end
 
   def self.parsed_thing(thing)
