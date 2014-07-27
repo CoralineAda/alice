@@ -6,17 +6,25 @@ module Alice
 
       def inventory
         message = inventory_of_items
-        message << " " + inventory_of_beverages + "."
+        message << " " + inventory_of_beverages.to_s + "."
+        message << " " + inventory_of_wands
         message ||= "has no possessions."
         message
       end
 
       def inventory_of_beverages
-        Alice::Beverage.inventory_from(self, self.beverages)
+        return if self.beverages.empty?
+        Beverage.inventory_from(self, self.beverages)
       end
 
       def inventory_of_items
-        Alice::Item.inventory_from(self, self.items)
+        return if self.items.empty?
+        Item.inventory_from(self, self.items)
+      end
+
+      def inventory_of_wands
+        return if self.wands.empty?
+        Wand.inventory_from(self, self.wands)
       end
 
       def add_to_inventory(item)
@@ -29,7 +37,6 @@ module Alice
 
       def remove_from_inventory(item)
         return unless item
-        p item.inspect
         item.drop
         item.save
       end

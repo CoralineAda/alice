@@ -12,12 +12,12 @@ module Alice
         ! op?(channel_user)
       end
 
-      def self.op?(channel_user)
-        channel_user.channel.ops.map(&:nick).include?(channel_user.user.nick)
+      def self.op?(nick)
+        op_nicks.include?(nick)
       end
 
       def self.exists?(nick)
-        Alice.bot.bot.user_list.map(&:nick).select{|n| n =~ /^#{nick}$/i}.compact.present?
+        user_nicks.any?{|n| n =~ /^#{nick}$/i}
       end
 
       def self.user_list
@@ -28,8 +28,20 @@ module Alice
         Alice.bot.bot.nick == nick
       end
 
+      def self.default_channel
+        Alice.bot.bot.channels.last
+      end
+
       def self.default_user
-        Alice.bot.bot.channels.last.users.keys.last
+        default_channel.users.keys.last
+      end
+
+      def self.user_nicks
+        user_list.map(&:nick).map(&:downcase)
+      end
+
+      def self.op_nicks
+        default_channel.ops.map(&:nick).map(&:downcase)
       end
 
       def self.send_raw(message)
@@ -39,20 +51,19 @@ module Alice
       end
 
       def self.user_from(channel_user)
-        Alice::User.with_nick_like(channel_user.user.nick)
+        User.from(channel_user)
       end
 
-      def self.reply_to(channel_user, message)
+      def self.reply_with(message)
         text = Alice::Util::Sanitizer.process(message)
         text = Alice::Util::Sanitizer.initial_upcase(text)
-        text = user_from(channel_user).apply_filters(text)
-        channel_user.reply(text)
+        Alice.bot.bot.channels.first.msg(text)
       end
 
-      def self.emote_to(channel_user, message)
+      def self.emote(message)
         text = Alice::Util::Sanitizer.process(message)
         text = Alice::Util::Sanitizer.initial_downcase(text)
-        channel_user.action_reply(text)
+        Alice.bot.bot.channels.first.action(text)
       end
 
     end

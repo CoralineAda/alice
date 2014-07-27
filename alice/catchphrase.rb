@@ -1,11 +1,11 @@
-module Alice
+class Catchphrase
 
-  class Catchphrase
+  include Mongoid::Document
+  include Behavior::Samples
 
-    include Mongoid::Document
-    field :text
-    belongs_to :actor 
+  field :text
 
-  end
+  store_in collection: "alice_catchphrases"
+  belongs_to :actor
 
 end

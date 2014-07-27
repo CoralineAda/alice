@@ -13,16 +13,7 @@ module Alice
           config.nick = "AliceBot_"
           config.user = "AliceBot"
           config.plugins.plugins = [
-            Listeners::Setter,
-            Listeners::Item,
-            Listeners::Nlp,
-            Listeners::Zork,
-            Listeners::Beverage,
-            Listeners::Score,
-            Listeners::NumberWang,
-            Listeners::Core,
-            Listeners::TickTock,
-            Listeners::Machine
+            Processor
           ]
           config.password = ENV['USER_PASS']
           config.messages_per_second = 1
@@ -36,6 +27,10 @@ module Alice
 
     def leave(channel_name)
       self.bot.channels.select{|c| c.name == channel_name}.first.part
+    end
+
+    def log(message)
+      bot.loggers.warn "#{Time.now} - #{message}"
     end
 
     def start

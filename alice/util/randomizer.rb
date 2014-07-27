@@ -5,7 +5,32 @@ module Alice
     class Randomizer
 
       def self.one_chance_in(number)
-        rand(number) == 1
+        rand(number) == 0
+      end
+
+      def self.random_user
+        user = User.active_and_online.sample
+        user ||= User.all.sample
+        user.current_nick
+      end
+
+      def self.brew_observation(what, who, args={})
+        message = [
+          "looks on in wonder as #{who} brews a perfect #{what}.",
+          "watches #{who} whip up #{what}.",
+          "watches #{who} brew a nice #{what}.",
+          "watches #{who} brew a #{what}.",
+          "watches as #{who} makes a #{what}.",
+          "watches #{who} brew a decent #{what}.",
+          "notices #{who} brewing a #{what}.",
+          "applauds as #{who} makes a #{what}.",
+          "nods approvingly as #{who} brews a #{what}.",
+          "admires #{who}'s ability to whip up a mean #{what}.",
+          "smiles and says, 'That's a fine #{what}!'",
+          "admires #{who}'s brewing prowess."
+        ].sample
+        message << " It looks rather potent." if args[:is_alcohol]
+        message
       end
 
       def self.summon_failure(who, whom)
@@ -154,7 +179,7 @@ module Alice
           "#{caster} temporarily turns into #{specific_person}.",
           "Great, now everyone in the channel looks like #{person}.",
           "There is suddenly an overwhelming smell of #{thing}.",
-          "A #{thing} appears out of nowhere and runs #{Alice::Place.current.exits.sample}!",
+          "A #{thing} appears out of nowhere and runs #{Place.current.exits.sample}!",
           "The illusion of a #{thing} appears, to all appearances #{action}",
           "The face of #{specific_person} flickers in mid-air, frowns, and then vanishes.",
           "The room is filled with a dense #{color} fog.",
@@ -163,11 +188,11 @@ module Alice
           "A portal to the #{type_of_place} flickers into existence!",
           "#{caster} turns into #{actor_description(specific_person)}.",
           "#{caster} takes on the appearance of #{specific_person}.",
-          "#{Alice::User.active_and_online.sample.proper_name} starts speaking in the voice of #{specific_person}.",
-          "#{Alice::User.active_and_online.sample.proper_name}'s #{body_thing} turns #{color}!",
+          "#{random_user} starts speaking in the voice of #{specific_person}.",
+          "#{random_user}'s #{body_thing} turns #{color}!",
           "#{caster} summons a fearsome #{thing}!",
           "#{caster} tries to summon a mighty #{thing}, but manages only #{empty_pockets}.",
-          "#{effect_message('spell', Alice::User.active_and_online.sample.proper_name)}",
+          "#{effect_message('spell', random_user)}",
           "a #{room_type} appears somewhere deep in the dungeon."
         ].sample
       end
@@ -185,7 +210,7 @@ module Alice
           "Shouldn't you be hunting the grue instead of messing around with #{noun.pluralize}?",
           "It's been established that if you #{verb} #{noun.pluralize}, you are likely to attract a grue.",
           "I'm not sure that you should really #{verb} a #{noun}.",
-          "Are you saying that a #{noun} is a clown here for your amusement?",
+          "Are you saying that the #{noun} is a clown here for your amusement?",
           "Fine, if I let you #{verb} the #{noun} can we get on with our lives?",
           "She who #{verb.pluralize} the #{noun} must also #{verb} herself.",
           "It's a crazy world where people go around #{verb}ing all the #{noun.pluralize} they see.",
@@ -472,10 +497,10 @@ module Alice
           "cooled in a bucket of #{Alice::Util::Randomizer.beverage}",
           "under bright #{color} halogen lights",
           "plucked from the bowels of the #{Alice::Util::Randomizer.type_of_place}",
-          "safe from the prying eyes of #{Alice::User.random.proper_name}",
-          "not unlike the one that #{Alice::User.random.proper_name} always carries",
-          "under the watchful eye of #{Alice::User.random.proper_name}",
-          "according to methods devised by #{Alice::User.random.proper_name}"
+          "safe from the prying eyes of #{User.random.proper_name}",
+          "not unlike the one that #{User.random.proper_name} always carries",
+          "under the watchful eye of #{User.random.proper_name}",
+          "according to methods devised by #{User.random.proper_name}"
         ].sample
       end
 
@@ -950,7 +975,7 @@ module Alice
           "You shouldn't examine your drinks so closely.",
           "It's giving off an otherworldly glow but otherwise seems normal.",
           "Is it supposed to have bubbles like that?",
-          "Pretty tamd as far as #{thing.pluralize} go.",
+          "Pretty tame as far as #{thing.pluralize} go.",
           "I think that #{thing} is an acquired taste.",
           "It looks deliious!",
           "You're getting thirsty just looking at it.",
@@ -1178,7 +1203,7 @@ module Alice
           "#{actor_name} pockets the #{item_name}.",
           "The #{item_name} now belongs to #{actor_name}!",
           "#{actor_name} now has the #{item_name}.",
-          "Now #{actor_name}'s #{item_container} the #{item_name}."
+          "Now #{actor_name}'s #{item_container} holds the #{item_name}."
         ].sample
       end
 
@@ -1242,9 +1267,9 @@ module Alice
           "with bare shelves lining the walls",
           "with walls covered in paintings depicting #{thing}",
           "covered with posters of #{thing}",
-          "with a portrait of #{Alice::User.random.proper_name} on the wall",
-          "dominated by a large statue of #{Alice::User.random.proper_name}",
-          "with graffiti spelling out #{Alice::User.random.proper_name}'s name on the wall",
+          "with a portrait of #{User.random.proper_name} on the wall",
+          "dominated by a large statue of #{User.random.proper_name}",
+          "with graffiti spelling out #{User.random.proper_name}'s name on the wall",
           "with what appear to be footprints on the ceiling",
           "whose floor is covered in an inch of dust",
           "with a faint smell of gunpowder",

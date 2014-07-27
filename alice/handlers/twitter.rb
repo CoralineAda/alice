@@ -1,27 +1,24 @@
-module Alice
+module Handlers
 
-  module Handlers
+  class Twitter
 
-    class Twitter
+    include PoroPlus
+    include Behavior::HandlesCommands
 
-      def self.minimum_indicators
-        2
-      end
+    def set
+      message.sender.set_twitter_handle(command_string.subject)
+      message.set_response("I'll remember that.")
+    end
 
-      def self.process(sender, command)
-        if subject = Alice::User.from(command)
-          Alice::Handlers::Response.new(content: twitter_info_for(subject), kind: :reply)
-        end
-      end
+    def get
+      return unless subject
+      message.set_response(subject.formatted_twitter_handle)
+    end
 
-      def self.twitter_info_for(subject)
-        if subject.twitter_handle.present?
-          "#{subject.primary_nick} is #{subject.twitter_handle} on Twitter (#{subject.twitter_url})"
-        else
-          "I don't know #{subject.primary_nick}'s handle on Twitter. They can set it using !twitter <handle> though."
-        end
-      end
+    private
 
+    def subject
+      ::User.from(command_string.subject)
     end
 
   end

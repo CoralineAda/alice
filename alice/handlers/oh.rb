@@ -1,19 +1,17 @@
-module Alice
+module Handlers
 
-  module Handlers
+  class OH
 
-    class Oh
+    include PoroPlus
+    include Behavior::HandlesCommands
 
-      def self.minimum_indicators
-        2
-      end
+    def set
+      ::OH.from(command_string.subject)
+      message.set_response("I'll remember that.")
+    end
 
-      def self.process(sender, command)
-        if oh = Alice::Oh.random
-          Alice::Handlers::Response.new(content: oh.formatted, kind: :reply)
-        end
-      end
-
+    def get
+      message.set_response("Someone said \"#{::OH.sample.text}\"")
     end
 
   end
