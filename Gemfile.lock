@@ -44,6 +44,7 @@ GEM
       method_source (~> 0.8)
       slop (~> 3.4)
     rack (1.5.2)
+    rake (10.3.2)
     require_all (1.3.2)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
@@ -73,6 +74,7 @@ DEPENDENCIES
   mongoid (~> 3.1.6)
   poro_plus
   pry
+  rake
   require_all
   rspec
   ruby-stemmer (>= 0.8.3)
