@@ -11,7 +11,7 @@ module Alice
           config.port = 2600
           config.channels = [ENV['PRIMARY_CHANNEL'], ENV['DEBUG_CHANNEL']]
           config.nick = "AliceBot_"
-          config.user = "AliceBot_"
+          config.user = "AliceBot"
           config.plugins.plugins = [
             Listener
           ]
