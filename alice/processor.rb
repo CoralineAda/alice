@@ -33,7 +33,7 @@ class Processor
   def track_nick_change
     user = User.find_or_create(message.sender_nick)
     user.update_nick(message.sender_nick)
-    Alice::Util::Mediator.emote(Response.name_change(self.message))
+    Alice::Util::Mediator.emote(Response.name_change(self.message).response)
   end
 
   private
