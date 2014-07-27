@@ -29,7 +29,7 @@ module Alice
       end
 
       def self.default_channel
-        Alice.bot.bot.channels.last
+        Alice.bot.bot.channels.first
       end
 
       def self.default_user
