@@ -22,7 +22,7 @@ class Beer
   end
 
   def availability
-    result.available && result.available.description
+    result && result.available && result.available.description
   end
 
   def brewery_db
@@ -30,11 +30,11 @@ class Beer
   end
 
   def brewery
-    result.breweries && "Brewed by #{result.breweries.first.name}."
+    result && result.breweries && "Brewed by #{result.breweries.first.name}."
   end
 
   def canonical_name
-    result.name
+    result && result.name
   end
 
   def container
