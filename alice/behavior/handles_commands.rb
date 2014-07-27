@@ -1,3 +1,4 @@
+require 'pry'
 module Behavior
 
   module HandlesCommands
@@ -13,6 +14,7 @@ module Behavior
 
     module ClassMethods
       def process(message, method=:process)
+        return unless method
         new(message: message).public_send(method)
       end
     end
