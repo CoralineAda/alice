@@ -21,7 +21,7 @@ class Message
   end
 
   def is_emote?
-    self.response.is_emote?
+    self.type == "emote"
   end
 
   def is_sudo?

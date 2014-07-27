@@ -56,7 +56,9 @@ class Command
   end
 
   def self.process(message)
-    from(message).invoke!
+    command = from(message)
+    message.type = command.response_kind
+    command.invoke!
   end
 
   def self.with_verbs(verbs)

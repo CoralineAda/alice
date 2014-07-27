@@ -26,11 +26,11 @@ class Beverage
   belongs_to :user
   belongs_to :place
 
-  before_create :set_alchohol
+  before_create :set_alcohol
   before_create :ensure_description
 
   def self.already_exists?(name)
-    like(name).present?
+    where(name: /name/i).present?
   end
 
   def self.brew(name, user)
@@ -75,8 +75,8 @@ class Beverage
     all.map{|item| item.delete unless item.actor? || item.user?}
   end
 
-  def set_alchohol
-    return if Dictionary.is_a?(:tea_or_coffee, self.name)
+  def set_alcohol
+    return if Dictionary.is_a?(:tea_or_coffee, self.name) == true
     beer = Beer.search(self.name)
     cocktail = MixedDrink.search(self.name)
     if drink = Alice::Parser::LanguageHelper.similar_to(self.name, beer.canonical_name) && beer ||

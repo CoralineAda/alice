@@ -5,7 +5,7 @@ class Adapter
   end
 
   def self.user_list
-    Alice.bot.bot.user_list
+    Alice.bot.bot.user_list.to_a.map(&:nick)
   end
 
   def self.send_message(message)
