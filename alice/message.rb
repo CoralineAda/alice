@@ -25,7 +25,7 @@ class Message
   end
 
   def is_sudo?
-    Alice::Util::Mediator.op?(sender_nick)
+    Alice::Util::Mediator.op?(self.sender_nick)
   end
 
   def recipient

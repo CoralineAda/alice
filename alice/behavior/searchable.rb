@@ -16,7 +16,7 @@ module Alice
 
         # Use when there are multiple words to parse. May be deprecated.
         def from(string)
-          return [] unless string.present?
+          return unless string.present?
           names = Alice::Parser::NgramFactory.new(string.gsub(/[^a-zA-Z0-9\-\_\ ]/, '')).omnigrams
           names = names.map{|g| g.join ' '} << string
           names.uniq.reject!{|name| Alice::Parser::LanguageHelper::IDENTIFIERS.include?(name)}

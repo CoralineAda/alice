@@ -12,8 +12,7 @@ module Alice
         ! op?(channel_user)
       end
 
-      def self.op?(channel_user)
-        nick = channel_user.respond_to?(:user) ? channel_user.user.nick : channel_user
+      def self.op?(nick)
         op_nicks.include?(nick)
       end
 
@@ -42,7 +41,7 @@ module Alice
       end
 
       def self.op_nicks
-        channel.ops.map(&:nick).map(&:downcase)
+        default_channel.ops.map(&:nick).map(&:downcase)
       end
 
       def self.send_raw(message)

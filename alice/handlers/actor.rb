@@ -10,13 +10,13 @@ module Handlers
     end
 
     def talk
-      message.set_response(subject.speak)
+      message.set_response("#{subject.proper_name} says, \"#{subject.speak}\"")
     end
 
     private
 
     def subject
-      ::Actor.from(command_string.predicate) || ::Actor.unknown
+      ::Actor.from(command_string.subject) || ::Actor.unknown
     end
 
   end
