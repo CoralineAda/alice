@@ -80,7 +80,7 @@ class Beverage
     beer = Beer.search(self.name)
     cocktail = MixedDrink.search(self.name)
     if drink = Alice::Parser::LanguageHelper.similar_to(self.name, beer.canonical_name) && beer ||
-               Alice::Parser::LanguageHelper.similar_to(self.name, cocktail.canonical_name) && cocktail
+               Alice::Parser::LanguageHelper.similar_to(self.name, cocktail.canonical_name) && cocktail.result
       self.name = "#{drink.container.downcase} of #{self.name}"
       self.description = drink.description
       self.is_alcohol = true

@@ -11,7 +11,7 @@ class MixedDrink
   end
 
   def canonical_name
-    result.name
+    result && result.name
   end
 
   def container
@@ -19,6 +19,7 @@ class MixedDrink
   end
 
   def description
+    return unless result
     text = []
     text << "A #{flavor} concoction." if flavor
     text << "Made from #{ingredients.to_sentence}."
@@ -26,7 +27,7 @@ class MixedDrink
   end
 
   def ingredients
-    result.ingredients
+    result && result.ingredients
   end
 
   def flavor
@@ -35,13 +36,15 @@ class MixedDrink
   end
 
   def flavors
-    result.json['flavors']
+    result && result.json['flavors']
    end
 
   def result
-    results.sort do |a,b|
+    candidate = results.sort do |a,b|
       RubyFish::Hamming.distance(self.name, a.name) <=> RubyFish::Hamming.distance(self.name, b.name)
     end.first
+    return unless RubyFish::Hamming.distance(candidate, self.name) <= 5
+    candidate
   end
 
   private

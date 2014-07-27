@@ -17,7 +17,7 @@ class Machine
   belongs_to :place
   has_many :actions
 
-  attr_accessor :just_made
+  attr_accessor :just_made, :triggered_action
 
   def self.catalog
     "The following machines are available to !install: #{Machine.all.map(&:name).to_sentence}."
@@ -42,19 +42,24 @@ class Machine
   end
 
   def use(trigger=nil)
-    triggered = self.actions.triggered_by(trigger)
-    triggered = self.actions.primary if triggered.empty?
-    descriptions = triggered.map{|action| do_this(action)}.compact
-    descriptions.map{|desc| desc.gsub!("<<machine_name>>", self.name_with_article)}
-    descriptions.map{|desc| desc.gsub!("<<thing_name>>", self.just_made.name)} if self.just_made.present?
-    descriptions.inject([]) {|descriptions, result| descriptions << result }.join(' ')
+    triggered = self.actions.triggered_by(trigger).first
+    triggered ||= self.actions.primary
+    self.triggered_action = triggered
+    description = do_this
+    description.gsub!("<<machine_name>>", self.name_with_article)
+    description.gsub!("<<thing_name>>", self.just_made.name) if self.just_made.present?
+    description
   end
 
   private
 
-  def do_this(action)
-    self.send(action.trigger_method) if action.trigger_method.present?
-    action.description
+  def do_this
+    if klass.respond_to?(self.triggered_action.trigger_method)
+      klass.send(self.triggered_action.trigger_method)
+    else
+      self.send(triggered_action.trigger_method) if triggered_action.trigger_method.present?
+    end
+    triggered_action.description
   end
 
   def klass

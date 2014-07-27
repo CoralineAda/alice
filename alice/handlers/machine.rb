@@ -6,7 +6,7 @@ module Handlers
     include Behavior::HandlesCommands
 
     def catalog
-      message.set_response(Machine.catalog)
+      message.set_response(::Machine.catalog)
     end
 
     def install
@@ -20,11 +20,11 @@ module Handlers
     private
 
     def action
-      "#{command_string.verb} #{command_string.subject}".downcase
+      command_string.predicate
     end
 
     def machine
-      ::Machine.from(command_string.predicate)
+      ::Machine.from(command_string.subject)
     end
 
   end
