@@ -21,23 +21,21 @@ module Handlers
     end
 
     def look
-      response = ""
-      if direction
+      if direction.present?
         if Place.current.has_exit?(direction)
           room = Place.current.neighbors.select{|r| r[:direction] == direction}.first[:room]
           response = room.view
-        else direction
+        elsif direction
           response = "A lovely wall you've found there."
         end
       elsif command_string.subject.length > 0 && subject = command_string.subject
-        if obj = (::User.from(subject) || ::Item.from(subject) || ::Beverage.from(subject) || ::Machine.from(subject) || ::Actor.from(subject)) 
+        if obj = (::User.from(subject) || ::Item.from(subject) || ::Beverage.from(subject) || ::Machine.from(subject) || ::Actor.from(subject))
           response = obj.describe
         else
           response = "I don't see that here."
         end
-      else
-        response = Place.current.describe
       end
+      response ||= Place.current.describe
       message.set_response(response)
     end
 
