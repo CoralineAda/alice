@@ -14,7 +14,7 @@ module Alice
           :name
         end
 
-        # Use when there are multiple words to parse. May be deprecated.
+        # Use when there are multiple words to parse, e.g. pulling a name from a string.
         def from(string)
           return unless string.present?
           clean_string = string.gsub(/[^a-zA-Z0-9\'\-\_\ ]/, '')

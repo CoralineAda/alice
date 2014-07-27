@@ -6,15 +6,16 @@ module Handlers
     include Behavior::HandlesCommands
 
     def cast
-      message.set_response(Alice::Randomizer.spell_effect(message.sender_nick, command_string.predicate))
+      message.set_response(Alice::Util::Randomizer.spell_effect(message.sender_nick, command_string.predicate))
     end
 
     def help
       response = []
       response << "For most things you can ask me or tell me something in plain English."
-      response << "!bio sets you bio, !fact sets a fact about yourself, and !twitter sets your Twitter handle."
+      response << "For other things, try !<<command>>. For example:"
+      response << "!bio sets your bio, !fact sets a fact about yourself, and !twitter sets your Twitter handle."
       response << "!look, !inventory, !forge, and !brew can come in handy sometimes."
-      response << "Also: beware the fruitcake. You've been warned."
+      response << "Also: beware the fruitcake."
       message.set_response(response.join("\r\n"))
     end
 
@@ -33,10 +34,6 @@ module Handlers
 
     def bug
       message.set_response("Please submit bug reports at https://github.com/Bantik/alice/issues")
-    end
-
-    def shifty
-      message.set_response("#{message.sender_nick} is looking pretty shifty...")
     end
 
     def one_ring
