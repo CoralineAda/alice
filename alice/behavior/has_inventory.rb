@@ -6,7 +6,7 @@ module Alice
 
       def inventory
         message = inventory_of_items
-        message << " " + inventory_of_beverages + "."
+        message << " " + inventory_of_beverages.to_s + "."
         message ||= "has no possessions."
         message
       end

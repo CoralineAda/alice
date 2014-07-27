@@ -1,3 +1,5 @@
+require 'pry'
+
 module Handlers
 
   class Dungeon
@@ -19,11 +21,22 @@ module Handlers
     end
 
     def look
-      if Place.current.has_exit?(direction)
-        room = Place.current.neighbors.select{|r| r[:direction] == direction}.first[:room]
-        response = room.view
+      response = ""
+      if direction
+        if Place.current.has_exit?(direction)
+          room = Place.current.neighbors.select{|r| r[:direction] == direction}.first[:room]
+          response = room.view
+        else direction
+          response = "A lovely wall you've found there."
+        end
+      elsif command_string.subject.length > 0 && subject = command_string.subject
+        if obj = (User.from(subject) || Item.from(subject) || Beverage.from(subject) || Machine.from(subject))
+          response = obj.describe
+        else
+          response = "I don't see that here."
+        end
       else
-        response = "A lovely wall you've found there."
+        response = Place.current.describe
       end
       message.set_response(response)
     end
@@ -46,7 +59,7 @@ module Handlers
     private
 
     def direction
-      @direction ||= ::Dungeon.direction_from(message.trigger)
+      @direction ||= ::Dungeon.direction_from(command_string.subject)
     end
 
     def reset_maze

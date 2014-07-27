@@ -38,7 +38,7 @@ module Alice
       end
 
       def self.user_nicks
-        channel.user_list.map(&:nick).map(&:downcase)
+        user_list.map(&:nick).map(&:downcase)
       end
 
       def self.op_nicks
@@ -52,20 +52,19 @@ module Alice
       end
 
       def self.user_from(channel_user)
-        User.with_nick_like(channel_user.user.nick)
+        User.from(channel_user)
       end
 
-      def self.reply_to(channel_user, message)
+      def self.reply_with(message)
         text = Alice::Util::Sanitizer.process(message)
         text = Alice::Util::Sanitizer.initial_upcase(text)
-        text = user_from(channel_user).apply_filters(text)
-        channel_user.reply(text)
+        Alice.bot.bot.channels.first.msg(text)
       end
 
-      def self.emote_to(channel_user, message)
+      def self.emote(message)
         text = Alice::Util::Sanitizer.process(message)
         text = Alice::Util::Sanitizer.initial_downcase(text)
-        channel_user.action_reply(text)
+        Alice.bot.bot.channels.first.action(text)
       end
 
     end

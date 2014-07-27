@@ -18,19 +18,19 @@ class Processor
   end
 
   def respond
-    Alice::Util::Mediator.send_raw(Response.from(self.message).response)
+    track_sender
+    Alice::Util::Mediator.reply_with(Response.from(self.message).response)
   end
 
   def greet_on_join
     track_sender
-    Response.greeting(message)
+    Alice::Util::Mediator.emote(Response.greeting(self.message).response)
   end
 
   def track_nick_change
-    track_sender
     user = User.find_or_create(message.sender_nick)
     user.update_nick(message.sender_nick)
-    Response.name_change(message)
+    Alice::Util::Mediator.emote(Response.name_change(self.message))
   end
 
   private
