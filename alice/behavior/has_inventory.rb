@@ -18,12 +18,12 @@ module Alice
       end
 
       def inventory_of_items
-        return if self.items.empty?
+        return "" if self.items.empty?
         Item.inventory_from(self, self.items)
       end
 
       def inventory_of_wands
-        return if self.wands.empty?
+        return "" if self.wands.empty?
         Wand.inventory_from(self, self.wands)
       end
 

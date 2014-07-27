@@ -11,9 +11,9 @@ module Alice
           config.port = 2600
           config.channels = [ENV['PRIMARY_CHANNEL'], ENV['DEBUG_CHANNEL']]
           config.nick = "AliceBot_"
-          config.user = "AliceBot"
+          config.user = "AliceBot_"
           config.plugins.plugins = [
-            Processor
+            Listener
           ]
           config.password = ENV['USER_PASS']
           config.messages_per_second = 1
