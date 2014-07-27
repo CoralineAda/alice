@@ -10,7 +10,6 @@ Bundler.require
 Mongoid.load!("config/mongoid.yml")
 
 require_all 'alice'
-
 module Alice
 
   def self.start
@@ -29,3 +28,6 @@ Yummly.configure do |config|
   config.app_id = ENV['YUMMLY_APP_ID']
   config.app_key = ENV['YUMMLY_APP_KEY']
 end
+
+I18n.enforce_available_locales = false
+
