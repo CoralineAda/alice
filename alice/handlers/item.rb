@@ -15,21 +15,17 @@ module Handlers
       message.set_response(item_for_user.drop)
     end
 
-    def examine
-      message.set_response(item.describe)
-    end
-
     # def find
     #   # message.response = ::Inventory.for(message)
     #   # message
     # end
 
     def forge
-      message.set_response(::Item.forge(command_string.predicate, message.sender))
+      message.set_response(::Item.forge(command_string.subject, message.sender))
     end
 
     def give
-      message.set_response(item_for_user.transfer_to(command_string.predicate))
+      message.set_response(item_for_user.transfer_to(User.from(command_string.predicate)))
     end
 
     # def hide
@@ -46,13 +42,13 @@ module Handlers
     end
 
     def steal
-      message.set_response(message.sender.steal(command_string.subject))
+      message.set_response(message.sender.steal(item))
     end
 
     private
 
     def loose_item
-      item.place.items.include?(item) ? item : ::Item.ephemeral
+      item.place && item.place.items.include?(item) && item
     end
 
     def item_for_user

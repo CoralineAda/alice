@@ -66,17 +66,17 @@ class Item
     new(name: "thing that you don't have", ephemeral: true)
   end
 
-  def self.forge(args={})
+  def self.forge(name, user)
     new_item = new(
-      name: args[:name].downcase,
-      user: args[:user],
-      actor: args[:actor],
-      creator_id: args[:user].try(:id),
+      name: name,
+      user: user,
+      creator_id: user.try(:id),
     )
     new_item.creator && new_item.creator.score_points
     new_item.check_if_cursed
     new_item.ensure_description
     new_item.save
+    "#{new_item.owner.current_nick} forges a #{name} #{Alice::Util::Randomizer.forge}."
   end
 
   def self.fruitcake
@@ -194,7 +194,7 @@ class Item
 
   def read
     return "#{name_with_article} is not a very interesting read." unless self.is_readable?
-    return "It says that #{Alice::Factoid.random.formatted(false)}."
+    return "It reads, \"#{Factoid.sample.formatted(false)}\"."
   end
 
 end

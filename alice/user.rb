@@ -130,7 +130,7 @@ class User
   end
 
   def describe
-    message = self.bio.formatted
+    message = self.bio && self.bio.formatted || ""
     message << "They're on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
     message << "#{self.inventory} "
     message << "#{check_score} "

@@ -27,9 +27,11 @@ module Alice
 
       def transfer_to(recipient)
         return unless recipient
+        original_owner = self.user
         self.user_id = recipient.id
         self.picked_up_at = DateTime.now
         self.save
+        Alice::Util::Randomizer.give_message(original_owner.current_nick, recipient.current_nick, self.name_with_article)
       end
 
     end
