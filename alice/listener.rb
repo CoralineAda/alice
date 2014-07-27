@@ -19,11 +19,12 @@ class Listener
     Processor.process(message(emitted, trigger), :respond)
   end
 
-  def greet(emitted, trigger)
-    Processor.process(message(emitted, trigger), :greet_on_join)
+  def greet(emitted)
+    return if emitted.user.nick == Alice::Util::Mediator.bot_name
+    Processor.process(message(emitted, emitted.user.nick), :greet_on_join)
   end
 
-  def update_nick(emitted, trigger)
+  def update_nick(emitted)
     Processor.process(message(emitted, emitted.user.last_nick), :track_nick_change)
   end
 
