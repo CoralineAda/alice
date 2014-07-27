@@ -13,7 +13,7 @@ module Alice
       end
 
       def self.op?(nick)
-        op_nicks.include?(nick)
+        op_nicks.include?(nick.downcase)
       end
 
       def self.exists?(nick)
