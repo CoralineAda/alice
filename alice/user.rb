@@ -28,6 +28,7 @@ class User
   has_many :factoids
   has_many :items
   has_many :beverages
+  has_many :wands
 
   validates_presence_of :primary_nick
   validates_uniqueness_of :primary_nick

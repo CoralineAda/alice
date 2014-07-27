@@ -7,6 +7,7 @@ module Alice
       def inventory
         message = inventory_of_items
         message << " " + inventory_of_beverages.to_s + "."
+        message << " " + inventory_of_wands
         message ||= "has no possessions."
         message
       end
@@ -19,6 +20,11 @@ module Alice
       def inventory_of_items
         return if self.items.empty?
         Item.inventory_from(self, self.items)
+      end
+
+      def inventory_of_wands
+        return if self.wands.empty?
+        Wand.inventory_from(self, self.wands)
       end
 
       def add_to_inventory(item)

@@ -5,8 +5,8 @@ module Handlers
     include PoroPlus
     include Behavior::HandlesCommands
 
-    def use(wand)
-      if wand
+    def use
+      if wand && message.sender.wands.include?(wand)
         message.set_response(wand.employ)
       else
         message.set_response("I don't think you have that.")

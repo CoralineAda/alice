@@ -15,6 +15,14 @@ module Handlers
       message.set_response(item_for_user.drop)
     end
 
+    def take
+      if item = loose_item
+        message.set_response(item.transfer_to(message.sender))
+      else
+        message.set_repsonse("I don't see that here.")
+      end
+    end
+
     # def find
     #   # message.response = ::Inventory.for(message)
     #   # message
