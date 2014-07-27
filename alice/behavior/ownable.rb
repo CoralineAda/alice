@@ -31,7 +31,11 @@ module Alice
         self.user_id = recipient.id
         self.picked_up_at = DateTime.now
         self.save
-        Alice::Util::Randomizer.give_message(original_owner.current_nick, recipient.current_nick, self.name_with_article)
+        if original_owner
+          Alice::Util::Randomizer.give_message(original_owner.current_nick, recipient.current_nick, self.name_with_article)
+        else
+          "#{self.user.current_nick} now has the #{self.name}."
+        end
       end
 
     end

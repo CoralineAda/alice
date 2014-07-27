@@ -16,14 +16,17 @@ class Wand
   index({ is_weapon: 1 }, { unique: false })
 
   belongs_to  :actor
-  belongs_to  :user, inverse_of: :items
+  belongs_to  :user, inverse_of: :wands
   belongs_to  :place
 
   validates_uniqueness_of :name
 
-  EFFECT_METHODS = [
-    :light, :dark, :summon, :appear, :teleport, :fruitcake
-  ]
+  EFFECT_METHODS = %w{light dark summon appear teleport fruitcake}
+
+  def self.inventory_from(owner, list)
+    return unless stuff = list.map(&:name).to_sentence
+    "Wands at the ready include a #{stuff}."
+  end
 
   def self.sweep
     all.map{|wand| wand.remove unless item.actor? || item.user?}
