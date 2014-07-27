@@ -977,7 +977,7 @@ module Alice
           "Is it supposed to have bubbles like that?",
           "Pretty tame as far as #{thing.pluralize} go.",
           "I think that #{thing} is an acquired taste.",
-          "It looks deliious!",
+          "It looks delicious!",
           "You're getting thirsty just looking at it.",
           "The #{thing}? Well, it's better than #{beverage}."
         ].sample
