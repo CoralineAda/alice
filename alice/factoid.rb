@@ -18,6 +18,12 @@ class Factoid
 
   before_create :extract_keywords
 
+  def self.best_match(matches, terms=[])
+    matches.sort do |a,b|
+      (a.keywords & terms).count <=> (b.keywords & terms).count
+    end.last
+  end
+
   def self.about(subject)
     if user = User.from(subject)
       return user.factoids && user.factoids.sample || Factoid.new
@@ -25,12 +31,15 @@ class Factoid
     keywords = subject.downcase.split.map{|w| w.gsub(/[^a-zA-Z0-9\_\-]/, '')}
     keywords << keywords.map{|word| Lingua.stemmer(word.downcase)}
     keywords = keywords.flatten.uniq
-    factoid = any_in(keywords: keywords).sample
-    factoid || Factoid.new
+    factoid = best_match(any_in(keywords: keywords), keywords)
+    factoid
   end
 
   def extract_keywords
-    self.keywords = Alice::Parser::NgramFactory.filtered_grams_from(self.text).flatten.uniq
+    terms = Alice::Parser::NgramFactory.filtered_grams_from(self.text.downcase).flatten.uniq
+    terms = terms - Alice::Parser::LanguageHelper::ARTICLES
+    terms << terms.map{|word| Lingua.stemmer(word.downcase)}
+    self.keywords = terms.flatten
   end
 
   def formatted(with_prefix=false)
