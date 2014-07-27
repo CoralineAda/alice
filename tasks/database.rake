@@ -6,4 +6,9 @@ namespace :database do
     system 'mongorestore -h localhost --drop -d alice_dev db/backups/alicebot/'
   end
 
+  desc "Back up local"
+  task :backup_local do
+    system "mongodump -h localhost -d alice_dev -o db/backups/"
+  end
+
 end
