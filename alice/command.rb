@@ -55,10 +55,11 @@ class Command
     match = nil
     match = find_verb(trigger)
     match ||= find_indicators(trigger)
-    match ||= default
-    match.message = message
-    p "*** Executing #{match.name} ***"
-    match
+    if match && match.message = message
+      p "*** Executing #{match.name} ***"
+      return match
+    end
+    default
   end
 
   def self.find_verb(trigger)
@@ -73,7 +74,7 @@ class Command
   def self.find_indicators(trigger)
     indicator_words = words_from(trigger)
     grams = indicator_words.map{|words| words.join(' ')}
-    with_indicators(grams).without_stopwords(indicator_words).first
+    with_indicators(grams).without_stopwords(indicator_words).last
   end
 
   def self.process(message)

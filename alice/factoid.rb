@@ -25,6 +25,7 @@ class Factoid
   end
 
   def self.about(subject)
+    return unless subject
     if user = User.from(subject)
       return user.factoids && user.factoids.sample || Factoid.new
     end
