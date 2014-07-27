@@ -8,6 +8,12 @@ module Alice
         rand(number) == 0
       end
 
+      def self.random_user
+        user = User.active_and_online.sample
+        user ||= User.all.sample
+        user.current_nick
+      end
+
       def self.brew_observation(what, who, args={})
         message = [
           "looks on in wonder as #{who} brews a perfect #{what}.",
@@ -173,7 +179,7 @@ module Alice
           "#{caster} temporarily turns into #{specific_person}.",
           "Great, now everyone in the channel looks like #{person}.",
           "There is suddenly an overwhelming smell of #{thing}.",
-          "A #{thing} appears out of nowhere and runs #{Alice::Place.current.exits.sample}!",
+          "A #{thing} appears out of nowhere and runs #{Place.current.exits.sample}!",
           "The illusion of a #{thing} appears, to all appearances #{action}",
           "The face of #{specific_person} flickers in mid-air, frowns, and then vanishes.",
           "The room is filled with a dense #{color} fog.",
@@ -182,11 +188,11 @@ module Alice
           "A portal to the #{type_of_place} flickers into existence!",
           "#{caster} turns into #{actor_description(specific_person)}.",
           "#{caster} takes on the appearance of #{specific_person}.",
-          "#{User.active_and_online.sample.proper_name} starts speaking in the voice of #{specific_person}.",
-          "#{User.active_and_online.sample.proper_name}'s #{body_thing} turns #{color}!",
+          "#{random_user} starts speaking in the voice of #{specific_person}.",
+          "#{random_user}'s #{body_thing} turns #{color}!",
           "#{caster} summons a fearsome #{thing}!",
           "#{caster} tries to summon a mighty #{thing}, but manages only #{empty_pockets}.",
-          "#{effect_message('spell', User.active_and_online.sample.proper_name)}",
+          "#{effect_message('spell', random_user)}",
           "a #{room_type} appears somewhere deep in the dungeon."
         ].sample
       end

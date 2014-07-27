@@ -1,3 +1,5 @@
+require 'pry'
+
 class Command
 
   include Mongoid::Document
@@ -5,6 +7,7 @@ class Command
   field :name
   field :verbs, type: Array, default: []
   field :stop_words, type: Array, default: []
+  field :indicators, type: Array, default: []
   field :handler_class
   field :handler_method
   field :response_kind, default: :message
@@ -25,8 +28,8 @@ class Command
     Command.new(handler_class: 'Handlers::Unknown')
   end
 
-  def self.verbs_from(message)
-    Alice::Parser::NgramFactory.omnigrams_from(message)
+  def self.words_from(message)
+    Alice::Parser::NgramFactory.filtered_grams_from(message)
   end
 
   def self.verb_from(message)
@@ -35,24 +38,42 @@ class Command
     end
   end
 
-  def self.best_match(matches, verbs)
+  def self.best_verb_match(matches, verbs=[])
     matches.sort do |a,b|
       (a.verbs & verbs).count <=> (b.verbs & verbs).count
+    end.last
+  end
+
+  def self.best_indicator_match(matches, indicators=[])
+    matches.sort do |a,b|
+      binding.pry
+      (a.indicators.to_a & indicators).count <=> (b.indicators.to_a & indicators).count
     end.last
   end
 
   def self.from(message)
     trigger = message.trigger.downcase.gsub(/[^a-zA-Z0-9\!\/\\\s]/, ' ')
     match = nil
-    if verb = verb_from(trigger)
-      match = any_in(verbs: verb).first
-    elsif verbs = verbs_from(trigger)
-      matches = with_verbs(verbs).without_stopwords(verbs)
-      match = best_match(matches, verbs)
-    end
+    match = find_verb(trigger)
+    match ||= find_indicators(trigger)
     match ||= default
     match.message = message
     match
+  end
+
+  def self.find_verb(trigger)
+    if verb = verb_from(trigger)
+      match = any_in(verbs: verb).first
+    elsif verbs = words_from(trigger)
+      matches = with_verbs(verbs).without_stopwords(verbs)
+      match = best_verb_match(matches, verbs)
+    end
+  end
+
+  def self.find_indicators(trigger)
+    indicator_words = words_from(trigger)
+    grams = indicator_words.map{|words| words.join(' ')}
+    with_indicators(grams).without_stopwords(indicator_words).first
   end
 
   def self.process(message)
@@ -62,7 +83,11 @@ class Command
   end
 
   def self.with_verbs(verbs)
-    Command.in(verbs: verbs)
+    Command.excludes(verbs: []).in(verbs: verbs)
+  end
+
+  def self.with_indicators(indicators)
+    Command.excludes(indicators: []).any_in(indicators: indicators)
   end
 
   def self.without_stopwords(verbs)
