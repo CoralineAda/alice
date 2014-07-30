@@ -10,8 +10,8 @@ describe Command do
 
     it "sorts by # of verbs, returning best match" do
       matches = [command_1, command_2, command_3]
-      verbs= ["jump", "fox", "dog"]
-      expect(Command.best_match(matches, verbs)).to eq(command_1)
+      verbs= ["jump", "fox", "dog", "quick"]
+      expect(Command.best_verb_match(matches, verbs)).to eq(command_1)
     end
 
   end

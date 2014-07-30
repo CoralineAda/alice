@@ -34,18 +34,6 @@ describe "Handlers::Item" do
     end
   end
 
-  describe "#examine" do
-    it "is wired to a working method" do
-      expect(item.respond_to?(:describe)).to be_true
-    end
-    it "calls item describe" do
-      expect(item).to receive(:describe)
-      handler.examine
-    end
-  end
-
-  describe "#find"
-
   describe "#forge" do
     it "is wired to a working method" do
       expect(::Item.respond_to?(:forge)).to be_true

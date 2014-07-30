@@ -60,7 +60,9 @@ module Handlers
     end
 
     def item_for_user
-      message.sender.items.include?(item) ? item : ::Item.ephemeral
+      return item if message.sender.items.include?(item)
+      return item if message.sender.beverages.include?(item)
+      return item if message.sender.wands.include?(item)
     end
 
     def item

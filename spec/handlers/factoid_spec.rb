@@ -22,11 +22,8 @@ describe "Handlers::Factoid" do
   end
 
   describe "#get" do
-    it "is wired to a working method" do
-      expect(user.respond_to?(:random_factoid)).to be_true
-    end
     it "calls the correct method" do
-      expect(user).to receive(:random_factoid) { ::Factoid.new }
+      expect(Factoid).to receive(:about) { ::Factoid.new }
       handler.get
     end
   end
