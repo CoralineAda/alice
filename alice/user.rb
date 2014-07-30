@@ -50,7 +50,7 @@ class User
   end
 
   def self.online
-    list = Alice::Util::Mediator.user_list.map(&:downcase)
+    list = Alice::Util::Mediator.user_nicks
     any_in(primary_nick: list) | any_in(alt_nicks: list)
   end
 
@@ -120,7 +120,7 @@ class User
   end
 
   def current_nick
-    (Alice::Util::Mediator.user_list.map(&:nick).map(&:downcase) & self.nicks).first || self.primary_nick
+    (Alice::Util::Mediator.user_nicks & self.nicks).first || self.primary_nick
   end
 
   def dazed?
