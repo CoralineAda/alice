@@ -120,7 +120,7 @@ class User
   end
 
   def current_nick
-    (Alice::Util::Mediator.user_list.map(&:downcase) & self.nicks).first || self.primary_nick
+    (Alice::Util::Mediator.user_list.map(&:nick).map(&:downcase) & self.nicks).first || self.primary_nick
   end
 
   def dazed?
