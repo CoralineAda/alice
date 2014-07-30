@@ -9,7 +9,7 @@ describe User do
   describe ".online" do
 
     before do
-      Adapter.stub(:user_list) { ["jack", "jill", "frederick"] }
+      Alice::Util::Mediator.stub(:user_list) { ["jack", "jill", "frederick"] }
       User.stub(:any_in) { [jack, jill] }
     end
 
@@ -59,7 +59,7 @@ describe User do
   describe "#current_nick" do
 
     before do
-      Adapter.stub(:user_list) { ["jack_", "jill", "frederick"] }
+      Alice::Util::Mediator.stub(:user_list) { ["jack_", "jill", "frederick"] }
       jack.stub(:nicks) { ["jack", "jack_"] }
     end
 
