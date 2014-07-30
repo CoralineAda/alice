@@ -13,7 +13,7 @@ namespace :database do
 
   desc "Copy local database to production"
   task :sync_to_prod_do_not_use do
-#    system "mongodump -h localhost -d alice_dev -o db/backups/"
+    system "mongodump -h localhost -d alice_dev -o db/backups/"
     system "mongorestore -h #{ENV['DB_HOST']} --drop -d alicebot -u #{ENV['DB_USER']} -p #{ENV['DB_PASS']} db/backups/alice_dev"
   end
 

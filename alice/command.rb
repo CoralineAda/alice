@@ -25,7 +25,7 @@ class Command
   attr_accessor :message, :terms
 
   def self.default
-    Command.new(handler_class: 'Handlers::Unknown')
+    Command.where(handler_class: "Handlers::Unknown").first || Command.new(handler_class: 'Handlers::Unknown')
   end
 
   def self.words_from(message)
@@ -54,14 +54,10 @@ class Command
 
   def self.from(message)
     trigger = message.trigger.downcase.gsub(/[^a-zA-Z0-9\+\!\/\\\s]/, ' ')
-    match = nil
-    match = find_verb(trigger)
-    match ||= find_indicators(trigger)
-    if match && match.message = message
-      p "*** Executing #{match.name} ***"
-      return match
-    end
-    default
+    match = find_verb(trigger) || find_indicators(trigger) || default
+    match.message = message
+    p "*** Executing #{match.name} ***" unless match.name.nil?
+    match
   end
 
   def self.find_verb(trigger)
@@ -111,11 +107,11 @@ class Command
     return unless self.handler_class
     return unless meets_odds?
     if needs_cooldown?
-      message.response = "Too soon! Wait a bit."
-      return message
+      self.message.response = "Too soon! Wait a bit."
+      return self.message
     end
     self.update_attribute(:last_said_at, Time.now)
-    eval(self.handler_class).process(message, self.handler_method)
+    eval(self.handler_class).process(self.message, self.handler_method)
   end
 
   def terms
