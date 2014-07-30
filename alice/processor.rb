@@ -2,10 +2,11 @@ class Processor
 
   include PoroPlus
 
-  attr_accessor :message, :response_method, :trigger
+  attr_accessor :channel, :message, :response_method, :trigger
 
-  def self.process(message, response_method)
+  def self.process(channel, message, response_method)
     new(
+      channel: channel,
       message: message,
       response_method: response_method,
       trigger: message.trigger
@@ -21,22 +22,31 @@ class Processor
     track_sender
     if response = Response.from(self.message)
       if response.type == "emote"
-        Alice::Util::Mediator.emote(response.response) if response.type == "emote"
+        Alice::Util::Mediator.emote(self.channel, response.response) if response.type == "emote"
       else
-        Alice::Util::Mediator.reply_with(response.response)
+        Alice::Util::Mediator.reply_with(self.channel, response.response)
       end
     end
+    message
   end
 
   def greet_on_join
     track_sender
-    Alice::Util::Mediator.emote(Response.greeting(self.message).response)
+    Alice::Util::Mediator.emote(
+      self.channel,
+      Response.greeting(self.message).response
+    )
+    message
   end
 
   def track_nick_change
     user = User.find_or_create(message.sender_nick)
     user.update_nick(message.sender_nick)
-    Alice::Util::Mediator.emote(Response.name_change(self.message).response)
+    Alice::Util::Mediator.emote(
+      self.channel,
+      Response.name_change(self.message).response
+    )
+    message
   end
 
   private

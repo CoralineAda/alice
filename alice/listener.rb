@@ -12,25 +12,25 @@ class Listener
   listen_to :nick, method: :update_nick
 
   def process_number(emitted, trigger)
-    Processor.process(message(emitted, "13"), :respond)
+    Processor.process(emitted.channel, message(emitted, "13"), :respond)
   end
 
   def process_points(emitted, trigger)
-    Processor.process(message(emitted, trigger), :respond)
+    Processor.process(emitted.channel, message(emitted, trigger), :respond)
   end
 
   def process_text(emitted, trigger)
     return unless trigger[0] =~ /[a-zA-Z\!]/
-    Processor.process(message(emitted, trigger), :respond)
+    Processor.process(emitted.channel, message(emitted, trigger), :respond)
   end
 
   def greet(emitted)
     return if emitted.user.nick == Alice::Util::Mediator.bot_name
-    Processor.process(message(emitted, emitted.user.nick), :greet_on_join)
+    Processor.process(emitted.channel, message(emitted, emitted.user.nick), :greet_on_join)
   end
 
   def update_nick(emitted)
-    Processor.process(message(emitted, emitted.user.last_nick), :track_nick_change)
+    Processor.process(emitted.channel, message(emitted, emitted.user.last_nick), :track_nick_change)
   end
 
   private

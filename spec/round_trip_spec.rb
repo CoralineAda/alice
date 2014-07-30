@@ -19,6 +19,7 @@ describe "Message Round Trip" do
                             response_kind: :message
                           )
                         }
+  let(:channel)        { Object.new }
 
   before do
     Processor.any_instance.stub(:track_sender) { true }
@@ -26,12 +27,14 @@ describe "Message Round Trip" do
     sender.stub(:recently_stole?) { true }
     User.stub(:find_or_create) { sender }
     Command.stub(:any_in) { [command] }
+    Alice::Util::Mediator.stub(:emote)
+    Alice::Util::Mediator.stub(:reply_with)
   end
 
   context "!command" do
     it "returns a response" do
       message = Message.new(emitted.user.primary_nick, trigger_1)
-      response_message = Processor.process(message, :respond)
+      response_message = Processor.process(channel, message, :respond)
       expect(response_message.response).to eq("thinks that Lydia shouldn't press their luck on the thievery front.")
     end
   end
@@ -39,7 +42,7 @@ describe "Message Round Trip" do
   context "contains Alice" do
     it "returns a response" do
       message = Message.new(emitted.user.primary_nick, trigger_3)
-      response_message = Processor.process(message, :respond)
+      response_message = Processor.process(channel, message, :respond)
       expect(response_message.response).to eq("thinks that Lydia shouldn't press their luck on the thievery front.")
     end
   end
@@ -47,7 +50,7 @@ describe "Message Round Trip" do
   context "should not respond" do
     it "does not return a response" do
       message = Message.new(emitted.user.primary_nick, trigger_2)
-      response_message = Processor.process(message, :respond)
+      response_message = Processor.process(channel, message, :respond)
       expect(response_message.response).to be_nil
     end
   end
@@ -55,7 +58,7 @@ describe "Message Round Trip" do
   context "user join" do
     it "responds to a join message" do
       message = Message.new(emitted.user.primary_nick, trigger_1)
-      response_message = Processor.process(message, :greet_on_join)
+      response_message = Processor.process(channel, message, :greet_on_join)
       expect(response_message.response).to eq("Hi there, Lydia.")
     end
   end
