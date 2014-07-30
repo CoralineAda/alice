@@ -29,7 +29,7 @@ module Alice
       end
 
       def self.default_channel
-        Alice.bot.bot.channels.first
+        Alice.bot.bot.channels.select{|c| c.name == ENV['PRIMARY_CHANNEL']}
       end
 
       def self.default_user
