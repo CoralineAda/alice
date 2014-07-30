@@ -4,9 +4,9 @@ class Listener
 
   include Cinch::Plugin
 
-  match /^([0-9]+)/, method: :process_number, use_prefix: false
-  match /(.+)\+\+$/, method: :process_points, use_prefix: false
-  match /(.+)/, method: :process, use_prefix: false
+  match /^([0-9]+)/,  method: :process_number,  use_prefix: false
+  match /(.+)\+\+$/,  method: :process_points,  use_prefix: false
+  match /(.+)/,       method: :process_text,    use_prefix: false
 
   listen_to :join, method: :greet
   listen_to :nick, method: :update_nick
@@ -19,7 +19,7 @@ class Listener
     Processor.process(message(emitted, trigger), :respond)
   end
 
-  def process(emitted, trigger)
+  def process_text(emitted, trigger)
     return unless trigger[0] =~ /[a-zA-Z\!]/
     Processor.process(message(emitted, trigger), :respond)
   end

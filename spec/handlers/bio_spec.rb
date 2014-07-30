@@ -2,33 +2,35 @@ require 'spec_helper'
 
 describe "Handlers::Bio" do
 
-  let(:user)    { User.new(primary_nick: "Sindarina") }
-  let(:message) { Message.new(user.primary_nick, "is a star") }
-  let(:handler) { Handlers::Bio.new(message: message) }
+  let(:user)      { User.new(primary_nick: "Sindarina") }
+  let(:message_1) { Message.new(user.primary_nick, "\"is a star\"") }
+  let(:message_2) { Message.new(user.primary_nick, "who is") }
+  let(:handler_1) { Handlers::Bio.new(message: message_1) }
+  let(:handler_2) { Handlers::Bio.new(message: message_2) }
 
   before do
-   message.stub(:sender) { user }
-   handler.stub(:subject) { user }
+   message_1.stub(:sender) { user }
+   handler_1.stub(:subject) { user }
+   message_2.stub(:sender) { user }
+   handler_2.stub(:subject) { user }
   end
 
-  describe "#set" do
-    it "is wired to a working method" do
-      expect(user.respond_to?(:update_bio)).to be_true
-    end
-    it "calls update_bio" do
-      expect(user).to receive(:update_bio)
-      handler.set
-    end
-  end
+  describe "#process" do
 
-  describe "#get" do
-    it "is wired to a working method" do
-      expect(user.respond_to?(:formatted_bio)).to be_true
+    context "quoted text" do
+      it "calls update_bio" do
+        expect(user).to receive(:update_bio)
+        handler_1.process
+      end
     end
-    it "calls formatted_bio" do
-      expect(user).to receive(:formatted_bio)
-      handler.get
+
+    context "no quoted text" do
+      it "calls formatted_bio" do
+        expect(user).to receive(:formatted_bio)
+        handler_2.process
+      end
     end
+
   end
 
 end

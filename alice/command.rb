@@ -67,7 +67,7 @@ class Command
   def self.find_verb(trigger)
     if verb = verb_from(trigger)
       match = any_in(verbs: verb).first
-    elsif verbs = words_from(trigger)
+    elsif verbs = words_from(trigger).flatten.uniq
       matches = with_verbs(verbs).without_stopwords(verbs)
       match = best_verb_match(matches, verbs)
     end
