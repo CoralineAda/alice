@@ -12,17 +12,11 @@ module Behavior
       CommandString.new(self.message.trigger)
     end
 
-    def should_respond?
-      return true if self.command_string.content[0] == "!"
-      return true if self.command_string.content =~ /#{ENV['BOT_SHORT_NAME']}/i
-      false
-    end
-
     module ClassMethods
       def process(message, method)
         method ||= :process
         handler = new(message: message)
-        handler.public_send(method) if handler.should_respond?
+        handler.public_send(method)
       end
     end
 
