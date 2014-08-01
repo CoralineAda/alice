@@ -16,7 +16,14 @@ class Processor
 
   def react
     track_sender
-    public_send(self.response_method)
+    public_send(self.response_method) if should_respond?
+  end
+
+  def should_respond?
+    return true if self.trigger[0] == "!"
+    return true if self.trigger[-2..-1] == "++"
+    return true if self.trigger =~ /#{ENV['BOT_SHORT_NAME']}/i
+    false
   end
 
   def respond
