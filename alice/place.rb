@@ -26,6 +26,7 @@ class Place
   before_create :ensure_description
 
   DIRECTIONS = ['north', 'south', 'east', 'west']
+  PITCH_BLACK = "It is pitch black. You are likely to be eaten by a grue."
 
   def self.current
     place = where(:is_current => true).last || generate!
@@ -37,14 +38,15 @@ class Place
   def self.generate!(args={})
     x = args[:x] || 0
     y = args[:y] || 0
-    room = create(
+    room = new(
       exits: (random_exits | [args[:entered_from]]).flatten.compact.uniq,
       x: x,
       y: y,
       is_current: args[:is_current],
       is_dark: x == 0 && y == 0 || Alice::Util::Randomizer.one_chance_in(5)
     )
-    room.update_attribute(:description, random_description(room))
+    room.description = random_description(room)
+    room.save
     Mapper.new.create
     room
   end
@@ -72,7 +74,11 @@ class Place
     end
 
     room = Place.where(x: x, y: y).first
-    room ||= Place.generate!(x: x, y:y, entered_from: opposite_direction(direction))
+    room ||= Place.generate!(
+      x: x,
+      y:y,
+      entered_from: opposite_direction(direction)
+    )
     return room.enter if party_moving
     return room
   end
@@ -85,7 +91,7 @@ class Place
   end
 
   def self.random_description(room)
-    return "It is pitch black. You are likely to be eaten by a grue" if room.origin_square?
+    return PITCH_BLACK if room.origin_square?
     description = [
       Alice::Util::Randomizer.room_adjective,
       Alice::Util::Randomizer.room_type,
@@ -131,7 +137,7 @@ class Place
     if self.origin_square?
       message = "#{self.description}. #{contents} Exits: #{exits.to_sentence}. "
     elsif self.is_dark?
-      message = "It is pitch black and you can't see a thing. What if there is a grue?"
+      message = PITCH_BLACK
     else
       message = "You are in #{self.description}. #{contents} Exits: #{exits.to_sentence}. "
     end
