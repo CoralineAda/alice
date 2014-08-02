@@ -107,7 +107,7 @@ class Command
     return unless self.handler_class
     return unless meets_odds?
     if needs_cooldown?
-      self.message.response = "Too soon! Wait a bit."
+      self.message.response = ""
       return self.message
     end
     self.update_attribute(:last_said_at, Time.now)
