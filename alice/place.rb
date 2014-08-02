@@ -16,7 +16,7 @@ class Place
   has_many :beverages
   has_many :items
   has_many :machines
-
+  
   index({ x: 1, y: 1 },    { unique: true })
   index({ is_current: 1 }, { unique: false })
 
@@ -38,25 +38,35 @@ class Place
   def self.generate!(args={})
     x = args[:x] || 0
     y = args[:y] || 0
-    room = new(
-      exits: (random_exits | [args[:entered_from]]).flatten.compact.uniq,
+    room = create!(
       x: x,
       y: y,
       is_current: args[:is_current],
       is_dark: x == 0 && y == 0 || Alice::Util::Randomizer.one_chance_in(5)
     )
+    room.exits = (random_exits | exits_for_neighbors).flatten.compact.uniq
     room.description = random_description(room)
     room.save
     Mapper.new.create
     room
   end
 
+  def self.exits_for_neighbors
+    matching_exits = []
+    DIRECTIONS.each do |direction|
+      if neighbor = place_to(direction, false, false)
+        matching_exits << direction if neighbor.exits.to_a.include?(opposite_direction(direction))
+      end
+    end
+    matching_exits
+  end
+  
   def self.go(direction)
     return false unless current.exits.include?(direction.downcase)
     place_to(direction, true)
   end
 
-  def self.place_to(direction, party_moving=false)
+  def self.place_to(direction, party_moving=false, create_place=true)
     if direction == 'north'
       y = current.y - 1
     elsif direction == 'south'
@@ -73,13 +83,15 @@ class Place
       x = current.x
     end
 
-    room = Place.where(x: x, y: y).first
-    room ||= Place.generate!(
-      x: x,
-      y:y,
-      entered_from: opposite_direction(direction)
-    )
-    return room.enter if party_moving
+   room = Place.where(x: x, y: y).first
+    if create_place
+      room ||= Place.generate!(
+        x: x,
+        y:y,
+        entered_from: opposite_direction(direction)
+      )
+    end
+    return room.enter if room && party_moving
     return room
   end
 
@@ -221,14 +233,7 @@ class Place
   end
 
   def neighbors
-    self.exits.inject([]) do |rooms, exit|
-      room =   exit == 'north' && Place.place_to('north', false)
-      room ||= exit == 'south' && Place.place_to('south', false)
-      room ||= exit == 'east'  && Place.place_to('east', false)
-      room ||= exit == 'west'  && Place.place_to('west', false)
-      rooms << { direction: exit, room: room }
-      rooms
-    end
+    Place.where(x: ((self.x - 1)..(self.x + 1)), y: ((self.y - 1)..(self.y + 1))).reject{|p| p == self}
   end
 
   def origin_square?
