@@ -16,7 +16,7 @@ class Place
   has_many :beverages
   has_many :items
   has_many :machines
-  
+
   index({ x: 1, y: 1 },    { unique: true })
   index({ is_current: 1 }, { unique: false })
 
@@ -58,7 +58,7 @@ class Place
       end
     end.reject(&:nil?)
   end
-  
+
   def self.go(direction)
     return false unless current.exits.include?(direction.downcase)
     place_to(direction, true)
@@ -179,11 +179,11 @@ class Place
   def handle_grue
     if self.actors.include? Actor.grue
       if user = User.fighting.sample
-        Dungeon.win!
-        "Huzzah! After a difficult fight and against all odds, #{user.proper_name} brandishes their #{user.items.weapons.sample.name} and slays the grue!"
+        message = "Huzzah! After a difficult fight and against all odds, #{user.current_nick} brandishes their #{user.items.weapons.sample.name} and slays the grue!"
+        message << Dungeon.win!
       else
-        Dungeon.lose!
-        "Eep! After wandering around in the dark room for a moment, the party has been eaten by a grue!"
+        message = "Eep! After wandering around in the dark room for a moment, the party has been eaten by a grue!"
+        message << Dungeon.lose!
       end
     end
   end
