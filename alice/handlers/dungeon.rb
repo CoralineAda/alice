@@ -39,6 +39,11 @@ module Handlers
       message.set_response(response)
     end
 
+    def map
+      message.set_response("#{ENV['MAP_URL']}")
+    end
+
+
     def xyzzy
       room = Place.all.sample
       Place.set_current_room(room)
@@ -62,7 +67,7 @@ module Handlers
     private
 
     def direction
-      @direction ||= ::Dungeon.direction_from(command_string.subject)
+      @direction ||= ::Dungeon.direction_from(command_string.verb)
     end
 
     def reset_maze

@@ -7,7 +7,7 @@ module Alice
         secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
       )
     end
-    
+
     def bucket
       @bucket ||= connection.buckets.find(ENV['AWS_BUCKET_NAME'])
     end
@@ -15,6 +15,7 @@ module Alice
     def upload(path_to_file)
       basefile = File.basename(path_to_file)
       obj = bucket.objects.build(basefile)
+      obj.content_type = "image/svg+xml"
       obj.content = open(path_to_file)
       obj.save
     end
