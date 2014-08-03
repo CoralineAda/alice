@@ -4,11 +4,25 @@ class Mapper
     content = ::Place.all.map do |place|
       room(place.x, place.y, place.is_current, place.describe, place.exits)
     end
-    File.open("images/map.svg", "w") do |file|
+    write_file(content)
+    save_to_cloud 
+  end
+  
+  def path_to_file
+    "images/map.svg"
+  end
+  
+  def write_file(content)
+    File.open(path_to_file, "w") do |file|
       file.puts document(content)
     end
   end
-
+  
+  def save_to_cloud
+    url = Alice::AWS.new.upload(path_to_file)
+    puts url
+  end
+  
   def room(x, y, is_current, desc, exits=[])
     grid_size = 100
     room_size = grid_size - 5
