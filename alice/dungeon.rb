@@ -27,11 +27,13 @@ class Dungeon
   def self.win!
     User.award_points_to_active(5)
     Actor.grue.penalize(5)
+    Dungeon.reset!
   end
 
   def self.lose!
     User.award_points_to_active(-5)
     Actor.grue.score_points(5)
+    Dungeon.reset!
   end
 
 end
