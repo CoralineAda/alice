@@ -19,7 +19,7 @@ module Handlers
       if item = loose_item
         message.set_response(item.transfer_to(message.sender))
       else
-        message.set_repsonse("I don't see that here.")
+        message.set_response("I don't see that here.")
       end
     end
 
