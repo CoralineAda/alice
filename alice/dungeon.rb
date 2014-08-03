@@ -15,9 +15,8 @@ class Dungeon
     response = ""
     response << "Everything goes black and you feel like you are suddenly somewhere else!\n\r"
     response << "Please wait while we regenerate the matrix...\n\r"
-    ::Dungeon.reset!
-    response << "#{Item.fruitcake.user.proper_name} has been given a special gift.\n\r"
-    response << Alice::Place.current.describe
+    response << "#{Item.fruitcake.user.current_nick} has been given a special gift.\n\r"
+    response << Place.current.describe
     response
   end
 
