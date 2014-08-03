@@ -34,18 +34,17 @@ class Place
     place
   end
 
-  # TODO FIXME exits to existing non-entered-from rooms don't always connect!
   def self.generate!(args={})
     x = args[:x] || 0
     y = args[:y] || 0
     room = create!(
       x: x,
       y: y,
+      description: random_description(room),
       is_current: args[:is_current],
       is_dark: x == 0 && y == 0 || Alice::Util::Randomizer.one_chance_in(5)
     )
     room.exits = (random_exits | exits_for_neighbors).flatten.compact.uniq
-    room.description = random_description(room)
     room.save
     Mapper.new.create
     room
