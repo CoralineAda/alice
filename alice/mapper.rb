@@ -5,11 +5,11 @@ class Mapper
       room(place.x, place.y, place.is_current, place.describe, place.exits)
     end
     write_file(content)
-    save_to_cloud
+#    save_to_cloud
   end
 
   def path_to_file
-    "images/map.svg"
+    "/var/www/images/map.svg"
   end
 
   def write_file(content)
