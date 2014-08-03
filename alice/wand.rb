@@ -29,7 +29,7 @@ class Wand
   end
 
   def self.sweep
-    all.map{|wand| wand.remove unless item.actor? || item.user?}
+    all.map{|wand| wand.remove unless wand.actor? || wand.user?}
     weapons.map(&:remove)
    end
 
