@@ -71,13 +71,7 @@ module Handlers
     end
 
     def reset_maze
-      response = ""
-      response << "Everything goes black and you feel like you are suddenly somewhere else!\n\r"
-      response << "Please wait while we regenerate the matrix...\n\r"
-      ::Dungeon.reset!
-      response << "#{Item.fruitcake.user.proper_name} has been given a special gift.\n\r"
-      response << Alice::Place.current.describe
-      response
+      message.set_response(Dungeon.reset_maze)
     end
 
   end
