@@ -52,13 +52,11 @@ class Place
   end
 
   def self.exits_for_neighbors
-    matching_exits = []
-    DIRECTIONS.each do |direction|
+    DIRECTIONS.select do |direction|
       if neighbor = place_to(direction, false, false)
-        matching_exits << direction if neighbor.exits.to_a.include?(opposite_direction(direction))
+        neighbor.exits.to_a.include?(opposite_direction(direction))
       end
-    end
-    matching_exits
+    end.reject(&:nil?)
   end
   
   def self.go(direction)

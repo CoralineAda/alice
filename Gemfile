@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem "s3"
 gem "cinch"
 gem "brewery_db"
 gem "yummly"
