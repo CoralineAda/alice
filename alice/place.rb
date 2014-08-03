@@ -3,7 +3,7 @@ class Place
   include Mongoid::Document
 
   field :description
-  field :exits
+  field :exits, type: Array, default: []
   field :is_current, type: Boolean
   field :x, type: Integer
   field :y, type: Integer
@@ -20,6 +20,8 @@ class Place
   index({ x: 1, y: 1 },    { unique: true })
   index({ is_current: 1 }, { unique: false })
 
+  validates_uniqueness_of :x, scope: :y
+
   after_create  :place_item
   after_create  :place_actor
   after_create  :place_wand
@@ -29,22 +31,25 @@ class Place
   PITCH_BLACK = "It is pitch black. You are likely to be eaten by a grue."
 
   def self.current
-    place = where(:is_current => true).last || generate!
-    place.update_attribute(:is_current, true) unless place.is_current?
-    place
+    where(:is_current => true).last || generate!(is_current: true)
   end
 
   def self.generate!(args={})
     x = args[:x] || 0
     y = args[:y] || 0
+    description = PITCH_BLACK if x ==0 && y == 0
     room = create!(
       x: x,
       y: y,
-      description: random_description(room),
       is_current: args[:is_current],
+      description: description || random_description,
       is_dark: x == 0 && y == 0 || Alice::Util::Randomizer.one_chance_in(5)
     )
-    room.exits = (random_exits | exits_for_neighbors).flatten.compact.uniq
+    if room.origin_square?
+      room.exits = random_exits
+    else
+      room.exits = (random_exits | exits_for_neighbors).flatten.compact.uniq
+    end
     room.save
     Mapper.new.create
     room
@@ -99,8 +104,7 @@ class Place
     return 'west' if direction == 'east'
   end
 
-  def self.random_description(room)
-    return PITCH_BLACK if room.origin_square?
+  def self.random_description
     description = [
       Alice::Util::Randomizer.room_adjective,
       Alice::Util::Randomizer.room_type,
@@ -144,7 +148,7 @@ class Place
 
   def describe
     if self.origin_square?
-      message = "#{self.description}. #{contents} Exits: #{exits.to_sentence}. "
+      message = "#{self.description} #{contents} Exits: #{exits.to_a.to_sentence}. "
     elsif self.is_dark?
       message = PITCH_BLACK
     else
