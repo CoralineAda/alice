@@ -10,7 +10,7 @@ module Alice
 
       def prepare
         corpus =  ::Factoid.all.map(&:formatted)
-        corpus << ::OH.all
+        corpus << ::OH.all.map(&:text)
         corpus << ::Bio.all.map(&:formatted)
         @prepared = corpus.flatten.map{|sentence| dictionary.parse_string(sentence)}
       end
