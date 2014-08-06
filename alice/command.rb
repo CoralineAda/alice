@@ -16,7 +16,8 @@ class Command
   field :one_in_x_odds, type: Integer, default: 1
   field :last_said_at, type: DateTime
 
-  index({ verbs: 1 }, { unique: true })
+  index({ verbs: 1 },      { unique: true })
+  index({ indicators: 1 }, { unique: true })
   index({ stop_words: 1 }, { unique: true })
 
   validates_uniqueness_of :name
@@ -53,10 +54,10 @@ class Command
   end
 
   def self.from(message)
-    trigger = message.trigger.downcase.gsub(/[^a-zA-Z0-9\+\!\/\\\s]/, ' ')
-    match = find_verb(trigger) || find_indicators(trigger) || default
+    trigger = message.trigger
+    match = find_verb(trigger.downcase) || find_indicators(trigger.downcase) || default
     match.message = message
-    p "*** Executing #{match.name} ***" unless match.name.nil?
+    p "*** Executing #{match.name} with #{trigger} ***" unless match.name.nil?
     match
   end
 
