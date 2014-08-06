@@ -1,3 +1,5 @@
+# TODO FIX truncating item names becuse of predicate
+
 class CommandString
 
   attr_accessor :content
