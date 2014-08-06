@@ -11,7 +11,7 @@ class CommandString
   end
 
   def components
-    @components ||= self.content.split(/\W+/).reject{|w| w.blank? }
+    @components ||= self.content.split(' ').reject{|w| w.blank? }
   end
 
   def has_predicate?

@@ -79,7 +79,7 @@ class User
   end
 
   def self.by_nick(nick)
-    scrubbed_nick = nick.to_s.gsub('_','').downcase
+    scrubbed_nick = nick.to_s.downcase
     found = where(primary_nick: nick.downcase).first || where(primary_nick: scrubbed_nick).first
     found ||= where(alt_nicks: nick.downcase).first || where(alt_nicks: scrubbed_nick).first
     found
@@ -136,7 +136,7 @@ class User
   end
 
   def describe
-    message = self.bio && self.bio.formatted || ""
+    message = self.bio && self.bio.formatted || ". "
     message << "They're on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
     message << "#{self.inventory} "
     message << "#{check_score} "
