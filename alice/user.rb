@@ -110,7 +110,26 @@ class User
   end
 
   def last_seen
-    self.updated_at.strftime("%B %e at %l:%M %P")
+
+    secs  = (Time.now - self.updated_at).to_i
+    minutes = secs / 60
+    hours = minutes / 60
+    days  = hours / 24
+
+    minutes_string = minutes % 60 == 1 ? "minute" : "minutes"
+    hours_string = hours == 1 ? "hour" : "hours"
+    days_string = days == 1 ? "day" : "days"
+
+    if days < 2
+      string = "about #{hours} #{hours_string}"
+      string << " and #{minutes % 60} #{minutes_string}" if (minutes % 60) < 60
+      string << " ago"
+    else
+      string = "about #{days} #{days_string}"
+      string << " and #{hours} #{hours_string}" if hours < 24
+      string << " ago"
+    end
+
   end
 
   def play!(points)
