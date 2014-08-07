@@ -109,6 +109,10 @@ class User
     self.items.count < 10
   end
 
+  def last_seen
+    self.updated_at.strftime("%B %e at %l:%M %P")
+  end
+
   def play!(points)
     self.score_point(points)
     self.update_attribute(:last_game, DateTime.now)

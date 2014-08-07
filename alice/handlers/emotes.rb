@@ -19,6 +19,12 @@ module Handlers
       message.set_response(response.join("\r\n"))
     end
 
+    def seen
+      user = ::User.from(command_string.subject)
+      response = "I last saw #{user.current_nick} at #{user.last_seen}."
+      message.set_response(response)
+    end
+
     def stats
       response = []
       response << "I'm currently managing #{::User.count} users, #{::Item.count} items, #{::Actor.count} actors, and #{::Place.count} rooms."
