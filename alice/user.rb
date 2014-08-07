@@ -120,7 +120,7 @@ class User
     hours_string = hours == 1 ? "hour" : "hours"
     days_string = days == 1 ? "day" : "days"
 
-    if days < 2
+    if days < 1
       string = "about #{hours} #{hours_string}"
       string << " and #{minutes % 60} #{minutes_string}" if (minutes % 60) < 60
       string << " ago"
