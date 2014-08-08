@@ -15,6 +15,12 @@ module Handlers
       message.set_response(item_for_user.drop)
     end
 
+    def hide
+      if item = item_for_user
+        message.set_response(item.hide!)
+      end
+    end
+
     def take
       if item = loose_item
         message.set_response(item.transfer_to(message.sender))

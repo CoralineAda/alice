@@ -45,7 +45,7 @@ class CommandString
   end
 
   def verb
-    components[0]
+    components[0].gsub(/^!/, '')
   end
 
 end

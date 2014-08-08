@@ -10,13 +10,14 @@ class Item
 
   field :name
   field :description
-  field :is_cursed, type: Boolean
-  field :is_hidden, type: Boolean
-  field :is_weapon, type: Boolean
-  field :is_game, type: Boolean
-  field :is_key, type: Boolean
-  field :is_readable, type: Boolean
-  field :picked_up_at, type: DateTime
+  field :is_cursed,     type: Boolean
+  field :is_hidden,     type: Boolean
+  field :is_weapon,     type: Boolean
+  field :is_game,       type: Boolean
+  field :is_hidden,     type: Boolean
+  field :is_key,        type: Boolean
+  field :is_readable,   type: Boolean
+  field :picked_up_at,  type: DateTime
   field :creator_id
 
   index({ name: 1 },        { unique: true, })
@@ -24,6 +25,7 @@ class Item
   index({ is_hidden: 1 },   { unique: false })
   index({ is_weapon: 1 },   { unique: false })
   index({ is_game: 1 },     { unique: false })
+  index({ is_hidden: 1 },   { unique: false })
   index({ is_key: 1 },      { unique: false })
   index({ is_readable: 1 }, { unique: false })
   index({ creator_id: 1 },  { unique: false })
@@ -89,6 +91,10 @@ class Item
 
   def self.games
     where(is_game: true)
+  end
+
+  def self.hidden
+    where(is_hidden: true)
   end
 
   def self.keys
