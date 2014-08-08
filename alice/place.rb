@@ -182,10 +182,10 @@ class Place
   def handle_grue
     if self.actors.include? Actor.grue
       if user = User.fighting.sample
-        message = "Huzzah! After a difficult fight and against all odds, #{user.current_nick} brandishes their #{user.items.weapons.sample.name} and slays the grue!"
+        message = "Huzzah! After a difficult fight and against all odds, #{user.current_nick} brandishes their #{user.items.weapons.sample.name} and slays the grue! "
         message << Dungeon.win!
       else
-        message = "Eep! After wandering around in the dark room for a moment, the party has been eaten by a grue!"
+        message = "Eep! After wandering around in the dark room for a moment, the party has been eaten by a grue! "
         message << Dungeon.lose!
       end
     end

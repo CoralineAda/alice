@@ -13,8 +13,6 @@ Handlers are like controllers: they connect incoming messages to the correct met
 ToDo
 ----
 
-* !seen function
-* Devil's Advocate actor with dudebro logic extension
 * Coffee clears dazed, etc. effects
 * Bio/factoid game
 * Juke box function (provide a url to queue)
