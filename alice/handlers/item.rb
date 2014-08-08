@@ -17,7 +17,7 @@ module Handlers
 
     def hide
       if item = item_for_user
-        message.set_response(item.hide!)
+        message.set_response(item.hide)
       end
     end
 
