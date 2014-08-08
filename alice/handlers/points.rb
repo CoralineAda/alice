@@ -17,8 +17,13 @@ module Handlers
 
     def lottery
       if message.is_sudo?
-        User.award_points_to_active(13)
-        message.set_response("Everyone gets 13 bonus points!")
+        u = User.active.random
+        if u == message.sender
+          message.set_response("Aww, no winners this time.")
+        else
+          u.score_points(13)
+          message.set_response("#{u.current_nick} gets 13 bonus points!")
+        end
       end
     end
 

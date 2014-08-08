@@ -18,12 +18,7 @@ module Alice
       end
 
       def filtered(text)
-        if rand(3) == 1
-          return text + (text[-1] * (rand(2)))
-        else
-          return text
-        end
-        
+        return text.split.map{|word| word + word[-1] * rand(2)}.join(" ")
       end
 
     end

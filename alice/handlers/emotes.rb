@@ -21,7 +21,7 @@ module Handlers
 
     def seen
       user = ::User.from(command_string.subject)
-      response = "I last saw #{user.current_nick} at #{user.last_seen}."
+      response = "I last saw #{user.current_nick} #{user.last_seen}."
       message.set_response(response)
     end
 
