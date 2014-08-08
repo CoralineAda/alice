@@ -7,17 +7,14 @@ class Message
     self.trigger = trigger
   end
 
-  def filtered
-    return self.response unless sender.remove_filter?
-    return self.response unless filters
-    filters.inject([]) do |processed, filter|
-      processed[0] = eval("Alice::Filters::#{filter.to_s.classify}").new.process(processed.first || self.response)
-      processed
-    end.first
+  def filtered(text)
+    return text if filters.empty?
+    return text if sender.remove_expired_filters
+    eval("Alice::Filters::#{filters.sample.to_s.classify}").new.process(text) || text
   end
 
   def filters
-    @filters ||= self.sender.filters.any?
+    @filters ||= self.sender.filters
   end
 
   def is_emote?
@@ -37,7 +34,7 @@ class Message
   end
 
   def set_response(content)
-    self.response = content
+    self.response = filtered(content)
     self
   end
 

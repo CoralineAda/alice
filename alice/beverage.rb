@@ -93,6 +93,8 @@ class Beverage
       effect = [:drunk, :dazed, :disoriented].sample
       message << " In addition to feeling a little #{effect.to_s}, " + Alice::Util::Randomizer.effect_message(self.name, owner_name)
       self.user.filters << effect
+      self.user.filter_applied = Time.now
+      self.user.save
     end
     self.delete
     message

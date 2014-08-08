@@ -199,8 +199,12 @@ class User
     self.factoids.sample
   end
 
-  def remove_filter?
-    filter_applied_date <= DateTime.now - 13.minutes
+  def remove_expired_filters
+    if filter_applied_date <= DateTime.now - 90.minutes
+      self.update_attribute(:filters, [])
+    else
+      false
+    end
   end
 
   def set_factoid(text)
