@@ -259,7 +259,8 @@ class Place
 
   def place_item
     return false if self.origin_square?
-    if Alice::Util::Randomizer.one_chance_in(5) && item = Item.unplaced.unclaimed.sample
+    if Alice::Util::Randomizer.one_chance_in(5)
+      item = Item.hidden.sample || Item.unplaced.unclaimed.sample
       item.update_attribute(:place_id, self.id)
     end
   end
