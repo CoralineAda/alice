@@ -20,8 +20,6 @@ class Place
   index({ x: 1, y: 1 },    { unique: true })
   index({ is_current: 1 }, { unique: false })
 
-  validates_uniqueness_of :x, scope: :y
-
   after_create  :place_item
   after_create  :place_actor
   after_create  :place_wand
