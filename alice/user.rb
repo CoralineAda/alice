@@ -34,7 +34,7 @@ class User
   validates_uniqueness_of :primary_nick
 
   def self.search_attr
-    :primary_nick
+    :alt_nicks
   end
 
   def self.award_points_to_active(points=0)
