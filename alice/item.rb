@@ -184,10 +184,10 @@ class Item
     return "It's not safe to play with #{name_with_article}!" unless self.is_game?
     if self.user.can_play_game?
       self.user.score_points(3)
-      "#{owner_name} #{Alice::Util::Randomizer.play} wins a game of #{name}!"
+      "#{owner_name} #{Alice::Util::Randomizer.play} a game of #{name} and wins!"
     else
       self.user.score_points(-3)
-      "#{owner_name} #{Alice::Util::Randomizer.play} loses badly at a game of #{name}."
+      "#{owner_name} #{Alice::Util::Randomizer.play} a game of #{name} but loses."
     end
   end
 
