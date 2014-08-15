@@ -18,16 +18,23 @@ class Factoid
 
   before_create :extract_keywords
 
+  def self.ranked_matches(matches, terms=[])
+    matches.map do |match|
+      RankedMatch.new(term: match, rank: (match.keywords & terms).count)
+    end
+  end
+
   def self.best_match(matches, terms=[])
-    matches.sort do |a,b|
-      (a.keywords & terms).count <=> (b.keywords & terms).count
-    end.last
+    best_score = ranked_matches(matches, terms).map(&:rank).max
+    ids = matches.select{|m| m.rank == best_score}.map(&:term).map(&:id)
+    any_in(id: ids).sample
   end
 
   def self.about(subject)
     return unless subject
-    if user = User.from(subject)
-      return user.factoids && user.factoids.sample || Factoid.new
+    user = User.from(subject)
+    if user && user.factoids.present?
+      return user.factoids && user.factoids.sample
     end
     keywords = subject.downcase.split.map{|w| w.gsub(/[^a-zA-Z0-9\_\-]/, '')}
     keywords << keywords.map{|word| Lingua.stemmer(word.downcase)}
@@ -54,6 +61,11 @@ class Factoid
     message << "#{Alice::Util::Randomizer.fact_prefix}" if with_prefix
     message << " #{self.user.try(:proper_name)} #{fact}"
     message
+  end
+
+  class RankedMatch
+    attr_accessor :term, :rank
+    def initialize(args={}); self.term = args[:term]; self.rank = args[:rank]; end
   end
 
 end
