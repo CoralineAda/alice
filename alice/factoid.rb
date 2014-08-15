@@ -25,8 +25,9 @@ class Factoid
   end
 
   def self.best_match(matches, terms=[])
-    best_score = ranked_matches(matches, terms).map(&:rank).max
-    ids = matches.select{|m| m.rank == best_score}.map(&:term).map(&:id)
+    ranked = ranked_matches(matches, terms)
+    best_score = ranked.map(&:rank).max
+    ids = ranked.select{|m| m.rank == best_score}.map(&:term).map(&:id)
     any_in(id: ids).sample
   end
 
