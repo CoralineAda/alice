@@ -21,7 +21,7 @@ module Alice
 
       def random_message
         return unless Alice::Util::Randomizer.one_chance_in(2)
-        self.catchphrases.sample
+        self.catchphrases.sample.text
       end
 
       def speak
