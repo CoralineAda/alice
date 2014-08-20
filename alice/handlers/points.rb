@@ -6,13 +6,14 @@ module Handlers
     include Behavior::HandlesCommands
 
     def give
-      message.set_response("Yay for #{command_string.content}!") and return unless subject
-      message.set_response("You'll go blind that way!") and return if subject == message.sender
+      p subject
       if message.sender.award_point_to(subject)
         message.set_response(subject.check_score)
       else
         message.set_response("#{message.sender_nick} needs to let their points cannon cool down.")
       end
+      message.set_response("Yay for #{command_string.content}!") unless subject
+      message.set_response("You'll go blind that way!") if subject == message.sender
     end
 
     def lottery
