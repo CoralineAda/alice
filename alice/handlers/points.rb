@@ -6,14 +6,15 @@ module Handlers
     include Behavior::HandlesCommands
 
     def give
-      p subject
-      if message.sender.award_point_to(subject)
+      if subject && message.sender.award_point_to(subject)
         message.set_response(subject.check_score)
+      elsif subject.nil?
+         message.set_response("Yay for #{command_string.content.gsub('++','')}!") 
+      elsif subject == message.sender
+         message.set_response("You'll go blind that way!")
       else
         message.set_response("#{message.sender_nick} needs to let their points cannon cool down.")
       end
-      message.set_response("Yay for #{command_string.content}!") if subject.nil?
-      message.set_response("You'll go blind that way!") if subject == message.sender
     end
 
     def lottery
