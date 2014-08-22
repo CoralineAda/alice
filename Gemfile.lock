@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    aasm (3.3.3)
     activemodel (3.2.18)
       activesupport (= 3.2.18)
       builder (~> 3.0.0)
@@ -39,7 +40,6 @@ GEM
     multipart-post (1.2.0)
     origin (1.1.0)
     poro_plus (1.0.2)
-    proxies (0.2.1)
     pry (0.9.12.6)
       coderay (~> 1.0)
       method_source (~> 0.8)
@@ -57,8 +57,6 @@ GEM
     rspec-mocks (2.14.6)
     ruby-stemmer (0.9.3)
     rubyfish (0.0.6)
-    s3 (0.3.21)
-      proxies (~> 0.2.0)
     slop (3.5.0)
     tzinfo (0.3.39)
     yummly (0.0.13)
@@ -70,6 +68,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aasm
   brewery_db
   cinch
   dotenv
@@ -82,5 +81,4 @@ DEPENDENCIES
   rspec
   ruby-stemmer (>= 0.8.3)
   rubyfish
-  s3
   yummly

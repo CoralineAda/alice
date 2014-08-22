@@ -21,7 +21,7 @@ class Processor
 
   def should_respond?
     return true if self.trigger[0] == "!"
-    return true if self.trigger[-2..-1] == "++"
+    return true if self.trigger =~ /\+\+/
     return true if self.trigger =~ /^[0-9\.\-]$/
     return true if self.trigger =~ /#{ENV['BOT_SHORT_NAME']}/i
     false
