@@ -11,6 +11,11 @@ namespace :database do
     system "mongodump -h localhost -d alice_dev -o db/backups/"
   end
 
+  desc "Back up production"
+  task :backup_local do
+    system "mongodump -h localhost -d alice_prod -o db/backups/"
+  end
+
   desc "Copy local database to production"
   task :sync_to_prod_do_not_use do
     system "mongodump -h localhost -d alice_dev -o db/backups/"
