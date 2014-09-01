@@ -22,7 +22,7 @@ class CommandString
 
   def predicate
     return unless predicate_positions.max
-    components[(predicate_positions.max + 1)..-1].join(' ')
+    components[(predicate_positions.max + 1)..-1].join(' ').gsub(/[\.\,\?\!]+$/, '')
   end
 
   def predicate_positions
@@ -45,7 +45,7 @@ class CommandString
 
   def subject
     return components[1..-1].join(' ') unless has_predicate?
-    return components[1..(predicate_positions.min - 1)].join(' ')
+    return components[1..(predicate_positions.min - 1)].join(' ').gsub(/[\.\,\?\!]+$/, '')
   end
 
   def verb

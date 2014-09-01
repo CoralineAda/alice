@@ -12,7 +12,14 @@ test:
       hosts:
         - localhost:27017
 
-production:
+test:
+  sessions:
+    default:
+      database: alice_test
+      hosts:
+        - localhost:27017
+
+# production:
   sessions:
     # Define the default session.
     default:
