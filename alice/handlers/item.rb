@@ -42,11 +42,6 @@ module Handlers
       message.set_response(item_for_user.transfer_to(User.from(command_string.predicate)))
     end
 
-    # def hide
-    #   message.response = "Sorry, not yet implemented."
-    #   message
-    # end
-
     def play
       message.set_response((loose_item || item_for_user).play)
     end

@@ -6,24 +6,20 @@ module Handlers
     include Behavior::HandlesCommands
 
     def process
-      if command_string.quoted_text
-        update_bio(command_string.quoted_text)
-      else
+      handle_bio(command_string.content.to_s)
+    end
+
+    def handle_bio(quoted)
+      if quoted.empty? || User.from(quoted)
         return_bio
+      else
+        update_bio(command_string.raw_command)
       end
     end
 
     def update_bio(quoted)
-      if quoted.length == 0
-        message.sender.bio.delete
-        message.set_response("I've erased your bio from my notebook.")
-      else
-        message.sender.update_bio(quoted)
-        message.set_response("I've recorded the details in my notebook.")
-      end
-    end
-
-    def delete_bio
+      message.sender.update_bio(quoted)
+      message.set_response("I've recorded the details in my notebook.")
     end
 
     def return_bio

@@ -6,7 +6,7 @@ module Handlers
     include Behavior::HandlesCommands
 
     def set
-      message.sender.set_factoid(command_string.predicate)
+      message.sender.set_factoid(command_string.raw_command)
       message.set_response("Got it!")
     end
 

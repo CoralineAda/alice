@@ -22,8 +22,9 @@ class Processor
   def should_respond?
     return true if self.trigger[0] == "!"
     return true if self.trigger =~ /\+\+/
-    return true if self.trigger =~ /^[0-9\.\-]$/
+    return true if self.trigger =~ /^[0-9\.\-]+$/
     return true if self.trigger =~ /#{ENV['BOT_SHORT_NAME']}/i
+    return true if self.response_method == :greet_on_join
     false
   end
 
@@ -41,6 +42,7 @@ class Processor
 
   def greet_on_join
     track_sender
+    return unless Alice::Util::Randomizer.one_chance_in(4)
     Alice::Util::Mediator.emote(
       self.channel,
       Response.greeting(self.message).response
