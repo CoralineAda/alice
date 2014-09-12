@@ -36,8 +36,10 @@ class Command
   def self.verb_from(trigger)
     if verb = trigger.split(' ').select{|w| w[0] == "!"}.first
       verb[1..-1]
-    elsif verb = trigger.split(' ').select{|w| w[-1] == "+"}.first
+    elsif trigger =~ /^.+\+\+$/
       "+"
+    elsif trigger == "13"
+      "13"
     end
   end
 

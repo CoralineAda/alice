@@ -60,7 +60,7 @@ class Factoid
 
     message = ""
     message << "#{Alice::Util::Randomizer.fact_prefix}" if with_prefix
-    message << " #{self.user.try(:proper_name)} #{fact}"
+    message << " #{fact}"
     message
   end
 

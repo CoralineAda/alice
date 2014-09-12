@@ -39,6 +39,10 @@ class CommandString
     content.gsub(/.*"(.*)".*/, '\1')
   end
 
+  def raw_command
+    self.content.gsub(/^.?#{verb} /, "")
+  end
+
   def subject
     return components[1..-1].join(' ') unless has_predicate?
     return components[1..(predicate_positions.min - 1)].join(' ')

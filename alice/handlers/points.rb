@@ -9,7 +9,7 @@ module Handlers
       if subject && message.sender.award_point_to(subject)
         message.set_response(subject.check_score)
       elsif subject.nil?
-         message.set_response("Yay for #{command_string.content.gsub('++','')}!") 
+         message.set_response("Yay for #{command_string.content.gsub('++','')}!")
       elsif subject == message.sender
          message.set_response("You'll go blind that way!")
       else
@@ -23,7 +23,7 @@ module Handlers
         if u == message.sender
           message.set_response("Aww, no winners this time.")
         else
-          u.score_points(13)
+          u.score_points(rand(13))
           message.set_response("#{u.current_nick} gets 13 bonus points!")
         end
       end
