@@ -14,3 +14,4 @@ gem 'require_all'
 gem 'rspec'
 gem 'rubyfish'
 gem 'rake'
+gem 'database_cleaner', :github => 'bmabey/database_cleaner', group: :test
