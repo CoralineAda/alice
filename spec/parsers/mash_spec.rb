@@ -46,9 +46,9 @@ describe "Alice::Parser::Mash" do
 
   end
 
-  context "Alice, look at Syd" do
+  context "Alice, who is Syd?" do
 
-    let(:command_string)  { CommandString.new("Alice, look at Syd.") }
+    let(:command_string)  { CommandString.new("Alice, who is Syd?") }
     let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
     before do
@@ -56,7 +56,22 @@ describe "Alice::Parser::Mash" do
     end
 
     it "recognizes the Syd user" do
-      p parser.state
+      expect(parser.this_subject).to eq(@syd)
+    end
+
+  end
+
+  context "Alice, what is Syd's twitter handle?" do
+
+    let(:command_string)  { CommandString.new("Alice, what is Syd's twitter handle?") }
+    let(:parser)          { Alice::Parser::Mash.new(command_string) }
+
+    before do
+      parser.parse!
+    end
+
+    it "recognizes the Syd user" do
+      binding.pry
       expect(parser.this_subject).to eq(@syd)
     end
 
