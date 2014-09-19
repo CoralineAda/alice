@@ -28,20 +28,16 @@ module Alice
           transitions from: :unparsed, to: :alice, guard: :has_alice?
         end
 
-        event :interrogative_pronoun do
-          transitions from: :alice, to: :interrogative_pronoun, guard: :transfer_verb?
-        end
-
         event :transfer_verb do
-          transitions from: [:alice, :interrogative_pronoun], to: :transfer_verb, guard: :transfer_verb?
+          transitions from: [:alice], to: :transfer_verb, guard: :transfer_verb?
         end
 
         event :info_verb do
-          transitions from: [:alice, :interrogative_pronoun], to: :info_verb, guard: :info_verb?
+          transitions from: [:alice], to: :info_verb, guard: :info_verb?
         end
 
         event :noun do
-          transitions from: [:transfer_verb, :info_verb, :interrogative_pronoun], to: :noun, guard: :has_noun?
+          transitions from: [:transfer_verb, :info_verb], to: :noun, guard: :has_noun?
         end
 
         event :preposition do
@@ -66,7 +62,7 @@ module Alice
       def parse_transfer
         alice &&
         (to_transfer_verb && (from_subject_to_object || object_to_subject)) ||
-        (from_info_verb_to_object)
+        (to_info_verb && (to_object_and_subject || to_object_or_subject))
       end
 
       def to_info_verb
@@ -81,8 +77,14 @@ module Alice
         false
       end
 
-      def from_info_verb_to_object
-        info_verb && (to_object || to_subject)
+      def to_object_or_subject
+        to_object || to_subject
+      rescue AASM::InvalidTransition
+        false
+      end
+
+      def to_object_and_subject
+        to_object && to_subject
       rescue AASM::InvalidTransition
         false
       end
@@ -165,9 +167,6 @@ module Alice
       rescue AASM::InvalidTransition
         false
       end
-
-      # Parts of speech
-      # ========================================================================
 
       # Util
       # ========================================================================

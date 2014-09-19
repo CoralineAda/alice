@@ -13,7 +13,9 @@ class CommandString
   end
 
   def components
-    @components ||= self.content.split(' ').reject{|w| w.blank? }.map{|c| c.gsub(/[^\w]/, '')}
+    @components ||= self.content.split(' ').reject{|w| w.blank? }.map do |c|
+      c.gsub(/\'s/, '').gsub(/[^\w]/, '')
+    end
   end
 
   def has_predicate?
