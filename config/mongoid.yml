@@ -12,35 +12,28 @@ test:
       hosts:
         - localhost:27017
 
-test:
-  sessions:
-    default:
-      database: alice_test
-      hosts:
-        - localhost:27017
-
 # production:
-  sessions:
-    # Define the default session.
-    default:
-      # A session can have any number of hosts. Usually 1 for a single
-      # server setup, and at least 3 for a replica set. Hosts must be
-      # an array of host:port pairs. This session is single server.
-      hosts:
-        - <%= ENV['DB_HOST'] %>
-      # Define the default database name.
-      database: alicebot
-      # Since this database points at a session connected to MongoHQ, we must
-      # provide the authentication details.
-      username: <%= ENV['DB_USER'] %>
-      password: <%= ENV['DB_PASS'] %>
-  options:
-    allow_dynamic_fields: false
-    identity_map_enabled: true
-    include_root_in_json: true
-    include_type_for_serialization: true
-    scope_overwrite_exception: true
-    raise_not_found_error: false
-    skip_version_check: false
-    use_activesupport_time_zone: false
-    use_utc: true
+#   sessions:
+#     # Define the default session.
+#     default:
+#       # A session can have any number of hosts. Usually 1 for a single
+#       # server setup, and at least 3 for a replica set. Hosts must be
+#       # an array of host:port pairs. This session is single server.
+#       hosts:
+#         - <%= ENV['DB_HOST'] %>
+#       # Define the default database name.
+#       database: alicebot
+#       # Since this database points at a session connected to MongoHQ, we must
+#       # provide the authentication details.
+#       username: <%= ENV['DB_USER'] %>
+#       password: <%= ENV['DB_PASS'] %>
+#   options:
+#     allow_dynamic_fields: false
+#     identity_map_enabled: true
+#     include_root_in_json: true
+#     include_type_for_serialization: true
+#     scope_overwrite_exception: true
+#     raise_not_found_error: false
+#     skip_version_check: false
+#     use_activesupport_time_zone: false
+#     use_utc: true

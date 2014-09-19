@@ -13,7 +13,7 @@ class CommandString
   end
 
   def components
-    @components ||= self.content.split(' ').reject{|w| w.blank? }
+    @components ||= self.content.split(' ').reject{|w| w.blank? }.map{|c| c.gsub(/[^\w]/, '')}
   end
 
   def has_predicate?
