@@ -63,18 +63,43 @@ describe "Alice::Parser::Mash" do
 
   context "Alice, what is Syd's twitter handle?" do
 
-    let(:command_string)  { CommandString.new("Alice, what is Syd's twitter handle?") }
-    let(:parser)          { Alice::Parser::Mash.new(command_string) }
+    context "happy path" do
 
-    before do
-      parser.parse!
+      let(:command_string)  { CommandString.new("Alice, what is Syd's twitter handle?") }
+      let(:parser)          { Alice::Parser::Mash.new(command_string) }
+
+      before do
+        parser.parse!
+      end
+
+      it "recognizes the Syd user" do
+        expect(parser.this_subject).to eq(@syd)
+      end
+
+      it "maps the object to a whitelisted instance method" do
+        expect(parser.this_property).to eq :twitter_handle
+      end
+
     end
 
-    it "recognizes the Syd user" do
-      binding.pry
-      expect(parser.this_subject).to eq(@syd)
+    context "edge cases" do
+
+      let(:command_string)  { CommandString.new("Alice, what is Syd's destroy?") }
+      let(:parser)          { Alice::Parser::Mash.new(command_string) }
+
+      before do
+        parser.parse!
+      end
+
+      it "does not map to a non-whitelisted instance method" do
+        expect(parser.this_property).to be_nil
+      end
+
     end
 
+  end
+
+  context "collects parts of speech" do
   end
 
 end

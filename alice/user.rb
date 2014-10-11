@@ -33,6 +33,23 @@ class User
   validates_presence_of :primary_nick
   validates_uniqueness_of :primary_nick
 
+  PROPERTIES = [
+    :can_brew?,
+    :can_forge?,
+    :last_seen,
+    :can_play_game?,
+    :current_nick,
+    :dazed?,
+    :disoriented?,
+    :drunk?,
+    :is_online?,
+    :is_op?,
+    :formatted_bio,
+    :proper_name,
+    :formatted_twitter_handle,
+    :twitter_url,
+  ]
+
   def self.like(name)
     name = name.respond_to?(:join) && name.join(' ') || name
 
