@@ -99,7 +99,23 @@ describe "Alice::Parser::Mash" do
 
   end
 
-  context "collects parts of speech" do
+  context "Alice, who made the tomato?" do
+
+      let(:command_string)  { CommandString.new("Alice, who made the tomato?") }
+      let(:parser)          { Alice::Parser::Mash.new(command_string) }
+
+      before do
+        parser.parse!
+      end
+
+      it "recognizes the tomato object" do
+        expect(parser.this_object).to eq(@tomato)
+      end
+
+      it "maps to the object's creator method" do
+        expect(parser.this_property).to eq(:creator)
+      end
+
   end
 
 end

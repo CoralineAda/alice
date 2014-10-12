@@ -6,10 +6,20 @@ module Alice
 
       attr_accessor :command_string
       attr_accessor :sentence
-      attr_accessor :this_object, :this_subject, :this_verb, :this_preposition
+      attr_accessor :this_object, :this_subject, :this_info_verb
+      attr_accessor :this_transfer_verb, :this_preposition
+      attr_accessor :relation_verb
       attr_accessor :this_property
 
-      include AASM
+      STRUCTURES = [
+        [:to_info_verb, [:to_subject, [:to_property]],
+                        [:to_object, [:to_subject]],
+                        [:to_subject]],
+        [:to_transfer_verb, [:to_subject, [:to_object]],
+                            [:to_object, [:to_subject]]]
+      ]
+
+    include AASM
 
       aasm do
         state :unparsed, initial: true
@@ -17,6 +27,7 @@ module Alice
         state :verb
         state :transfer_verb
         state :info_verb
+        state :relation_verb
         state :item
         state :noun
         state :object
@@ -38,6 +49,10 @@ module Alice
           transitions from: [:alice], to: :info_verb, guard: :info_verb?
         end
 
+        event :relation_verb do
+          transitions from: [:alice], to: :relation_verb, guard: :relation_verb?
+        end
+
         event :noun do
           transitions from: [:transfer_verb, :info_verb], to: :noun, guard: :has_noun?
         end
@@ -47,7 +62,7 @@ module Alice
         end
 
         event :object do
-          transitions from: [:subject, :transfer_verb, :info_verb, :preposition], to: :object, guard: :has_object?
+          transitions from: [:subject, :transfer_verb, :info_verb, :preposition,:relation_verb], to: :object, guard: :has_object?
         end
 
         event :subject do
@@ -65,69 +80,60 @@ module Alice
         self.sentence = Sentence.new(command_string.content.gsub(/\?$/, '').split(' '))
       end
 
-      def parse_transfer
-        alice &&
-        (to_info_verb && to_subject && to_property) ||
-        (to_transfer_verb && (from_subject_to_object || object_to_subject)) ||
-        (to_info_verb && (to_object_and_subject || to_object_or_subject))
+      def parse_transfer(structures=STRUCTURES)
+=begin
+        structures.select { |s| can_transition_to?(s.first) }.each do |struct|
+          self.public_send(struct.first)
+          tail = struct[1..-1]
+          return unless(tail.any?)
+          parse_transfer(tail)
+        end
+=end
+        structures.each do |structure|
+          head,tail = structure.first, structure[1..-1]
+          if can_transition_to?(head)
+            self.public_send(head)
+            sentence.remove(self.public_send(head.to_s.gsub(/to_/, 'this_')))
+            return unless tail.any?
+            parse_transfer(tail)
+          end
+        end
+      end
+
+      def can_transition_to?(event)
+        answer = aasm.may_fire_event?(event.to_s.gsub(/^to_/, '').to_sym)
       end
 
       def to_info_verb
         info_verb
-      rescue AASM::InvalidTransition
-        false
       end
 
       def to_transfer_verb
         transfer_verb
-      rescue AASM::InvalidTransition
-        false
       end
 
       def to_object_or_subject
         to_object || to_subject
-      rescue AASM::InvalidTransition
-        false
       end
 
       def to_object_and_subject
         to_object && to_subject
-      rescue AASM::InvalidTransition
-        false
       end
 
       def to_object
         object
-      rescue AASM::InvalidTransition
-        false
       end
 
       def to_subject
         subject
-      rescue AASM::InvalidTransition
-        false
       end
 
       def to_property
         property
-      rescue AASM::InvalidTransition
-        false
-      end
-
-      def from_subject_to_object
-        subject && (may_preposition? && preposition && object) || object
-      rescue AASM::InvalidTransition
-        false
-      end
-
-      def object_to_subject
-        object && (may_preposition? && preposition && subject) || subject
-      rescue AASM::InvalidTransition
-        false
       end
 
       def parse!
-        parse_transfer
+        alice && parse_transfer
       rescue
         return false
       end
@@ -146,16 +152,22 @@ module Alice
 
       def has_preposition?
         self.this_preposition = any_content_in?(Alice::Parser::LanguageHelper::PREPOSITIONS)
-        sentence.remove(self.this_preposition)
       end
 
       def info_verb?
-        self.this_verb = any_content_in?(Alice::Parser::LanguageHelper::INFO_VERBS)
-        sentence.remove(self.this_verb)
+        self.this_info_verb = any_content_in?(Alice::Parser::LanguageHelper::INFO_VERBS)
       end
 
       def known_verb?
         command.present?
+      end
+
+      def relation_verb?
+        self.this_relation_verb = any_content_in?(Alice::Parser::LanguageHelper::RELATION_VERBS)
+      end
+
+      def transfer_verb?
+        self.this_transfer_verb = any_content_in?(Alice::Parser::LanguageHelper::TRANSFER_VERBS)
       end
 
       def has_person?
@@ -166,7 +178,6 @@ module Alice
 
       def has_object?
         self.this_object = Item.from(potential_nouns.join(' ')) || Beverage.from(potential_nouns.join(' '))
-        sentence.remove(self.this_object)
       end
 
       def has_noun?
@@ -175,24 +186,13 @@ module Alice
 
       def has_subject?
         self.this_subject ||= has_person?
-        sentence.remove("Syd's")
-      end
-
-      def transfer_verb?
-        self.this_verb = any_content_in?(Alice::Parser::LanguageHelper::TRANSFER_VERBS)
-        self.sentence.remove(this_verb)
-      rescue AASM::InvalidTransition
-        false
       end
 
       def has_property?
         method_list = any_method_like?(properties(self.this_subject.class))
         method_refs = method_list.map(&:split)
-        best_match  = method_refs.map { |m| (m & self.sentence).join('_') }.uniq.sort { |n,m| n.length <=> m.length }.last.to_sym
+        best_match  = method_refs.map { |m| (m & self.sentence).join('_') }.uniq.sort { |n,m| n.length <=> m.length }.last.try(:to_sym)
         self.this_property = best_match
-        self.sentence.remove(self.this_property)
-      rescue AASM::InvalidTransition
-        false
       end
 
       # Util

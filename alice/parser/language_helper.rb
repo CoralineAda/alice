@@ -14,15 +14,21 @@ module Alice
         "do",
         "does",
         "examine",
-        "had",
-        "has",
         "hid",
         "inspect",
         "is",
         "look",
-        "made",
         "set",
         "was"
+      ]
+
+      RELATION_VERBS = [
+        "made",
+        "make",
+        "makes",
+        "has",
+        "have",
+        "holds"
       ]
 
       INTERROGATIVES = [

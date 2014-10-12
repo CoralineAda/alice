@@ -129,6 +129,10 @@ class Item
     where(is_weapon: true)
   end
 
+  def cursed?
+    self.is_cursed
+  end
+
   def check_if_cursed
     self.is_cursed ||= rand(10) == 1
     true
