@@ -41,7 +41,6 @@ module Alice
       def parse!
         bang && verb && (known_verb? || person || object) && command
       rescue
-        p "Banger was unable to parse #{command_string.content}"
         return false
       end
 

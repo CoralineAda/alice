@@ -6,7 +6,6 @@ describe Trigger do
     Trigger.new(
       verb: "made",
       synonyms: %w{make craft},
-      klass: "Item",
       method_name: :creator
     )
   }
@@ -15,7 +14,6 @@ describe Trigger do
     Trigger.new(
       verb: "craft",
       synonyms: %w{made},
-      klass: "Item",
       method_name: :creator
     )
   }
@@ -24,7 +22,6 @@ describe Trigger do
     Trigger.new(
       verb: "makes",
       synonyms: %w{craft},
-      klass: "Item",
       method_name: :creator
     )
   }

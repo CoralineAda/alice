@@ -4,7 +4,6 @@ class Trigger
 
   field :verb
   field :synonyms, type: Array, default: []
-  field :klass
   field :method_name
 
   validates_uniqueness_of :verb
