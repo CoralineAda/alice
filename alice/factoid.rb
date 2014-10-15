@@ -59,6 +59,7 @@ class Factoid
     fact = Alice::Util::Sanitizer.initial_downcase(fact)
 
     message = ""
+    message << self.user.primary_nick if self.user.present?
     message << "#{Alice::Util::Randomizer.fact_prefix}" if with_prefix
     message << " #{fact}"
     message

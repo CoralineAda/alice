@@ -8,6 +8,7 @@ module Alice
       attr_accessor :sentence
       attr_accessor :this_object, :this_subject, :this_info_verb
       attr_accessor :this_transfer_verb, :this_preposition
+      attr_accessor :this_relation_verb
       attr_accessor :relation_verb
       attr_accessor :this_property
 
@@ -81,15 +82,7 @@ module Alice
       end
 
       def parse_transfer(structures=STRUCTURES)
-=begin
-        structures.select { |s| can_transition_to?(s.first) }.each do |struct|
-          self.public_send(struct.first)
-          tail = struct[1..-1]
-          return unless(tail.any?)
-          parse_transfer(tail)
-        end
-=end
-        structures.each do |structure|
+        structures.map do |structure|
           head,tail = structure.first, structure[1..-1]
           if can_transition_to?(head)
             self.public_send(head)
@@ -133,9 +126,9 @@ module Alice
       end
 
       def parse!
-        alice && parse_transfer
-      rescue
-        return false
+        alice && parse_transfer && command
+      # rescue
+      #   return false
       end
 
       def state
@@ -158,16 +151,16 @@ module Alice
         self.this_info_verb = any_content_in?(Alice::Parser::LanguageHelper::INFO_VERBS)
       end
 
-      def known_verb?
-        command.present?
-      end
-
       def relation_verb?
         self.this_relation_verb = any_content_in?(Alice::Parser::LanguageHelper::RELATION_VERBS)
       end
 
       def transfer_verb?
         self.this_transfer_verb = any_content_in?(Alice::Parser::LanguageHelper::TRANSFER_VERBS)
+      end
+
+      def verb
+       self.this_relation_verb || self.this_transfer_verb || self.this_info_verb
       end
 
       def has_person?
@@ -177,11 +170,13 @@ module Alice
       end
 
       def has_object?
-        self.this_object = Item.from(potential_nouns.join(' ')) || Beverage.from(potential_nouns.join(' '))
+        self.this_object = Item.from(potential_nouns.join(' ')) ||
+                           Beverage.from(potential_nouns.join(' ')) ||
+                           Wand.from(potential_nouns.join(' '))
       end
 
       def has_noun?
-        known_object? || known_person?
+        has_object? || has_person?
       end
 
       def has_subject?
@@ -203,7 +198,7 @@ module Alice
       end
 
       def command
-        @command ||= Command.any_in(verbs: command_string.verb).first
+        @command ||= Command.any_in(verbs: verb).first
       end
 
       def any_method_like?(array)

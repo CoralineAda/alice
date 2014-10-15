@@ -1,10 +1,14 @@
 class Message
 
-  attr_accessor :sender_nick, :recipient_nick, :type, :response, :trigger
+  attr_accessor :sender_nick, :recipient_nick, :type, :trigger, :response_type
 
   def initialize(sender_nick, trigger)
     self.sender_nick = sender_nick
     self.trigger = trigger
+  end
+
+  def content
+    self.trigger
   end
 
   def filtered(text)
@@ -29,13 +33,23 @@ class Message
     @recipient ||= User.find_or_create(self.recipient_nick)
   end
 
+  def response
+    @response ||= filtered(Response.from(self).response)
+  end
+
   def sender
     @sender ||= User.find_or_create(self.sender_nick)
   end
 
   def set_response(content)
-    self.response = filtered(content)
+    @response = filtered(content)
     self
+  end
+
+  private
+
+  def response_reference
+    @response_reference ||= Response.from(self)
   end
 
 end

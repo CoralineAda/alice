@@ -30,11 +30,11 @@ class Processor
 
   def respond
     track_sender
-    if response = Response.from(self.message)
-      if response.type == "emote"
-        Alice::Util::Mediator.emote(self.channel, response.response) if response.type == "emote"
+    if response = self.message.response
+      if self.message.response_type == "emote"
+        Alice::Util::Mediator.emote(self.channel, response)
       else
-        Alice::Util::Mediator.reply_with(self.channel, response.response)
+        Alice::Util::Mediator.reply_with(self.channel, response)
       end
     end
     message

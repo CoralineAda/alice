@@ -108,11 +108,11 @@ describe "Alice::Parser::Mash" do
         parser.parse!
       end
 
-      it "recognizes the tomato object" do
+      xit "recognizes the tomato object" do
         expect(parser.this_object).to eq(@tomato)
       end
 
-      it "maps to the object's creator method" do
+      xit "maps to the object's creator method" do
         expect(parser.this_property).to eq(:creator)
       end
 
