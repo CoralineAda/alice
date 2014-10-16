@@ -30,6 +30,7 @@ module Alice
         was_hidden = self.is_hidden?
         original_owner = self.user
         self.user_id = recipient.id
+        self.place_id = nil
         self.picked_up_at = DateTime.now
         self.is_hidden = false
         self.save

@@ -55,15 +55,13 @@ class Command
     end.last
   end
 
-  # TODO experimental
   def self.from(message)
     trigger = message.trigger
-    match = Alice::Parser::Mash.new(CommandString.new(message.trigger)).parse!
-    match ||= Alice::Parser::Banger.new(CommandString.new(message.trigger)).parse!
+    match = Alice::Parser::Banger.new(CommandString.new(trigger)).parse!
     match ||= find_verb(trigger.downcase) || find_indicators(trigger.downcase)
     match ||= default
     match.message = message
-    p "*** Executing #{match.name} with #{trigger} ***" unless match.name.nil?
+    p "*** Executing #{match.name} with #{trigger} ***"
     match
   end
 
