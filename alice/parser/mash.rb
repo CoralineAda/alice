@@ -17,7 +17,7 @@ module Alice
                         [:to_object, [:to_subject]],
                         [:to_subject]],
         [:to_transfer_verb, [:to_subject, [:to_object]],
-                            [:to_object, [:to_subject]]]
+                            [:to_object, [:to_subject]]],
       ]
 
     include AASM
@@ -78,7 +78,7 @@ module Alice
 
       def initialize(command_string)
         self.command_string = command_string
-        self.sentence = Sentence.new(command_string.content.gsub(/\?$/, '').split(' '))
+        self.sentence = Sentence.new(command_string.content.downcase.gsub(/\?\,\!$/, '').split(' '))
       end
 
       def parse_transfer(structures=STRUCTURES)
@@ -127,8 +127,8 @@ module Alice
 
       def parse!
         alice && parse_transfer && command
-      # rescue
-      #   return false
+      rescue
+        return false
       end
 
       def state
@@ -149,6 +149,9 @@ module Alice
 
       def info_verb?
         self.this_info_verb = any_content_in?(Alice::Parser::LanguageHelper::INFO_VERBS)
+        binding.pry
+        self.this_info_verb ||= "is" if any_content_in?(Alice::Parser::LanguageHelper::INTERROGATIVES)
+        self.this_info_verb ||= "is" if sentence.contains_possessive
       end
 
       def relation_verb?
@@ -210,10 +213,8 @@ module Alice
       end
 
       def properties(klass)
-        method_names = klass::PROPERTIES.reject{|m| m =~ /[\=\!]/}.map do |m|
-          m.to_s.gsub(/_/, ' ')
-        end
-        method_names.select{ |n| sentence.map { |m| Regexp.new(m, 'i').match(n) }.any? }
+        method_names = klass::PROPERTIES.map{ |method| method.to_s.gsub(/_/, ' ') }
+        method_names.select{ |n| sentence.map{ |m| Regexp.new(m, 'i').match(n) }.any? }
       end
 
       def any_content_in?(array)
@@ -230,6 +231,9 @@ module Alice
       end
 
       class Sentence < Array
+        def contains_possessive
+          self.select{|word| word =~ /\'s/}.any?
+        end
         def remove(what)
           return self if what.nil?
           regexp = Regexp.new(what.to_s + "(?:'s)?", 'i')
