@@ -20,4 +20,5 @@ class Trigger
   def do
     @trigger_object.public_send(self.method_name)
   end
+
 end

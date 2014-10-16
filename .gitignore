@@ -4,3 +4,4 @@ db/backups/*/**
 .DS_Store
 images/*
 doc/*
+log/*

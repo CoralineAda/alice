@@ -1,4 +1,3 @@
-require 'pry'
 module Behavior
 
   module HandlesCommands
