@@ -57,8 +57,9 @@ class Command
 
   def self.from(message)
     trigger = message.trigger
-    match = Alice::Parser::Banger.new(CommandString.new(trigger)).parse!
-    match ||= find_verb(trigger.downcase) || find_indicators(trigger.downcase)
+    command_string = CommandString.new(trigger)
+    match = Alice::Parser::Banger.new(command_string).parse!
+    match ||= Alice::Parser::Mash.new(command_string).parse!
     match ||= default
     match.message = message
     p "*** Executing #{match.name} with #{trigger} ***"

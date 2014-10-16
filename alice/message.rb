@@ -34,7 +34,7 @@ class Message
   end
 
   def response
-    @response ||= filtered(Response.from(self).response)
+    @response ||= filtered(Response.from(self).try(:response))
   end
 
   def sender
