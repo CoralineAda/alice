@@ -14,4 +14,6 @@ gem 'require_all'
 gem 'rspec'
 gem 'rubyfish'
 gem 'rake'
+gem 'sanitize', ">= 3.0.2"
+gem 'wikipedia-client'
 gem 'database_cleaner', :github => 'bmabey/database_cleaner', group: :test

@@ -9,6 +9,8 @@ module Handlers
       parser.parse!
       sanitized_property = property.to_s.gsub("_", " ")
       message.set_response("#{subject.proper_name}'s #{sanitized_property} is #{result}.")
+    rescue
+      message.set_response("I'm not sure I understand, can you say that another way?")
     end
 
     private
