@@ -149,7 +149,6 @@ module Alice
 
       def info_verb?
         self.this_info_verb = any_content_in?(Alice::Parser::LanguageHelper::INFO_VERBS)
-        binding.pry
         self.this_info_verb ||= "is" if any_content_in?(Alice::Parser::LanguageHelper::INTERROGATIVES)
         self.this_info_verb ||= "is" if sentence.contains_possessive
       end
