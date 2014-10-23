@@ -23,7 +23,7 @@ module Handlers
         if u == message.sender
           message.set_response("Aww, no winners this time.")
         else
-          points = rand(13)
+          points = rand(13) + 1
           u.score_points(points))
           message.set_response("#{u.current_nick} gets #{points} bonus points!")
         end
