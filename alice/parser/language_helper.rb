@@ -14,9 +14,12 @@ module Alice
         "do",
         "does",
         "examine",
+        "hear",
+        "heard",
         "hid",
         "inspect",
         "is",
+        "know",
         "look",
         "set",
         "was"
