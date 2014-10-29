@@ -8,6 +8,36 @@ describe "Alice::Parser::Mash" do
     @tomato = Item.create!(name: "tomato")
   end
 
+  context "Alice, say hello to Syd" do
+
+    let(:command_string)  { CommandString.new("Alice, say hello to Syd.") }
+    let(:parser)          { Alice::Parser::Mash.new(command_string) }
+
+    before do
+      parser.parse!
+    end
+
+    it "greet Syd" do
+      expect(parser.this_object).to eq(@syd)
+    end
+
+  end
+
+  context "Alice, what do you know about Briggs?" do
+
+    let(:command_string)  { CommandString.new("Alice, what do you know about Briggs?") }
+    let(:parser)          { Alice::Parser::Mash.new(command_string) }
+
+    before do
+      parser.parse!
+    end
+
+    it "recognize topic" do
+      expect(parser.this_subject).to eq('Briggs')
+    end
+
+  end
+
   context "Alice, please give the tomato to Robyn." do
 
     let(:command_string)  { CommandString.new("Alice, please give the tomato to Robyn.") }

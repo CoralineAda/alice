@@ -242,7 +242,6 @@ class User
     self.factoids.create(text: text)
   end
 
-  # TODO Extract twitter info into object
   def set_twitter_handle(handle)
     handle = handle.split[0].gsub("@", "")
     self.update_attribute(:twitter_handle, handle)

@@ -52,6 +52,7 @@ module Alice
         when 0; random_message
         when 1; generated_message
         when 2; converse # HERE
+        end
       end
 
     end
