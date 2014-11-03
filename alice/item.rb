@@ -206,7 +206,7 @@ class Item
   end
 
   def point_value
-    self.theft_attempt_count > 0 ? self.theft_attempt_count : 1
+    self.theft_attempt_count > 0 ? self.theft_attempt_count + 1 : 1
   end
 
   def randomize_name
