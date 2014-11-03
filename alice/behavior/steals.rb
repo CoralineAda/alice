@@ -18,7 +18,7 @@ module Alice
         item ||= Item.from(name: what.downcase).last || Beverage.from(name: what.downcase).last
         return "eyes #{proper_name} curiously." unless item
         return "#{Alice::Util::Randomizer.laugh} as #{proper_name} tries to steal their own #{item.name}!" if item.owner == self
-        return "Sorry, but #{item.owner_name} locked that up tight before going to sleep!" unless item.owner.awake?
+        return "apologizes, but #{item.owner_name} locked that up tight before going to sleep!" unless item.owner.awake?
 
         if Alice::Util::Randomizer.one_chance_in(5)
           update_thefts
