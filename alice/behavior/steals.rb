@@ -22,12 +22,18 @@ module Alice
         update_thefts
 
         if Alice::Util::Randomizer.one_chance_in(5)
-          message = "watches in awe as #{proper_name} steals the #{item.name} from #{item.owner_name}!"
+          if item.point_value > 1
+            message = "stares in surprise as #{proper_name} steals the #{item.name}, valued at #{item.point_value} points, from #{item.owner_name}!"
+          else
+            message = "watches in wonder as #{proper_name} snatches the #{item.name} from #{item.owner_name}'s pocket!"
+          end
           item.remove
+          item.reset_theft_attempts
           self.items << item
           self.score_points if self.respond_to?(:score_points)
         else
-          message = "sees #{proper_name} try and fail to snatch the #{item.name} from #{item.owner_name}."
+          message = "sees #{proper_name} try and fail to take the #{item.name} from #{item.owner_name}. That's got to sting!"
+          item.increment_theft_attempts
           self.penalize if self.respond_to?(:penalize)
         end
         message
