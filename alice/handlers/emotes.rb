@@ -19,6 +19,11 @@ module Handlers
       message.set_response(response.join("\r\n"))
     end
 
+    def well_actually
+      message.sender.penalize
+      message.set_response(response.join("Seriously?"))
+    end
+
     def seen
       user = ::User.from(command_string.subject)
       response = "I last saw #{user.current_nick} #{user.last_seen}."
