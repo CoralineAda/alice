@@ -35,15 +35,8 @@ class User
 
   def self.like(name)
     name = name.respond_to?(:join) && name.join(' ') || name
-
-    # try primary nick first
     match = where(primary_nick: /^#{Regexp.escape(name)}$/i).first
     match ||= where(primary_nick: /\b#{Regexp.escape(name)}\b/i).first
-
-    # try alt nicks
-    match ||= any_in(alt_nicks: /^#{Regexp.escape(name)}$/i).first
-    match ||= any_in(alt_nicks: /\b#{Regexp.escape(name)}\b/i).first
-
     match
   end
 
