@@ -21,7 +21,7 @@ module Handlers
 
     def well_actually
       message.sender.penalize
-      message.set_response(response.join("Seriously?"))
+      message.set_response("Seriously?")
     end
 
     def seen
