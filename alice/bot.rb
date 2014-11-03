@@ -7,8 +7,8 @@ module Alice
     def initialize
       self.bot = Cinch::Bot.new do
         configure do |config|
-          config.server = "irc.lonelyhackersclub.com"
-          config.port = 2600
+          config.server = ENV['IRC_SERVER']
+          config.port = ENV['IRC_PORT']
           config.channels = [ENV['PRIMARY_CHANNEL'], ENV['DEBUG_CHANNEL']]
           config.nick = ENV['IRC_NICK']
           config.user = ENV['IRC_USER']
