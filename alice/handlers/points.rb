@@ -41,7 +41,7 @@ module Handlers
     private
 
     def subject
-      ::User.like(command_string.subject)
+      ::User.from(command_string.content)
     end
 
   end
