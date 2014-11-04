@@ -5,7 +5,7 @@ module Alice
     class Dazed
 
       def process(text)
-        if Alice::Util::Randomizer.one_chance_in(5)
+        if Alice::Util::Randomizer.one_chance_in(10)
           filtered = text.split[0..rand(4)].join(' ')
           filtered << "... "
           filtered << "#{Alice::Util::Randomizer.exclamation} "
