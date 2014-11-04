@@ -8,12 +8,13 @@ module Alice
       attr_accessor :sentence
       attr_accessor :this_object, :this_subject, :this_info_verb
       attr_accessor :this_transfer_verb, :this_action_verb, :this_preposition
-      attr_accessor :this_relation_verb, :this_topic
+      attr_accessor :this_relation_verb, :this_topic, :this_noun
       attr_accessor :relation_verb
       attr_accessor :this_property
 
       STRUCTURES = [
         [:to_info_verb,     [:to_subject, [:to_property]],
+                            [:to_object, [:to_property]],
                             [:to_object, [:to_subject]],
                             [:to_subject],
                             [:to_topic]],
@@ -84,7 +85,7 @@ module Alice
         end
 
         event :property do
-          transitions from: [:subject], to: :property, guard: :has_property?
+          transitions from: [:subject, :object], to: :property, guard: :has_property?
         end
 
       end
@@ -204,7 +205,7 @@ module Alice
       end
 
       def has_noun?
-        has_object? || has_person?
+        self.this_noun = has_object? || has_person?
       end
 
       def has_subject?
@@ -216,7 +217,8 @@ module Alice
       end
 
       def has_property?
-        map = self.this_subject.class::PROPERTIES.inject({}) do |hash, property|
+        thing = self.this_subject || self.this_object
+        map = thing.class::PROPERTIES.inject({}) do |hash, property|
           hash[property] = property.to_s.split("_")
           hash
         end
