@@ -60,6 +60,7 @@ class Command
     command_string = CommandString.new(trigger)
     match = Alice::Parser::Banger.new(command_string).parse!
     match ||= Alice::Parser::Mash.new(command_string).parse!
+    match ||= find_verb(trigger)
     if match
       match.message = message
       p "*** Executing #{match.name} with #{trigger} ***"
