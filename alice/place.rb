@@ -160,7 +160,7 @@ class Place
 
   def ensure_description
     return true if self.description.present? && self.view_from_afar.present?
-    self.description ||= Place.random_description(self)
+    self.description ||= Place.random_description
     self.view_from_afar ||= Alice::Util::Randomizer.view_from_afar
   end
 
@@ -256,7 +256,7 @@ class Place
   end
 
   def place_item
-    return false if self.origin_square?
+    return false if self.origin_square? || Item.all.empty?
     if Alice::Util::Randomizer.one_chance_in(5)
       item = Item.hidden.sample || Item.unplaced.unclaimed.sample
       item.update_attribute(:place_id, self.id)

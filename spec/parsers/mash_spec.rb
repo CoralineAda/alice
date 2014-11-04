@@ -108,7 +108,7 @@ describe "Alice::Parser::Mash" do
       end
 
       it "maps the object to a whitelisted instance method" do
-        expect(parser.this_property).to eq :formatted_twitter_handle
+        expect(parser.this_property).to eq :twitter_handle
       end
 
     end

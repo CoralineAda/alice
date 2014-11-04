@@ -104,14 +104,14 @@ describe User do
 
   describe "#remove_filter?" do
 
-    it "returns true if the last filter was applied more than 13 minutes ago" do
-      jack.filter_applied = DateTime.now - 15.minutes
-      expect(jack.remove_filter?).to be_true
+    it "returns true if the last filter was applied more than 90 minutes ago" do
+      jack.filter_applied = DateTime.now - 91.minutes
+      expect(jack.remove_expired_filters).to be_true
     end
 
-    it "returns false if the last filter was applied within the last 13 minutes" do
+    it "returns false if the last filter was applied within the last 90 minutes" do
       jack.filter_applied = DateTime.now - 11.minutes
-      expect(jack.remove_filter?).to be_false
+      expect(jack.remove_expired_filters).to be_false
     end
 
   end
