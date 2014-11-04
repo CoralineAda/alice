@@ -6,6 +6,16 @@ class Item
   include Alice::Behavior::Ownable
   include Alice::Behavior::Placeable
 
+  PROPERTIES = [
+    :maker,
+    :made_by,
+    :created_by,
+    :forged_by,
+    :is_cursed?,
+    :is_game?,
+    :is_readable?,
+  ]
+
   store_in collection: "alice_items"
 
   field :name

@@ -132,20 +132,39 @@ describe "Alice::Parser::Mash" do
 
   context "Alice, who made the tomato?" do
 
-      let(:command_string)  { CommandString.new("Alice, who made the tomato?") }
-      let(:parser)          { Alice::Parser::Mash.new(command_string) }
+    let(:command_string)  { CommandString.new("Alice, who made the tomato?") }
+    let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
-      before do
-        parser.parse!
-      end
+    before do
+      parser.parse!
+    end
 
-      xit "recognizes the tomato object" do
-        expect(parser.this_object).to eq(@tomato)
-      end
+    it "recognizes the tomato object" do
+      expect(parser.this_object).to eq(@tomato)
+    end
 
-      xit "maps to the object's creator method" do
-        expect(parser.this_property).to eq(:creator)
-      end
+    it "maps to the object's creator method" do
+      expect(parser.this_property).to eq(:made_by)
+    end
+
+  end
+
+  context "Alice, is the tomato cursed?" do
+
+    let(:command_string)  { CommandString.new("Alice, is the tomato cursed?") }
+    let(:parser)          { Alice::Parser::Mash.new(command_string) }
+
+    before do
+      parser.parse!
+    end
+
+    it "recognizes the tomato object" do
+      expect(parser.this_object).to eq(@tomato)
+    end
+
+    it "maps to the object's is_cursed? method" do
+      expect(parser.this_property).to eq(:is_cursed?)
+    end
 
   end
 
