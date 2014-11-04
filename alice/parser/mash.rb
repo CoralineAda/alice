@@ -7,15 +7,18 @@ module Alice
       attr_accessor :command_string
       attr_accessor :sentence
       attr_accessor :this_object, :this_subject, :this_info_verb
-      attr_accessor :this_transfer_verb, :this_preposition
-      attr_accessor :this_relation_verb
+      attr_accessor :this_transfer_verb, :this_action_verb, :this_preposition
+      attr_accessor :this_relation_verb, :this_topic
       attr_accessor :relation_verb
       attr_accessor :this_property
 
       STRUCTURES = [
-        [:to_info_verb, [:to_subject, [:to_property]],
-                        [:to_object, [:to_subject]],
-                        [:to_subject]],
+        [:to_info_verb,     [:to_subject, [:to_property]],
+                            [:to_object, [:to_subject]],
+                            [:to_subject],
+                            [:to_topic]],
+        [:to_action_verb,   [:to_subject, [:to_object]],
+                            [:to_object, [:to_subject]]],
         [:to_transfer_verb, [:to_subject, [:to_object]],
                             [:to_object, [:to_subject]]],
       ]
@@ -29,6 +32,7 @@ module Alice
         state :transfer_verb
         state :info_verb
         state :relation_verb
+        state :action_verb
         state :item
         state :noun
         state :object
@@ -36,6 +40,7 @@ module Alice
         state :person
         state :subject
         state :item
+        state :topic
         state :property
 
         event :alice do
@@ -50,12 +55,20 @@ module Alice
           transitions from: [:alice], to: :info_verb, guard: :info_verb?
         end
 
+        event :action_verb do
+          transitions from: [:alice], to: :action_verb, guard: :action_verb?
+        end
+
         event :relation_verb do
           transitions from: [:alice], to: :relation_verb, guard: :relation_verb?
         end
 
         event :noun do
           transitions from: [:transfer_verb, :info_verb], to: :noun, guard: :has_noun?
+        end
+
+        event :topic do
+          transitions from: [:info_verb], to: :topic, guard: :has_topic?
         end
 
         event :preposition do
@@ -67,7 +80,7 @@ module Alice
         end
 
         event :subject do
-          transitions from: [:transfer_verb, :info_verb, :object], to: :subject, guard: :has_subject?
+          transitions from: [:transfer_verb, :info_verb, :action_verb, :object], to: :subject, guard: :has_subject?
         end
 
         event :property do
@@ -101,6 +114,10 @@ module Alice
         info_verb
       end
 
+      def to_action_verb
+        action_verb
+      end
+
       def to_transfer_verb
         transfer_verb
       end
@@ -119,6 +136,10 @@ module Alice
 
       def to_subject
         subject
+      end
+
+      def to_topic
+        topic
       end
 
       def to_property
@@ -151,6 +172,7 @@ module Alice
         self.this_info_verb = any_content_in?(Alice::Parser::LanguageHelper::INFO_VERBS)
         self.this_info_verb ||= "is" if any_content_in?(Alice::Parser::LanguageHelper::INTERROGATIVES)
         self.this_info_verb ||= "is" if sentence.contains_possessive
+        self.this_info_verb
       end
 
       def relation_verb?
@@ -161,8 +183,12 @@ module Alice
         self.this_transfer_verb = any_content_in?(Alice::Parser::LanguageHelper::TRANSFER_VERBS)
       end
 
+      def action_verb?
+        self.this_action_verb = any_content_in?(Alice::Parser::LanguageHelper::ACTION_VERBS)
+      end
+
       def verb
-       self.this_relation_verb || self.this_transfer_verb || self.this_info_verb
+       self.this_relation_verb || self.this_transfer_verb || self.this_info_verb || self.this_action_verb
       end
 
       def has_person?
@@ -185,11 +211,17 @@ module Alice
         self.this_subject ||= has_person?
       end
 
+      def has_topic?
+        self.this_topic = Factoid.about(command_string.predicate)
+      end
+
       def has_property?
-        method_list = any_method_like?(properties(self.this_subject.class))
-        method_refs = method_list.map(&:split)
-        best_match  = method_refs.map { |m| (m & self.sentence).join('_') }.uniq.sort { |n,m| n.length <=> m.length }.last.try(:to_sym)
-        self.this_property = best_match
+        map = self.this_subject.class::PROPERTIES.inject({}) do |hash, property|
+          hash[property] = property.to_s.split("_")
+          hash
+        end
+        match = map.values.detect{|value_set| value_set.detect{|n| ([n] & sentence).count > 0} }
+        self.this_property = map.detect{|key, value| value == match}[0]
       end
 
       # Util

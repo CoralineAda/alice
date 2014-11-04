@@ -6,6 +6,7 @@ describe "Alice::Parser::Mash" do
     @robyn  = User.create!(primary_nick: "robyn")
     @syd    = User.create!(primary_nick: "syd")
     @tomato = Item.create!(name: "tomato")
+    @factoid = Factoid.create!(text: "Briggs features in the Robyn Hitchcock song 'A Man\'s Gotta Know'")
   end
 
   context "Alice, say hello to Syd" do
@@ -17,8 +18,8 @@ describe "Alice::Parser::Mash" do
       parser.parse!
     end
 
-    it "greet Syd" do
-      expect(parser.this_object).to eq(@syd)
+    it "greets Syd" do
+      expect(parser.this_subject).to eq(@syd)
     end
 
   end
@@ -32,8 +33,8 @@ describe "Alice::Parser::Mash" do
       parser.parse!
     end
 
-    it "recognize topic" do
-      expect(parser.this_subject).to eq('Briggs')
+    it "recognizes topics" do
+      expect(parser.this_topic).to eq(@factoid)
     end
 
   end
@@ -107,7 +108,7 @@ describe "Alice::Parser::Mash" do
       end
 
       it "maps the object to a whitelisted instance method" do
-        expect(parser.this_property).to eq :twitter_handle
+        expect(parser.this_property).to eq :formatted_twitter_handle
       end
 
     end

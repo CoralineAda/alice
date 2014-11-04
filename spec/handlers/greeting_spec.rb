@@ -9,6 +9,7 @@ describe "Handlers::Greeting" do
   before do
    message.stub(:sender_nick) { user.primary_nick }
    handler.stub(:subject) { user }
+   Alice::Util::Mediator.stub(:exists?) { true }
   end
 
   describe "#greet_sender" do
@@ -18,16 +19,6 @@ describe "Handlers::Greeting" do
     it "calls the correct method" do
       expect(::Greeting).to receive(:greet)
       handler.greet_sender
-    end
-  end
-
-  describe "#greet_other" do
-    it "is wired to a working method" do
-      expect(::Greeting.respond_to?(:greet)).to be_true
-    end
-    it "calls the correct method" do
-      expect(::Greeting).to receive(:greet)
-      handler.greet_other
     end
   end
 
