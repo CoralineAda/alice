@@ -16,6 +16,10 @@ module Alice
         self.last_award <= DateTime.now - 13.minutes
       end
 
+      def check_points
+        check_score
+      end
+
       def check_score
         score_text = "#{self.proper_name} has #{self.points == 1 ? "1 point" : self.points.to_s << ' points'}"
         score_text << " and is in #{Alice::Util::Sanitizer.ordinal(rank)} place."

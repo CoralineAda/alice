@@ -47,7 +47,8 @@ class User
     :bio,
     :proper_name,
     :twitter_handle,
-    :twitter_url,
+    :check_score,
+    :check_points
   ]
 
   INACTIVITY_THRESHOLD = 13
