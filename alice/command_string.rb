@@ -47,7 +47,7 @@ class CommandString
 
   def subject
     return components[1..-1].join(' ') unless has_predicate?
-    return components[1..(predicate_positions.min - 1)].join(' ').gsub(/[\.\,\?\!]+$/, '')
+    return components[1..(predicate_position - 1)].join(' ').gsub(/[\.\,\?\'\!]+$/, '')
   end
 
   def verb
