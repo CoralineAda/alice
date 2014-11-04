@@ -76,11 +76,11 @@ class Beverage
   end
 
   def is_coffee?
-    Dictionary.is_a?(:tea_or_coffee, self.name) == true
+    Dictionary.is_a?(:coffee_or_tea, self.name) == true
   end
 
   def set_alcohol
-    return if Dictionary.is_a?(:tea_or_coffee, self.name) == true
+    return if Dictionary.is_a?(:coffee_or_tea, self.name) == true
     beer = Beer.search(self.name)
     cocktail = MixedDrink.search(self.name)
     if drink = Alice::Parser::LanguageHelper.similar_to(self.name, beer.canonical_name) && beer ||
@@ -97,6 +97,7 @@ class Beverage
       effect = [:drunk, :dazed, :disoriented].sample
       message << " In addition to feeling a little #{effect.to_s}, " + Alice::Util::Randomizer.effect_message(self.name, owner_name)
       self.user.filters << effect
+      self.user.filters.uniq!
       self.user.filter_applied = Time.now
       self.user.save
     end
