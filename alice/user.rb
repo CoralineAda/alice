@@ -44,9 +44,9 @@ class User
     :drunk?,
     :is_online?,
     :is_op?,
-    :formatted_bio,
+    :bio,
     :proper_name,
-    :formatted_twitter_handle,
+    :twitter_handle,
     :twitter_url,
   ]
 
@@ -207,7 +207,7 @@ class User
   end
 
   def is_op?
-    (Mediator.op_nicks & self.nicks).any?
+    (Alice::Util::Mediator.op_nicks & self.nicks).any?
   end
 
   def formatted_bio

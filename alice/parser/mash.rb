@@ -234,7 +234,7 @@ module Alice
       end
 
       def command
-        @command ||= Command.any_in(verbs: verb).first
+        @command ||= Command.any_in(verbs: verb).first || Command.any_in(verbs: this_property).first
       end
 
       def any_method_like?(array)

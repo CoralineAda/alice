@@ -5,3 +5,4 @@ db/backups/*/**
 images/*
 doc/*
 log/*
+arkham.hect/log/*
