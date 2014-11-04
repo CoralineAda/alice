@@ -1,5 +1,6 @@
 db/backups/*/**
 .env
+.env.production
 .console_history
 .DS_Store
 images/*
