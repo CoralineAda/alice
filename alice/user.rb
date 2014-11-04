@@ -151,7 +151,7 @@ class User
     days_string = days == 1 ? "day" : "days"
 
     if hour < 1 && minuts < 10
-      string "just now"
+      string = "just now"
     elsif hour < 1 && minutes < 60
       string = "just #{minutes_string} ago"
     elsif days < 1
