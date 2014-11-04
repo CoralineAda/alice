@@ -57,6 +57,7 @@ describe "Message Round Trip" do
 
   context "user join" do
     it "responds to a join message" do
+      Alice::Util::Randomizer.stub(:one_chance_in) { true }
       message = Message.new(emitted.user.primary_nick, trigger_1)
       response_message = Processor.process(channel, message, :greet_on_join)
       expect(response_message.response).to eq("Hi there, Lydia.")

@@ -18,8 +18,7 @@ module Alice
 
       def check_score
         score_text = "#{self.proper_name} has #{self.points == 1 ? "1 point" : self.points.to_s << ' points'}"
-        score_text << " and is in #{Alice::Util::Sanitizer.ordinal(rank)} place" if rank && rank < 5
-        score_text << "."
+        score_text << " and is in #{Alice::Util::Sanitizer.ordinal(rank)} place."
         score_text
       end
 

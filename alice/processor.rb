@@ -16,7 +16,7 @@ class Processor
 
   def react
     track_sender
-    public_send(self.response_method) if should_respond?
+    should_respond? ? public_send(self.response_method) : message
   end
 
   def should_respond?

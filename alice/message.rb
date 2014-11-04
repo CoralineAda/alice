@@ -1,6 +1,6 @@
 class Message
 
-  attr_accessor :sender_nick, :recipient_nick, :type, :trigger, :response_type
+  attr_accessor :sender_nick, :recipient_nick, :type, :trigger, :response_type, :response
 
   def initialize(sender_nick, trigger)
     self.sender_nick = sender_nick

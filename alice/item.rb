@@ -13,21 +13,31 @@ class Item
     :forged_by,
     :is_cursed?,
     :is_game?,
-    :is_readable?,
+    :is_readable?
+  ]
+
+  ALLOWED_PROPERTIES = [
+    :smell,
+    :taste,
+    :image,
+    :url,
+    :description
   ]
 
   store_in collection: "alice_items"
 
   field :name
   field :description
-  field :is_cursed,     type: Boolean
-  field :is_hidden,     type: Boolean
-  field :is_weapon,     type: Boolean
-  field :is_game,       type: Boolean
-  field :is_hidden,     type: Boolean
-  field :is_key,        type: Boolean
-  field :is_readable,   type: Boolean
-  field :picked_up_at,  type: DateTime
+  field :properties,          type: Hash,    default: {}
+  field :is_cursed,           type: Boolean
+  field :is_hidden,           type: Boolean
+  field :is_weapon,           type: Boolean
+  field :is_game,             type: Boolean
+  field :is_hidden,           type: Boolean
+  field :is_key,              type: Boolean
+  field :is_readable,         type: Boolean
+  field :picked_up_at,        type: DateTime
+  field :theft_attempt_count, type: Integer, default: 0
   field :creator_id
 
   index({ name: 1 },        { unique: true, })
@@ -158,13 +168,18 @@ class Item
 
   def describe
     text = []
-    text << self.description
+    text << !self.properties[:description].blank? && self.properties[:description] || self.description
     text << "#{creator.proper_name} was its creator, "
     text << "judging by the #{creator.new_record? ? 'lack of a' : ''} maker's mark."
     text << "Might be fun to read." if self.is_readable?
     text << "Might make a decent weapon." if self.is_weapon?
     text << "Might be fun to play." if self.is_game?
     text << "Could come in handy with those pesky locked doors." if self.is_key?
+    text << "It probably tastes #{self.properties[:taste]}." if self.properties[:taste]
+    text << "From here, it smells #{self.properties[:smell]}." if self.properties[:smell]
+    text << "Find it online at #{self.properties[:url]}." if self.properties[:url]
+    text << "It looks remarkably like this: #{properties[:image]}" if self.properties[:image]
+    text << "It's currently valued at #{self.point_value} Internet Points™."
     text.join(" ").gsub(/\.\. /, '. ').gsub(/^ /,'')
   end
 
@@ -205,6 +220,10 @@ class Item
     end
   end
 
+  def point_value
+    self.theft_attempt_count > 0 ? self.theft_attempt_count + 1 : 1
+  end
+
   def randomize_name
     new_name = self.name
     new_name = "#{Alice::Util::Randomizer.material} #{new_name}" if Item.where(name: new_name).first
@@ -215,6 +234,20 @@ class Item
   def read
     return "#{name_with_article} is not a very interesting read." unless self.is_readable?
     return "It reads, \"#{Factoid.sample.formatted(false)}\"."
+  end
+
+  def increment_theft_attempts
+    update_attribute(:theft_attempt_count, self.theft_attempt_count + 1)
+  end
+
+  def reset_theft_attempts
+    update_attribute(:theft_attempt_count, 0)
+  end
+
+  def set_property(key, value)
+    return unless ALLOWED_PROPERTIES.include? key.to_sym
+    self.properties[key.to_sym] = value
+    self.save
   end
 
 end

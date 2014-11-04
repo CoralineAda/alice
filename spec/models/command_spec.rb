@@ -16,30 +16,6 @@ describe Command do
 
   end
 
-  describe ".from" do
-
-    let(:command_1) { Command.new(verbs: ["quick", "brown", "fox", "jump"]) }
-    let(:command_2) { Command.new(verbs: ["lazy", "dog", "jump"]) }
-    let(:command_3) { Command.new(verbs: ["cow", "moon", "jump"]) }
-    let(:command_4) { Command.new }
-
-    it "returns the best match amongs one or more matches" do
-      Command.stub_chain(:with_verbs, :without_stopwords) {
-        [command_1, command_2, command_3]
-      }
-      result = Command.from(Message.new("aleister", "Alice, make the cat jump over the lazy dog!"))
-      expect(result).to eq(command_2)
-    end
-
-    it "defaults to a blank command if there are no matches" do
-      Command.stub_chain(:with_verbs, :without_stopwords) { [] }
-      Command.stub(:default) { command_4 }
-      result = Command.from(Message.new("aleister", "Alice, put the coffee down and back away."))
-      expect(result).to eq(command_4)
-    end
-
-  end
-
   describe "#meets_odds?" do
 
     let(:times) { 1000 }

@@ -50,17 +50,12 @@ class User
     :twitter_url,
   ]
 
+  INACTIVITY_THRESHOLD = 13
+
   def self.like(name)
     name = name.respond_to?(:join) && name.join(' ') || name
-
-    # try primary nick first
     match = where(primary_nick: /^#{Regexp.escape(name)}$/i).first
     match ||= where(primary_nick: /\b#{Regexp.escape(name)}\b/i).first
-
-    # try alt nicks
-    match ||= any_in(alt_nicks: /^#{Regexp.escape(name)}$/i).first
-    match ||= any_in(alt_nicks: /\b#{Regexp.escape(name)}\b/i).first
-
     match
   end
 
@@ -94,7 +89,7 @@ class User
   end
 
   def self.active
-    where(:updated_at.gte => DateTime.now - 10.minutes)
+    where(:updated_at.gte => DateTime.now - INACTIVITY_THRESHOLD.minutes)
   end
 
   def self.fighting
@@ -106,7 +101,7 @@ class User
   end
 
   def self.random
-    all.sample
+    all.sample || User.new(primary_nick: "Eleanor Nobody")
   end
 
   def self.by_nick(nick)
@@ -126,6 +121,10 @@ class User
 
   def accepts_gifts?
     ! self.is_bot? && is_online?
+  end
+
+  def awake?
+    self.updated_at >= DateTime.now - INACTIVITY_THRESHOLD.minutes
   end
 
   def creations
@@ -190,7 +189,7 @@ class User
   end
 
   def describe
-    message = self.bio && self.bio.formatted || ". "
+    message = self.bio && self.bio.formatted || ""
     message << "They're on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
     message << "#{self.inventory} "
     message << "#{check_score} "
