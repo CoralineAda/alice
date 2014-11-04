@@ -34,6 +34,12 @@ module Alice
         "holds"
       ]
 
+      ACTION_VERBS = [
+        "say",
+        "greet",
+        "welcome"
+      ]
+
       INTERROGATIVES = [
         "how",
         "what",
