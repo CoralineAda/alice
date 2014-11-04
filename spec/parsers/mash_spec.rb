@@ -18,7 +18,7 @@ describe "Alice::Parser::Mash" do
       parser.parse!
     end
 
-    it "greets Syd" do
+    it "recognizes Syd" do
       expect(parser.this_subject).to eq(@syd)
     end
 
