@@ -75,6 +75,10 @@ class Beverage
     all.map{|item| item.delete unless item.actor? || item.user?}
   end
 
+  def is_coffee?
+    Dictionary.is_a?(:tea_or_coffee, self.name) == true
+  end
+
   def set_alcohol
     return if Dictionary.is_a?(:tea_or_coffee, self.name) == true
     beer = Beer.search(self.name)
@@ -94,6 +98,11 @@ class Beverage
       message << " In addition to feeling a little #{effect.to_s}, " + Alice::Util::Randomizer.effect_message(self.name, owner_name)
       self.user.filters << effect
       self.user.filter_applied = Time.now
+      self.user.save
+    end
+    if self.is_coffee?
+      message << " Your head seems to have cleared up a bit."
+      self.user.filters = []
       self.user.save
     end
     self.delete
