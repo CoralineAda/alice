@@ -149,6 +149,25 @@ describe "Alice::Parser::Mash" do
 
   end
 
+  context "Alice, how many points does Robyn have?" do
+
+    let(:command_string)  { CommandString.new("Alice, how many points does Robyn have?") }
+    let(:parser)          { Alice::Parser::Mash.new(command_string) }
+
+    before do
+      parser.parse!
+    end
+
+    it "recognizes the Robyn user" do
+      expect(parser.this_subject).to eq(@robyn)
+    end
+
+    it "maps to Robyn's check_points method" do
+      expect(parser.this_property).to eq(:check_points)
+    end
+
+  end
+
   context "Alice, is the tomato cursed?" do
 
     let(:command_string)  { CommandString.new("Alice, is the tomato cursed?") }
