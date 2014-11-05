@@ -21,9 +21,9 @@ module Alice
           # clean_string.gsub!(/'s/, '')
           names = Alice::Parser::NgramFactory.new(string).omnigrams
           names = names.map{|g| g.join ' '} << string
-          names.uniq.reject!{|name| Alice::Parser::LanguageHelper::IDENTIFIERS.include?(name)}
+          names = names.uniq - Alice::Parser::LanguageHelper::IDENTIFIERS
           objects = names.map do |name|
-            name = (name.split(/\W+/) - Alice::Parser::LanguageHelper::IDENTIFIERS).compact.join(' ')
+            name = (name.split(/\s+/) - Alice::Parser::LanguageHelper::IDENTIFIERS).compact.join(' ')
             if name.present? && found = like(name)
               SearchResult.new(term: name, result: found)
             end
