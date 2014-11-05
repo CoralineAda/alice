@@ -167,7 +167,10 @@ class Item
   end
 
   def describe
-    text = [self.properties[:description] || self.description]
+    text= []
+    text = ["Ah yes," "Let's see,", "Take a look at", "Here we find", "Yet another example of"].sample
+    text << "the #{self.name}!"
+    text << self.properties[:description] || self.description
     text << "#{creator.proper_name} was its creator, "
     text << "judging by the #{creator.new_record? ? 'lack of a' : ''} maker's mark."
     text << "Might be fun to read." if self.is_readable?
@@ -178,7 +181,8 @@ class Item
     text << "From here, it smells #{self.properties[:smell]}." if self.properties[:smell]
     text << "Find it online at #{self.properties[:url]}." if self.properties[:url]
     text << "It looks remarkably like this: #{properties[:image]}" if self.properties[:image]
-    text << "It's currently valued at #{self.point_value} Internet Points™."
+    text << "In the possession of #{self.owner_name},"
+    text << "it's currently valued at #{self.point_value} Internet Points™."
     text.join(" ").gsub(/\.\. /, '. ').gsub(/^ /,'')
   end
 
