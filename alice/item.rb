@@ -85,7 +85,7 @@ class Item
   end
 
   def self.ephemeral
-    new(name: "thing that you don't have", ephemeral: true)
+    new(name: "thing that you don't have", is_ephemeral: true)
   end
 
   def self.forge(name, user)
