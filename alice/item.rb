@@ -170,7 +170,7 @@ class Item
     text= []
     text = ["Ah yes," "Let's see,", "Take a look at", "Here we find", "Yet another example of"].sample
     text << "the #{self.name}!"
-    text << self.properties[:description] || self.description
+    text << "#{self.properties[:description] || self.description}"
     text << "#{creator.proper_name} was its creator, "
     text << "judging by the #{creator.new_record? ? 'lack of a' : ''} maker's mark."
     text << "Might be fun to read." if self.is_readable?
