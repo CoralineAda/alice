@@ -163,7 +163,7 @@ class Item
   end
 
   def creator
-    User.where(id: self.creator_id).first || User.new(primary_nick: "nobody")
+    User.find(self.creator_id) || User.new(primary_nick: "nobody")
   end
 
   def describe
