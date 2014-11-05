@@ -14,7 +14,7 @@ class CommandString
 
   def components
     @components ||= self.content.split(' ').reject{|w| w.blank? }.map do |c|
-      c.gsub(/\'s/, '').gsub(/[^\w]/, '')
+      c.gsub(/\'s/, '')#.gsub(/[^\w]/, '')
     end
   end
 
