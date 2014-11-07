@@ -5,10 +5,16 @@ module Alice
     class NgramFactory
 
       attr_accessor :options, :target
-     
+
       def self.filtered_grams_from(words)
         filtered = words.gsub(/[^a-zA-Z0-9\-\_]/, ' ').split.map(&:strip)
         filtered.reject!{|name| Alice::Parser::LanguageHelper::IDENTIFIERS.include?(name)}
+        filtered.reject!(&:empty?)
+        new(filtered.join(' ')).omnigrams
+      end
+
+      def self.unfiltered_grams_from(words)
+        filtered = words.gsub(/[^a-zA-Z0-9\-\_]/, ' ').split.map(&:strip)
         filtered.reject!(&:empty?)
         new(filtered.join(' ')).omnigrams
       end
@@ -26,8 +32,8 @@ module Alice
       def omnigram(args={})
         exclude = [args[:exclude]].flatten.compact
         uni = ngrams(1).reject{|unigram| (exclude & unigram.flatten).count > 0}
-        bi  = ngrams(2).reject{|unigram| (exclude & unigram.flatten).count > 0} 
-        tri = ngrams(3).reject{|unigram| (exclude & unigram.flatten).count > 0} 
+        bi  = ngrams(2).reject{|unigram| (exclude & unigram.flatten).count > 0}
+        tri = ngrams(3).reject{|unigram| (exclude & unigram.flatten).count > 0}
         Alice::Parser::Ngram.new(uni + bi + tri)
       end
 
@@ -40,11 +46,11 @@ module Alice
       def unigrams
         Alice::Parser::Ngram.new(ngrams(1))
       end
-     
+
       def bigrams
         Alice::Parser::Ngram.new(ngrams(2))
       end
-     
+
       def trigrams
         Alice::Parser::Ngram.new(ngrams(3))
       end
