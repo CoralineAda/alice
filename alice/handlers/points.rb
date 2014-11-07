@@ -41,7 +41,7 @@ module Handlers
     private
 
     def subject
-      ::User.from(command_string.content)
+      ::User.from(command_string.components)
     end
 
   end
