@@ -4,7 +4,7 @@ class CommandString
 
   attr_accessor :content
 
-  PRIMARY_PREDICATE_INDICATORS = [
+  PREDICATE_INDICATORS = [
     "to", "from", "with", "on", "in", "about", "the"
   ]
 
