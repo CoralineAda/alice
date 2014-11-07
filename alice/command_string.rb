@@ -4,8 +4,8 @@ class CommandString
 
   attr_accessor :content
 
-  PREDICATE_INDICATORS = [
-    "to", "from", "with", "on", "in", "about"
+  PRIMARY_PREDICATE_INDICATORS = [
+    "to", "from", "with", "on", "in", "about", "the"
   ]
 
   def initialize(content)
@@ -14,7 +14,7 @@ class CommandString
 
   def components
     @components ||= self.content.split(' ').reject{|w| w.blank? }.map do |c|
-      c.gsub(/\'s/, '')#.gsub(/[^\w]/, '')
+      c.gsub(/\'s/, '').gsub(/^\!/,'').gsub(/\+/, '').gsub(/[\?\!\.\,]$/, '')
     end
   end
 
