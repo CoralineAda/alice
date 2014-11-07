@@ -163,7 +163,9 @@ class Item
   end
 
   def creator
-    User.find(self.creator_id) || User.new(primary_nick: "nobody")
+    User.find(self.creator_id)
+  rescue
+    User.new(primary_nick: "nobody")
   end
 
   def describe
