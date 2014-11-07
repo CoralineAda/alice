@@ -4,9 +4,7 @@ module Alice
 
     module LanguageHelper
 
-      ARTICLES = [
-        'a', 'the', 'of', 'an', 'to', 'and'
-      ]
+      ARTICLES = %w{a the of an to and}
 
       INFO_VERBS = [
         "delete",

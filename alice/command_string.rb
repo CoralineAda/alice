@@ -1,12 +1,8 @@
-# TODO FIX truncating item names becuse of predicate
-
 class CommandString
 
   attr_accessor :content
 
-  PREDICATE_INDICATORS = [
-    "to", "from", "with", "on", "in", "about", "the"
-  ]
+  PREDICATE_INDICATORS = %w{to from with on in about the and or near from by}
 
   def initialize(content)
     self.content = content
@@ -16,6 +12,11 @@ class CommandString
     @components ||= self.content.split(' ').reject{|w| w.blank? }.map do |c|
       c.gsub(/\'s/, '').gsub(/^\!/,'').gsub(/\+/, '').gsub(/[\?\!\.\,]$/, '')
     end
+  end
+
+  def probable_nouns
+    re = Regexp.union(PREDICATE_INDICATORS.map{|w| /\s*\b#{Regexp.escape(w)}\b\s*/i})
+    candidates = self.content.split(re).map(&:split).map(&:last)
   end
 
   def has_predicate?
