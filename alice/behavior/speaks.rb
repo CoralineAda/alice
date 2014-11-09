@@ -44,7 +44,7 @@ module Alice
       end
 
       def random_message
-        self.catchphrases.present? && self.catchphrases.sample.text
+        self.catchphrases.present? && self.catchphrases.sample.text || speak
       end
 
       def speak
