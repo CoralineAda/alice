@@ -34,6 +34,13 @@ module Handlers
     #   # message
     # end
 
+    def set
+      return unless this_item = item_for_user
+      if this_item.set_property(AttributeParser.new(command_string.content))
+        message.response = "Got it! It's set."
+      end
+    end
+
     def forge
       message.set_response(::Item.forge(command_string.subject, message.sender))
     end
@@ -54,6 +61,24 @@ module Handlers
       message.set_response(message.sender.steal(item))
     end
 
+    class AttributeParser
+      PATTERN = /^.+:\s*(?<key>\S+)\s+to\s+(?<value>.+)$/
+
+      attr_reader :string
+
+      def initialize(string)
+        @string = string
+      end
+
+      def key
+        self.string.match(PATTERN)[:key]
+      end
+
+      def value
+        self.string.match(PATTERN)[:value]
+      end
+    end
+
     private
 
     def loose_item
@@ -67,7 +92,9 @@ module Handlers
     end
 
     def item
-      @item ||= ::Item.from(command_string.subject) || ::Item.ephemeral
+      @item ||= ::Item.from(command_string.subject) ||
+                  ::Item.from(command_string.subject.split(':')[0]) ||
+                  ::Item.ephemeral
     end
 
   end

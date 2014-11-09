@@ -16,13 +16,7 @@ class Item
     :is_readable?
   ]
 
-  ALLOWED_PROPERTIES = [
-    :smell,
-    :taste,
-    :image,
-    :url,
-    :description
-  ]
+  ALLOWED_PROPERTIES = %w{smell taste image url description}
 
   store_in collection: "alice_items"
 
@@ -179,10 +173,13 @@ class Item
     text << "Might make a decent weapon." if self.is_weapon?
     text << "Might be fun to play." if self.is_game?
     text << "Could come in handy with those pesky locked doors." if self.is_key?
-    text << "It probably tastes #{self.properties[:taste]}." if self.properties[:taste]
-    text << "From here, it smells #{self.properties[:smell]}." if self.properties[:smell]
-    text << "Find it online at #{self.properties[:url]}." if self.properties[:url]
-    text << "It looks remarkably like this: #{properties[:image]}" if self.properties[:image]
+    text << "It probably tastes #{self.properties['taste']}." if self.properties['taste']
+    text << "From here, it smells #{self.properties['smell']}." if self.properties['smell']
+    text << "Find it online at #{self.properties['url']}." if self.properties['url']
+    text << "It looks remarkably like this: #{properties['image']}" if self.properties['image']
+    dynamic_properties.each do |key, value|
+      text << "Its #{key} is #{value}."
+    end
     text << "In the possession of #{self.owner_name},"
     text << "it's currently valued at #{self.point_value} Internet Points™."
     text.join(" ").gsub(/\.\. /, '. ').gsub(/^ /,'')
@@ -249,10 +246,15 @@ class Item
     update_attribute(:theft_attempt_count, 0)
   end
 
-  def set_property(key, value)
-    return unless ALLOWED_PROPERTIES.include? key.to_sym
-    self.properties[key.to_sym] = value
+  def set_property(property)
+    self.properties[property.key] = property.value
     self.save
+  end
+
+  private
+
+  def dynamic_properties
+    self.properties.delete_if{ |key,value| ALLOWED_PROPERTIES.include? key}
   end
 
 end
