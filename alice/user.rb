@@ -13,6 +13,7 @@ class User
   field :primary_nick
   field :alt_nicks,         type: Array, default: []
   field :twitter_handle
+  field :pronouns
   field :last_theft,        type: DateTime
   field :last_award,        type: DateTime
   field :last_game,         type: DateTime
@@ -47,6 +48,7 @@ class User
     :bio,
     :proper_name,
     :twitter_handle,
+    :pronouns,
     :check_score,
     :check_points
   ]
@@ -196,6 +198,7 @@ class User
   def describe
     message = self.bio && self.bio.formatted || ""
     message << "They're on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
+    message << "Their pronouns are #{self.pronouns}. " if self.pronouns.present?
     message << "#{self.inventory} "
     message << "#{check_score} "
     message << "#{proper_name} is currently feeling a little #{self.filters.map(&:to_s).to_sentence}. " if self.filters.present?
@@ -253,7 +256,7 @@ class User
 
   def formatted_twitter_handle
     return unless self.twitter_handle
-    "#{proper_name} is on Twitter as @#{self.twitter_handle.gsub('@','')}. Find them at https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
+    "#{proper_name} is on Twitter as @#{self.twitter_handle.gsub('@','')}. Find them at #{ twitter_url }"
   end
 
   def twitter_url
