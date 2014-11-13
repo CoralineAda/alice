@@ -24,7 +24,7 @@ module Alice
           names = names.uniq - Alice::Parser::LanguageHelper::IDENTIFIERS
           objects = names.map do |name|
             name = (name.split(/\s+/) - Alice::Parser::LanguageHelper::IDENTIFIERS).compact.join(' ')
-            if name.present? && found = like(name) || found = Item.where(name: name)
+            if name.present? && found = like(name) || found = Item.where(name: name).first
               SearchResult.new(term: name, result: found)
             end
           end.compact
