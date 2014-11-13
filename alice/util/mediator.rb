@@ -45,7 +45,8 @@ module Alice
       end
 
       def self.send_raw(message)
-        text = Alice::Util::Sanitizer.process(message)
+        text = message.respond_to?(:response) ? message.response : message
+        text = Alice::Util::Sanitizer.process(text)
         text = Alice::Util::Sanitizer.initial_upcase(text)
         Alice.bot.bot.channels.first.msg(text)
       end
