@@ -45,6 +45,7 @@ module Alice
       end
 
       def self.send_raw(message)
+        p message.inspect
         text = message.respond_to?(:response) ? message.response : message
         text = Alice::Util::Sanitizer.process(text)
         text = Alice::Util::Sanitizer.initial_upcase(text)
