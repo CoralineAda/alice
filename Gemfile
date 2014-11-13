@@ -13,7 +13,7 @@ gem 'poro_plus'
 gem 'pry'
 gem 'rake'
 gem 'require_all'
-gem 'rspec'
+gem 'rspec', :group => :test
 gem 'ruby-stemmer', '>=0.8.3', require: 'lingua/stemmer'
 gem 'rubyfish'
 gem 'sanitize', ">= 3.0.2"

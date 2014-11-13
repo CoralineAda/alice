@@ -56,8 +56,7 @@ module Alice
       end
 
       def self.reply_with(channel, message)
-        text = message.respond_to?(:response) ? message.response : message
-        text = Alice::Util::Sanitizer.process(text)
+        text = Alice::Util::Sanitizer.process(message)
         text = Alice::Util::Sanitizer.initial_upcase(text)
         Alice.bot.bot.channels.select{|c| c == channel}.first.msg(text)
       end
