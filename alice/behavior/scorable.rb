@@ -30,7 +30,7 @@ module Alice
         self.update_attribute(:points, self.points + value)
       end
 
-      def penalize(value=-1)
+      def penalize(value=1)
         return if self.points == 0
         self.update_attribute(:points, self.points - value)
       end
