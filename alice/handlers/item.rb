@@ -42,7 +42,7 @@ module Handlers
     end
 
     def forge
-      message.set_response(::Item.forge(command_string.subject, message.sender))
+      message.set_response(::Item.forge(command_string.raw_command, message.sender))
     end
 
     def give
@@ -94,6 +94,7 @@ module Handlers
     def item
       @item ||= ::Item.from(command_string.subject) ||
                   ::Item.from(command_string.subject.split(':')[0]) ||
+                  ::Item.from(command_string.raw_command) ||
                   ::Item.ephemeral
     end
 
