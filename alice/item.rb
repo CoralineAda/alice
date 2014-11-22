@@ -61,6 +61,10 @@ class Item
     where(name: name).present?
   end
 
+  def self.for_user(user)
+    where(user_id: user.id)
+  end
+
   def self.create_defaults
     create(name: Alice::Util::Randomizer.game, is_game: true)
     (rand(10) + 2).times {|i| create(name: Alice::Util::Randomizer.item) }

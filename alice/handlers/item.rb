@@ -86,9 +86,11 @@ module Handlers
     end
 
     def item_for_user
-      return item if message.sender.items.include?(item)
-      return item if message.sender.beverages.include?(item)
-      return item if message.sender.wands.include?(item)
+      user = message.sender
+      ::Item.for_user(user).from(command_string.subject) ||
+        ::Item.for_user(user).from(command_string.subject.split(':')[0]) ||
+        ::Item.for_user(user).from(command_string.raw_command) ||
+        ::Item.ephemeral
     end
 
     def item
