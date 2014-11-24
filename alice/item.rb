@@ -182,7 +182,7 @@ class Item
     text << "Find it online at #{self.properties['url']}." if self.properties['url']
     text << "It looks remarkably like this: #{properties['image']}" if self.properties['image']
     dynamic_properties.each do |key, value|
-      text << "Its #{key} is #{value}."
+      text << "Its #{key} is #{value}." if value
     end
     text << "In the possession of #{self.owner_name},"
     text << "it's currently valued at #{self.point_value} Internet Points™."
