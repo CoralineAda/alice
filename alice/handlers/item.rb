@@ -37,7 +37,7 @@ module Handlers
     def set
       return unless this_item = item_for_user
       if this_item.set_property(AttributeParser.new(command_string.content))
-        message.response = "Got it! It's set."
+        message.set_response = "Got it! It's set."
       end
     end
 
@@ -62,7 +62,7 @@ module Handlers
     end
 
     class AttributeParser
-      PATTERN = /^.+:\s*(?<key>\S+)\s+to\s+(?<value>.+)$/
+      PATTERN = /^.+property\s*(?<key>\S+)\s+to\s+(?<value>.+)$/
 
       attr_reader :string
 
