@@ -6,6 +6,7 @@ class Processor
   attr_accessor :channel, :message, :response_method, :trigger
 
   def self.process(channel, message, response_method)
+    track_sender
     new(
       channel: channel,
       message: message,
@@ -15,7 +16,6 @@ class Processor
   end
 
   def react
-    track_sender
     should_respond? ? public_send(self.response_method) : message
   end
 
@@ -29,7 +29,6 @@ class Processor
   end
 
   def respond
-    track_sender
     if response = self.message.response
       if self.message.response_type == "emote"
         Alice::Util::Mediator.emote(self.channel, response)
@@ -41,7 +40,6 @@ class Processor
   end
 
   def greet_on_join
-    track_sender
     return unless Alice::Util::Randomizer.one_chance_in(4)
     Alice::Util::Mediator.emote(
       self.channel,
@@ -63,7 +61,7 @@ class Processor
   private
 
   def track_sender
-    self.message.sender.touch
+    self.message.sender.active!
   end
 
 end

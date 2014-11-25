@@ -16,6 +16,7 @@ class User
   field :last_theft,        type: DateTime
   field :last_award,        type: DateTime
   field :last_game,         type: DateTime
+  field :last_active,       type: DateTime
   field :is_bot,            type: Boolean
   field :points,            type: Integer, default: 0
   field :filters,           type: Array, default: []
@@ -126,6 +127,10 @@ class User
 
   def awake?
     self.updated_at >= DateTime.now - INACTIVITY_THRESHOLD.minutes
+  end
+
+  def active!
+    update_attribute(:last_active, DateTime.now)
   end
 
   def creations
