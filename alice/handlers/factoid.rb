@@ -11,9 +11,10 @@ module Handlers
     end
 
     def get
-      factoid = ::Factoid.about(command_string.predicate)
-      factoid ||= ::Factoid.about(command_string.subject)
-      message.set_response(factoid.formatted) if factoid
+      factoid = ::Factoid.about(command_string.predicate).try(:formatted)
+      # factoid ||= ::Factoid.about(command_string.subject)
+      factoid ||= ::Topic.new(command_string.predicate).support
+      message.set_response(factoid || "I've got nothing.")
     end
 
     private

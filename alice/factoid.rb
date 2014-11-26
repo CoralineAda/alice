@@ -37,7 +37,7 @@ class Factoid
     if user && user.factoids.present?
       return user.factoids && user.factoids.sample
     end
-    keywords = subject.downcase.split.map{|w| w.gsub(/[^a-zA-Z0-9\_\-]/, '')}
+    keywords = subject.downcase.split.select{|w| w.size > 3}.map{|w| w.gsub(/[^a-zA-Z0-9\_\-]/, '')}
     keywords << keywords.map{|word| Lingua.stemmer(word.downcase)}
     keywords = keywords.flatten.uniq
     factoid = best_match(any_in(keywords: keywords), keywords)

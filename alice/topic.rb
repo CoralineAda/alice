@@ -1,23 +1,30 @@
 class Topic
 
-  def initialize(dictionary=nil)
-    @dictionary = dictionary || default_dictionary
+  attr_reader :dictionary
+  attr_accessor :subject
+
+  def initialize(topic=nil, dictionary=nil)
+    @subject = topic || select_subject
   end
 
-  def default_dictionary
-    MarkyMarkov::Dictionary.new('dictionary')
+  def dictionary
+    @dictionary ||= MarkyMarkov::Dictionary.new('dictionary')
   end
 
   def intro
     "I was #{verb} #{subject}."
   end
 
-  def subject
-    @topic_subject ||= dictionary.generate_n_words(100).split.select{|w| w.size > 7}.sample.gsub(/[^a-zA-Z]/,'')
+  def reset
+    self.subject = select_subject
+  end
+
+  def select_subject
+    dictionary.generate_n_words(100).split.select{|w| w.size > 7}.sample.gsub(/[^a-zA-Z]/,'')
   end
 
   def support
-    support = ::Sanitize.fragment(Wikipedia.find(topic_subject).sanitized_content)
+    support = ::Sanitize.fragment(Wikipedia.find(subject).sanitized_content)
     support = support.split(/[\.\:\[\]\n\*\=]/)
     support = support.reject{|w| w == " "}
     support = support.reject(&:empty?)
@@ -33,11 +40,11 @@ class Topic
       "I was recently reminded of",
       "I was talking to a friend about",
       "I was wanting to ask you about",
-      "I was thinking a lot about",
-      "I was interested in your opinion on",
+      "I have been thinking a lot about",
+      "I am interested in your opinion on",
       "I'd like to hear your opinions on",
       "I can't stop thinking about"
-    ].sample = " #{subject}."
+    ].sample + " #{subject}."
   end
 
 end
