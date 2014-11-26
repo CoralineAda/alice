@@ -163,8 +163,8 @@ module Alice
         alice
         parse_transfer
         command
-      # rescue
-      #   return false
+      rescue
+        return false
       end
 
       def state
