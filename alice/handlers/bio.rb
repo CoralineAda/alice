@@ -14,7 +14,6 @@ module Handlers
       #   return_bio
       # else
       command_string.raw_command.present? && update_bio(command_string.raw_command)
-      end
     end
 
     def update_bio(quoted)
