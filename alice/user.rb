@@ -165,9 +165,7 @@ class User
       string << " and #{minutes % 60} #{minutes_string}" if (minutes % 60) < 60
       string << " ago"
     else
-      string = "about #{days} #{days_string}"
-      string << " and #{hours % 24} #{hours_string}" if (hours % 24) < 24
-      string << " ago"
+      string = "about #{days} #{days_string} ago"
     end
 
   end

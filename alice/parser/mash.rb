@@ -8,16 +8,19 @@ module Alice
       attr_accessor :sentence
       attr_accessor :this_object, :this_subject, :this_info_verb
       attr_accessor :this_transfer_verb, :this_action_verb, :this_preposition
-      attr_accessor :this_relation_verb, :this_topic, :this_noun
+      attr_accessor :this_relation_verb, :this_topic, :this_noun, :this_adverb
       attr_accessor :relation_verb
       attr_accessor :this_property
 
       STRUCTURES = [
-        [:to_info_verb,     [:to_subject, [:to_property]],
-                            [:to_object, [:to_property]],
+        [:to_info_verb,
                             [:to_object, [:to_subject]],
+                            [:to_adverb],
                             [:to_subject],
-                            [:to_topic]],
+                            [:to_topic],
+                            [:to_subject, [:to_property]],
+                            [:to_object, [:to_property]]
+        ],
         [:to_action_verb,   [:to_subject, [:to_object]],
                             [:to_object, [:to_subject]]],
         [:to_transfer_verb, [:to_subject, [:to_object]],
@@ -29,6 +32,7 @@ module Alice
       aasm do
         state :unparsed, initial: true
         state :alice
+        state :adverb
         state :verb
         state :transfer_verb
         state :info_verb
@@ -46,6 +50,10 @@ module Alice
 
         event :alice do
           transitions from: :unparsed, to: :alice, guard: :has_alice?
+        end
+
+        event :adverb do
+          transitions from: [:info_verb], to: :adverb, guard: :adverb?
         end
 
         event :transfer_verb do
@@ -92,7 +100,7 @@ module Alice
 
       def initialize(command_string)
         self.command_string = command_string
-        self.sentence = Sentence.new(command_string.content.downcase.gsub(/\?\,\!$/, '').split(' '))
+        self.sentence = Sentence.new(command_string.content.downcase.gsub(/[\?\,\!]+/, '').split(' '))
       end
 
       def parse_transfer(structures=STRUCTURES)
@@ -117,6 +125,10 @@ module Alice
 
       def to_action_verb
         action_verb
+      end
+
+      def to_adverb
+        adverb
       end
 
       def to_transfer_verb
@@ -148,9 +160,11 @@ module Alice
       end
 
       def parse!
-        alice && parse_transfer && command
-      rescue
-        return false
+        alice
+        parse_transfer
+        command
+      # rescue
+      #   return false
       end
 
       def state
@@ -174,6 +188,10 @@ module Alice
         self.this_info_verb ||= "is" if any_content_in?(Alice::Parser::LanguageHelper::INTERROGATIVES)
         self.this_info_verb ||= "is" if sentence.contains_possessive
         self.this_info_verb
+      end
+
+      def adverb?
+        self.this_adverb = any_content_in?(Alice::Parser::LanguageHelper::ADVERBS)
       end
 
       def relation_verb?
@@ -202,6 +220,7 @@ module Alice
         self.this_object = Item.from(potential_nouns.join(' ')) ||
                            Beverage.from(potential_nouns.join(' ')) ||
                            Wand.from(potential_nouns.join(' '))
+        self.this_object = self.this_object && ! self.this_object.is_ephemeral
       end
 
       def has_noun?
@@ -223,18 +242,26 @@ module Alice
           hash
         end
         match = map.values.detect{|value_set| value_set.detect{|n| ([n] & sentence).count > 0} }
-        self.this_property = map.detect{|key, value| value == match}[0]
+        match = map.detect{|key, value| value == match}
+        self.this_property = match && match[0]
       end
 
       # Util
       # ========================================================================
 
       def potential_nouns
-        command_string.components - ["Alice"] - Alice::Parser::LanguageHelper::PREPOSITIONS - Alice::Parser::LanguageHelper::ARTICLES
+        command_string.components -
+          ["Alice"] -
+          Alice::Parser::LanguageHelper::PREPOSITIONS -
+          Alice::Parser::LanguageHelper::ARTICLES -
+          Alice::Parser::LanguageHelper::INFO_VERBS -
+          Alice::Parser::LanguageHelper::INTERROGATIVES
       end
 
       def command
-        @command ||= Command.any_in(verbs: verb).first || Command.any_in(verbs: this_property).first
+        @command ||= Command.any_in(verbs: verb).first ||
+                      Command.any_in(verbs: this_property).first ||
+                      Command.any_in(indicators: verb).first
       end
 
       def any_method_like?(array)
@@ -251,7 +278,7 @@ module Alice
       end
 
       def any_content_in?(array)
-        common = (array & split_content)
+        common = (array & sentence)
         common.count > 0 && common.first
       end
 
@@ -260,7 +287,11 @@ module Alice
       end
 
       def split_content
-        @split_content ||= command_string.content.split
+        @split_content ||= begin
+          bits = command_string.content.split.map(&:downcase)
+          pieces = bits.map{|word| Lingua.stemmer(word.downcase)}
+          (bits + pieces).uniq
+        end
       end
 
       class Sentence < Array

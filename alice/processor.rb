@@ -6,7 +6,6 @@ class Processor
   attr_accessor :channel, :message, :response_method, :trigger
 
   def self.process(channel, message, response_method)
-    track_sender
     new(
       channel: channel,
       message: message,
@@ -16,6 +15,7 @@ class Processor
   end
 
   def react
+    track_sender
     should_respond? ? public_send(self.response_method) : message
   end
 
