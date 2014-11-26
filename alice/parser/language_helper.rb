@@ -9,17 +9,18 @@ module Alice
       INFO_VERBS = [
         "delete",
         "describe",
-        "do",
         "does",
         "examine",
         "hear",
         "heard",
+        "hearing",
         "hid",
         "inspect",
         "is",
         "know",
         "look",
         "set",
+        "think",
         "was"
       ]
 
@@ -36,6 +37,11 @@ module Alice
         "say",
         "greet",
         "welcome"
+      ]
+
+      ADVERBS = [
+        "lately",
+        "recently"
       ]
 
       INTERROGATIVES = [
