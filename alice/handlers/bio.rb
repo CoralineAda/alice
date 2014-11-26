@@ -29,7 +29,7 @@ module Handlers
     private
 
     def subject
-      ::User.from(command_string.content) || message.sender
+      ::User.from(command_string.components.join(' ')) || message.sender
     end
 
   end
