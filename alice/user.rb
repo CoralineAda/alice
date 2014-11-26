@@ -54,6 +54,21 @@ class User
 
   INACTIVITY_THRESHOLD = 13
 
+  def from(string)
+    return unless string.present?
+    names = Alice::Parser::NgramFactory.new(string).omnigrams
+    names = names.map{|g| g.join ' '} << string
+    names = names.uniq - Alice::Parser::LanguageHelper::IDENTIFIERS
+    objects = names.map do |name|
+      name = (name.split(/\s+/) - Alice::Parser::LanguageHelper::IDENTIFIERS).compact.join(' ')
+      if name.present? && found = like(name) || found = User.where(name: name).first
+        SearchResult.new(term: name, result: found)
+      end
+    end.compact
+    objects = objects.select{|obj| obj.result.present?}.uniq || []
+    objects.sort{|b,a| b.term.length <=> a.term.length}.map(&:result).last
+  end
+
   def self.like(name)
     name = name.respond_to?(:join) && name.join(' ') || name
     match = where(primary_nick: /^#{Regexp.escape(name)}$/i).first
