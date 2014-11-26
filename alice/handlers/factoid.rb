@@ -12,7 +12,6 @@ module Handlers
 
     def get
       factoid = ::Factoid.about(command_string.predicate).try(:formatted)
-      # factoid ||= ::Factoid.about(command_string.subject)
       factoid ||= ::Topic.new(command_string.predicate).support
       message.set_response(factoid || "I've got nothing.")
     end
