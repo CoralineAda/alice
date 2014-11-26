@@ -23,7 +23,7 @@ class Topic
     dictionary.generate_n_words(100).split.select{|w| w.size > 7}.sample.gsub(/[^a-zA-Z]/,'')
   end
 
-  def support
+  def quote_support
     support = ::Sanitize.fragment(Wikipedia.find(subject).sanitized_content)
     support = support.split(/[\.\:\[\]\n\*\=]/)
     support = support.reject{|w| w == " "}
@@ -31,6 +31,10 @@ class Topic
     support = support.reject{|sentence| sentence.size < 30}
     support = support.sample
     support && support.strip << "." || "Never mind. Let's talk about something else."
+  end
+
+  def support
+    dictionary.generate_n_sentences(2)
   end
 
   def intro
