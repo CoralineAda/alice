@@ -12,7 +12,7 @@ module Behavior
         return unless samples = asc(:last_sampled_at)
         return samples.first if samples.count == 1
         sample = samples[0..-2].sample
-        sample.update_attribute(:last_sampled_at, DateTime.now)
+        sample && sample.update_attribute(:last_sampled_at, DateTime.now)
         sample
       end
     end
