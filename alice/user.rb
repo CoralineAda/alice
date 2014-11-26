@@ -54,7 +54,7 @@ class User
 
   INACTIVITY_THRESHOLD = 13
 
-  def from(string)
+  def self.from(string)
     return unless string.present?
     names = Alice::Parser::NgramFactory.new(string).omnigrams
     names = names.map{|g| g.join ' '} << string
