@@ -33,6 +33,7 @@ class Factoid
 
   def self.about(subject)
     return unless subject
+    subject = (subject.downcase.split - Alice::Parser::LanguageHelper::PREPOSITIONS).join(" ")
     user = User.from(subject)
     if user && user.factoids.present?
       return user.factoids && user.factoids.sample
