@@ -10,11 +10,11 @@ module Handlers
     end
 
     def handle_bio(quoted)
-      if quoted.empty? || User.from(quoted)
-        return_bio
-      else
+      # if quoted.empty? || User.from(quoted)
+      #   return_bio
+      # else
         update_bio(command_string.raw_command)
-      end
+      # end
     end
 
     def update_bio(quoted)
