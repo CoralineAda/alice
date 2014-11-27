@@ -14,6 +14,16 @@ module Alice
         user.current_nick
       end
 
+      def self.got_nothing
+        message = [
+          "Let me Google that for you. Sigh.",
+          "Sorry, I've got nothing.",
+          "Really? That again?",
+          "Let's change the subject, OK?",
+          "Excuse me, I've got something in my eye."
+        ].sample
+      end
+
       def self.brew_observation(what, who, args={})
         message = [
           "looks on in wonder as #{who} brews a perfect #{what}.",
