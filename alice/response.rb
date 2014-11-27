@@ -16,4 +16,15 @@ class Response
     message
   end
 
+  def self.well_actually(message)
+    message.sender.penalize
+    message.response = "Well actually, you just lost points. :("
+    message
+  end
+
+  def self.so_say_we_all(message)
+    message.response = "So say we all!"
+    message
+  end
+
 end
