@@ -28,9 +28,11 @@ class Topic
     support = support.split(/[\.\:\[\]\n\*\=]/)
     support = support.reject{|w| w == " "}
     support = support.reject(&:empty?)
+    support = support.map(&:strip)
     support = support.reject{|sentence| sentence.size < 30}
+    support = support.select{|sentence| sentence.include? subject}
     support = support.sample
-    support && support.strip << "." || "Never mind. Let's talk about something else."
+    support && support << "." || "Never mind. Let's talk about something else."
   end
 
   def markov_support

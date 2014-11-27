@@ -55,14 +55,15 @@ class Factoid
   def formatted(with_prefix=false)
     return Constants::FAX_NOT_FOUND unless self.text.present?
     fact = self.text
-    fact = Alice::Util::Sanitizer.strip_pronouns(fact)
-    fact = Alice::Util::Sanitizer.make_third_person(fact)
-    fact = Alice::Util::Sanitizer.initial_downcase(fact)
-
-    message = ""
-    message << self.user.primary_nick if self.user.present?
-    message << "#{Alice::Util::Randomizer.fact_prefix}" if with_prefix
-    message << " #{fact}"
+    # fact = Alice::Util::Sanitizer.strip_pronouns(fact)
+    # fact = Alice::Util::Sanitizer.make_third_person(fact)
+    # fact = Alice::Util::Sanitizer.initial_downcase(fact)
+    if self.user.present?
+      message = "#{self.user.primary_nick} once said \"#{fact}\""
+    else
+      message = "#{Alice::Util::Randomizer.fact_prefix}" if with_prefix
+      message.to_s << " #{fact}"
+    end
     message
   end
 
