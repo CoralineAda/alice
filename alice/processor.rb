@@ -23,6 +23,8 @@ class Processor
     return true if self.trigger[0] == "!"
     return true if self.trigger =~ /\+\+/
     return true if self.trigger =~ /^[0-9\.\-]+$/
+    return true if self.trigger =~ /well[,]* actually/i
+    return true if self.trigger =~ /so say we all/i
     return true if self.trigger =~ /#{ENV['BOT_SHORT_NAME']}/i
     return true if self.response_method == :greet_on_join
     false
@@ -54,6 +56,23 @@ class Processor
     Alice::Util::Mediator.emote(
       self.channel,
       Response.name_change(self.message).response
+    )
+    message
+  end
+
+  def well_actually
+    return unless Alice::Util::Randomizer.one_chance_in(2)
+    Alice::Util::Mediator.reply_with(
+      self.channel,
+      Response.well_actually(self.message).response
+    )
+    message
+  end
+
+  def so_say_we_all
+    Alice::Util::Mediator.reply_with(
+      self.channel,
+      Response.so_say_we_all(self.message).response
     )
     message
   end

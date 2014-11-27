@@ -7,6 +7,8 @@ class Listener
   match /^([0-9]+)/,  method: :process_number,  use_prefix: false
   match /(.+)\+\+$/,  method: :process_points,  use_prefix: false
   match /(.+)/,       method: :process_text,    use_prefix: false
+  match /well,* actually/i, method: :well_actually, use_prefix: false
+  match /so say we all/i, method: :so_say_we_all, use_prefix: false
 
   listen_to :join, method: :greet
   listen_to :nick, method: :update_nick
@@ -31,6 +33,14 @@ class Listener
 
   def update_nick(emitted)
     Processor.process(emitted.channel, message(emitted, emitted.user.last_nick), :track_nick_change)
+  end
+
+  def well_actually(emitted)
+    Processor.process(emitted.channel, message(emitted, "well actually"), :well_actually)
+  end
+
+  def so_say_we_all(emitted)
+    Processor.process(emitted.channel, message(emitted, "so say we all"), :so_say_we_all)
   end
 
   private
