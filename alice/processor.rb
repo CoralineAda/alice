@@ -1,3 +1,6 @@
+require "open-uri"
+require "nokogiri"
+
 class Processor
 
   include PoroPlus
@@ -24,6 +27,7 @@ class Processor
 
   def should_respond?
     return true if self.trigger[0] == "!"
+    return true if self.trigger =~ %r{(https?://.*?)(?:\s|$|,|\.\s|\.$)}
     return true if self.trigger =~ /\+\+/
     return true if self.trigger =~ /^[0-9\.\-]+$/
     return true if self.trigger =~ /well[,]* actually/i
@@ -61,6 +65,19 @@ class Processor
       Response.name_change(self.message).response
     )
     message
+  end
+
+  def preview_url
+    source = Nokogiri::HTML(open(trigger))
+    title_node = source.search("//title")
+    snippet = source.search("//p").first.content[0..254]
+    preview = "#{title_node && title_node.text}... #{snippet}"
+    Alice::Util::Mediator.reply_with(
+      self.channel,
+      Response.url_preview(self.message, preview).response
+    )
+  rescue Exception => e
+    Alice::Util::Logger.info("*** Couldn't process URL preview for #{trigger}: #{e}")
   end
 
   def well_actually

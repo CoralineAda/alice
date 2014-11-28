@@ -9,9 +9,14 @@ class Listener
   match /(.+)/,       method: :process_text,    use_prefix: false
   match /well,* actually/i, method: :well_actually, use_prefix: false
   match /so say we all/i, method: :so_say_we_all, use_prefix: false
+  match %r{(https?://.*?)(?:\s|$|,|\.\s|\.$)}, method: :preview_url, :use_prefix => false
 
   listen_to :join, method: :greet
   listen_to :nick, method: :update_nick
+
+  def preview_url(emitted, trigger)
+    Processor.process(emitted.channel, message(emitted, trigger), :preview_url)
+  end
 
   def process_number(emitted, trigger)
     Processor.process(emitted.channel, message(emitted, "13"), :respond)
