@@ -1,4 +1,3 @@
-require 'pry'
 class Processor
 
   include PoroPlus
@@ -14,12 +13,8 @@ class Processor
     ).react
   end
 
-  def self.awaken
-    Alice::Util::Mediator.emote(ENV['PRIMARY_CHANNEL'], "wakes up. \"Hello, hackers!\"")
-  end
-
   def self.sleep
-    Alice::Util::Mediator.emote(ENV['PRIMARY_CHANNEL'], "goes to sleep for a while. \"Gnight hackers.\"")
+    Alice::Util::Mediator.emote(ENV['PRIMARY_CHANNEL'], "reboots.")
   end
 
   def react
