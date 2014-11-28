@@ -4,24 +4,41 @@ require 'bundler/setup'
 require 'cinch'
 require 'dotenv'
 require 'require_all'
+require 'raad'
 
 Dotenv.load
 Bundler.require
 Mongoid.load!("config/mongoid.yml")
 
 require_all 'alice'
+
 module Alice
 
-  def self.start
-    bot.start
+  def self.new
+    Daemon.new(bot)
   end
 
   def self.bot
     @@bot ||= Alice::Bot.new
-    # @@bot.bot.loggers = nil
-    @@bot
   end
 
+  class Daemon
+
+    attr_reader :bot
+
+    def initialize(bot)
+      @bot = bot
+    end
+
+    def start
+      Raad::Logger.info("Daemon started. I LIVE!")
+      self.bot.start
+    end
+
+    def stop
+      Raad::Logger.info("Daemon stopped.")
+    end
+  end
 end
 
 Yummly.configure do |config|

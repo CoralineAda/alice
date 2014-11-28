@@ -63,8 +63,9 @@ class Command
     match ||= find_verb(trigger)
     if match
       match.message = message
-      p "*** Executing #{match.name} with #{trigger} ***"
+      Raad::Logger.info "*** Executing #{match.name} with \"#{trigger}\" ***"
     else
+      Raad::Logger.info "*** Received unhandled trigger \"#{trigger}\" ***"
       match = default
     end
     match
