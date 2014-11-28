@@ -23,6 +23,15 @@ module Handlers
       message.set_response(response)
     end
 
+    def commands
+      response = "I understand the following commands: "
+      response << Command.all.map(&:verbs).map do |verbs|
+        verb = verbs.detect{|verb| verb =~ /[a-z]+/ && "!#{verb}"}
+        verb.present? && "!#{verb}" || nil
+      end.flatten.compact.sort.join(", ")
+      message.set_response(response)
+    end
+
     def help
       response = []
       response << "For most things you can ask me or tell me something in plain English."
