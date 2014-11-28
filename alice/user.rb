@@ -285,7 +285,7 @@ class User
   end
 
   def pronouns
-    "Preferred pronouns are #{self.pronoun_primary}/#{pronoun_objective}/#{pronoun_possessive}/#{pronoun_predicate}. "
+    "Preferred pronouns: #{self.pronoun_primary}/#{pronoun_objective}/#{pronoun_possessive}/#{pronoun_predicate}. "
   end
 
   def pronoun_contraction
