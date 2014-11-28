@@ -14,6 +14,15 @@ class Processor
     ).react
   end
 
+  def self.awaken
+    Alice::Util::Mediator.emote(ENV['PRIMARY_CHANNEL'], "wakes up.")
+    Alice::Util::Mediator.reply_to(ENV['PRIMARY_CHANNEL'], "Hello hackers!")
+  end
+
+  def self.sleep
+    Alice::Util::Mediator.emote(ENV['PRIMARY_CHANNEL'], "goes to sleep for a while. \"Gnight hackers.\"")
+  end
+
   def react
     track_sender
     should_respond? ? public_send(self.response_method) : message
@@ -28,15 +37,6 @@ class Processor
     return true if self.trigger =~ /#{ENV['BOT_SHORT_NAME']}/i
     return true if self.response_method == :greet_on_join
     false
-  end
-
-  def awaken
-    Alice::Util::Mediator.emote(ENV['PRIMARY_CHANNEL'], "wakes up.")
-    Alice::Util::Mediator.reply_to(ENV['PRIMARY_CHANNEL'], "Hello hackers!")
-  end
-
-  def sleep
-    Alice::Util::Mediator.emote(ENV['PRIMARY_CHANNEL'], "goes to sleep for a while. \"Gnight hackers.\"")
   end
 
   def respond
