@@ -13,7 +13,8 @@ module Handlers
       response = []
       response << "For most things you can ask me or tell me something in plain English."
       response << "For other things, try !<<command>>. For example:"
-      response << "!bio sets your bio, !fact sets a fact about yourself, and !twitter sets your Twitter handle."
+      response << "!bio sets your bio, !fact sets a fact about yourself,"
+      response << "!pronouns sets your pronouns, and !twitter sets your Twitter handle."
       response << "!look, !inventory, !forge, and !brew can come in handy sometimes."
       response << "Also: beware the fruitcake."
       message.set_response(response.join("\r\n"))

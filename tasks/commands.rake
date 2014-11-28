@@ -70,6 +70,14 @@ namespace :commands do
       response_kind: :message
     )
     Command.create(
+      name: 'pronouns',
+      indicators: ["pronouns"],
+      stop_words: ["pronouns"],
+      handler_class: 'Handlers::Pronouns',
+      response_kind: :message
+
+    )
+    Command.create(
       name: 'find',
       indicators: ["find", "dungeon", "maze", "where", "is"],
       stop_words: ["fact", "something", "about"],
