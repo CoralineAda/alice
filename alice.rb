@@ -33,8 +33,9 @@ module Alice
     def start
       Raad::Logger.info("Daemon started. I LIVE!")
       self.bot.start
+      sleep 5
       Processor.awaken
-   end
+    end
 
     def stop
       Processor.sleep
