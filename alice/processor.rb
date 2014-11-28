@@ -16,7 +16,7 @@ class Processor
 
   def self.awaken
     Alice::Util::Mediator.emote(ENV['PRIMARY_CHANNEL'], "wakes up.")
-    Alice::Util::Mediator.reply_to(ENV['PRIMARY_CHANNEL'], "Hello hackers!")
+    Alice::Util::Mediator.reply_with(ENV['PRIMARY_CHANNEL'], "Hello hackers!")
   end
 
   def self.sleep
