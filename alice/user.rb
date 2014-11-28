@@ -11,16 +11,20 @@ class User
   store_in collection: "alice_users"
 
   field :primary_nick
-  field :alt_nicks,         type: Array, default: []
+  field :alt_nicks,           type: Array, default: []
   field :twitter_handle
-  field :last_theft,        type: DateTime
-  field :last_award,        type: DateTime
-  field :last_game,         type: DateTime
-  field :last_active,       type: DateTime
-  field :is_bot,            type: Boolean
-  field :points,            type: Integer, default: 0
-  field :filters,           type: Array, default: []
-  field :filter_applied, type: DateTime
+  field :last_theft,          type: DateTime
+  field :last_award,          type: DateTime
+  field :last_game,           type: DateTime
+  field :last_active,         type: DateTime
+  field :is_bot,              type: Boolean
+  field :points,              type: Integer, default: 0
+  field :filters,             type: Array, default: []
+  field :pronoun_primary,     default: "they"
+  field :pronoun_objective,   default: "them"
+  field :pronoun_possessive,  default: "their"
+  field :pronoun_predicate,   default: "theirs"
+  field :filter_applied,      type: DateTime
 
   index({ primary_nick: 1 },  { unique: true })
   index({ alt_nicks: 1 },     { unique: true })
@@ -187,7 +191,7 @@ class User
 
   def play!(points)
     self.score_point(points)
-    self.update_attribute(:last_game, DateTime.now)
+    update_attribute(:last_game, DateTime.now)
   end
 
   def can_play_game?
@@ -213,7 +217,8 @@ class User
 
   def describe
     message = self.bio && self.bio.formatted || ""
-    message << "They're on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
+    message << "Find #{self.pronoun_objective} on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
+    message << pronouns
     message << "#{self.inventory} "
     message << "#{check_score} "
     message << "#{proper_name} is currently feeling a little #{self.filters.map(&:to_s).to_sentence}. " if self.filters.present?
@@ -225,7 +230,7 @@ class User
   end
 
   def is_online?
-    (Mediator.user_nicks & self.nicks).any?
+    (Alice::Util::Mediator.user_nicks & self.nicks).any?
   end
 
   def is_op?
@@ -254,7 +259,7 @@ class User
 
   def remove_expired_filters
     if filter_applied_date <= DateTime.now - 90.minutes
-      self.update_attribute(:filters, [])
+      update_attribute(:filters, [])
     else
       false
     end
@@ -266,12 +271,32 @@ class User
 
   def set_twitter_handle(handle)
     handle = handle.split[0].gsub("@", "")
-    self.update_attribute(:twitter_handle, handle)
+    update_attribute(:twitter_handle, handle)
+  end
+
+  def set_pronouns(pronouns)
+    pronouns = pronouns.split("/")
+    update_attributes(
+      pronoun_primary: pronouns[0] || "they",
+      pronoun_objective: pronouns[1] || "them",
+      pronoun_possessive: pronouns[2] || "their",
+      pronoun_predicate: pronouns[3] || "theirs"
+    )
+  end
+
+  def pronouns
+    "Preferred pronouns are #{self.pronoun_primary}/#{pronoun_objective}/#{pronoun_possessive}/#{pronoun_predicate}. "
+  end
+
+  def pronoun_contraction
+    return "she's" if pronoun_objective == "she"
+    return "he's" if pronoun_objective == "he"
+    "they're"
   end
 
   def formatted_twitter_handle
     return unless self.twitter_handle
-    "#{proper_name} is on Twitter as @#{self.twitter_handle.gsub('@','')}. Find them at https://twitter.com/#{self.twitter_handle.gsub("@", "").downcase}"
+    "#{proper_name} is on Twitter as @#{self.twitter_handle.gsub('@','')}. Find #{self.pronoun_objective} at #{twitter_url}"
   end
 
   def twitter_url

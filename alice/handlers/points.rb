@@ -13,7 +13,7 @@ module Handlers
       elsif subject.nil?
          message.set_response("Yay for #{command_string.content.gsub('++','')}!")
       else
-        message.set_response("#{message.sender_nick} needs to let their points cannon cool down.")
+        message.set_response("#{message.sender_nick} needs to let #{message.sender.pronoun_possessive} points cannon cool down.")
       end
     end
 

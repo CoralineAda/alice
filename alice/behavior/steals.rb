@@ -12,12 +12,12 @@ module Alice
       end
 
       def steal(what)
-        return "thinks that #{proper_name} shouldn't press their luck on the thievery front." if recently_stole?
+        return "thinks that #{proper_name} shouldn't press #{self.pronoun_possessive} luck on the thievery front." if recently_stole?
 
         item = what if what.respond_to?(:name)
         item ||= Item.from(name: what.downcase).last || Beverage.from(name: what.downcase).last
         return "eyes #{proper_name} curiously." unless item
-        return "#{Alice::Util::Randomizer.laugh} as #{proper_name} tries to steal their own #{item.name}!" if item.owner == self
+        return "#{Alice::Util::Randomizer.laugh} as #{proper_name} tries to steal #{self.pronoun_possessive} own #{item.name}!" if item.owner == self
         return "apologizes, but #{item.owner_name} locked that up tight before going to sleep!" unless item.owner.awake?
 
         if Alice::Util::Randomizer.one_chance_in(5)

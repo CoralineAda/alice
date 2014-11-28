@@ -71,7 +71,7 @@ class Processor
     source = Nokogiri::HTML(open(trigger))
     title_node = source.search("//title")
     snippet = source.search("//p").first.content[0..254]
-    preview = "#{title_node && title_node.text}... #{snippet}"
+    preview = "#{title_node && title_node.text}... #{snippet}..."
     Alice::Util::Mediator.reply_with(
       self.channel,
       Response.url_preview(self.message, preview).response
