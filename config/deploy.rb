@@ -8,7 +8,7 @@ set :repo_url, 'git@github.com:CoralineAda/alice.git'
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/home/coraline/alice'
+set :deploy_to, '/home/coraline/alice/'
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -36,12 +36,22 @@ set :deploy_to, '/home/coraline/alice'
 
 namespace :deploy do
 
-  after :restart, :clear_cache do
+  before :starting, :ensure_user   do
     on roles(:app), in: :groups, limit: 3, wait: 10 do
       within release_path do
-        execute :ruby, 'alice.rb stop'
-        execute :git, "pull origin master"
-        execute :ruby, 'alice.rb -dvs --log log/alice.log --timeout 1 start'
+       execute :ruby, './alice.rb stop'
+      end
+    end
+  end
+
+  after :finishing, :notify do
+    on roles(:app), in: :groups, limit: 3, wait: 10 do
+      within release_path do
+        execute :cp, '/home/coraline/alice/common/mongoid.yml config/mongoid.yml'
+        execute :cp, '/home/coraline/alice/common/.env .env'
+        execute :bundle, "install --path /home/coraline/alice/common/vendor/bundle"
+        execute "ln -nfs /home/coraline/alice/common/vendor #{current_path}/vendor"
+        execute :ruby, 'alice.rb -dvs --name alice --log log/alice.log --timeout 1 start'
       end
     end
   end
