@@ -63,9 +63,9 @@ class Command
     match ||= find_verb(trigger)
     if match
       match.message = message
-      Raad::Logger.info "*** Executing #{match.name} with \"#{trigger}\" ***"
+      Alice::Util::Logger.info "*** Executing #{match.name} with \"#{trigger}\" ***"
     else
-      Raad::Logger.info "*** Received unhandled trigger \"#{trigger}\" ***"
+      Alice::Util::Logger.info "*** Received unhandled trigger \"#{trigger}\" ***"
       match = default
     end
     match
