@@ -16,6 +16,11 @@ class Response
     message
   end
 
+  def self.url_preview(message, preview)
+    message.response = preview
+    message
+  end
+
   def self.well_actually(message)
     message.sender.penalize
     message.response = "Well actually, you just lost points. :("

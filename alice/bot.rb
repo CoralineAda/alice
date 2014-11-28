@@ -1,6 +1,8 @@
 module Alice
   class Bot
 
+#    require_relative "cinch_plugins/link_info"
+
     attr_accessor :bot
 
     def initialize
