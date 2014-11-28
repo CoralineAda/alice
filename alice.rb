@@ -33,12 +33,11 @@ module Alice
     def start
       Raad::Logger.info("Daemon started. I LIVE!")
       self.bot.start
-      Alice::Util::Mediator.emote(self.channel, "wakes up.")
-      Alice::Util::Mediator.reply_to(self.channel, "Hello hackers!")
-    end
+      Alice::Processor.new.awaken
+   end
 
     def stop
-      Alice::Util::Mediator.emote(self.channel, "goes to sleep for a while. \"Gnight hackers.\"")
+      Alice::Processor.new.sleep
       Raad::Logger.info("Daemon stopped.")
     end
   end
