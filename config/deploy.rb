@@ -39,7 +39,11 @@ namespace :deploy do
   before :starting, :ensure_user   do
     on roles(:app), in: :groups, limit: 3, wait: 10 do
       within release_path do
-       execute :ruby, './alice.rb stop'
+        begin
+          execute :ruby, './alice.rb stop'
+        rescue
+          p "*** No daemon running, continuing"
+        end
       end
     end
   end
