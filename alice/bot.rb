@@ -11,6 +11,7 @@ module Alice
           config.channels = [ENV['PRIMARY_CHANNEL'], ENV['DEBUG_CHANNEL']]
           config.nick = ENV['IRC_NICK']
           config.user = ENV['IRC_USER']
+          config.logger = Raad::Logger
           config.plugins.plugins = [
             Listener
           ]
@@ -29,7 +30,7 @@ module Alice
     end
 
     def log(message)
-      bot.loggers.warn "#{Time.now} - #{message}"
+      Raad::Logger.info "#{Time.now} - #{message}"
     end
 
     def start
