@@ -46,7 +46,15 @@ module Handlers
     end
 
     def give
-      message.set_response(item_for_user.transfer_to(User.from(command_string.predicate)))
+      if user = User.from(command_string.predicate)
+        if user.accepts_gifts?
+          message.set_response(item_for_user.transfer_to())
+        else
+          message.set_response("Sorry, they're not accepting gifts right now.")
+        end
+      else
+          message.set_response("Sorry, I don't see #{command_string.predicate} here right now.")
+      end
     end
 
     def play

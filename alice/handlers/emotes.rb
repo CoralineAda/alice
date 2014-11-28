@@ -9,17 +9,32 @@ module Handlers
       message.set_response(Alice::Util::Randomizer.spell_effect(message.sender_nick, command_string.predicate))
     end
 
+    def dance
+      response = "Looks like you're dancing with yourself there."
+      if person = ::User.from(command_string.subject)
+        if person.is_online? && person != message.sender
+          response = Alice::Util::Randomizer.dance(message.sender_nick, person.current_nick)
+        elsif ! person.is_online?
+          response = "You can't dance with #{person.pronoun_objective} when #{person.pronoun_contraction} asleep!"
+        end
+      elsif actor = ::Actor.from(command_string.subject)
+        response = Alice::Util::Randomizer.dance(message.sender_nick, actor.proper_name)
+      end
+      message.set_response(response)
+    end
+
     def help
       response = []
       response << "For most things you can ask me or tell me something in plain English."
       response << "For other things, try !<<command>>. For example:"
       response << "!bio sets your bio, !fact sets a fact about yourself, and !twitter sets your Twitter handle."
+      response << "!pronouns your preferred pronouns (just type !pronouns for help)."
       response << "!look, !inventory, !forge, and !brew can come in handy sometimes."
       response << "Also: beware the fruitcake."
       message.set_response(response.join("\r\n"))
     end
 
-   def seen
+    def seen
       user = ::User.from(command_string.subject)
       response = "I last saw #{user.current_nick} #{user.last_seen}."
       message.set_response(response)
