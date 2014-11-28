@@ -30,6 +30,15 @@ class Processor
     false
   end
 
+  def awaken
+    Alice::Util::Mediator.emote(ENV['PRIMARY_CHANNEL'], "wakes up.")
+    Alice::Util::Mediator.reply_to(ENV['PRIMARY_CHANNEL'], "Hello hackers!")
+  end
+
+  def sleep
+    Alice::Util::Mediator.emote(ENV['PRIMARY_CHANNEL'], "goes to sleep for a while. \"Gnight hackers.\"")
+  end
+
   def respond
     if response = self.message.response
       if self.message.response_type == "emote"
