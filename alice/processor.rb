@@ -74,7 +74,7 @@ class Processor
     preview = "#{title_node && title_node.text}... #{snippet}..."
     Alice::Util::Mediator.reply_with(
       self.channel,
-      Response.url_preview(self.message, preview).response
+      Response.url_preview(self.message, preview.strip).response
     )
   rescue Exception => e
     Alice::Util::Logger.info("*** Couldn't process URL preview for #{trigger}: #{e}")
