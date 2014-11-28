@@ -906,7 +906,7 @@ module Alice
       def self.greeting(name)
         [
           "tips her hat to",
-          "gives a tip of the old chapeau to"
+          "gives a tip of the old chapeau to",
           "nods to",
           "greets",
           "smiles at",
