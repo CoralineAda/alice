@@ -33,7 +33,7 @@ module Alice
         "holds"
       ]
 
-      GREETINGS = %w{hi hello evening morning hai}
+      GREETINGS = %w{hi hello evening morning hii hiii hiiii guten ohai hai ahoy yo heya}
 
       ACTION_VERBS = [
         "say",
