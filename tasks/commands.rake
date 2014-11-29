@@ -16,13 +16,13 @@ namespace :commands do
         next unless command.name
         output = []
         output << "Command.create("
-        output << "\tname: '#{command.name}', "
-        output << "\tverbs: #{command.verbs}, "
-        output << "\tstop_words: #{command.stop_words}, "
-        output << "\tindicators: #{command.indicators}, "
-        output << "\thandler_class: '#{command.handler_class}', "
-        output << "\thandler_method: '#{command.handler_method}', "
-        output << "\tresponse_kind: '#{command.response_kind}', "
+        output << "\tname: '#{command.name}',"
+        output << "\tverbs: #{command.verbs},"
+        output << "\tstop_words: #{command.stop_words},"
+        output << "\tindicators: #{command.indicators},"
+        output << "\thandler_class: '#{command.handler_class}',"
+        output << "\thandler_method: '#{command.handler_method}',"
+        output << "\tresponse_kind: '#{command.response_kind}',"
         output << ")"
         output = output.join("\n")
         file.puts output
