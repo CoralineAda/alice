@@ -14,6 +14,20 @@ module Alice
         user.current_nick
       end
 
+      def self.thanks_response(who)
+        message = [
+          "You are most welcome, #{who}!",
+          "No problem.",
+          "Sure thing.",
+          "Anytime.",
+          "Don't mention it.",
+          "Don't mention it. No really, please don't mention it.",
+          "It was the least I could do.",
+          "You're totally worth it.",
+          "You're welcome!"
+        ].sample
+      end
+
       def self.got_nothing
         message = [
           "Let me Google that for you. Sigh.",

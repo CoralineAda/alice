@@ -74,6 +74,10 @@ module Handlers
       message.set_response("So say we all!")
     end
 
+    def youre_welcome
+      message.set_response(Alice::Util::Randomizer.thanks_response(message.sender_nick))
+    end
+
   end
 
 end

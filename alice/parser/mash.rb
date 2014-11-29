@@ -21,7 +21,8 @@ module Alice
                             [:to_subject, [:to_property]],
                             [:to_object, [:to_property]]
         ],
-        [:to_action_verb,   [:to_subject, [:to_object]],
+        [:to_action_verb,   [],
+                            [:to_subject, [:to_object]],
                             [:to_object, [:to_subject]]],
         [:to_transfer_verb, [:to_subject, [:to_object]],
                             [:to_object, [:to_subject]]],
