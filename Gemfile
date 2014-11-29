@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem "aasm"
 gem "brewery_db"
 gem "capistrano", '~> 3.3.0'
-gem "cinch", git: "git@github.com:CoralineAda/cinch.git", branch: "nick_change_user_fix"
+gem "cinch", github: "CoralineAda/cinch", branch: "nick_change_user_fix"
 gem "dotenv"
 gem "google-search", "~> 1.0"
 gem "mongoid", "~> 3.1.6"
