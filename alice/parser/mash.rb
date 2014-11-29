@@ -10,9 +10,10 @@ module Alice
       attr_accessor :this_transfer_verb, :this_action_verb, :this_preposition
       attr_accessor :this_relation_verb, :this_topic, :this_noun, :this_adverb
       attr_accessor :relation_verb
-      attr_accessor :this_property
+      attr_accessor :this_property, :this_greeting
 
       STRUCTURES = [
+        [:greeting, []],
         [:to_info_verb,
                             [:to_object, [:to_subject]],
                             [:to_adverb],
@@ -33,6 +34,7 @@ module Alice
       aasm do
         state :unparsed, initial: true
         state :alice
+        state :greeting
         state :adverb
         state :verb
         state :transfer_verb
@@ -59,6 +61,10 @@ module Alice
 
         event :transfer_verb do
           transitions from: [:alice], to: :transfer_verb, guard: :transfer_verb?
+        end
+
+        event :greeting do
+          transitions from: [:alice], to: :greeting, guard: :greeting?
         end
 
         event :info_verb do
@@ -128,6 +134,10 @@ module Alice
         action_verb
       end
 
+      def to_greeting
+        greeting
+      end
+
       def to_adverb
         adverb
       end
@@ -164,8 +174,9 @@ module Alice
         alice
         parse_transfer
         command
-      rescue
-        return false
+      rescue AASM::InvalidTransition
+      ensure
+        return command
       end
 
       def state
@@ -201,6 +212,10 @@ module Alice
 
       def transfer_verb?
         self.this_transfer_verb = any_content_in?(Alice::Parser::LanguageHelper::TRANSFER_VERBS)
+      end
+
+      def greeting?
+        self.this_greeting = any_content_in?(Alice::Parser::LanguageHelper::GREETINGS)
       end
 
       def action_verb?
@@ -262,7 +277,8 @@ module Alice
       def command
         @command ||= Command.any_in(verbs: verb).first ||
                       Command.any_in(verbs: this_property).first ||
-                      Command.any_in(indicators: verb).first
+                      Command.any_in(indicators: verb).first ||
+                      Command.any_in(indicators: this_greeting).first
       end
 
       def any_method_like?(array)
