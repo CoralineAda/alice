@@ -9,10 +9,10 @@ class Listener
   match /(.+)/,       method: :process_text,    use_prefix: false
   match /well,* actually/i, method: :well_actually, use_prefix: false
   match /so say we all/i, method: :so_say_we_all, use_prefix: false
-  match %r{(https?://.*?)(?:\s|$|,|\.\s|\.$)}, method: :preview_url, :use_prefix => false
+  match %r{(https?://.*?)(?:\s|$|,|\.\s|\.$)}, method: :preview_url, use_prefix: false
 
+  listen_to :nick, method: :nick_update
   listen_to :join, method: :greet
-  listen_to :nick, method: :update_nick
 
   def preview_url(emitted, trigger)
     Processor.process(emitted.channel, message(emitted, trigger), :preview_url)
@@ -36,8 +36,8 @@ class Listener
     Processor.process(emitted.channel, message(emitted, emitted.user.nick), :greet_on_join)
   end
 
-  def update_nick(emitted)
-    Processor.process(emitted.channel, message(emitted, emitted.user.last_nick), :track_nick_change)
+  def nick_update(emitted)
+    processor = Processor.process(emitted.channel || ENV['PRIMARY_CHANNEL'], message(emitted, emitted.params.first, emitted.prefix), :track_nick_change)
   end
 
   def well_actually(emitted)
@@ -50,8 +50,8 @@ class Listener
 
   private
 
-  def message(emitted, trigger)
-    Message.new(emitted.user.nick, trigger)
+  def message(emitted, trigger, user=nil)
+    Message.new(user || emitted.user.nick, trigger)
   end
 
 end

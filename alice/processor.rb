@@ -34,6 +34,7 @@ class Processor
     return true if self.trigger =~ /so say we all/i
     return true if self.trigger =~ /#{ENV['BOT_SHORT_NAME']}/i
     return true if self.response_method == :greet_on_join
+    return true if self.response_method == :track_nick_change
     false
   end
 
@@ -59,7 +60,7 @@ class Processor
 
   def track_nick_change
     user = User.find_or_create(message.sender_nick)
-    user.update_nick(message.sender_nick)
+    user.update_nick(message.trigger)
     Alice::Util::Mediator.emote(
       self.channel,
       Response.name_change(self.message).response
