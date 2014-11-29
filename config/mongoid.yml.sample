@@ -1,0 +1,13 @@
+development:
+  sessions:
+    default:
+      database: alice_dev
+      hosts:
+        - localhost:27017
+
+test:
+  sessions:
+    default:
+      database: alice_test
+      hosts:
+        - localhost:27017
