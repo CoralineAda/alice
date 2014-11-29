@@ -36,9 +36,15 @@ set :deploy_to, '/home/coraline/alice/'
 
 namespace :deploy do
 
+  run_locally do
+    begin
+      execute 'bundle exec rake commands:export'
+    rescue
+    end
+  end
+
   before :starting, :ensure_user   do
     on roles(:app), in: :groups, limit: 3, wait: 10 do
-        execute :rake, 'commands:export'
       within release_path do
         begin
           execute :ruby, './alice.rb stop'
