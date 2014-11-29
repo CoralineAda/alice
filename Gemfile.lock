@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/CoralineAda/cinch.git
+  revision: 14804c11ed092ffde8e0c63880488dbba30282f0
+  branch: nick_change_user_fix
+  specs:
+    cinch (2.1.0)
+
+GIT
   remote: git://github.com/bmabey/database_cleaner.git
   revision: 5d85717975107e64521e943c8cac338eff080bab
   specs:
@@ -25,7 +32,6 @@ GEM
       rake (>= 10.0.0)
       sshkit (~> 1.3)
     capistrano-stats (1.0.3)
-    cinch (2.1.0)
     coderay (1.1.0)
     colorize (0.7.3)
     crass (0.2.1)
@@ -107,7 +113,7 @@ DEPENDENCIES
   aasm
   brewery_db
   capistrano (~> 3.3.0)
-  cinch
+  cinch!
   database_cleaner!
   dotenv
   google-search (~> 1.0)

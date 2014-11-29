@@ -48,7 +48,7 @@ module Alice
         text = message.respond_to?(:response) ? message.response : message
         text = Alice::Util::Sanitizer.process(text)
         text = Alice::Util::Sanitizer.initial_upcase(text)
-        Alice.bot.bot.channels.first.msg(text)
+        Alice.bot.bot.channels.first.send(text)
       end
 
       def self.user_from(channel_user)
@@ -58,7 +58,7 @@ module Alice
       def self.reply_with(channel, message)
         text = Alice::Util::Sanitizer.process(message)
         text = Alice::Util::Sanitizer.initial_upcase(text)
-        Alice.bot.bot.channels.select{|c| c == channel}.first.msg(text)
+        Alice.bot.bot.channels.select{|c| c == channel}.first.send(text)
       end
 
       def self.emote(channel, message)
