@@ -7,3 +7,5 @@ images/*
 doc/*
 log/*
 arkham.hect/log/*
+.capistrano/metrics
+alice.log
