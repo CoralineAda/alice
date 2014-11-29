@@ -2,6 +2,36 @@ require './alice'
 
 namespace :commands do
 
+  desc "Import commands"
+  task :import do
+    system 'ruby db/commands/command_dump.rb'
+  end
+
+  desc "Export existing commands"
+  task :export do
+
+    File.open('db/commands/import.rb', 'w') do |file|
+      file.puts ("require_relative '../../alice'")
+      Command.all.each do |command|
+        next unless command.name
+        output = []
+        output << "Command.create("
+        output << "\tname: '#{command.name}', "
+        output << "\tverbs: #{command.verbs}, "
+        output << "\tstop_words: #{command.stop_words}, "
+        output << "\tindicators: #{command.indicators}, "
+        output << "\thandler_class: '#{command.handler_class}', "
+        output << "\thandler_method: '#{command.handler_method}', "
+        output << "\tresponse_kind: '#{command.response_kind}', "
+        output << ")"
+        output = output.join("\n")
+        file.puts output
+      end
+      file.puts "puts 'Command import complete.'"
+    end
+
+  end
+
   desc "Create default commands"
   task :create_defaults do
 

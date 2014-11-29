@@ -215,7 +215,7 @@ module Alice
       end
 
       def greeting?
-        self.this_greeting = any_content_in?(Alice::Parser::LanguageHelper::GREETINGS)
+        self.this_greeting = "hi" if any_content_in?(Alice::Parser::LanguageHelper::GREETINGS)
       end
 
       def action_verb?

@@ -38,9 +38,11 @@ namespace :deploy do
 
   before :starting, :ensure_user   do
     on roles(:app), in: :groups, limit: 3, wait: 10 do
+        execute :rake, 'commands:export'
       within release_path do
         begin
           execute :ruby, './alice.rb stop'
+          execute :ruby, 'db/commands/import.rb'
         rescue
           p "*** No daemon running, continuing"
         end
