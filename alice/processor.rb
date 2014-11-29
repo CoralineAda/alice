@@ -107,6 +107,8 @@ class Processor
 
   def track_sender
     self.message.sender.active!
+  rescue Exception => e
+    puts "Could not track sender!"
   end
 
 end

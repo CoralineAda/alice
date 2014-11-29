@@ -37,7 +37,8 @@ class Listener
   end
 
   def nick_update(emitted)
-    processor = Processor.process(emitted.channel || ENV['PRIMARY_CHANNEL'], message(emitted, emitted.params.first, emitted.prefix), :track_nick_change)
+    old_name = emitted.prefix.split("!")[0]
+    processor = Processor.process(emitted.channel || ENV['PRIMARY_CHANNEL'], message(emitted, emitted.params.first, old_name), :track_nick_change)
   end
 
   def well_actually(emitted)
