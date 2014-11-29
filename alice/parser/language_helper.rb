@@ -36,7 +36,9 @@ module Alice
       ACTION_VERBS = [
         "say",
         "greet",
-        "welcome"
+        "welcome",
+        "thank",
+        "thanks"
       ]
 
       ADVERBS = [
