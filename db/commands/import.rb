@@ -6,7 +6,7 @@ Command.create(
 	indicators: [],
 	handler_class: 'Handlers::Item',
 	handler_method: 'steal',
-	response_kind: 'message',
+	response_kind: 'emote',
 )
 Command.create(
 	name: 'seen',
@@ -42,15 +42,6 @@ Command.create(
 	indicators: [],
 	handler_class: 'Handlers::Beverage',
 	handler_method: 'brew',
-	response_kind: 'message',
-)
-Command.create(
-	name: 'drink',
-	verbs: ["drink", "quaff", "consume", "chug", "sip"],
-	stop_words: ["alice"],
-	indicators: [],
-	handler_class: 'Handlers::Beverage',
-	handler_method: 'drink',
 	response_kind: 'message',
 )
 Command.create(
@@ -144,15 +135,6 @@ Command.create(
 	response_kind: 'message',
 )
 Command.create(
-	name: 'bug',
-	verbs: ["bug"],
-	stop_words: ["alice"],
-	indicators: [],
-	handler_class: 'Handlers::Emotes',
-	handler_method: 'bug',
-	response_kind: 'message',
-)
-Command.create(
 	name: 'one_ring',
 	verbs: [],
 	stop_words: [],
@@ -168,15 +150,6 @@ Command.create(
 	indicators: [],
 	handler_class: 'Handlers::Factoid',
 	handler_method: 'set',
-	response_kind: 'message',
-)
-Command.create(
-	name: 'get_fact',
-	verbs: [],
-	stop_words: [],
-	indicators: ["know", "fact", "factoid"],
-	handler_class: 'Handlers::Factoid',
-	handler_method: 'get',
 	response_kind: 'message',
 )
 Command.create(
@@ -225,69 +198,6 @@ Command.create(
 	response_kind: 'message',
 )
 Command.create(
-	name: 'drop',
-	verbs: ["drop", "release", "let go"],
-	stop_words: ["alice"],
-	indicators: [],
-	handler_class: 'Handlers::Item',
-	handler_method: 'drop',
-	response_kind: 'message',
-)
-Command.create(
-	name: 'hide',
-	verbs: ["hide"],
-	stop_words: ["alice"],
-	indicators: [],
-	handler_class: 'Handlers::Item',
-	handler_method: 'hide',
-	response_kind: 'message',
-)
-Command.create(
-	name: 'take',
-	verbs: ["take", "pick up", "grab"],
-	stop_words: ["alice"],
-	indicators: [],
-	handler_class: 'Handlers::Item',
-	handler_method: 'take',
-	response_kind: 'message',
-)
-Command.create(
-	name: 'forge',
-	verbs: ["create", "forge", "make", "assemble"],
-	stop_words: ["alice"],
-	indicators: [],
-	handler_class: 'Handlers::Item',
-	handler_method: 'forge',
-	response_kind: 'message',
-)
-Command.create(
-	name: 'give',
-	verbs: ["give", "hand", "transfer"],
-	stop_words: ["alice"],
-	indicators: [],
-	handler_class: 'Handlers::Item',
-	handler_method: 'give',
-	response_kind: 'message',
-)
-Command.create(
-	name: 'play',
-	verbs: ["play"],
-	stop_words: ["alice"],
-	indicators: [],
-	handler_class: 'Handlers::Item',
-	handler_method: 'play',
-	response_kind: 'message',
-)
-Command.create(
-	name: 'read',
-	verbs: ["read", "scan", "peruse"],
-	stop_words: ["alice"],
-	indicators: [],
-	handler_class: 'Handlers::Item',
-	handler_method: 'read',
-	response_kind: 'message',
-)
-Command.create(
 	name: 'catalog',
 	verbs: ["catalog", "machines"],
 	stop_words: ["alice"],
@@ -321,15 +231,6 @@ Command.create(
 	indicators: [],
 	handler_class: 'Handlers::OH',
 	handler_method: 'set',
-	response_kind: 'message',
-)
-Command.create(
-	name: 'get_oh',
-	verbs: [],
-	stop_words: [],
-	indicators: ["hearing", "said", "overheard", "saying"],
-	handler_class: 'Handlers::OH',
-	handler_method: 'get',
 	response_kind: 'message',
 )
 Command.create(
@@ -387,12 +288,138 @@ Command.create(
 	response_kind: 'message',
 )
 Command.create(
+	name: 'give',
+	verbs: ["give", "hand", "transfer"],
+	stop_words: ["alice"],
+	indicators: [],
+	handler_class: 'Handlers::Item',
+	handler_method: 'give',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'take',
+	verbs: ["take", "pick up", "grab"],
+	stop_words: ["alice"],
+	indicators: [],
+	handler_class: 'Handlers::Item',
+	handler_method: 'take',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'play',
+	verbs: ["play"],
+	stop_words: ["alice"],
+	indicators: [],
+	handler_class: 'Handlers::Item',
+	handler_method: 'play',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'drink',
+	verbs: ["drink", "quaff", "consume", "chug", "sip"],
+	stop_words: ["alice"],
+	indicators: [],
+	handler_class: 'Handlers::Beverage',
+	handler_method: 'drink',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'bug',
+	verbs: ["bug"],
+	stop_words: ["alice"],
+	indicators: [],
+	handler_class: 'Handlers::Emotes',
+	handler_method: 'bug',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'forge',
+	verbs: ["create", "forge", "make", "assemble"],
+	stop_words: ["alice"],
+	indicators: [],
+	handler_class: 'Handlers::Item',
+	handler_method: 'forge',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'drop',
+	verbs: ["drop", "release", "let go"],
+	stop_words: ["alice"],
+	indicators: [],
+	handler_class: 'Handlers::Item',
+	handler_method: 'drop',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'read',
+	verbs: ["read", "scan", "peruse"],
+	stop_words: ["alice"],
+	indicators: [],
+	handler_class: 'Handlers::Item',
+	handler_method: 'read',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'hide',
+	verbs: ["hide"],
+	stop_words: ["alice"],
+	indicators: [],
+	handler_class: 'Handlers::Item',
+	handler_method: 'hide',
+	response_kind: 'message',
+)
+Command.create(
 	name: 'well_actually',
 	verbs: [],
 	stop_words: [],
-	indicators: ["well actually", "well, actually"],
+	indicators: ["well", "actually"],
 	handler_class: 'Handlers::Emotes',
 	handler_method: 'well_actually',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'image',
+	verbs: ["image"],
+	stop_words: [],
+	indicators: [],
+	handler_class: 'Handlers::Imager',
+	handler_method: 'call',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'property_set',
+	verbs: ["set"],
+	stop_words: [],
+	indicators: [],
+	handler_class: 'Handlers::Item',
+	handler_method: 'set',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'unknown',
+	verbs: [],
+	stop_words: [],
+	indicators: [],
+	handler_class: 'Handlers::Unknown',
+	handler_method: '',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'get_oh',
+	verbs: ["hear,", "hearing,", "said,", "saying,", "overheard"],
+	stop_words: [],
+	indicators: ["hearing", "said", "overheard", "saying"],
+	handler_class: 'Handlers::OH',
+	handler_method: 'get',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'whois',
+	verbs: [],
+	stop_words: [],
+	indicators: ["is"],
+	handler_class: 'Handlers::Bio',
+	handler_method: 'return_bio',
 	response_kind: 'message',
 )
 Command.create(
@@ -402,6 +429,33 @@ Command.create(
 	indicators: [],
 	handler_class: 'Handlers::Pronouns',
 	handler_method: 'process',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'sentinel',
+	verbs: [""],
+	stop_words: [""],
+	indicators: [],
+	handler_class: 'Handlers::Item',
+	handler_method: 'steal',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'properties',
+	verbs: ["can_brew?", "can_forge?", "last_seen", "can_play_game?", "current_nick", "dazed?", "disoriented?", "drunk?", "is_online?", "is_op?", "bio", "proper_name", "twitter_handle", "twitter_url", "points", "check_points", "check_score"],
+	stop_words: [],
+	indicators: ["can_brew?", "can_forge?", "last_seen", "can_play_game?", "current_nick", "dazed?", "disoriented?", "drunk?", "is_online?", "is_op?", "bio", "proper_name", "twitter_handle", "twitter_url"],
+	handler_class: 'Handlers::Properties',
+	handler_method: 'get_property',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'get_fact',
+	verbs: ["know", "think", "observe"],
+	stop_words: [],
+	indicators: ["know", "fact", "factoid"],
+	handler_class: 'Handlers::Factoid',
+	handler_method: 'get',
 	response_kind: 'message',
 )
 Command.create(
@@ -438,15 +492,6 @@ Command.create(
 	indicators: ["hi", "hello", "hey", "afternoon", "evening", "greetings", "hola", "hai"],
 	handler_class: 'Handlers::Greeting',
 	handler_method: 'greet_sender',
-	response_kind: 'message',
-)
-Command.create(
-	name: 'sentinel',
-	verbs: [""],
-	stop_words: [""],
-	indicators: [],
-	handler_class: 'Handlers::Item',
-	handler_method: 'steal',
-	response_kind: 'message',
+	response_kind: 'emote',
 )
 puts 'Command import complete.'
