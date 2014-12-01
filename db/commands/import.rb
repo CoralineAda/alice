@@ -127,7 +127,7 @@ Command.create(
 )
 Command.create(
 	name: 'source',
-	verbs: ["source", "github", "repo"],
+	verbs: ["source", "repo"],
 	stop_words: ["alice"],
 	indicators: [],
 	handler_class: 'Handlers::Emotes',
