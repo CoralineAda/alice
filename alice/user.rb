@@ -65,7 +65,7 @@ class User
     names = names.uniq - Alice::Parser::LanguageHelper::IDENTIFIERS
     objects = names.map do |name|
       name = (name.split(/\s+/) - Alice::Parser::LanguageHelper::IDENTIFIERS).compact.join(' ')
-      if name.present? && found = like(name) || found = User.where(name: name).first
+      if name.present? && found = like(name) || found = User.where(primary_nick: name).first || found = User.any_in(alt_nicks: name).first
         SearchResult.new(term: name, result: found)
       end
     end.compact
@@ -216,11 +216,15 @@ class User
   end
 
   def describe
-    message = self.bio && self.bio.formatted || ""
+    message = ""
+    message << self.bio.formatted if self.bio.present?
+    if self.created_at
+      message << "#{self.pronoun_primary} first joined us on #{self.created_at.strftime("%B %-d, %Y")}. "
+    end
     message << "Find #{self.pronoun_objective} on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
     message << pronouns
-    message << "#{self.inventory} "
     message << "#{check_score} "
+    message << "#{self.inventory} "
     message << "#{proper_name} is currently feeling a little #{self.filters.map(&:to_s).to_sentence}. " if self.filters.present?
     message
   end

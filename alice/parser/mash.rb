@@ -13,7 +13,7 @@ module Alice
       attr_accessor :this_property, :this_greeting
 
       STRUCTURES = [
-        [:greeting, []],
+        [:greeting, [:to_subject]],
         [:to_info_verb,
                             [:to_object, [:to_subject]],
                             [:to_adverb],
@@ -112,7 +112,7 @@ module Alice
 
       def parse_transfer(structures=STRUCTURES)
         structures.map do |structure|
-          head,tail = structure.first, structure[1..-1]
+          head, tail = structure.first, structure[1..-1]
           if can_transition_to?(head)
             self.public_send(head)
             sentence.remove(self.public_send(head.to_s.gsub(/to_/, 'this_')))

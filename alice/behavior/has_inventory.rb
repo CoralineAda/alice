@@ -5,11 +5,8 @@ module Alice
     module HasInventory
 
       def inventory
-        message = inventory_of_items
-        message << " " + inventory_of_beverages.to_s + "."
-        message << " " + inventory_of_wands
-        message ||= "has no possessions."
-        message
+        message = [inventory_of_items, inventory_of_wands, inventory_of_beverages]
+        message.empty? ? "has no possessions." : message.compact.join(". ")
       end
 
       def inventory_of_beverages
