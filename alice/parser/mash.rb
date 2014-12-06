@@ -14,13 +14,17 @@ module Alice
 
       STRUCTURES = [
         [:greeting, [:to_subject]],
+        [:to_object,        [:to_info_verb, [:to_object]],
+                            [:to_info_verb, [:to_topic]],
+                            [:to_info_verb, [:to_subject]]
+        ],
         [:to_info_verb,
                             [:to_object, [:to_subject]],
                             [:to_adverb],
                             [:to_subject],
-                            [:to_topic],
                             [:to_subject, [:to_property]],
-                            [:to_object, [:to_property]]
+                            [:to_object, [:to_property]],
+                            [:to_topic],
         ],
         [:to_action_verb,   [],
                             [:to_subject, [:to_object]],
@@ -114,6 +118,7 @@ module Alice
         structures.map do |structure|
           head, tail = structure.first, structure[1..-1]
           if can_transition_to?(head)
+            Alice::Util::Logger.info "*** Mash state is  \"#{head}\" ***"
             self.public_send(head)
             sentence.remove(self.public_send(head.to_s.gsub(/to_/, 'this_')))
             return unless tail.any?
@@ -174,8 +179,11 @@ module Alice
         alice
         parse_transfer
         command
-      rescue AASM::InvalidTransition
+      rescue AASM::InvalidTransition => e
+        Alice::Util::Logger.info "*** Mash can't set state: \"#{e}\" ***"
       ensure
+        Alice::Util::Logger.info "*** Final mash state is  \"#{aasm.current_state}\" ***"
+        Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" ***"
         return command
       end
 
@@ -227,8 +235,8 @@ module Alice
       end
 
       def has_person?
-        (command_string.predicate && User.like(command_string.predicate)) ||
-        (command_string.subject && User.like(command_string.subject)) ||
+        (command_string.predicate.present? && User.like(command_string.predicate)) ||
+        (command_string.subject.present? && User.like(command_string.subject)) ||
         User.from(command_string.subject)
       end
 
@@ -248,7 +256,25 @@ module Alice
       end
 
       def has_topic?
-        self.this_topic = Factoid.about(command_string.predicate)
+        if this_object
+          if match = Alice::Context.any_from(command_string.subject, this_object)
+            self.this_topic = match
+            self.this_info_verb = "converse"
+            Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" ***"
+          end
+        elsif match = Alice::Context.any_from(command_string.subject)
+          self.this_topic = match
+          self.this_info_verb = "converse"
+          Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" ***"
+        elsif match = Alice::Context.any_from(command_string.predicate)
+          self.this_topic = match
+          self.this_info_verb = "converse"
+          Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" ***"
+        elsif match = Alice::Context.current
+          self.this_topic = match
+          self.this_info_verb = "converse"
+          Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" ***"
+        end
       end
 
       def has_property?
@@ -275,7 +301,7 @@ module Alice
       end
 
       def command
-        @command ||= Command.any_in(verbs: verb).first ||
+        @command ||=  Command.any_in(verbs: verb).first ||
                       Command.any_in(verbs: this_property).first ||
                       Command.any_in(indicators: verb).first ||
                       Command.any_in(indicators: this_greeting).first

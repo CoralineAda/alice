@@ -12,8 +12,16 @@ module Handlers
 
     def get
       factoid = ::Factoid.about(command_string.predicate).try(:formatted)
-      factoid ||= ::Topic.new(command_string.predicate).support
-      message.set_response(factoid || "I've got nothing.")
+      if context = Alice::Context.any_from(command_string.predicate)
+        context.current!
+      end
+      if factoid ||= ::Topic.new(command_string.predicate).support
+        message.set_response(factoid)
+      elsif context
+        message.set_response(context.describe)
+      else
+        message.set_response(Alice::Util::Randomizer.got_nothing)
+      end
     end
 
     private

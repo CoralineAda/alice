@@ -101,7 +101,11 @@ module Alice
         "take"
       ]
 
+      NOUN_INDICATORS = %w{ the a an this  }
+
       IDENTIFIERS = NUMBERS.keys + NUMBERS.values + ARTICLES
+
+      PREDICATE_INDICATORS = PREPOSITIONS + NOUN_INDICATORS + INFO_VERBS + ACTION_VERBS + TRANSFER_VERBS + RELATION_VERBS
 
       def self.similar_to(original_word, test_word)
         return true if original_word =~ /#{test_word}/i
