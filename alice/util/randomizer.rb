@@ -34,7 +34,13 @@ module Alice
           "Sorry, I've got nothing.",
           "Really? That again?",
           "Let's change the subject, OK?",
-          "Excuse me, I've got something in my eye."
+          "Excuse me, I've got something in my eye.",
+          "I don't want to talk about that, really.",
+          "Nope nope nope.",
+          "You seem a little fixated.",
+          "Do you kiss your mother with that mouth?",
+          "I'd rather not relive my experiences with that.",
+          "If it's all the same to you, I'd rather not talk about it."
         ].sample
       end
 
