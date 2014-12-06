@@ -16,8 +16,8 @@ class Response
     message
   end
 
-  def self.url_preview(message, preview)
-    message.response = preview
+  def self.preview_url(message)
+    message.response = Alice::Parser::URL.new(mesage.trigger).preview
     message
   end
 
