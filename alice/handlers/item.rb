@@ -22,9 +22,7 @@ module Handlers
     end
 
     def eat
-      if item = item_for_user
-        message.set_response(item.eat)
-      end
+      item && message.set_response(item.eat)
     end
 
     def take
