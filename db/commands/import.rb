@@ -449,4 +449,13 @@ Command.create(
 	handler_method: 'steal',
 	response_kind: 'message',
 )
+Command.create(
+	name: 'eat',
+	verbs: ["eat", "consume", "munch", "swallow", "drink"],
+	stop_words: [],
+	indicators: [],
+	handler_class: 'Item',
+	handler_method: 'eat',
+	response_kind: 'message',
+)
 puts 'Command import complete.'
