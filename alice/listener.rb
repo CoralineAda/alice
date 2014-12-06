@@ -3,22 +3,22 @@ require 'cinch'
 class Listener
 
   include Cinch::Plugin
-  match /(.+)/, method: :route, use_prefix: false
 
+  METHOD_MAP = {
+    /^([0-9]+)/                           => :process_number,
+    /(.+\+\+)$/x                          => :process_points,
+    /well,* actually/i                    => :well_actually,
+    /so say we all/i                      => :so_say_we_all,
+    %r{(https?://.*?)(?:\s|$|,|\.\s|\.$)} => :preview_url,
+    /(.+)/                                => :process_text
+  }
+
+  match /(.+)/, method: :route, use_prefix: false
   listen_to :nick, method: :nick_update
   listen_to :join, method: :greet
 
   def route(emitted, trigger)
-    method_map = {
-      /^([0-9]+)/                           => :process_number,
-      /(.+\+\+)$/x                          => :process_points,
-      /well,* actually/i                    => :well_actually,
-      /so say we all/i                      => :so_say_we_all,
-      %r{(https?://.*?)(?:\s|$|,|\.\s|\.$)} => :preview_url,
-      /(.+)/                                => :process_text
-    }
-    to_call = method_map.detect { |k,m| k.match(trigger) }.last
-
+    return unless to_call = METHOD_MAP.detect { |k,m| k.match(trigger) }.last
     self.public_send(to_call, emitted, trigger)
   end
 
