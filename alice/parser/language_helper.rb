@@ -20,6 +20,7 @@ module Alice
         "know",
         "look",
         "set",
+        "tell",
         "think",
         "was"
       ]

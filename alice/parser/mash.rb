@@ -254,7 +254,7 @@ module Alice
       def has_property?
         thing = self.this_subject || self.this_object
         map = thing.class::PROPERTIES.inject({}) do |hash, property|
-          hash[property] = property.to_s.split("_")
+          hash[property] = property.to_s.split("_").reject{|value| value == "can"}
           hash
         end
         match = map.values.detect{|value_set| value_set.detect{|n| ([n] & sentence).count > 0} }

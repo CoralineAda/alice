@@ -174,7 +174,7 @@ Command.create(
 	name: 'get_fact',
 	verbs: [],
 	stop_words: [],
-	indicators: ["know", "fact", "factoid"],
+	indicators: ["know", "fact", "factoid", "tell"],
 	handler_class: 'Handlers::Factoid',
 	handler_method: 'get',
 	response_kind: 'message',
