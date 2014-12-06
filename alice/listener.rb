@@ -3,16 +3,24 @@ require 'cinch'
 class Listener
 
   include Cinch::Plugin
-
-  match /^([0-9]+)/,  method: :process_number,  use_prefix: false
-  match /(.+)\+\+$/,  method: :process_points,  use_prefix: false
-  match /(.+)/,       method: :process_text,    use_prefix: false
-  match /well,* actually/i, method: :well_actually, use_prefix: false
-  match /so say we all/i, method: :so_say_we_all, use_prefix: false
-  match %r{(https?://.*?)(?:\s|$|,|\.\s|\.$)}, method: :preview_url, use_prefix: false
+  match /(.+)/, method: :route, use_prefix: false
 
   listen_to :nick, method: :nick_update
   listen_to :join, method: :greet
+
+  def route(emitted, trigger)
+    method_map = {
+      /^([0-9]+)/                           => :process_number,
+      /(.+\+\+)$/x                          => :process_points,
+      /well,* actually/i                    => :well_actually,
+      /so say we all/i                      => :so_say_we_all,
+      %r{(https?://.*?)(?:\s|$|,|\.\s|\.$)} => :preview_url,
+      /(.+)/                                => :process_text
+    }
+    to_call = method_map.detect { |k,m| k.match(trigger) }.last
+
+    self.public_send(to_call, emitted, trigger)
+  end
 
   def preview_url(emitted, trigger)
     Processor.process(emitted.channel, message(emitted, trigger), :preview_url)
