@@ -22,13 +22,14 @@ module Alice
           break if snippet.length > 255
         end
         snippet = snippet.to_s.strip.gsub(/[\n\r ]+/," ")[0..254]
-        preview = "#{title_node && title_node.text}... #{snippet}..."
+        title = title_node.nil? ? '' : title_node.text
+        preview = [title, snippet].reject(:empty?).join('| ')
         Alice::Util::Mediator.reply_with(
           self.channel,
           Response.url_preview(self.message, preview).response
         )
       rescue Exception => e
-        Alice::Util::Logger.info("*** Couldn't process URL preview for #{trigger}: #{e}")
+        Alice::Util::Logger.info("*** Couldn't process URL preview for #{url}: #{e}")
       end
       
     end

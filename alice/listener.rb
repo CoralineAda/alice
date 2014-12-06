@@ -20,7 +20,7 @@ class Listener
     tuple = METHOD_MAP.detect { |k,m| k.match(trigger) }
     return unless tuple.any?
     matching_method = tuple.last
-    captured_match = tuple.first.match(trigger)
+    captured_match = tuple.first.match(trigger).to_s
     self.public_send(matching_method, emitted, captured_match)
   end
 
@@ -66,3 +66,4 @@ class Listener
   end
 
 end
+
