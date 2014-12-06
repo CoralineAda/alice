@@ -23,13 +23,9 @@ module Alice
         end
         snippet = snippet.to_s.strip.gsub(/[\n\r ]+/," ")[0..254]
         title = title_node.nil? ? '' : title_node.text
-        preview = [title, snippet].reject(:empty?).join('| ')
-        Alice::Util::Mediator.reply_with(
-          self.channel,
-          Response.url_preview(self.message, preview).response
-        )
+        return [title, snippet].reject(&:empty?).join('| ')
       rescue Exception => e
-        Alice::Util::Logger.info("*** Couldn't process URL preview for #{url}: #{e}")
+        Alice::Util::Logger.info("*** Couldn't process URL preview for #{url}: #{e.backtrace}")
       end
       
     end
