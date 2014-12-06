@@ -21,6 +21,12 @@ module Handlers
       end
     end
 
+    def eat
+      if item = item_for_user
+        message.set_response(item.eat)
+      end
+    end
+
     def take
       if item = loose_item
         message.set_response(item.transfer_to(message.sender))
