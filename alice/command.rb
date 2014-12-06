@@ -63,7 +63,7 @@ class Command
     match ||= find_verb(trigger)
     if match
       match.message = message
-      Alice::Util::Logger.info "*** Executing #{match.name} with \"#{trigger}\" ***"
+      Alice::Util::Logger.info "*** Executing #{match.name} with \"#{trigger}\" with context #{Alice::Context.current && Alice::Context.current.topic || "none"} ***"
     else
       Alice::Util::Logger.info "*** Received unhandled trigger \"#{trigger}\" ***"
       match = default

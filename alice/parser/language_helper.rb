@@ -17,6 +17,7 @@ module Alice
         "hid",
         "inspect",
         "is",
+        "are",
         "know",
         "look",
         "set",
@@ -41,7 +42,8 @@ module Alice
         "greet",
         "welcome",
         "thank",
-        "thanks"
+        "thanks",
+        "do"
       ]
 
       ADVERBS = [
@@ -101,7 +103,15 @@ module Alice
         "take"
       ]
 
+      VERBS = TRANSFER_VERBS + INFO_VERBS + ACTION_VERBS + RELATION_VERBS
+
+      NOUN_INDICATORS = %w{ the a an this about }
+
       IDENTIFIERS = NUMBERS.keys + NUMBERS.values + ARTICLES
+
+      PREDICATE_INDICATORS = PREPOSITIONS + NOUN_INDICATORS + INFO_VERBS + ACTION_VERBS + TRANSFER_VERBS + RELATION_VERBS
+
+      PRONOUNS = %w{ him her his him hers they theirs them he she it its this those these that }
 
       def self.similar_to(original_word, test_word)
         return true if original_word =~ /#{test_word}/i

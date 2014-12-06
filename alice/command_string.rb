@@ -2,8 +2,6 @@ class CommandString
 
   attr_accessor :content
 
-  PREDICATE_INDICATORS = %w{to from with on in about the and or near from by}
-
   def initialize(content)
     self.content = content
   end
@@ -15,8 +13,13 @@ class CommandString
   end
 
   def probable_nouns
-    re = Regexp.union(PREDICATE_INDICATORS.map{|w| /\s*\b#{Regexp.escape(w)}\b\s*/i})
-    candidates = self.content.split(re).map(&:split).map(&:last)
+    re = Regexp.union(Alice::Parser::LanguageHelper::PREDICATE_INDICATORS.map{|w| /\s*\b#{Regexp.escape(w)}\b\s*/i})
+    candidates = self.content.split(re).map(&:split).compact.flatten
+    candidates = candidates - [ "you", "your", "Alice", "Alice," ]
+    candidates = candidates - Alice::Parser::LanguageHelper::PRONOUNS
+    candidates = candidates - Alice::Parser::LanguageHelper::VERBS
+    candidates = candidates - Alice::Parser::LanguageHelper::INTERROGATIVES
+    candidates = candidates - Alice::Parser::LanguageHelper::NOUN_INDICATORS
   end
 
   def has_predicate?
@@ -29,7 +32,7 @@ class CommandString
   end
 
   def predicate_positions
-    PREDICATE_INDICATORS.map{ |indicator| components.index(indicator) }.compact
+    Alice::Parser::LanguageHelper::PREDICATE_INDICATORS.map{ |indicator| components.index(indicator) }.compact
   end
 
   def predicate_position
