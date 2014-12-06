@@ -26,6 +26,7 @@ module Handlers
         message.set_response(subject.formatted_bio)
       else
         message.set_response(Alice::Util::Randomizer.got_nothing)
+      end
     end
 
     private
