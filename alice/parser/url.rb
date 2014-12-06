@@ -1,9 +1,9 @@
+require "open-uri"
+require "nokogiri"
+
 module Alice
 
   module Parser
-
-    require "open-uri"
-    require "nokogiri"
 
     class URL
 
@@ -14,7 +14,7 @@ module Alice
       end
 
       def preview
-        source = Nokogiri::HTML(open(self.url))
+        source = Nokogiri::HTML(open(url))
         title_node = source.search("//title")
         source.search("//p").map(&:content).each do |content|
           next if content.length < 25
@@ -22,9 +22,10 @@ module Alice
           break if snippet.length > 255
         end
         snippet = snippet.to_s.strip.gsub(/[\n\r ]+/," ")[0..254]
-        return "#{title_node && title_node.text}... #{snippet}..."
+        title = title_node.nil? ? '' : title_node.text
+        return [title, snippet].reject(&:empty?).join('| ')
       rescue Exception => e
-        Alice::Util::Logger.info("*** Couldn't process URL preview for #{url}: #{e}")
+        Alice::Util::Logger.info("*** Couldn't process URL preview for #{url}: #{e.backtrace}")
       end
 
     end
