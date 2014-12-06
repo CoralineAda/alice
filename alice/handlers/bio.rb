@@ -22,7 +22,7 @@ module Handlers
     end
 
     def return_bio
-      message.set_response(subject.formatted_bio || "I can't seem to remember anything about them.")
+      message.set_response(subject.formatted_bio || Alice::Util::Randomizer.got_nothing)
     end
 
     private
