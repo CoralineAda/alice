@@ -1,24 +1,55 @@
-alice
-=====
+## Setting Up a Local Alice for Development
 
-Architecture
-------------
+### Prepping Alice
 
-## Listener
-This is effectively a dynamic router. It matches an incoming message to a corresponding `Command` object, which in turn indicates the handler and handler method that should be used to create a response.
+Before you start, make sure to run `bundle`
 
-## Handlers
-Handlers are like controllers: they connect incoming messages to the correct methods on the correct models.
+Next, rename `config/mongoid.yml.sample` to `mongoid.yml`
 
-ToDo
-----
+Also rename `.env.sample` to `.env`
 
-* Coffee clears dazed, etc. effects
-* Bio/factoid game
-* Juke box function (provide a url to queue)
-* Potions with specific effects
-* Other machines
-  * Alchemist lab (produces potions)
-  * Beer tap
-  * Wet bar
-  * Boom box
+Run the following from Terminal to initialize basic commands:
+
+    ruby db/commands/import.rb
+
+### Setting Up an IRC Server
+
+Install hector,  (a lightweight IRC server)
+
+    gem install hector
+
+Set up hector:
+
+    hector setup myserver
+    cd myserver.hect
+
+Set up permissions for your hector IRC account:
+
+    hector identity remember my_account_name
+
+Set up permissions for Alice:
+
+    hector identity remember AliceBot
+
+Start the IRC server
+
+    hector daemon
+
+Add the AliceBot password you created in hector to your `.env` file. All the other settings should be fine.
+
+### Starting the Bot
+
+Start 2 IRB sessions: one for running Alice and one for interacting with the Alice program:
+
+    irb -r ./alice.rb
+
+In the first IRB session, start the bot:
+
+    Alice.bot.start
+
+Alice will have joined the ##alicebottest channel on your local server now. Follow her there.
+
+You will need to send `/pass my_hector_password` to the local hector IRC server to join.
+
+Alice should be waiting for you! Experiment away.
+

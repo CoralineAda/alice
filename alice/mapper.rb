@@ -18,11 +18,6 @@ class Mapper
     end
   end
 
-  def save_to_cloud
-    url = Alice::AWS.new.upload(path_to_file)
-    puts url
-  end
-
   def room(x, y, is_current, desc, exits=[])
     grid_size = 100
     room_size = grid_size - 5

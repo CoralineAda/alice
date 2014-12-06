@@ -25,7 +25,7 @@ module Alice
         if rank
           score_text << " and is in #{Alice::Util::Sanitizer.ordinal(rank)} place"
         end
-        "#{score_text}. "
+        "#{score_text} "
       end
 
       def score_points(value=1)
