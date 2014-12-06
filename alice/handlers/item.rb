@@ -51,8 +51,9 @@ module Handlers
 
     def give
       if user = User.from(command_string.predicate)
+        thing = beverage_for_user || item_for_user
         if user.accepts_gifts?
-          message.set_response(item_for_user.transfer_to(user))
+          message.set_response(thing.transfer_to(user))
         else
           message.set_response("Sorry, they're not accepting gifts right now.")
         end
@@ -108,6 +109,13 @@ module Handlers
         ::Item.for_user(user).from(command_string.subject.split(':')[0]) ||
         ::Item.for_user(user).from(command_string.raw_command) ||
         ::Item.ephemeral
+    end
+
+    def beverage_for_user
+      user = message.sender
+      ::Beverage.for_user(user).from(command_string.subject) ||
+        ::Beverage.for_user(user).from(command_string.subject.split(':')[0]) ||
+        ::Beverage.for_user(user).from(command_string.raw_command)
     end
 
     def item
