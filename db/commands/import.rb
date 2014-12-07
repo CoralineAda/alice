@@ -57,7 +57,7 @@ Command.create(
 	name: 'bio',
 	verbs: ["bio"],
 	stop_words: ["alice"],
-	indicators: [],
+	indicators: ["is"],
 	handler_class: 'Handlers::Bio',
 	handler_method: 'process',
 	response_kind: 'message',
@@ -343,7 +343,7 @@ Command.create(
 )
 Command.create(
 	name: 'check_points',
-	verbs: ["points"],
+	verbs: ["points", "score"],
 	stop_words: ["alice"],
 	indicators: [],
 	handler_class: 'Handlers::Points',
@@ -456,6 +456,24 @@ Command.create(
 	indicators: [],
 	handler_class: 'Item',
 	handler_method: 'eat',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'converse',
+	verbs: [],
+	stop_words: [],
+	indicators: ["converse"],
+	handler_class: 'Handlers::Conversation',
+	handler_method: 'converse',
+	response_kind: 'message',
+)
+Command.create(
+	name: 'context',
+	verbs: [],
+	stop_words: [],
+	indicators: ["talking"],
+	handler_class: 'Handlers::Conversation',
+	handler_method: 'give_context',
 	response_kind: 'message',
 )
 puts 'Command import complete.'
