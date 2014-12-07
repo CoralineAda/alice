@@ -12,10 +12,10 @@ module Handlers
 
     def get
       factoid = ::Factoid.about(command_string.predicate).try(:formatted)
-      if context = Alice::Context.any_from(command_string.predicate)
+      if context = Alice::Context.find_or_create(command_string.predicate)
         context.current!
       end
-      if factoid ||= ::Topic.new(command_string.predicate).support
+      if factoid
         message.set_response(factoid)
       elsif context
         message.set_response(context.describe)

@@ -29,7 +29,14 @@ module Alice
         @corpus
       end
 
-     def seed_text
+      def converse
+        context = Alice::Context.current
+        context ||= Alice::Context.find_or_create(seed_word)
+        context ||= Alice::Context.all.sample
+        context.describe
+      end
+
+      def seed_text
         ::Sanitize.fragment(Wikipedia.find(seed_word).sanitized_content)
       end
 
@@ -48,10 +55,9 @@ module Alice
       end
 
       def speak
-        case rand(3)
+        case rand(2)
         when 0; random_message
         when 1; generated_message
-        when 2; converse # HERE
         end
       end
 

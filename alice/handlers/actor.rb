@@ -10,13 +10,21 @@ module Handlers
     end
 
     def talk
-      message.set_response("#{subject.proper_name} says, \"#{subject.speak}\"")
+      if subject
+        message.set_response("#{subject.proper_name} says, \"#{subject.speak}\"")
+      else
+        context = Alice::Context.current
+        context ||= Alice::Context.with_keywords.sample
+        if context
+          message.set_response("Hmm. Today's topic is '#{context.topic}'.")
+        end
+      end
     end
 
     private
 
     def subject
-      ::Actor.from(command_string.subject) || ::Actor.unknown
+      @actor ||= Actor.from(command_string.subject)
     end
 
   end

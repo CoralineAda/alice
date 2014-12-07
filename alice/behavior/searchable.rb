@@ -22,8 +22,8 @@ module Alice
           names = names.uniq - Alice::Parser::LanguageHelper::IDENTIFIERS
           objects = names.map do |name|
             name = (name.split(/\s+/) - Alice::Parser::LanguageHelper::IDENTIFIERS).compact.join(' ')
-            if name.present? && found = like(name) || found = Item.where(name: name).first
-              SearchResult.new(term: name, result: found)
+            if name.present? && found = like(name) || found = where(name: name).first
+              result = SearchResult.new(term: name, result: found)
             end
           end.compact
           objects = objects.select{|obj| obj.result.present?}.uniq || []
@@ -34,7 +34,7 @@ module Alice
         def like(name)
           name = name.respond_to?(:join) && name.join(' ') || name
           unless match = where("#{search_attr}" => /^#{Regexp.escape(name)}$/i).first
-            match = where("#{search_attr}" => /\s#{Regexp.escape(name)}/i).first
+            match = where("#{search_attr}" => /\s#{Regexp.escape(name)}\b/i).first
           end
           match
         end

@@ -45,6 +45,12 @@ describe "Handlers::Item" do
   end
 
   describe "#give" do
+
+    let(:recipient) { User.new(primary_nick: "Bob") }
+    before do
+      allow(User).to receive(:from) { recipient }
+      allow(recipient).to receive(:accepts_gifts?) { true }
+    end
     it "is wired to a working method" do
       expect(item.respond_to?(:transfer_to)).to be_true
     end

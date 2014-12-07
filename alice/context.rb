@@ -7,14 +7,23 @@ class Alice::Context
   field :corpus
   field :expires_at, type: DateTime
   field :is_current, type: Boolean
+  field :spoken, type: Array, default: []
 
-  TTL = 13
+  TTL = 5
   PREDICATE_INDICATORS = %w{to from with on in about the and or near from by}
 
   before_save :downcase_topic, :define_corpus, :extract_keywords
+  before_create :set_expiry
+  validates_uniqueness_of :topic
+
+  def self.with_keywords
+    not_in(keywords: [])
+  end
 
   def self.current
-    where(is_current: true).first
+    if context = where(is_current: true).desc(:expires_at).first
+      ! context.expire && context
+    end
   end
 
   def self.find_or_create(topic)
@@ -22,7 +31,8 @@ class Alice::Context
   end
 
   def self.from(topic)
-    topic_keywords = topic.to_a.map(&:split).flatten - Alice::Parser::LanguageHelper::PREDICATE_INDICATORS
+    topic_keywords = topic.to_a.compact.map(&:split).flatten.map(&:downcase)
+    topic_keywords = topic_keywords - Alice::Parser::LanguageHelper::PREDICATE_INDICATORS
     if exact_match = any_in(topic: topic_keywords).first
       return exact_match
     end
@@ -41,13 +51,16 @@ class Alice::Context
   end
 
   def self.any_from(*topic)
-    topic_array = topic.to_a.map(&:split).flatten
+    topic_array = topic.to_a.compact.map(&:split).flatten.map(&:downcase)
     from(topic) || about(topic_array[0..1])
   end
 
   def current!
-    Alice::Context.update_all(is_current: false)
-    update_attributes(is_current: true, expires_at: DateTime.now + 5.minutes)
+    update_attributes(is_current: true, expires_at: DateTime.now + TTL.minutes)
+  end
+
+  def set_expiry
+    self.expires_at = DateTime.now + TTL.minutes
   end
 
   def expire
@@ -55,28 +68,32 @@ class Alice::Context
   end
 
   def expire!
-    update_attribute(:is_current, false)
+    update_attributes(is_current: false, spoken: [])
   end
 
   def describe
-    corpus.select do |sentence|
-      topic_placement = sentence =~ /#{topic}/i
-      (
-        topic_placement &&
-        topic_placement.to_i < 50 &&
-        (sentence.include?("is a") || sentence.include?("was"))
-      )
-    end.sample || ""
+    candidates = facts.select{ |sentence| near_match(self.topic, sentence) }
+    fact = candidates.compact.sort do |a,b|
+      position_of('is', a).to_i || position_of('was', a).to_i <=> position_of('is', b).to_i || position_of('was', b).to_i
+    end.first
+    record_spoken(fact)
+    fact
+  end
+
+  def near_match(subject, sentence)
+    (sentence.downcase.split & subject.split).size > 0
   end
 
   def define_corpus
-    self.corpus = begin
+    self.corpus ||= begin
       sanitized = ::Sanitize.fragment(Wikipedia.find(self.topic).sanitized_content)
-      sanitized = sanitized.split(/[\.\:\[\]\n\*\=]/)
+      sanitized = sanitized.split(/[\.\:\[\]\n\*\=] /)
       sanitized = sanitized.reject{|w| w == " "}
       sanitized = sanitized.reject(&:empty?)
       sanitized = sanitized.map(&:strip)
       sanitized
+    rescue Exception => e
+      Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e} ***"
     end
   end
 
@@ -87,6 +104,10 @@ class Alice::Context
   def extract_keywords
     candidates = probable_nouns.inject(Hash.new(0)) {|h,i| h[i] += 1; h }
     self.keywords = candidates.select{|k,v| v > 1}.map(&:first)
+  end
+
+  def has_spoken_about?(topic)
+    self.spoken.to_s.downcase.include?(topic.downcase)
   end
 
   def probable_nouns
@@ -101,27 +122,51 @@ class Alice::Context
   end
 
   def relational_facts(subtopic)
-    corpus.select{ |sentence| sentence =~ /#{subtopic}/i }
+    facts.select do |sentence|
+      placement = position_of(subtopic.downcase, sentence.downcase)
+      binding.pry
+      placement && placement.to_i < 100
+    end
   end
 
   def targeted_fact_candidates(subtopic)
-    (facts.select{|fact| fact =~ /#{subtopic}/i} + corpus.select{|sentence| sentence =~ /#{subtopic}/i}).reject{|candidate| candidate.size < 50}
+    candidates = facts.select{|fact| fact =~ /#{subtopic}/i} + facts.select{|sentence| sentence =~ /#{subtopic}/i}
+    candidates = candidates.reject{|candidate| candidate.size < topic.size + 10}
+    candidates
   end
 
   def targeted_fact(subtopic)
-    targeted_fact_candidates(subtopic).sample
+    fact = targeted_fact_candidates(subtopic).sample
+    record_spoken(fact)
+    fact
   end
 
   def relational_fact(subtopic)
-    relational_facts(subtopic).sample
+    fact = targeted_fact_candidates(subtopic).sample
+    record_spoken(fact)
+    fact
   end
 
   def facts
-    @facts ||= corpus.select{ |sentence| sentence.include?("is a") || sentence.include?("was") }
+    corpus.reject{|sentence| spoken.include? sentence}.sort do |a,b|
+      (a =~ /is|was/i).to_i <=> (b =~ /is|was/i).to_i
+    end.reverse
+  end
+
+  def record_spoken(fact)
+    return unless fact
+    self.spoken << fact
+    update_attribute(:spoken, self.spoken.uniq)
   end
 
   def inspect
-    %{#<Alice::Context _id: #{self.id}", topic: "#{self.topic}", keywords: #{self.keywords.count}"}
+    %{#<Alice::Context _id: #{self.id}", topic: "#{self.topic}", keywords: #{self.keywords.count}, is_current: #{is_current}, expires_at: #{self.expires_at}"}
+  end
+
+  private
+
+  def position_of(word, sentence)
+    sentence =~ /#{word}/i
   end
 
 end

@@ -14,6 +14,25 @@ module Alice
         user.current_nick
       end
 
+      def self.talking_about(topic)
+        message = [
+          "I think we're talking about #{topic}",
+          "Well, the grownups were discussing #{topic}",
+          "I'm not sure, but I think we're discussing #{topic}",
+          "We're discussing #{topic}",
+          "I was just thinking about #{topic}",
+          "I think we were on the subject of #{topic}",
+          "How about them #{topic}s",
+          "#{topic} is the topic d'jour",
+          "It's all about #{topic}, amirite?",
+          "Today it's all about #{topic}",
+          "Our reading today is from the Book of #{topic.titleize}",
+          "Ah yes, #{topic}",
+          "Let's get back to talking about #{topic}",
+          "I'd like to look at #{topic} some more"
+        ].sample
+      end
+
       def self.thanks_response(who)
         message = [
           "You are most welcome, #{who}!",

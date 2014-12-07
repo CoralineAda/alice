@@ -54,6 +54,7 @@ module Handlers
       response << "I'm currently managing #{::User.count} users, #{::Item.count} items, #{::Actor.count} actors, and #{::Place.count} rooms."
       response << "I'm capable of responding to #{::Command.count} distinct commands."
       response << "I've overheard #{::OH.count} things and I know #{::Factoid.count} facts."
+      response << "I can converse on #{Alice::Context.count} different topics, including #{Alice::Context.with_keywords.sample.topic}."
       response << "Pretty cool, huh?"
       message.set_response(response.join("\r\n"))
     end

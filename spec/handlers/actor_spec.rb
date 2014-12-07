@@ -5,7 +5,7 @@ describe "Handlers::Actor" do
   let(:user)    { User.new(primary_nick: "fivetanley") }
   let(:message) { Message.new(user.primary_nick, "!talk Poe") }
   let(:handler) { Handlers::Actor.new(message: message) }
-  let(:actor)   { ::Actor.new }
+  let(:actor)   { Actor.create!(name: "Poe") }
   before do
     message.stub(:sender)  { user }
     handler.stub(:subject) { actor }

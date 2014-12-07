@@ -5,7 +5,7 @@ describe "Message Round Trip" do
   Command.delete_all
 
   let(:trigger_1)      { "!steal power from superman" }
-  let(:trigger_2)      { "steal power from superman" }
+  let(:trigger_2)      { "drain power from superman" }
   let(:trigger_3)      { "Alice, steal power from superman" }
   let(:emitted_struct) { Struct.new(:user) }
   let(:sender)         { User.new(primary_nick: "Lydia") }

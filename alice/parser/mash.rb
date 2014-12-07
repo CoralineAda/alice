@@ -10,21 +10,21 @@ module Alice
       attr_accessor :this_transfer_verb, :this_action_verb, :this_preposition
       attr_accessor :this_relation_verb, :this_topic, :this_noun, :this_adverb
       attr_accessor :relation_verb
-      attr_accessor :this_property, :this_greeting
+      attr_accessor :this_property, :this_greeting, :this_pronoun
 
       STRUCTURES = [
-        [:greeting, [:to_subject]],
+        [:to_greeting, [:to_subject]],
         [:to_object,        [:to_info_verb, [:to_object]],
                             [:to_info_verb, [:to_topic]],
                             [:to_info_verb, [:to_subject]]
         ],
         [:to_info_verb,
-                            [:to_object, [:to_subject]],
+                            [:to_pronoun],
                             [:to_adverb],
-                            [:to_subject],
                             [:to_subject, [:to_property]],
                             [:to_object, [:to_property]],
                             [:to_topic],
+                            [:to_object, [:to_subject]]
         ],
         [:to_action_verb,   [],
                             [:to_subject, [:to_object]],
@@ -50,6 +50,7 @@ module Alice
         state :object
         state :preposition
         state :person
+        state :pronoun
         state :subject
         state :item
         state :topic
@@ -87,6 +88,10 @@ module Alice
           transitions from: [:transfer_verb, :info_verb], to: :noun, guard: :has_noun?
         end
 
+        event :pronoun do
+          transitions from: :info_verb, to: :pronoun, guard: :has_pronoun?
+        end
+
         event :topic do
           transitions from: [:info_verb], to: :topic, guard: :has_topic?
         end
@@ -100,7 +105,7 @@ module Alice
         end
 
         event :subject do
-          transitions from: [:transfer_verb, :info_verb, :action_verb, :object], to: :subject, guard: :has_subject?
+          transitions from: [:greeting, :transfer_verb, :info_verb, :action_verb, :object], to: :subject, guard: :has_subject?
         end
 
         event :property do
@@ -118,17 +123,17 @@ module Alice
         structures.map do |structure|
           head, tail = structure.first, structure[1..-1]
           if can_transition_to?(head)
-            Alice::Util::Logger.info "*** Mash state is  \"#{head}\" ***"
+            Alice::Util::Logger.info "*** Mash state is  \"#{head}\" "
             self.public_send(head)
             sentence.remove(self.public_send(head.to_s.gsub(/to_/, 'this_')))
-            return unless tail.any?
+            return unless tail.present?
             parse_transfer(tail)
           end
         end
       end
 
       def can_transition_to?(event)
-        answer = aasm.may_fire_event?(event.to_s.gsub(/^to_/, '').to_sym)
+        aasm.may_fire_event?(event.to_s.gsub(/^to_/, '').to_sym)
       end
 
       def to_info_verb
@@ -145,6 +150,10 @@ module Alice
 
       def to_adverb
         adverb
+      end
+
+      def to_pronoun
+        pronoun
       end
 
       def to_transfer_verb
@@ -180,10 +189,10 @@ module Alice
         parse_transfer
         command
       rescue AASM::InvalidTransition => e
-        Alice::Util::Logger.info "*** Mash can't set state: \"#{e}\" ***"
+        Alice::Util::Logger.info "*** Mash can't set state: \"#{e}\" "
       ensure
-        Alice::Util::Logger.info "*** Final mash state is  \"#{aasm.current_state}\" ***"
-        Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" ***"
+        Alice::Util::Logger.info "*** Final mash state is  \"#{aasm.current_state}\" "
+        Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
         return command
       end
 
@@ -201,6 +210,12 @@ module Alice
 
       def has_preposition?
         self.this_preposition = any_content_in?(Alice::Parser::LanguageHelper::PREPOSITIONS)
+      end
+
+      def has_pronoun?
+        if self.this_pronoun = any_content_in?(Alice::Parser::LanguageHelper::PRONOUNS)
+          self.this_info_verb = "converse"
+        end
       end
 
       def info_verb?
@@ -237,14 +252,13 @@ module Alice
       def has_person?
         (command_string.predicate.present? && User.like(command_string.predicate)) ||
         (command_string.subject.present? && User.like(command_string.subject)) ||
-        User.from(command_string.subject)
+        User.from(command_string.subject) || User.from(command_string.predicate)
       end
 
       def has_object?
         self.this_object = Item.from(potential_nouns.join(' ')) ||
                            Beverage.from(potential_nouns.join(' ')) ||
                            Wand.from(potential_nouns.join(' '))
-        self.this_object = self.this_object && ! self.this_object.is_ephemeral
       end
 
       def has_noun?
@@ -260,31 +274,31 @@ module Alice
           if match = Alice::Context.any_from(command_string.subject, this_object)
             self.this_topic = match
             self.this_info_verb = "converse"
-            Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" ***"
+            Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" "
           end
         elsif match = Alice::Context.any_from(command_string.subject)
           self.this_topic = match
           self.this_info_verb = "converse"
-          Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" ***"
+          Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" "
         elsif match = Alice::Context.any_from(command_string.predicate)
           self.this_topic = match
           self.this_info_verb = "converse"
-          Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" ***"
+          Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" "
         elsif match = Alice::Context.current
           self.this_topic = match
           self.this_info_verb = "converse"
-          Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" ***"
+          Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" "
         end
       end
 
       def has_property?
         thing = self.this_subject || self.this_object
         map = thing.class::PROPERTIES.inject({}) do |hash, property|
-          hash[property] = property.to_s.split("_").reject{|value| value == "can"}
+          hash[property] = property.to_s.split("_").reject{|value| value == "can"}.map{|w| w.gsub("?","")}
           hash
         end
-        match = map.values.detect{|value_set| value_set.detect{|n| ([n] & sentence).count > 0} }
-        match = map.detect{|key, value| value == match}
+        candidate = (map.values.flatten & sentence).first
+        match = map.select{|k,v| v.include?(candidate) }.first
         self.this_property = match && match[0]
       end
 
@@ -292,16 +306,12 @@ module Alice
       # ========================================================================
 
       def potential_nouns
-        command_string.components -
-          ["Alice"] -
-          Alice::Parser::LanguageHelper::PREPOSITIONS -
-          Alice::Parser::LanguageHelper::ARTICLES -
-          Alice::Parser::LanguageHelper::INFO_VERBS -
-          Alice::Parser::LanguageHelper::INTERROGATIVES
+        command_string.probable_nouns
       end
 
       def command
-        @command ||=  Command.any_in(verbs: verb).first ||
+        return if state == :unparsed
+        @command ||=  Command.any_in(verbs: verb.to_s).first ||
                       Command.any_in(verbs: this_property).first ||
                       Command.any_in(indicators: verb).first ||
                       Command.any_in(indicators: this_greeting).first
