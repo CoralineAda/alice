@@ -123,7 +123,7 @@ class Alice::Context
 
   def relational_facts(subtopic)
     facts.select do |sentence|
-      next unless sentence =~ /\b#{subtopic}/
+      next unless sentence =~ /\b#{subtopic}/ix
       placement = position_of(subtopic.downcase, sentence.downcase)
       placement && placement.to_i < 100
     end
@@ -135,6 +135,16 @@ class Alice::Context
     candidates
   end
 
+  def declarative_fact(subtopic)
+    fact = relational_facts(subtopic).select do |sentence|
+      has_info_verb = sentence =~ /\b#{Alice::Parser::LanguageHelper::INFO_VERBS * '|\b'}/ix
+      placement = position_of(subtopic.downcase, sentence.downcase)
+      has_info_verb && placement && placement.to_i < 100
+    end.sample
+    record_spoken(fact)
+    fact
+  end
+
   def targeted_fact(subtopic)
     fact = targeted_fact_candidates(subtopic).sample
     record_spoken(fact)
@@ -142,7 +152,7 @@ class Alice::Context
   end
 
   def relational_fact(subtopic)
-    fact = targeted_fact_candidates(subtopic).sample
+    fact = relational_facts(subtopic).sample
     record_spoken(fact)
     fact
   end
@@ -166,7 +176,7 @@ class Alice::Context
   private
 
   def position_of(word, sentence)
-    sentence =~ /#{word}/i
+    sentence =~ /\b#{word}/i
   end
 
 end

@@ -62,7 +62,8 @@ module Handlers
     def fact_from(topic)
       return unless self.current_context
       return unless topic
-      self.current_context.relational_fact(topic.downcase)
+      fact = self.current_context.declarative_fact(topic.downcase)
+      fact ||= self.current_context.relational_fact(topic.downcase)
     end
 
     def global_context
