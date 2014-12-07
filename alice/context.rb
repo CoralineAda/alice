@@ -103,7 +103,7 @@ class Alice::Context
   end
 
   def has_spoken_about?(topic)
-    spoken.join(" ").include?(topic)
+    self.spoken.to_s.downcase.include?(topic.downcase)
   end
 
   def probable_nouns

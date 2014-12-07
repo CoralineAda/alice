@@ -39,14 +39,16 @@ module Handlers
 
     def default_response(topic=nil)
       if self.current_context && topic != self.current_context.topic
-        if self.current_context.has_spoken_about?(topic)
-          "I've told you everything I know about #{topic}."
-        else
-          "Sorry, but I don't understand how that relates to #{self.current_context.topic}."
-        end
+        text = topic.split.map do |word|
+          if self.current_context.has_spoken_about?(word)
+            text = "I've told you everything I know about that."
+          end
+        end.compact.first
+        text ||= "Sorry, but I don't understand how that relates to #{self.current_context.topic}."
       else
-        "I've told you all I know for now. Ask me about something else?"
+        text = "I've told you all I know for now. Ask me about something else?"
       end
+      text
     end
 
     def fact_from(topic)
