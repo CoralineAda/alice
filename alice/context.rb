@@ -93,7 +93,7 @@ class Alice::Context
       sanitized = sanitized.map(&:strip)
       sanitized
     rescue Exception => e
-      Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e} ***"
+      Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
     end
   end
 
@@ -111,9 +111,9 @@ class Alice::Context
   end
 
   def probable_nouns
-    re = Regexp.union(PREDICATE_INDICATORS.map{|w| /\s*\b#{Regexp.escape(w)}\b\s*/i})
+    re = Regexp.union(PREDICATE_INDICATORS.map{|w| /\b#{Regexp.escape(w)}\b/i})
     candidates = self.corpus.split(re).flatten
-    candidates = candidates.map{|candidate| candidate.gsub(/[^a-zA-Z]/, " ")}.compact
+    candidates = candidates.map{|candidate| candidate.gsub(/[^a-zA-Z]/x, " ")}.compact
     candidates = candidates.map(&:split).map(&:last).flatten.compact.map(&:downcase)
   end
 
@@ -123,8 +123,8 @@ class Alice::Context
 
   def relational_facts(subtopic)
     facts.select do |sentence|
+      next unless sentence =~ /\b#{subtopic}/
       placement = position_of(subtopic.downcase, sentence.downcase)
-      binding.pry
       placement && placement.to_i < 100
     end
   end
