@@ -5,22 +5,99 @@ module Handlers
     include PoroPlus
     include Behavior::HandlesCommands
 
+    attr_accessor :current_context
+
+    def initialize(*args)
+      self.current_context = global_context
+      super
+    end
+
     def converse
-      if this_topic = topic_from_subject
-        text = this_topic.relational_fact(command_string.predicate) || this_topic.describe
-      elsif this_topic = topic_from_predicate || Alice::Context.current
-        text = this_topic.relational_fact(command_string.predicate.split.last)
+      text ||= fact_from(subject) if set_context_from_subject
+      text ||= fact_from(predicate.split.last)
+      text ||= fact_from(predicate) if set_context_from_predicate
+      text ||= default_response(predicate)
+      set_response(text)
+    end
+
+    def give_context
+      text = if self.current_context
+        "I was just talking about #{self.current_context.topic}."
+      else
+        "I wasn't talking about anything in particular."
       end
-      this_topic && this_topic.current!
-      message.set_response(text.to_s)
+      set_response(text)
     end
 
-    def topic_from_predicate
-      command_string.predicate && this_topic = Alice::Context.any_from(command_string.subject, command_string.predicate)
+    private
+
+    def context_from(topic, subtopic=nil)
+      self.current_context = Alice::Context.any_from(topic.downcase, subtopic)
+      self.current_context ||= global_context
+      self.current_context
     end
 
-    def topic_from_subject
-      Alice::Context.any_from(command_string.subject)
+    def default_response(topic=nil)
+      if self.current_context && topic != self.current_context.topic
+        if self.current_context.has_spoken_about?(topic)
+          "I've told you everything I know about #{topic}."
+        else
+          "Sorry, but I don't understand how that relates to #{self.current_context.topic}."
+        end
+      else
+        "I've told you all I know for now. Ask me about something else?"
+      end
+    end
+
+    def fact_from(topic)
+      return unless self.current_context
+      return unless topic
+      self.current_context.relational_fact(topic.downcase)
+    end
+
+    def global_context
+      @global_context ||= Alice::Context.current
+    end
+
+    def predicate
+      @predicate ||= command_string.predicate
+    end
+
+    def set_context_from_predicate
+      return unless predicate
+      if self.current_context = context_from(predicate.downcase)
+        return false if self.current_context == global_context
+        update_context
+        return true
+      end
+    end
+
+    def set_context_from_subject
+      return unless subject
+      if self.current_context = context_from(subject.downcase)
+        return false if self.current_context == global_context
+        update_context
+        return true
+      end
+    end
+
+    def set_response(text)
+      return unless text
+      message.set_response((text + ".").gsub(/\.\.$/, '.'))
+    end
+
+    def subject
+      @subject ||= command_string.subject
+    end
+
+    def update_context
+      if self.current_context
+        self.current_context.current!
+      else
+        self.current_context = global_context
+      end
+      return if self.current_context == global_context
+      Alice::Util::Logger.info("*** Switching context to #{self.current_context.topic}")
     end
 
   end

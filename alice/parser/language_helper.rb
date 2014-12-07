@@ -23,7 +23,10 @@ module Alice
         "set",
         "tell",
         "think",
-        "was"
+        "was",
+        "do",
+        "does",
+        "did"
       ]
 
       RELATION_VERBS = [

@@ -10,10 +10,15 @@ module Handlers
     end
 
     def handle_bio(quoted)
-      command_string.raw_command.present? && update_bio(command_string.raw_command)
+      if ([command_string.predicate.downcase] & [subject.primary_nick, subject.alt_nicks].flatten).any?
+        return_bio
+      else
+        update_bio(command_string.raw_command)
+      end
     end
 
     def update_bio(quoted)
+      return unless quoted
       message.sender.update_bio(quoted)
       message.set_response("I've recorded the details in my notebook.")
     end

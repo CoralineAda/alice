@@ -15,11 +15,16 @@ class CommandString
   def probable_nouns
     re = Regexp.union(Alice::Parser::LanguageHelper::PREDICATE_INDICATORS.map{|w| /\s*\b#{Regexp.escape(w)}\b\s*/i})
     candidates = self.content.split(re).map(&:split).compact.flatten
-    candidates = candidates - [ "you", "your", "Alice", "Alice," ]
-    candidates = candidates - Alice::Parser::LanguageHelper::PRONOUNS
-    candidates = candidates - Alice::Parser::LanguageHelper::VERBS
-    candidates = candidates - Alice::Parser::LanguageHelper::INTERROGATIVES
-    candidates = candidates - Alice::Parser::LanguageHelper::NOUN_INDICATORS
+    remove_markers(candidates)
+  end
+
+  def remove_markers(list)
+    list = list - [ "you", "your", "Alice", "Alice," ]
+    list = list - Alice::Parser::LanguageHelper::PRONOUNS
+    list = list - Alice::Parser::LanguageHelper::VERBS
+    list = list - Alice::Parser::LanguageHelper::INTERROGATIVES
+    list = list - Alice::Parser::LanguageHelper::NOUN_INDICATORS
+    list
   end
 
   def has_predicate?
@@ -28,7 +33,9 @@ class CommandString
 
   def predicate
     return unless predicate_positions.max
-    components[(predicate_positions.max + 1)..-1].join(' ').gsub(/[\.\,\?\!]+$/, '')
+    candidates = components[(predicate_positions.max + 1)..-1]
+    candidates = remove_markers(candidates)
+    candidates.join(' ').gsub(/[\.\,\?\!]+$/, '')
   end
 
   def predicate_positions
