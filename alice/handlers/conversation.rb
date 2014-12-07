@@ -41,7 +41,9 @@ module Handlers
       if self.current_context && topic != self.current_context.topic
         text = topic.split.map do |word|
           if self.current_context.has_spoken_about?(word)
-            text = "I've told you everything I know about that."
+            "I've told you everything I know about that."
+          else
+            fact_from(topic)
           end
         end.compact.first
         if text.nil? && set_context_from_predicate
