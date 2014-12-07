@@ -26,12 +26,6 @@ describe CommandString do
 
   describe "#subject" do
 
-    context "without predicate" do
-      it "returns the subject" do
-        expect(command.subject).to eq("the object")
-      end
-    end
-
     context "with predicate" do
       it "returns the subject" do
         expect(predicate_command.subject).to eq("the relic")
@@ -44,9 +38,6 @@ describe CommandString do
     it "detects a predicate" do
       expect(predicate_command.has_predicate?).to be_true
     end
-    it "returns false if no predicate" do
-      expect(command.has_predicate?).to be_false
-    end
   end
 
   describe "#predicate" do
@@ -54,7 +45,7 @@ describe CommandString do
       expect(predicate_command.predicate).to eq("Indie")
     end
     it "extracts its 'from' predicate" do
-      expect(alt_predicate_command.predicate).to eq("the rich")
+      expect(alt_predicate_command.predicate).to eq("rich")
     end
   end
 

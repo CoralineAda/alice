@@ -58,7 +58,7 @@ module Handlers
           message.set_response("Sorry, they're not accepting gifts right now.")
         end
       else
-          message.set_response("Sorry, I don't see #{command_string.predicate} here right now.")
+        message.set_response("Sorry, I don't see #{command_string.predicate} here right now.")
       end
     end
 

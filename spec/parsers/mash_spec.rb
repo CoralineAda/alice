@@ -6,7 +6,8 @@ describe "Alice::Parser::Mash" do
     @robyn  = User.create!(primary_nick: "robyn")
     @syd    = User.create!(primary_nick: "syd")
     @tomato = Item.create!(name: "tomato")
-    @factoid = Factoid.create!(text: "Briggs features in the Robyn Hitchcock song 'A Man\'s Gotta Know'")
+    @command = Command.create!(name: "get_fact", indicators: ["know", "fact", "factoid", "tell"], handler_class: "Handlers::Factoid", handler_method: "get")
+    @factoid = Factoid.create!(user: @robyn, text: "Briggs features in the Robyn Hitchcock song 'A Man\'s Gotta Know'")
   end
 
   context "Alice, say hello to Syd" do
@@ -24,17 +25,21 @@ describe "Alice::Parser::Mash" do
 
   end
 
-  context "Alice, what do you know about Briggs?" do
+  context "Alice, what do you know about Robyn?" do
 
-    let(:command_string)  { CommandString.new("Alice, what do you know about Briggs?") }
+    let(:command_string)  { CommandString.new("Alice, what do you know about Robyn?") }
     let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
     before do
       parser.parse!
     end
 
-    it "recognizes topics" do
-      expect(parser.this_topic).to eq(@factoid)
+    it "recognizes Robyn" do
+      expect(parser.this_subject).to eq(@robyn)
+    end
+
+    it "recognizes factoids" do
+      expect(parser.command).to eq(@command)
     end
 
   end
@@ -96,7 +101,7 @@ describe "Alice::Parser::Mash" do
 
     context "happy path" do
 
-      let(:command_string)  { CommandString.new("Alice, what is Syd's twitter handle?") }
+      let(:command_string)  { CommandString.new("Alice, what is Syd twitter handle?") }
       let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
       before do

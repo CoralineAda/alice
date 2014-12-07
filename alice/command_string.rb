@@ -8,13 +8,13 @@ class CommandString
 
   def components
     @components ||= self.content.split(' ').reject{|w| w.blank? }.map do |c|
-      c.gsub(/\'s/, '').gsub(/^\!/,'').gsub(/\+/, '').gsub(/[\?\!\.\,]$/, '')
+      c.gsub(/\'s/, 'for').gsub(/^\!/,'').gsub(/\+/, '').gsub(/[\?\!\.\,]$/, '')
     end
   end
 
   def probable_nouns
     re = Regexp.union(Alice::Parser::LanguageHelper::PREDICATE_INDICATORS.map{|w| /\s*\b#{Regexp.escape(w)}\b\s*/i})
-    candidates = self.content.split(re).map(&:split).compact.flatten
+    candidates = self.content.split(re).map(&:split).compact.flatten.map{|word| word.gsub(/[\.\?\!]?$/, '')}
     remove_markers(candidates)
   end
 
@@ -62,7 +62,7 @@ class CommandString
   end
 
   def verb
-    components[0].gsub(/^!/, '')
+    components[0].to_s.gsub(/^!/, '')
   end
 
 end
