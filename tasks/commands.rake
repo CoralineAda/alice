@@ -4,7 +4,7 @@ namespace :commands do
 
   desc "Import commands"
   task :import do
-    system 'ruby db/commands/command_dump.rb'
+    system 'ruby db/commands/import.rb'
   end
 
   desc "Export existing commands"
