@@ -60,11 +60,11 @@ module Handlers
     end
 
     def source
-      message.set_response("My source code is available at https://github.com/Bantik/alice")
+      message.set_response("My source code is available at #{ENV['GITHUB_URL']}")
     end
 
     def bug
-      message.set_response("Please submit bug reports at https://github.com/Bantik/alice/issues")
+      message.set_response("Please submit bug reports at #{ENV['ISSUES_URL']}")
     end
 
     def one_ring
