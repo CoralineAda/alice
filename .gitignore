@@ -1,3 +1,4 @@
+config/mongoid.yml
 db/backups/*/**
 .env
 .env.production
