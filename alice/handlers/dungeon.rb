@@ -31,6 +31,8 @@ module Handlers
       elsif command_string.subject.length > 0 && subject = command_string.subject
         if obj = (::User.from(subject) || ::Item.from(subject) || ::Beverage.from(subject) || ::Machine.from(subject) || ::Actor.from(subject))
           response = obj.describe
+        elsif Place.current.description =~ /#{command_string.subject}/i
+          response = Alice::Util::Randomizer.item_description(command_string.subject)
         else
           response = "I don't see that here."
         end

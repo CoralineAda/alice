@@ -36,7 +36,7 @@ describe CommandString do
 
   describe "#has_predicate?" do
     it "detects a predicate" do
-      expect(predicate_command.has_predicate?).to be_true
+      expect(predicate_command.has_predicate?).to be_truthy
     end
   end
 

@@ -5,7 +5,7 @@ gem 'activesupport'
 gem 'brewery_db'
 gem 'capistrano', '~> 3.3.0'
 gem 'cinch', github: 'CoralineAda/cinch', branch: 'nick_change_user_fix'
-gem 'database_cleaner', :github => 'bmabey/database_cleaner', group: :test
+gem 'database_cleaner', '~> 1.3.0', group: :test #s :github => 'bmabey/database_cleaner', group: :test
 gem 'dotenv'
 gem 'google-search', '~> 1.0'
 gem 'inflections'

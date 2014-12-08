@@ -12,7 +12,7 @@ describe "Handlers::Inventory" do
 
   describe "#inventory" do
     it "is wired to a working method" do
-      expect(user.respond_to?(:inventory)).to be_true
+      expect(user.respond_to?(:inventory)).to be_truthy
     end
     it "calls the correct method" do
       expect(user).to receive(:inventory)

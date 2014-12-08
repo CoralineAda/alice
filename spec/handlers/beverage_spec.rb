@@ -12,7 +12,7 @@ describe "Handlers::Beverage" do
 
   describe "#brew" do
     it "is wired to a working method" do
-      expect(::Beverage.respond_to?(:brew)).to be_true
+      expect(::Beverage.respond_to?(:brew)).to be_truthy
     end
     it "calls Beverage.brew" do
       expect(::Beverage).to receive(:brew)
@@ -22,7 +22,7 @@ describe "Handlers::Beverage" do
 
   describe "#drink" do
     it "is wired to a working method" do
-      expect(::Beverage.respond_to?(:consume)).to be_true
+      expect(::Beverage.respond_to?(:consume)).to be_truthy
     end
     it "calls Beverage.brew" do
       expect(::Beverage).to receive(:consume)

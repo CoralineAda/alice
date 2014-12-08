@@ -13,7 +13,7 @@ describe "Handlers::Twitter" do
 
   describe "#set" do
     it "is wired to a working method" do
-      expect(user.respond_to?(:set_twitter_handle)).to be_true
+      expect(user.respond_to?(:set_twitter_handle)).to be_truthy
     end
     it "calls the correct method" do
       expect(user).to receive(:set_twitter_handle)
@@ -23,7 +23,7 @@ describe "Handlers::Twitter" do
 
   describe "#get" do
     it "is wired to a working method" do
-      expect(user.respond_to?(:formatted_twitter_handle)).to be_true
+      expect(user.respond_to?(:formatted_twitter_handle)).to be_truthy
     end
     it "calls the correct method" do
       expect(user).to receive(:formatted_twitter_handle)

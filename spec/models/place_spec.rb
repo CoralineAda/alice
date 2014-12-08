@@ -3,31 +3,31 @@ require 'spec_helper'
 describe Place do
 
   describe ".exits_for_neighbors" do
-  
+
     before do
       Place.delete_all
-      Place.any_instance.stub(:ensure_description) { true }  
+      Place.any_instance.stub(:ensure_description) { true }
       @place = Place.create!(x:0, y:0, is_current: true )
       @north = Place.create!(x: 0, y: -1)
       @south = Place.create!(x: 0, y: 1)
       @east = Place.create!(x: 1, y: 0)
       @west = Place.create!(x: -1, y: 0)
     end
-    
+
     it "detects its neighbors" do
       @place.neighbors.each do |neighbor|
-        expect([@north, @south, @east, @west].include?(neighbor)).to be_true
+        expect([@north, @south, @east, @west].include?(neighbor)).to be_truthy
       end
     end
 
   end
-  
+
   describe ".generate" do
 
     before do
-      Place.delete_all    
+      Place.delete_all
     end
-  
+
     it "matches exits between rooms" do
       origin = Place.create(x: 0, y: 0, exits: ["east"])
 

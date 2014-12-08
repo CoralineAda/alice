@@ -13,7 +13,7 @@ describe "Handlers::Actor" do
 
   describe "#talk" do
     it "is wired to a working method" do
-      expect(actor.respond_to?(:speak)).to be_true
+      expect(actor.respond_to?(:speak)).to be_truthy
     end
     it "calls the correct method" do
       expect(actor).to receive(:speak)

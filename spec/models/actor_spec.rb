@@ -19,7 +19,7 @@ describe Actor do
 
       it "sets in_play to false" do
         Actor.reset_all
-        expect(actor_1.in_play).to be_false
+        expect(actor_1.in_play).to be_falsey
       end
 
       it "clears place_id" do
@@ -60,7 +60,7 @@ describe Actor do
 
       it "returns false" do
         Alice::Util::Randomizer.stub(:one_chance_in) { false }
-        expect(actor.perform_random_action).to be_false
+        expect(actor.perform_random_action).to be_falsey
       end
 
     end
@@ -73,7 +73,7 @@ describe Actor do
 
       it "performs a random action" do
         Alice::Util::Randomizer.stub(:one_chance_in) { true }
-        expect(actor.perform_random_action).to be_true
+        expect(actor.perform_random_action).to be_truthy
       end
 
     end

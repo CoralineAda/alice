@@ -13,7 +13,7 @@ describe "Handlers::Factoid" do
 
   describe "#set" do
     it "is wired to a working method" do
-      expect(user.respond_to?(:set_factoid)).to be_true
+      expect(user.respond_to?(:set_factoid)).to be_truthy
     end
     it "calls the correct method" do
       expect(user).to receive(:set_factoid)

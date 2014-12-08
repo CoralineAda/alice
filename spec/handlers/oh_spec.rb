@@ -12,7 +12,7 @@ describe "Handlers::OH" do
 
   describe "#set" do
     it "is wired to a working method" do
-      expect(::OH.respond_to?(:from)).to be_true
+      expect(::OH.respond_to?(:from)).to be_truthy
     end
     it "calls the correct method" do
       expect(::OH).to receive(:from)
@@ -22,7 +22,7 @@ describe "Handlers::OH" do
 
   describe "#get" do
     it "is wired to a working method" do
-      expect(::OH.respond_to?(:sample)).to be_true
+      expect(::OH.respond_to?(:sample)).to be_truthy
     end
     it "calls the correct method" do
       expect(::OH).to receive(:sample) { ::OH.new }

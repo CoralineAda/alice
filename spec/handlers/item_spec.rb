@@ -16,7 +16,7 @@ describe "Handlers::Item" do
 
   describe "#destroy" do
     it "is wired to a working method" do
-      expect(item.respond_to?(:destruct)).to be_true
+      expect(item.respond_to?(:destruct)).to be_truthy
     end
     it "calls item destruct" do
       expect(item).to receive(:destruct)
@@ -26,7 +26,7 @@ describe "Handlers::Item" do
 
   describe "#drop" do
     it "is wired to a working method" do
-      expect(item.respond_to?(:drop)).to be_true
+      expect(item.respond_to?(:drop)).to be_truthy
     end
     it "calls item drop" do
       expect(item).to receive(:drop)
@@ -36,7 +36,7 @@ describe "Handlers::Item" do
 
   describe "#forge" do
     it "is wired to a working method" do
-      expect(::Item.respond_to?(:forge)).to be_true
+      expect(::Item.respond_to?(:forge)).to be_truthy
     end
     it "calls forge" do
       expect(::Item).to receive(:forge)
@@ -52,7 +52,7 @@ describe "Handlers::Item" do
       allow(recipient).to receive(:accepts_gifts?) { true }
     end
     it "is wired to a working method" do
-      expect(item.respond_to?(:transfer_to)).to be_true
+      expect(item.respond_to?(:transfer_to)).to be_truthy
     end
     it "calls item transer_to" do
       expect(item).to receive(:transfer_to)
@@ -64,7 +64,7 @@ describe "Handlers::Item" do
 
   describe "#play" do
     it "is wired to a working method" do
-      expect(item.respond_to?(:play)).to be_true
+      expect(item.respond_to?(:play)).to be_truthy
     end
     it "calls item play" do
       expect(item).to receive(:play)
@@ -74,7 +74,7 @@ describe "Handlers::Item" do
 
   describe "#read" do
     it "is wired to a working method" do
-      expect(item.respond_to?(:read)).to be_true
+      expect(item.respond_to?(:read)).to be_truthy
     end
     it "calls item read" do
       expect(item).to receive(:read)
@@ -84,7 +84,7 @@ describe "Handlers::Item" do
 
   describe "#steal" do
     it "is wired to a working method" do
-      expect(user.respond_to?(:steal)).to be_true
+      expect(user.respond_to?(:steal)).to be_truthy
     end
     it "calls item transer_to" do
       expect(user).to receive(:steal)

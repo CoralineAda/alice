@@ -14,6 +14,20 @@ module Alice
         user.current_nick
       end
 
+      def self.cant_pick_up(thing)
+        message = [
+          "I wouldn't touch that if I were you.",
+          "Leave the #{thing} alone.",
+          "Nope nope nope, not gonna let you do that.",
+          "But the #{thing.singularize} really ties the room together!",
+          "Turns out it's just painted on.",
+          "This place just wouldn't be the same without a #{thing.singularize}, sorry.",
+          "!forge your own #{thing}!",
+          "It's glued in place!",
+          "It's too heavy."
+        ].sample
+      end
+
       def self.i_dont_know
         message = [
           "I'm not sure.",

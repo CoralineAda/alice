@@ -14,7 +14,7 @@ describe "Handlers::Greeting" do
 
   describe "#greet_sender" do
     it "is wired to a working method" do
-      expect(::Greeting.respond_to?(:greet)).to be_true
+      expect(::Greeting.respond_to?(:greet)).to be_truthy
     end
     it "calls the correct method" do
       expect(::Greeting).to receive(:greet)
