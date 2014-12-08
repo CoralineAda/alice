@@ -38,7 +38,7 @@ module Handlers
     end
 
     def default_response(topic)
-      return "I've told you all I know for now. Ask me about something else?" if facts_exhausted?(topic)
+      return Alice::Util::Randomizer.i_dont_know if facts_exhausted?(topic)
       return "I don't know what we're talking about" if no_context?
       return Alice::Util::Randomizer.talking_about(self.current_context.topic)
     end
@@ -70,7 +70,7 @@ module Handlers
 
     def set_context_from_predicate
       return unless predicate && predicate.present?
-      return if (command_string.components & Alice::Parser::LanguageHelper::PRONOUNS).count > 0
+      return if predicate.include? Alice::Parser::LanguageHelper::PRONOUNS
       if self.current_context = context_from(predicate.downcase)
         return false if self.current_context == global_context
         update_context
@@ -109,4 +109,3 @@ module Handlers
   end
 
 end
-

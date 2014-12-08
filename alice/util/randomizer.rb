@@ -14,6 +14,26 @@ module Alice
         user.current_nick
       end
 
+      def self.i_dont_know
+        message = [
+          "I'm not sure.",
+          "I don't know.",
+          "That is not clear to me.",
+          "Yes. I mean no! I mean I'm not sure.",
+          "I'm uncertain about that.",
+          "That's a tough one.",
+          "I only know what I read on Wikipedia.",
+          "Let me Google that for you.",
+          "The world may never know.",
+          "Some things are not meant to be known by mere mortals.",
+          "Some questions are best left unanswered.",
+          "Who knows?",
+          "Outlook unclear; ask again later."
+          "What a quandry!",
+          "Science may never find an answer."
+        ].sample  
+      end
+      
       def self.talking_about(topic)
         message = [
           "I think we're talking about #{topic}",
