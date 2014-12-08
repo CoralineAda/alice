@@ -33,6 +33,7 @@ module Handlers
 
     def context_from(topic, subtopic=nil)
       self.current_context = Alice::Context.any_from(topic.downcase, subtopic)
+      self.current_context ||= Alice::Context.find_or_create(topic.downcase)
       self.current_context ||= global_context
       self.current_context
     end
@@ -40,11 +41,9 @@ module Handlers
     def default_response(topic=nil)
       if self.current_context && topic != self.current_context.topic
         text = topic.split.map do |word|
-          if self.current_context.has_spoken_about?(word)
-            "I've told you everything I know about that."
-          else
-            fact_from(topic)
-          end
+          fact = fact_from(topic)
+          next if fact && self.current_context.has_spoken_about?(fact)
+          fact
         end.compact.first
         if text.nil? && set_context_from_predicate
           text ||= self.current_context.describe
@@ -62,6 +61,7 @@ module Handlers
     def fact_from(topic)
       return unless self.current_context
       return unless topic
+      puts "!!! => #{topic}"
       fact = self.current_context.declarative_fact(topic.downcase)
       fact ||= self.current_context.relational_fact(topic.downcase)
     end

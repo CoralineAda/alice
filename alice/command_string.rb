@@ -8,7 +8,7 @@ class CommandString
 
   def components
     @components ||= self.content.split(' ').reject{|w| w.blank? }.map do |c|
-      c.gsub(/\'s/, 'for').gsub(/^\!/,'').gsub(/\+/, '').gsub(/[\?\!\.\,]$/, '')
+      c.gsub(/\'s/, ' for').gsub(/^\!/,'').gsub(/\+/, '').gsub(/[\?\!\.\,]$/, '')
     end
   end
 

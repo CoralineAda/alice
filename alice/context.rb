@@ -89,6 +89,7 @@ class Alice::Context
       sanitized = ::Sanitize.fragment(Wikipedia.find(self.topic).sanitized_content)
       sanitized = sanitized.split(/[\.\:\[\]\n\*\=] /)
       sanitized = sanitized.reject{|w| w == " "}
+      sanitized = sanitized.reject{|w| w == "["}
       sanitized = sanitized.reject(&:empty?)
       sanitized = sanitized.map(&:strip)
       sanitized
@@ -112,7 +113,7 @@ class Alice::Context
 
   def probable_nouns
     re = Regexp.union(PREDICATE_INDICATORS.map{|w| /\b#{Regexp.escape(w)}\b/i})
-    candidates = self.corpus.split(re).flatten
+    candidates = self.corpus.to_a.split(re).flatten
     candidates = candidates.map{|candidate| candidate.gsub(/[^a-zA-Z]/x, " ")}.compact
     candidates = candidates.map(&:split).map(&:last).flatten.compact.map(&:downcase)
   end
@@ -158,7 +159,10 @@ class Alice::Context
   end
 
   def facts
-    corpus.reject{|sentence| spoken.include? sentence}.sort do |a,b|
+    return [] unless corpus
+    candidates = corpus.reject{|sentence| spoken.include? sentence}
+    candidates = candidates.reject{|sentence| sentence.include? "http"}
+    candidates.to_a.sort do |a,b|
       (a =~ /is|was/i).to_i <=> (b =~ /is|was/i).to_i
     end.reverse
   end
