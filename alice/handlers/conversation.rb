@@ -40,17 +40,17 @@ module Handlers
     def default_response(topic)
       return "I've told you all I know for now. Ask me about something else?" if facts_exhausted?(topic)
       return "I don't know what we're talking about" if no_context?
-      return "I have no idea."
+      return Alice::Util::Randomizer.talking_about(self.current_context.topic)
     end
-  
+
     def no_context?
       self.current_context.nil?
     end
-  
+
     def facts_exhausted?(topic)
       fact_from(topic, false).nil?
     end
-  
+
   # Don't switch contexts if there's a pronoun in the topic
 #     def default_response(topic=nil)
 #       if self.current_context && topic != self.current_context.topic
