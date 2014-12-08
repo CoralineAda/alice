@@ -42,7 +42,7 @@ module Handlers
       if self.current_context && topic != self.current_context.topic
         text = topic.split.map do |word|
           fact = fact_from(topic)
-          next if fact && self.current_context.has_spoken_about?(fact)
+          fact = "That's all I've got" if fact && self.current_context.has_spoken_about?(fact)
           fact
         end.compact.first
         if text.nil? && set_context_from_predicate
@@ -61,7 +61,6 @@ module Handlers
     def fact_from(topic)
       return unless self.current_context
       return unless topic
-      puts "!!! => #{topic}"
       fact = self.current_context.declarative_fact(topic.downcase)
       fact ||= self.current_context.relational_fact(topic.downcase)
     end
