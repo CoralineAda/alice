@@ -90,8 +90,9 @@ class Alice::Context
       sanitized = sanitized.split(/[\.\:\[\]\n\*\=] /)
       sanitized = sanitized.reject{|w| w == " "}
       sanitized = sanitized.reject{|w| w == "["}
-      sanitized = sanitized.reject{|w| w == "==="}
+      sanitized = sanitized.reject{|w| w =~ /^\=/}
       sanitized = sanitized.reject(&:empty?)
+      sanitized = sanitized.reject{|w| w =~ /^\*/}
       sanitized = sanitized.reject{|s| s.size < 50}
       sanitized = sanitized.map(&:strip)
       sanitized
