@@ -1,8 +1,8 @@
-## Setting Up a Local Alice for Development
-
-### Overall Architecture
+## Overall Architecture
 
 ![Alice Architecture](https://github.com/CoralineAda/alice/blob/master/doc/architecture.png)
+
+## Setting Up a Local Alice for Development
 
 ### Prepping Alice
 
