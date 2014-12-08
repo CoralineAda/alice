@@ -13,7 +13,6 @@ module Handlers
     end
 
     def converse
-#      text ||= fact_from(subject) if set_context_from_subject
       text = fact_from(predicate.split.last)
       text ||= fact_from(predicate) if set_context_from_predicate
       text ||= default_response(predicate)
@@ -38,27 +37,42 @@ module Handlers
       self.current_context
     end
 
-    def default_response(topic=nil)
-      if self.current_context && topic != self.current_context.topic
-        text = topic.split.map do |word|
-          fact = fact_from(topic)
-          fact = "That's all I've got" if fact && self.current_context.has_spoken_about?(fact)
-          fact
-        end.compact.first
-        if text.nil? && set_context_from_predicate
-          text ||= self.current_context.describe
-        else
-          text ||= Alice::Util::Randomizer.talking_about(self.current_context.topic)
-          text ||= "I don't know what we're talking about."
-        end
-      else
-        text = "I've told you all I know for now. Ask me about something else?"
-      end
-      text ||= "I have no idea."
-      text
+    def default_response(topic)
+      return "I've told you all I know for now. Ask me about something else?" if facts_exhausted?(topic)
+      return "I don't know what we're talking about" if no_context?
+      return "I have no idea."
     end
+  
+    def no_context?
+      self.current_context.nil?
+    end
+  
+    def facts_exhausted?(topic)
+      fact_from(topic, false).nil?
+    end
+  
+  # Don't switch contexts if there's a pronoun in the topic
+#     def default_response(topic=nil)
+#       if self.current_context && topic != self.current_context.topic
+#         text = topic.split.map do |word|
+#           fact = fact_from(topic)
+#           fact = "That's all I've got" if fact && self.current_context.has_spoken_about?(fact)
+#           fact
+#         end.compact.first
+#         if text.nil? && set_context_from_predicate
+#           text ||= self.current_context.describe
+#         else
+#           text ||= Alice::Util::Randomizer.talking_about(self.current_context.topic)
+#           text ||= "I don't know what we're talking about."
+#         end
+#       else
+#         text = "I've told you all I know for now. Ask me about something else?"
+#       end
+#       text ||= "I have no idea."
+#       text
+#     end
 
-    def fact_from(topic)
+    def fact_from(topic, speak=true)
       return unless self.current_context
       return unless topic
       fact = self.current_context.declarative_fact(topic.downcase)

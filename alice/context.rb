@@ -31,7 +31,6 @@ class Alice::Context
   end
 
   def self.from(topic)
-    puts topic
     topic_keywords = topic.to_s.downcase.to_a
     topic_keywords = topic_keywords - Alice::Parser::LanguageHelper::PREDICATE_INDICATORS
     if exact_match = any_in(topic: topic_keywords).first
@@ -139,25 +138,25 @@ class Alice::Context
     candidates
   end
 
-  def declarative_fact(subtopic)
+  def declarative_fact(subtopic, spoken=true)
     fact = relational_facts(subtopic).select do |sentence|
       has_info_verb = sentence =~ /\b#{Alice::Parser::LanguageHelper::INFO_VERBS * '|\b'}/ix
       placement = position_of(subtopic.downcase, sentence.downcase)
       has_info_verb && placement && placement.to_i < 100
     end.sample
-    record_spoken(fact)
+    record_spoken(fact) if spoken
     fact
   end
 
-  def targeted_fact(subtopic)
+  def targeted_fact(subtopic, spoken=true)
     fact = targeted_fact_candidates(subtopic).sample
-    record_spoken(fact)
+    record_spoken(fact) if spoken
     fact
   end
 
-  def relational_fact(subtopic)
+  def relational_fact(subtopic, spoken=true)
     fact = relational_facts(subtopic).sample
-    record_spoken(fact)
+    record_spoken(fact) if spoken
     fact
   end
 
