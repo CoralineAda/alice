@@ -45,6 +45,8 @@ module Handlers
           fact = "That's all I've got" if fact && self.current_context.has_spoken_about?(fact)
           fact
         end.compact.first
+        Alice::Util::Logger.info("*** text is currently #{text}")
+
         if text.nil? && set_context_from_predicate
           text ||= self.current_context.describe
         else
