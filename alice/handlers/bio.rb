@@ -12,7 +12,7 @@ module Handlers
     private
 
     def handle_bio(quoted)
-      if command_string.predicate
+      if command_string.predicate && subject
         update_bio(command_string.raw_command)
       else
         return_bio
@@ -20,6 +20,7 @@ module Handlers
     end
 
     def return_bio
+      return unless subject
       if subject.formatted_bio
         message.set_response(subject.formatted_bio)
       else

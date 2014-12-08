@@ -13,8 +13,8 @@ module Handlers
     end
 
     def converse
-      text ||= fact_from(subject) if set_context_from_subject
-      text ||= fact_from(predicate.split.last)
+#      text ||= fact_from(subject) if set_context_from_subject
+      text = fact_from(predicate.split.last)
       text ||= fact_from(predicate) if set_context_from_predicate
       text ||= default_response(predicate)
       set_response(text)
@@ -45,8 +45,6 @@ module Handlers
           fact = "That's all I've got" if fact && self.current_context.has_spoken_about?(fact)
           fact
         end.compact.first
-        Alice::Util::Logger.info("*** text is currently #{text}")
-
         if text.nil? && set_context_from_predicate
           text ||= self.current_context.describe
         else
@@ -64,7 +62,9 @@ module Handlers
       return unless self.current_context
       return unless topic
       fact = self.current_context.declarative_fact(topic.downcase)
+      fact ||= self.current_context.declarative_fact(Lingua.stemmer(topic.downcase))
       fact ||= self.current_context.relational_fact(topic.downcase)
+      fact ||= self.current_context.relational_fact(Lingua.stemmer(topic.downcase))
     end
 
     def global_context
@@ -76,7 +76,7 @@ module Handlers
     end
 
     def set_context_from_predicate
-      return unless predicate
+      return unless predicate && predicate.present?
       if self.current_context = context_from(predicate.downcase)
         return false if self.current_context == global_context
         update_context

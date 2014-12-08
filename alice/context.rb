@@ -31,12 +31,13 @@ class Alice::Context
   end
 
   def self.from(topic)
-    topic_keywords = topic.to_a.compact.map(&:split).flatten.map(&:downcase)
+    puts topic
+    topic_keywords = topic.to_s.downcase.to_a
     topic_keywords = topic_keywords - Alice::Parser::LanguageHelper::PREDICATE_INDICATORS
     if exact_match = any_in(topic: topic_keywords).first
       return exact_match
     end
-    any_in(keywords: topic_keywords).sort do |a,b|
+    any_in(keywords: topic_keywords.join(" ")).sort do |a,b|
       (a.keywords & topic_keywords).count <=> (b.keywords & topic_keywords).count
     end.last
   end
@@ -90,7 +91,9 @@ class Alice::Context
       sanitized = sanitized.split(/[\.\:\[\]\n\*\=] /)
       sanitized = sanitized.reject{|w| w == " "}
       sanitized = sanitized.reject{|w| w == "["}
+      sanitized = sanitized.reject{|w| w == "==="}
       sanitized = sanitized.reject(&:empty?)
+      sanitized = sanitized.reject{|s| s.size < 50}
       sanitized = sanitized.map(&:strip)
       sanitized
     rescue Exception => e
