@@ -1,9 +1,12 @@
+require 'active_support/inflector'
+
 module Handlers
 
   class Conversation
 
     include PoroPlus
     include Behavior::HandlesCommands
+    include ActiveSupport
 
     attr_accessor :current_context
 
@@ -54,10 +57,14 @@ module Handlers
     def fact_from(topic, speak=true)
       return unless self.current_context
       return unless topic
+
       fact = self.current_context.declarative_fact(topic.downcase, speak)
-      fact ||= self.current_context.declarative_fact(Lingua.stemmer(topic.downcase), speak)
+      fact ||= self.current_context.declarative_fact(topic.downcase.pluralize, speak)
+      fact ||= self.current_context.declarative_fact(topic.downcase.singularize, speak)
+
       fact ||= self.current_context.relational_fact(topic.downcase, speak)
-      fact ||= self.current_context.relational_fact(Lingua.stemmer(topic.downcase), speak)
+      fact ||= self.current_context.relational_fact(topic.downcase.pluralize, speak)
+      fact ||= self.current_context.relational_fact(topic.downcase.singularize, speak)
     end
 
     def global_context
@@ -70,7 +77,7 @@ module Handlers
 
     def set_context_from_predicate
       return unless predicate && predicate.present?
-      return if predicate.include? Alice::Parser::LanguageHelper::PRONOUNS
+      return if (command_string.components & Alice::Parser::LanguageHelper::PRONOUNS).any?
       if self.current_context = context_from(predicate.downcase)
         return false if self.current_context == global_context
         update_context
