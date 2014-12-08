@@ -28,12 +28,12 @@ module Alice
           "Some things are not meant to be known by mere mortals.",
           "Some questions are best left unanswered.",
           "Who knows?",
-          "Outlook unclear; ask again later."
+          "Outlook unclear; ask again later.",
           "What a quandry!",
           "Science may never find an answer."
-        ].sample  
+        ].sample
       end
-      
+
       def self.talking_about(topic)
         message = [
           "I think we're talking about #{topic}",
