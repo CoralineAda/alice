@@ -39,7 +39,7 @@ class Processor
   end
 
   def respond
-    if response = self.message.response
+    if response = Alice::Commander.process(self.message).response
       if self.message.response_type == "emote"
         Alice::Util::Mediator.emote(self.channel, response)
       else

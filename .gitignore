@@ -4,7 +4,7 @@ db/backups/*/**
 .console_history
 .DS_Store
 images/*
-doc/*
+doc/fukuzatsu/*
 log/*
 arkham.hect/*
 .capistrano/metrics

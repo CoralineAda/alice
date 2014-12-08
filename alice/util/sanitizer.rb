@@ -4,10 +4,11 @@ module Alice
 
     class Sanitizer
 
+      # FIXME why isn't this being used instead of message.filtered_response?
       def self.filter_for(user, text)
-        text = Alice::Filter::Drunk.new.process(text) if user.is_drunk?
-        text = Alice::Filter::Dazed.new.process(text) if user.is_dazed?
-        text = Alice::Filter::Disoriented.new.process(text) if user.is_disoriented?
+        text = Alice::Filters::Drunk.new.process(text) if user.drunk?
+        text = Alice::Filters::Dazed.new.process(text) if user.dazed?
+        text = Alice::Filters::Disoriented.new.process(text) if user.disoriented?
       end
 
       def self.process(text)

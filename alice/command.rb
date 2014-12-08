@@ -1,5 +1,3 @@
-require 'pry'
-
 class Command
 
   include Mongoid::Document
