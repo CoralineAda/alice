@@ -14,7 +14,7 @@ module Behavior
       self.is_hidden = false if self.respond_to?(:is_hidden)
       self.picked_up_at = nil if self.respond_to?(:picked_up_at)
       self.save
-      Alice::Util::Randomizer.drop_message(name, previous_owner)
+      Util::Randomizer.drop_message(name, previous_owner)
     end
 
     def hide
@@ -24,7 +24,7 @@ module Behavior
       self.is_hidden = true if self.respond_to?(:is_hidden)
       self.picked_up_at = nil if self.respond_to?(:picked_up_at)
       self.save
-      Alice::Util::Randomizer.hide_message(name_with_article, owner_name)
+      Util::Randomizer.hide_message(name_with_article, owner_name)
     end
 
     def remove

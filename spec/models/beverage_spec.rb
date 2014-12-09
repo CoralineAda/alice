@@ -20,7 +20,7 @@ describe Beverage do
       user.stub_chain(:beverages, :create) { Beverage.new }
       user.stub_chain(:beverages, :already_exists?) { false }
       user.stub(:can_brew?) { true }
-      expect(Alice::Util::Randomizer).to receive(:brew_observation)
+      expect(Util::Randomizer).to receive(:brew_observation)
       Beverage.brew("black coffee in Moscow", user)
     end
 

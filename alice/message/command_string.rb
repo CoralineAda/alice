@@ -29,6 +29,10 @@ module Message
       list
     end
 
+    def sentence
+      "#{subject} #{predicate}"
+    end
+
     def has_predicate?
       predicate_position > 0
     end

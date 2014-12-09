@@ -66,11 +66,11 @@ class Item
   end
 
   def self.create_defaults
-    create(name: Alice::Util::Randomizer.game, is_game: true)
-    (rand(10) + 2).times {|i| create(name: Alice::Util::Randomizer.item) }
-    (rand(10) + 2).times {|i| create(name: Alice::Util::Randomizer.reading_material, is_readable: true) }
-    (rand(10) + 2 / 2).times {|i| create(name: Alice::Util::Randomizer.weapon, is_weapon: true) }
-    (rand(10) + 2 / 2).times {|i| create(name: Alice::Util::Randomizer.keys, is_key: true) }
+    create(name: Util::Randomizer.game, is_game: true)
+    (rand(10) + 2).times {|i| create(name: Util::Randomizer.item) }
+    (rand(10) + 2).times {|i| create(name: Util::Randomizer.reading_material, is_readable: true) }
+    (rand(10) + 2 / 2).times {|i| create(name: Util::Randomizer.weapon, is_weapon: true) }
+    (rand(10) + 2 / 2).times {|i| create(name: Util::Randomizer.keys, is_key: true) }
   end
 
   def self.cursed
@@ -96,7 +96,7 @@ class Item
     new_item.check_if_cursed
     new_item.ensure_description
     new_item.save
-    "#{new_item.owner.current_nick} forges a #{name} #{Alice::Util::Randomizer.forge}."
+    "#{new_item.owner.current_nick} forges a #{name} #{Util::Randomizer.forge}."
   end
 
   def self.fruitcake
@@ -120,9 +120,9 @@ class Item
   end
 
   def self.inventory_from(owner, list)
-    stuff = Alice::Util::Randomizer.empty_pockets if list.empty?
+    stuff = Util::Randomizer.empty_pockets if list.empty?
     stuff ||= list.map(&:name_with_article).to_sentence
-    "#{owner.proper_name}'s #{Alice::Util::Randomizer.item_container} #{stuff}."
+    "#{owner.proper_name}'s #{Util::Randomizer.item_container} #{stuff}."
   end
 
   def self.reading_material
@@ -192,7 +192,7 @@ class Item
   def destruct
     return "The #{self.name} is cursed and cannot be destroyed so easily." if self.is_cursed
     self.delete
-    "#{owner_name} #{Alice::Util::Randomizer.destroy_message(self.name)}"
+    "#{owner_name} #{Util::Randomizer.destroy_message(self.name)}"
   end
 
   def drink
@@ -204,7 +204,7 @@ class Item
   end
 
   def ensure_description
-    self.description ||= Alice::Util::Randomizer.item_description(self.name)
+    self.description ||= Util::Randomizer.item_description(self.name)
   end
 
   def name_with_appendix
@@ -212,17 +212,17 @@ class Item
   end
 
   def name_with_article
-    Alice::Util::Sanitizer.process("#{Alice::Util::Randomizer.article} #{self.name_with_appendix}")
+    Alice::Util::Sanitizer.process("#{Util::Randomizer.article} #{self.name_with_appendix}")
   end
 
   def play
     return "It's not safe to play with #{name_with_article}!" unless self.is_game?
     if self.user.can_play_game?
       self.user.score_points(3)
-      "#{owner_name} #{Alice::Util::Randomizer.play} a game of #{name} and wins!"
+      "#{owner_name} #{Util::Randomizer.play} a game of #{name} and wins!"
     else
       self.user.score_points(-3)
-      "#{owner_name} #{Alice::Util::Randomizer.play} a game of #{name} but loses."
+      "#{owner_name} #{Util::Randomizer.play} a game of #{name} but loses."
     end
   end
 
@@ -232,7 +232,7 @@ class Item
 
   def randomize_name
     new_name = self.name
-    new_name = "#{Alice::Util::Randomizer.material} #{new_name}" if Item.where(name: new_name).first
+    new_name = "#{Util::Randomizer.material} #{new_name}" if Item.where(name: new_name).first
     new_name = "#{new_name} with SN #{Time.now.to_i}" if Item.where(name: new_name).first
     self.name = new_name
   end

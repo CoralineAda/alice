@@ -16,6 +16,7 @@ module Parser
                           [:to_info_verb, [:to_topic]],
                           [:to_info_verb, [:to_subject]]
       ],
+      [:to_interrogative, [:to_info_verb, [:to_subject]]],
       [:to_info_verb,
                           [:to_pronoun],
                           [:to_adverb],
@@ -44,6 +45,7 @@ module Parser
       state :relation_verb
       state :action_verb
       state :item
+      state :interrogative
       state :noun
       state :object
       state :preposition
@@ -76,6 +78,10 @@ module Parser
 
       event :action_verb do
         transitions from: [:alice], to: :action_verb, guard: :action_verb?
+      end
+
+      event :interrogative do
+        transitions from: [:alice], to: :interrogative, guard: :interrogative?
       end
 
       event :relation_verb do
@@ -150,6 +156,10 @@ module Parser
       adverb
     end
 
+    def to_interrogative
+      interrogative
+    end
+
     def to_pronoun
       pronoun
     end
@@ -221,6 +231,11 @@ module Parser
       self.this_info_verb ||= "is" if any_content_in?(Parser::LanguageHelper::INTERROGATIVES)
       self.this_info_verb ||= "is" if sentence.contains_possessive
       self.this_info_verb
+    end
+
+    def interrogative?
+      self.this_pronoun = "who" if any_content_in?(["who"])
+      self.this_pronoun
     end
 
     def adverb?
@@ -309,10 +324,12 @@ module Parser
 
     def command
       return if state == :unparsed
-      @command ||=  Message::Command.any_in(verbs: verb.to_s).first ||
-                    Message::Command.any_in(verbs: this_property).first ||
-                    Message::Command.any_in(indicators: verb).first ||
-                    Message::Command.any_in(indicators: this_greeting).first
+      @command ||= Message::Command.any_in(verbs: verb.to_s).first
+      @command ||= Message::Command.any_in(verbs: this_property).first
+      @command ||= Message::Command.any_in(indicators: verb).first
+      @command ||= Message::Command.any_in(indicators: this_greeting).first
+      @command ||= Message::Command.any_in(indicators: this_pronoun).first
+      @command ||= Message::Command.any_in(indicators: "alpha").first
     end
 
     def any_method_like?(array)

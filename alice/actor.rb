@@ -72,7 +72,7 @@ class Actor
 
   def self.reset_all
     all.each{|actor| actor.in_play = false; actor.place_id = nil; actor.save}
-    10.times{create(name: Alice::Util::Randomizer.specific_person)}
+    10.times{create(name: Util::Randomizer.specific_person)}
     all.sample(10).map(&:put_in_play)
     grue.put_in_play
   end
@@ -104,7 +104,7 @@ class Actor
   end
 
   def ensure_description
-    self.description ||= Alice::Util::Randomizer.actor_description(self.name)
+    self.description ||= Util::Randomizer.actor_description(self.name)
   end
 
   def is_present?
@@ -135,7 +135,7 @@ class Actor
   end
 
   def perform_random_action
-    return unless Alice::Util::Randomizer.one_chance_in(10)
+    return unless Util::Randomizer.one_chance_in(10)
     action = ACTIONS.sample
     respond_to?(action) && self.send(action)
   end
@@ -171,11 +171,11 @@ class Actor
     if self.is_grue?
       return "The image of a fearsome grue appears for a moment, then vanishes, leaving a musky scent lingering in the air."
     end
-    if force || Alice::Util::Randomizer.one_chance_in(2)
+    if force || Util::Randomizer.one_chance_in(2)
       put_in_play && Place.current.actors << self
       return "#{proper_name} appears before #{summoner}!"
     else
-      Alice::Util::Randomizer.summon_failure(summoner, proper_name)
+      Util::Randomizer.summon_failure(summoner, proper_name)
     end
   end
 

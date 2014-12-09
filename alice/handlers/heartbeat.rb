@@ -11,7 +11,7 @@ module Handlers
 
     def random_act
       return unless channel_is_idle?
-      return unless Alice::Util::Randomizer.one_chance_in(FREQUENCY)
+      return unless Util::Randomizer.one_chance_in(FREQUENCY)
       action = ACTIONS.sample
       self.send(action)
     end

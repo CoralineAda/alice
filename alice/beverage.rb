@@ -37,7 +37,7 @@ class Beverage
     return Util::Constants::THERE_CAN_BE_ONLY_ONE if user.beverages.already_exists?(name)
     return Util::Constants::THATS_ENOUGH_DONTCHA_THINK unless user.can_brew?
     if beverage = user.beverages.create(name: name, user: user)
-      Alice::Util::Randomizer.brew_observation(name, user.current_nick, alcohol: beverage.is_alcohol?)
+      Util::Randomizer.brew_observation(name, user.current_nick, alcohol: beverage.is_alcohol?)
     else
       Util::Constants::UH_OH
     end
@@ -92,10 +92,10 @@ class Beverage
   end
 
   def drink
-    message = Alice::Util::Randomizer.drink_message(self.name, owner_name)
+    message = Util::Randomizer.drink_message(self.name, owner_name)
     if self.is_potion? || self.is_alcohol?
       effect = [:drunk, :dazed, :disoriented].sample
-      message << " In addition to feeling a little #{effect.to_s}, " + Alice::Util::Randomizer.effect_message(self.name, owner_name)
+      message << " In addition to feeling a little #{effect.to_s}, " + Util::Randomizer.effect_message(self.name, owner_name)
       self.user.filters << effect
       self.user.filters.uniq!
       self.user.filter_applied = Time.now
@@ -115,7 +115,7 @@ class Beverage
   end
 
   def ensure_description
-    self.description ||= Alice::Util::Randomizer.drink_description(self.name)
+    self.description ||= Util::Randomizer.drink_description(self.name)
   end
 
   def is_cursed?
@@ -128,18 +128,18 @@ class Beverage
 
   def randomize_name
     new_name = self.name
-    new_name = "#{Alice::Util::Randomizer.beverage_container} of #{self.name}" if Beverage.where(name: new_name).first
-    new_name = "#{Alice::Util::Randomizer.material} #{new_name}" if Beverage.where(name: new_name).first
+    new_name = "#{Util::Randomizer.beverage_container} of #{self.name}" if Beverage.where(name: new_name).first
+    new_name = "#{Util::Randomizer.material} #{new_name}" if Beverage.where(name: new_name).first
     new_name = "#{new_name} with SN #{Time.now.to_i}" if Beverage.where(name: new_name).first
     self.name = new_name
   end
 
   def spill
-    self.destroy && Alice::Util::Randomizer.spill_message(self.name, owner_name)
+    self.destroy && Util::Randomizer.spill_message(self.name, owner_name)
   end
 
   def name_with_article
-    Alice::Util::Sanitizer.process("#{Alice::Util::Randomizer.article} #{self.name}")
+    Alice::Util::Sanitizer.process("#{Util::Randomizer.article} #{self.name}")
   end
 
 end

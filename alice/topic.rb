@@ -32,7 +32,7 @@ class Topic
     support = support.reject{|sentence| sentence.size < 30}
     support = support.select{|sentence| sentence.include? subject}
     support = support.sample
-    support && support << "." || Alice::Util::Randomizer.got_nothing
+    support && support << "." || Util::Randomizer.got_nothing
   end
 
   def markov_support

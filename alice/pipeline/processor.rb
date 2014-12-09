@@ -53,7 +53,7 @@ module Pipeline
     end
 
     def greet_on_join
-      return unless Alice::Util::Randomizer.one_chance_in(4)
+      return unless Util::Randomizer.one_chance_in(4)
       Pipeline::Mediator.emote(
         self.channel,
         Message::Response.greeting(self.message).response
@@ -84,7 +84,7 @@ module Pipeline
     end
 
     def well_actually
-      return unless Alice::Util::Randomizer.one_chance_in(2)
+      return unless Util::Randomizer.one_chance_in(2)
       Pipeline::Mediator.reply_with(
         self.channel,
         Message::Response.well_actually(self.message).response

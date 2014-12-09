@@ -6,19 +6,19 @@ module Handlers
     include Behavior::HandlesCommands
 
     def cast
-      message.set_response(Alice::Util::Randomizer.spell_effect(message.sender_nick, command_string.predicate))
+      message.set_response(Util::Randomizer.spell_effect(message.sender_nick, command_string.predicate))
     end
 
     def dance
       response = "Looks like you're dancing with yourself there."
       if person = ::User.from(command_string.subject)
         if person.is_online? && person != message.sender
-          response = Alice::Util::Randomizer.dance(message.sender_nick, person.current_nick)
+          response = Util::Randomizer.dance(message.sender_nick, person.current_nick)
         elsif ! person.is_online?
           response = "You can't dance with #{person.pronoun_objective} when #{person.pronoun_contraction} asleep!"
         end
       elsif actor = ::Actor.from(command_string.subject)
-        response = Alice::Util::Randomizer.dance(message.sender_nick, actor.proper_name)
+        response = Util::Randomizer.dance(message.sender_nick, actor.proper_name)
       end
       message.set_response(response)
     end
@@ -76,7 +76,7 @@ module Handlers
     end
 
     def youre_welcome
-      message.set_response(Alice::Util::Randomizer.thanks_response(message.sender_nick))
+      message.set_response(Util::Randomizer.thanks_response(message.sender_nick))
     end
 
   end

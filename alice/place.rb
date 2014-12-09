@@ -41,7 +41,7 @@ class Place
       y: y,
       is_current: args[:is_current],
       description: description || random_description,
-      is_dark: x == 0 && y == 0 || Alice::Util::Randomizer.one_chance_in(5)
+      is_dark: x == 0 && y == 0 || Util::Randomizer.one_chance_in(5)
     )
     if room.origin_square?
       room.exits = random_exits
@@ -104,9 +104,9 @@ class Place
 
   def self.random_description
     description = [
-      Alice::Util::Randomizer.room_adjective,
-      Alice::Util::Randomizer.room_type,
-      Alice::Util::Randomizer.room_description
+      Util::Randomizer.room_adjective,
+      Util::Randomizer.room_type,
+      Util::Randomizer.room_description
     ].join(' ') + "."
     description
   end
@@ -135,7 +135,7 @@ class Place
   def contents
     return unless stuff.present? || has_actor?
     contents_text = ""
-    contents_text << "You notice #{self.actors.map(&:name).to_sentence} #{Alice::Util::Randomizer.action}. " if self.has_actor?
+    contents_text << "You notice #{self.actors.map(&:name).to_sentence} #{Util::Randomizer.action}. " if self.has_actor?
     contents_text << "Contents: #{stuff.map(&:name).to_sentence}. " if stuff.present?
     contents_text
   end
@@ -161,7 +161,7 @@ class Place
   def ensure_description
     return true if self.description.present? && self.view_from_afar.present?
     self.description ||= Place.random_description
-    self.view_from_afar ||= Alice::Util::Randomizer.view_from_afar
+    self.view_from_afar ||= Util::Randomizer.view_from_afar
   end
 
   def enter
@@ -209,7 +209,7 @@ class Place
     return false if self.exits.count == 1
     return true if self.locked_exit.present?
     candidates = self.exits - neighbors.select{|n| ! n[:room].already_visited? }.map{|n| n[:direction]}
-    if Alice::Util::Randomizer.one_chance_in(2)
+    if Util::Randomizer.one_chance_in(2)
       self.update_attribute(:locked_exit, candidates.sample)
       if room = neighbors.select{|n| n[:direction] == self.locked_exit}.first
         room[:room].lock_door(Place.opposite_direction(locked_exit))
@@ -243,21 +243,21 @@ class Place
     return false if self.origin_square?
     return true if has_grue?
     odds = self.is_dark? ? 7 : 20
-    if Alice::Util::Randomizer.one_chance_in(odds) && actor = Actor.unplaced.grue
+    if Util::Randomizer.one_chance_in(odds) && actor = Actor.unplaced.grue
       actor.update_attribute(:place_id, self.id)
     end
   end
 
   def place_wand
     return false if self.origin_square?
-    if Alice::Util::Randomizer.one_chance_in(10) && wand = Wand.unplaced.unclaimed.sample
+    if Util::Randomizer.one_chance_in(10) && wand = Wand.unplaced.unclaimed.sample
       wand.update_attribute(:place_id, self.id)
     end
   end
 
   def place_item
     return false if self.origin_square? || Item.all.empty?
-    if Alice::Util::Randomizer.one_chance_in(5)
+    if Util::Randomizer.one_chance_in(5)
       item = Item.hidden.sample || Item.unplaced.unclaimed.sample
       item.update_attribute(:place_id, self.id)
     end
@@ -265,7 +265,7 @@ class Place
 
   def place_actor
     return false if self.origin_square?
-    if Alice::Util::Randomizer.one_chance_in(10) && actor = Actor.in_play.unplaced.sample
+    if Util::Randomizer.one_chance_in(10) && actor = Actor.in_play.unplaced.sample
       actor.update_attribute(:place_id, self.id)
     end
   end

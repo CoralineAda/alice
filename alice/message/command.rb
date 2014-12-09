@@ -112,7 +112,7 @@ module Message
     end
 
     def meets_odds?
-      Alice::Util::Randomizer.one_chance_in(self.one_in_x_odds)
+      Util::Randomizer.one_chance_in(self.one_in_x_odds)
     end
 
     def invoke!

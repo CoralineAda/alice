@@ -31,9 +31,9 @@ module Behavior
 
     def laugh_with(actor)
       [
-        "#{Alice::Util::Randomizer.laugh} along with #{actor}.",
-        "#{Alice::Util::Randomizer.laugh} at #{actor}'s antics.",
-        "#{Alice::Util::Randomizer.laugh}."
+        "#{Util::Randomizer.laugh} along with #{actor}.",
+        "#{Util::Randomizer.laugh} at #{actor}'s antics.",
+        "#{Util::Randomizer.laugh}."
       ].sample
     end
 

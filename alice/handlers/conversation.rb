@@ -43,9 +43,9 @@ module Handlers
     end
 
     def default_response(topic)
-      return Alice::Util::Randomizer.i_dont_know if facts_exhausted?(topic)
+      return Util::Randomizer.i_dont_know if facts_exhausted?(topic)
       return "I don't know what we're talking about" if no_context?
-      return Alice::Util::Randomizer.talking_about(self.current_context.topic)
+      return Util::Randomizer.talking_about(self.current_context.topic)
     end
 
     def no_context?

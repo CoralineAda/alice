@@ -23,7 +23,7 @@ describe "Message Round Trip" do
 
   before do
     Pipeline::Processor.any_instance.stub(:track_sender) { true }
-    Alice::Util::Randomizer.stub(:greeting) { "Hi there, Lydia." }
+    Util::Randomizer.stub(:greeting) { "Hi there, Lydia." }
     sender.stub(:recently_stole?) { true }
     User.stub(:find_or_create) { sender }
     Message::Command.stub(:any_in) { [command] }
@@ -57,7 +57,7 @@ describe "Message Round Trip" do
 
   context "user join" do
     it "responds to a join message" do
-      Alice::Util::Randomizer.stub(:one_chance_in) { true }
+      Util::Randomizer.stub(:one_chance_in) { true }
       message = Message::Message.new(emitted.user.primary_nick, trigger_1)
       response_message = Pipeline::Processor.process(channel, message, :greet_on_join)
       expect(response_message.response).to eq("Hi there, Lydia.")

@@ -59,7 +59,7 @@ describe Actor do
     context "when random condition is not met" do
 
       it "returns false" do
-        Alice::Util::Randomizer.stub(:one_chance_in) { false }
+        Util::Randomizer.stub(:one_chance_in) { false }
         expect(actor.perform_random_action).to be_falsey
       end
 
@@ -72,7 +72,7 @@ describe Actor do
       end
 
       it "performs a random action" do
-        Alice::Util::Randomizer.stub(:one_chance_in) { true }
+        Util::Randomizer.stub(:one_chance_in) { true }
         expect(actor.perform_random_action).to be_truthy
       end
 

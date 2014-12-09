@@ -38,7 +38,7 @@ class Machine
   end
 
   def name_with_article
-    Alice::Util::Sanitizer.process("#{Alice::Util::Randomizer.article} #{self.name}")
+    Alice::Util::Sanitizer.process("#{Util::Randomizer.article} #{self.name}")
   end
 
   def use(trigger=nil)

@@ -5,7 +5,7 @@ module Alice
     class Drunk
 
       def process(text)
-        if Alice::Util::Randomizer.one_chance_in(4)
+        if Util::Randomizer.one_chance_in(4)
           to_process = text.split
           positions = to_process.sample(to_process.length / 2).map{|word| to_process.index(word)}.sort
           to_process.inject([]) do |a, word|

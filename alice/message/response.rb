@@ -13,7 +13,7 @@ module Message
     end
 
     def self.greeting(message)
-      message.response = Alice::Util::Randomizer.greeting(message.sender_nick)
+      message.response = Util::Randomizer.greeting(message.sender_nick)
       message
     end
 

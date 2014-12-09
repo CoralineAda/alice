@@ -20,7 +20,7 @@ module Handlers
       elsif context
         message.set_response(context.describe)
       else
-        message.set_response(Alice::Util::Randomizer.got_nothing)
+        message.set_response(Util::Randomizer.got_nothing)
       end
     end
 

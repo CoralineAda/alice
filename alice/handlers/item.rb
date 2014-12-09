@@ -29,7 +29,7 @@ module Handlers
       if item = loose_item
         message.set_response(item.transfer_to(message.sender))
       elsif Place.current.description =~ /#{command_string.subject}/i
-        message.set_response(Alice::Util::Randomizer.cant_pick_up(command_string.subject))
+        message.set_response(Util::Randomizer.cant_pick_up(command_string.subject))
       else
         message.set_response("I don't see that here.")
       end

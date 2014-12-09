@@ -21,5 +21,6 @@ gem 'ruby-stemmer', '>=0.8.3', require: 'lingua/stemmer'
 gem 'rubyfish'
 gem 'sanitize', '>= 3.0.2'
 gem 'wikipedia-client'
+gem 'wolfram-alpha'
 gem 'yummly'
 

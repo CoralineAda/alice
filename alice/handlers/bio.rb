@@ -24,7 +24,7 @@ module Handlers
       if subject.formatted_bio
         message.set_response(subject.formatted_bio)
       else
-        message.set_response(Alice::Util::Randomizer.got_nothing)
+        message.set_response(Util::Randomizer.got_nothing)
       end
     end
 

@@ -58,7 +58,7 @@ class Factoid
     if self.user.present?
       message = "#{self.user.primary_nick} once said \"#{fact}\""
     else
-      message = "#{Alice::Util::Randomizer.fact_prefix}" if with_prefix
+      message = "#{Util::Randomizer.fact_prefix}" if with_prefix
       message.to_s << " #{fact}"
     end
     message
