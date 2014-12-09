@@ -25,7 +25,7 @@ module Util
     end
 
     def enabled?
-      ENV['ALPHA_ENABLED'] == true
+      ENV['ALPHA_ENABLED'] == "true"
     end
 
     def response
