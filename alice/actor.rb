@@ -2,13 +2,14 @@ class Actor
 
   include Mongoid::Document
   include Mongoid::Timestamps
-  include Alice::Behavior::Searchable
-  include Alice::Behavior::Emotes
-  include Alice::Behavior::Steals
-  include Alice::Behavior::Speaks
-  include Alice::Behavior::Placeable
-  include Alice::Behavior::HasInventory
-  include Alice::Behavior::Scorable
+  include Behavior::Searchable
+  include Behavior::Emotes
+  include Behavior::Steals
+  include Behavior::Speaks
+  include Behavior::Placeable
+  include Behavior::HasInventory
+  include Behavior::Scorable
+  include Behavior::Samples
 
   store_in collection: "alice_actors"
 

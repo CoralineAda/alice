@@ -31,7 +31,7 @@ module Message
     end
 
     def self.words_from(message)
-      Alice::Parser::NgramFactory.filtered_grams_from(message)
+      Parser::NgramFactory.filtered_grams_from(message)
     end
 
     def self.verb_from(trigger)
@@ -59,12 +59,12 @@ module Message
     def self.from(message)
       trigger = message.trigger
       command_string = CommandString.new(trigger)
-      match = Alice::Parser::Banger.new(command_string).parse!
-      match ||= Alice::Parser::Mash.new(command_string).parse!
+      match = Parser::Banger.new(command_string).parse!
+      match ||= Parser::Mash.new(command_string).parse!
       match ||= find_verb(trigger)
       if match
         match.message = message
-        Alice::Util::Logger.info "*** Executing #{match.name} with \"#{trigger}\" with context #{Alice::Context.current && Alice::Context.current.topic || "none"} ***"
+        Alice::Util::Logger.info "*** Executing #{match.name} with \"#{trigger}\" with context #{Context.current && Context.current.topic || "none"} ***"
       else
         Alice::Util::Logger.info "*** Received unhandled trigger \"#{trigger}\" ***"
         match = default

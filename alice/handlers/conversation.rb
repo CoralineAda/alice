@@ -17,7 +17,9 @@ module Handlers
 
     def converse
       text = fact_from(predicate.split.last)
-      text ||= fact_from(predicate) if set_context_from_predicate
+      if set_context_from_predicate
+        text ||= fact_from(predicate)
+      end
       text ||= default_response(predicate)
       set_response(text)
     end
@@ -34,8 +36,8 @@ module Handlers
     private
 
     def context_from(topic, subtopic=nil)
-      self.current_context = Alice::Context.any_from(topic.downcase, subtopic)
-      self.current_context ||= Alice::Context.find_or_create(topic.downcase)
+      self.current_context = Context.any_from(topic.downcase, subtopic)
+      self.current_context ||= Context.find_or_create(topic.downcase)
       self.current_context ||= global_context
       self.current_context
     end
@@ -68,7 +70,7 @@ module Handlers
     end
 
     def global_context
-      @global_context ||= Alice::Context.current
+      @global_context ||= Context.current
     end
 
     def predicate
@@ -77,7 +79,7 @@ module Handlers
 
     def set_context_from_predicate
       return unless predicate && predicate.present?
-      return if (command_string.components & Alice::Parser::LanguageHelper::PRONOUNS).any?
+      return if (command_string.components & Parser::LanguageHelper::PRONOUNS).any?
       if self.current_context = context_from(predicate.downcase)
         return false if self.current_context == global_context
         update_context

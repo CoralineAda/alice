@@ -1,8 +1,8 @@
 class Machine
 
   include Mongoid::Document
-  include Alice::Behavior::Searchable
-  include Alice::Behavior::Placeable
+  include Behavior::Searchable
+  include Behavior::Placeable
 
   field :name
   field :description

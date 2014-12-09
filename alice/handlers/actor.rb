@@ -13,8 +13,8 @@ module Handlers
       if subject
         message.set_response("#{subject.proper_name} says, \"#{subject.speak}\"")
       else
-        context = Alice::Context.current
-        context ||= Alice::Context.with_keywords.sample
+        context = Context.current
+        context ||= Context.with_keywords.sample
         if context
           message.set_response("Hmm. Today's topic is '#{context.topic}'.")
         end

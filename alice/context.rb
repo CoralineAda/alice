@@ -1,9 +1,9 @@
-class Alice::Context
+class Context
 
   include Mongoid::Document
 
   field :topic
-  field :keywords, type: Array, default: []
+  field :keywords, type: Array
   field :corpus
   field :expires_at, type: DateTime
   field :is_current, type: Boolean
@@ -15,9 +15,10 @@ class Alice::Context
   before_save :downcase_topic, :define_corpus, :extract_keywords
   before_create :set_expiry
   validates_uniqueness_of :topic
+  store_in collection: "alice_contexts"
 
   def self.with_keywords
-    not_in(keywords: [])
+    where(:keywords.not => { "$size" => 0 })
   end
 
   def self.current
@@ -32,7 +33,7 @@ class Alice::Context
 
   def self.from(topic)
     topic_keywords = topic.to_s.downcase.to_a
-    topic_keywords = topic_keywords - Alice::Parser::LanguageHelper::PREDICATE_INDICATORS
+    topic_keywords = topic_keywords - Parser::LanguageHelper::PREDICATE_INDICATORS
     if exact_match = any_in(topic: topic_keywords).first
       return exact_match
     end
@@ -141,7 +142,7 @@ class Alice::Context
 
   def declarative_fact(subtopic, spoken=true)
     fact = relational_facts(subtopic).select do |sentence|
-      has_info_verb = sentence =~ /\b#{Alice::Parser::LanguageHelper::INFO_VERBS * '|\b'}/ix
+      has_info_verb = sentence =~ /\b#{Parser::LanguageHelper::INFO_VERBS * '|\b'}/ix
       placement = position_of(subtopic.downcase, sentence.downcase)
       has_info_verb && placement && placement.to_i < 100
     end.sample
@@ -177,7 +178,7 @@ class Alice::Context
   end
 
   def inspect
-    %{#<Alice::Context _id: #{self.id}", topic: "#{self.topic}", keywords: #{self.keywords.count}, is_current: #{is_current}, expires_at: #{self.expires_at}"}
+    %{#<Context _id: #{self.id}", topic: "#{self.topic}", keywords: #{self.keywords.count}, is_current: #{is_current}, expires_at: #{self.expires_at}"}
   end
 
   private

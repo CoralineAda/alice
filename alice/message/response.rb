@@ -18,12 +18,12 @@ module Message
     end
 
     def self.heartbeat(message)
-      message.response = "PONG"
+      message.response = Handlers::Heartbeat.process(message, :random_act)
       message
     end
 
     def self.preview_url(message)
-      message.response = Alice::Parser::URL.new(message.trigger).preview
+      message.response = Parser::URL.new(message.trigger).preview
       message
     end
 

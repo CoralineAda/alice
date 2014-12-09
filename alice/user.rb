@@ -2,11 +2,11 @@ class User
 
   include Mongoid::Document
   include Mongoid::Timestamps
-  include Alice::Behavior::Searchable
-  include Alice::Behavior::Scorable
-  include Alice::Behavior::HasInventory
-  include Alice::Behavior::Emotes
-  include Alice::Behavior::Steals
+  include Behavior::Searchable
+  include Behavior::Scorable
+  include Behavior::HasInventory
+  include Behavior::Emotes
+  include Behavior::Steals
 
   store_in collection: "alice_users"
 
@@ -60,11 +60,11 @@ class User
 
   def self.from(string)
     return unless string.present?
-    names = Alice::Parser::NgramFactory.new(string).omnigrams
+    names = Parser::NgramFactory.new(string).omnigrams
     names = names.map{|g| g.join ' '} << string
-    names = names.uniq - Alice::Parser::LanguageHelper::IDENTIFIERS
+    names = names.uniq - Parser::LanguageHelper::IDENTIFIERS
     objects = names.map do |name|
-      name = (name.split(/\s+/) - Alice::Parser::LanguageHelper::IDENTIFIERS).compact.join(' ')
+      name = (name.split(/\s+/) - Parser::LanguageHelper::IDENTIFIERS).compact.join(' ')
       if name.present? && found = like(name) || found = User.where(primary_nick: name).first || found = User.any_in(alt_nicks: name).first
         SearchResult.new(term: name, result: found)
       end

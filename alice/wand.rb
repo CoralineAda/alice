@@ -3,9 +3,9 @@ class Wand
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  include Alice::Behavior::Searchable
-  include Alice::Behavior::Ownable
-  include Alice::Behavior::Placeable
+  include Behavior::Searchable
+  include Behavior::Ownable
+  include Behavior::Placeable
 
   field :name
   field :effect_method

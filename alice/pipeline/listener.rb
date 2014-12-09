@@ -30,7 +30,8 @@ module Pipeline
     end
 
     def heartbeat(emitted)
-      Pipeline::Processor.process(emitted.channel, message(emitted, "ping", User.bot), :heartbeat)
+      return if emitted.user
+      Pipeline::Processor.process(ENV['PRIMARY_CHANNEL'], message(emitted, "ping", User.bot), :heartbeat)
     end
 
     def preview_url(emitted, trigger)

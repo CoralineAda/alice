@@ -12,7 +12,7 @@ module Behavior
     end
 
     def parser
-      @parser ||= Alice::Parser::Mash.new(command_string)
+      @parser ||= Parser::Mash.new(command_string)
     end
 
     module ClassMethods

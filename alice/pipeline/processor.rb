@@ -62,7 +62,7 @@ module Pipeline
     end
 
     def heartbeat
-      Pipeline::Mediator.emote(
+      Pipeline::Mediator.reply_with(
         ENV['PRIMARY_CHANNEL'],
         Message::Response.heartbeat(self.message).response
       )
@@ -103,9 +103,10 @@ module Pipeline
     private
 
     def track_sender
+      return unless self.message.sender
       self.message.sender.active!
     rescue Exception => e
-      Alice::Util::Logger.info("***Could not track sender!")
+      Alice::Util::Logger.info("*** Could not track sender!")
     end
 
   end

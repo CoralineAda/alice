@@ -2,9 +2,9 @@ class Beverage
 
   include Mongoid::Document
   include Mongoid::Timestamps
-  include Alice::Behavior::Searchable
-  include Alice::Behavior::Ownable
-  include Alice::Behavior::Placeable
+  include Behavior::Searchable
+  include Behavior::Ownable
+  include Behavior::Placeable
 
   field :name
   field :description
@@ -83,8 +83,8 @@ class Beverage
     return if Dictionary.is_a?(:coffee_or_tea, self.name) == true
     beer = Beer.search(self.name)
     cocktail = MixedDrink.search(self.name)
-    if drink = Alice::Parser::LanguageHelper.similar_to(self.name, beer.canonical_name) && beer ||
-               Alice::Parser::LanguageHelper.similar_to(self.name, cocktail.canonical_name) && cocktail.result
+    if drink = Parser::LanguageHelper.similar_to(self.name, beer.canonical_name) && beer ||
+               Parser::LanguageHelper.similar_to(self.name, cocktail.canonical_name) && cocktail.result
       self.name = "#{drink.container.downcase} of #{self.name}"
       self.description = drink.description
       self.is_alcohol = true
