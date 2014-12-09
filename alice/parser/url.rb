@@ -13,11 +13,12 @@ module Parser
 
     def preview
       source = Nokogiri::HTML(open(url))
+      return unless source.search("//html").any?
       title_node = source.search("//title")
       snippet = source.xpath("//p").map(&:content).detect do |content|
         content.length > 25
       end
-      snippet = truncate(snippet.to_s.strip.gsub(/[\n\r ]+/," "))
+      snippet = truncate(snippet.to_s.strip.gsub(/[\n\r ]+/," ")).split('|')[0]
       title   = truncate(title_node.nil? ? '' : title_node.text)
       return [title, snippet].reject(&:empty?).join(' | ')
     rescue Exception => e
