@@ -17,6 +17,11 @@ module Message
       message
     end
 
+    def self.heartbeat(message)
+      message.response = "PONG"
+      message
+    end
+
     def self.preview_url(message)
       message.response = Alice::Parser::URL.new(message.trigger).preview
       message

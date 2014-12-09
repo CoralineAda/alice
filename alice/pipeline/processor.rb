@@ -15,7 +15,7 @@ module Pipeline
         message: message,
         response_method: response_method,
         trigger: message.trigger
-        ).react
+      ).react
     end
 
     def self.sleep
@@ -37,6 +37,7 @@ module Pipeline
       return true if self.trigger =~ /#{ENV['BOT_SHORT_NAME']}/i
       return true if self.response_method == :greet_on_join
       return true if self.response_method == :track_nick_change
+      return true if self.response_method == :heartbeat
       false
     end
 
@@ -56,7 +57,15 @@ module Pipeline
       Pipeline::Mediator.emote(
         self.channel,
         Message::Response.greeting(self.message).response
-        )
+      )
+      message
+    end
+
+    def heartbeat
+      Pipeline::Mediator.emote(
+        ENV['PRIMARY_CHANNEL'],
+        Message::Response.heartbeat(self.message).response
+      )
       message
     end
 
@@ -70,7 +79,7 @@ module Pipeline
       Pipeline::Mediator.reply_with(
         self.channel,
         Message::Response.preview_url(self.message).response
-        )
+      )
       message
     end
 
@@ -79,7 +88,7 @@ module Pipeline
       Pipeline::Mediator.reply_with(
         self.channel,
         Message::Response.well_actually(self.message).response
-        )
+      )
       message
     end
 
@@ -87,7 +96,7 @@ module Pipeline
       Pipeline::Mediator.reply_with(
         self.channel,
         Message::Response.so_say_we_all(self.message).response
-        )
+      )
       message
     end
 
@@ -96,7 +105,7 @@ module Pipeline
     def track_sender
       self.message.sender.active!
     rescue Exception => e
-      puts "Could not track sender!"
+      Alice::Util::Logger.info("***Could not track sender!")
     end
 
   end
