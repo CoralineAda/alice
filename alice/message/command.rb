@@ -22,6 +22,8 @@ module Message
     validates_uniqueness_of :name
     validates_presence_of :name, :handler_class
 
+    store_in collection: 'commands'
+
     attr_accessor :message, :terms
 
     def self.default
