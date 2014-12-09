@@ -57,7 +57,7 @@ Message::Command.create(
 	name: 'bio',
 	verbs: ["bio"],
 	stop_words: ["alice"],
-	indicators: ["is"],
+	indicators: ["who"],
 	handler_class: 'Handlers::Bio',
 	handler_method: 'process',
 	response_kind: 'message',
@@ -465,6 +465,15 @@ Message::Command.create(
 	indicators: ["talking"],
 	handler_class: 'Handlers::Conversation',
 	handler_method: 'give_context',
+	response_kind: 'message',
+)
+Message::Command.create(
+	name: 'alpha',
+	verbs: [],
+	stop_words: [],
+	indicators: ["alpha"],
+	handler_class: 'Handlers::Alpha',
+	handler_method: 'answer_question',
 	response_kind: 'message',
 )
 puts 'Command import complete.'
