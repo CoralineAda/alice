@@ -13,7 +13,7 @@ module Parser
 
     def preview
       source = Nokogiri::HTML(open(url))
-      return unless source.search("//html").any?
+      return unless source.content =~ /html/i
       title_node = source.search("//title")
       snippet = source.xpath("//p").map(&:content).detect do |content|
         content.length > 25
