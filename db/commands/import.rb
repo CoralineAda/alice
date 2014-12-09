@@ -1,5 +1,5 @@
 require_relative '../../alice'
-Command.create(
+Message::Command.create(
 	name: 'steal',
 	verbs: ["steal"],
 	stop_words: ["stuff"],
@@ -8,7 +8,7 @@ Command.create(
 	handler_method: 'steal',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'seen',
 	verbs: ["seen"],
 	stop_words: [],
@@ -17,7 +17,7 @@ Command.create(
 	handler_method: 'seen',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'summon',
 	verbs: ["summon"],
 	stop_words: ["alice"],
@@ -26,7 +26,7 @@ Command.create(
 	handler_method: 'summon',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'talk',
 	verbs: ["talk"],
 	stop_words: ["alice"],
@@ -35,7 +35,7 @@ Command.create(
 	handler_method: 'talk',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'brew',
 	verbs: ["brew", "distill", "concoct", "mix"],
 	stop_words: ["alice"],
@@ -44,7 +44,7 @@ Command.create(
 	handler_method: 'brew',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'drink',
 	verbs: ["drink", "quaff", "consume", "chug", "sip"],
 	stop_words: ["alice"],
@@ -53,7 +53,7 @@ Command.create(
 	handler_method: 'drink',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'bio',
 	verbs: ["bio"],
 	stop_words: ["alice"],
@@ -62,7 +62,7 @@ Command.create(
 	handler_method: 'process',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'look',
 	verbs: ["look"],
 	stop_words: ["alice"],
@@ -71,7 +71,7 @@ Command.create(
 	handler_method: 'look',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'move',
 	verbs: ["east", "west", "north", "south"],
 	stop_words: ["alice"],
@@ -80,7 +80,7 @@ Command.create(
 	handler_method: 'move',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'map',
 	verbs: ["map"],
 	stop_words: ["alice"],
@@ -89,7 +89,7 @@ Command.create(
 	handler_method: 'map',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'xyzzy',
 	verbs: ["xyzzy"],
 	stop_words: ["alice"],
@@ -98,7 +98,7 @@ Command.create(
 	handler_method: 'xyzzy',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'attack',
 	verbs: ["attack", "kill"],
 	stop_words: ["alice"],
@@ -107,7 +107,7 @@ Command.create(
 	handler_method: 'attack',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'cast',
 	verbs: ["cast"],
 	stop_words: ["alice"],
@@ -116,7 +116,7 @@ Command.create(
 	handler_method: 'cast',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'help',
 	verbs: ["help"],
 	stop_words: ["alice"],
@@ -125,7 +125,7 @@ Command.create(
 	handler_method: 'help',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'stats',
 	verbs: ["stats", "stat"],
 	stop_words: ["alice"],
@@ -134,7 +134,7 @@ Command.create(
 	handler_method: 'stats',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'source',
 	verbs: ["source", "github", "repo"],
 	stop_words: ["alice"],
@@ -143,7 +143,7 @@ Command.create(
 	handler_method: 'source',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'bug',
 	verbs: ["bug"],
 	stop_words: ["alice"],
@@ -152,7 +152,7 @@ Command.create(
 	handler_method: 'bug',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'one_ring',
 	verbs: [],
 	stop_words: [],
@@ -161,7 +161,7 @@ Command.create(
 	handler_method: 'one_ring',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'set_fact',
 	verbs: ["fact", "remember"],
 	stop_words: ["alice"],
@@ -170,7 +170,7 @@ Command.create(
 	handler_method: 'set',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'get_fact',
 	verbs: [],
 	stop_words: [],
@@ -179,7 +179,7 @@ Command.create(
 	handler_method: 'get',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'number_wang',
 	verbs: ["13"],
 	stop_words: ["alice"],
@@ -188,7 +188,7 @@ Command.create(
 	handler_method: 'number_wang',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'give_points',
 	verbs: ["+"],
 	stop_words: ["alice"],
@@ -197,7 +197,7 @@ Command.create(
 	handler_method: 'give',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'greet',
 	verbs: ["hi", "hello", "hey", "heya", "morning", "afternoon", "evening", "night"],
 	stop_words: [],
@@ -206,7 +206,7 @@ Command.create(
 	handler_method: 'greet_sender',
 	response_kind: 'emote',
 )
-Command.create(
+Message::Command.create(
 	name: 'inventory',
 	verbs: ["inventory"],
 	stop_words: ["alice"],
@@ -215,7 +215,7 @@ Command.create(
 	handler_method: 'inventory',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'destroy',
 	verbs: ["destroy", "obliterate", "consume", "break"],
 	stop_words: ["alice"],
@@ -224,7 +224,7 @@ Command.create(
 	handler_method: 'destroy',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'drop',
 	verbs: ["drop", "release", "let go"],
 	stop_words: ["alice"],
@@ -233,7 +233,7 @@ Command.create(
 	handler_method: 'drop',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'hide',
 	verbs: ["hide"],
 	stop_words: ["alice"],
@@ -242,7 +242,7 @@ Command.create(
 	handler_method: 'hide',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'take',
 	verbs: ["take", "pick up", "grab"],
 	stop_words: ["alice"],
@@ -251,7 +251,7 @@ Command.create(
 	handler_method: 'take',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'forge',
 	verbs: ["create", "forge", "make", "assemble"],
 	stop_words: ["alice"],
@@ -260,7 +260,7 @@ Command.create(
 	handler_method: 'forge',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'give',
 	verbs: ["give", "hand", "transfer"],
 	stop_words: ["alice"],
@@ -269,7 +269,7 @@ Command.create(
 	handler_method: 'give',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'play',
 	verbs: ["play"],
 	stop_words: ["alice"],
@@ -278,7 +278,7 @@ Command.create(
 	handler_method: 'play',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'read',
 	verbs: ["read", "scan", "peruse"],
 	stop_words: ["alice"],
@@ -287,7 +287,7 @@ Command.create(
 	handler_method: 'read',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'catalog',
 	verbs: ["catalog", "machines"],
 	stop_words: ["alice"],
@@ -296,7 +296,7 @@ Command.create(
 	handler_method: 'catalog',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'install',
 	verbs: ["install"],
 	stop_words: ["alice"],
@@ -305,7 +305,7 @@ Command.create(
 	handler_method: 'install',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'use',
 	verbs: ["use", "operate"],
 	stop_words: ["alice"],
@@ -314,7 +314,7 @@ Command.create(
 	handler_method: 'use',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'oh_set',
 	verbs: ["OH", "OH:"],
 	stop_words: ["alice"],
@@ -323,7 +323,7 @@ Command.create(
 	handler_method: 'set',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'get_oh',
 	verbs: [],
 	stop_words: [],
@@ -332,7 +332,7 @@ Command.create(
 	handler_method: 'get',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'lottery',
 	verbs: ["lottery"],
 	stop_words: ["alice"],
@@ -341,7 +341,7 @@ Command.create(
 	handler_method: 'lottery',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'check_points',
 	verbs: ["points", "score"],
 	stop_words: ["alice"],
@@ -350,7 +350,7 @@ Command.create(
 	handler_method: 'check',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'scores',
 	verbs: ["scores", "leaderboard"],
 	stop_words: [],
@@ -359,7 +359,7 @@ Command.create(
 	handler_method: 'leaderboard',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'set_twitter',
 	verbs: ["twitter"],
 	stop_words: ["alice"],
@@ -368,7 +368,7 @@ Command.create(
 	handler_method: 'set',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'get_twitter',
 	verbs: [],
 	stop_words: [],
@@ -377,7 +377,7 @@ Command.create(
 	handler_method: 'get',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'wand',
 	verbs: ["wield", "wave"],
 	stop_words: ["alice"],
@@ -386,7 +386,7 @@ Command.create(
 	handler_method: 'use',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'well_actually',
 	verbs: [],
 	stop_words: [],
@@ -395,7 +395,7 @@ Command.create(
 	handler_method: 'well_actually',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'pronouns',
 	verbs: ["pronouns"],
 	stop_words: [""],
@@ -404,7 +404,7 @@ Command.create(
 	handler_method: 'process',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'dance',
 	verbs: ["dance"],
 	stop_words: [""],
@@ -413,7 +413,7 @@ Command.create(
 	handler_method: 'dance',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'commands',
 	verbs: ["commands"],
 	stop_words: [],
@@ -422,7 +422,7 @@ Command.create(
 	handler_method: 'commands',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'youre_welcome',
 	verbs: [],
 	stop_words: [],
@@ -431,7 +431,7 @@ Command.create(
 	handler_method: 'youre_welcome',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'loose_greeting',
 	verbs: [],
 	stop_words: [],
@@ -440,7 +440,7 @@ Command.create(
 	handler_method: 'greet_sender',
 	response_kind: 'emote',
 )
-Command.create(
+Message::Command.create(
 	name: 'sentinel',
 	verbs: [""],
 	stop_words: [""],
@@ -449,7 +449,7 @@ Command.create(
 	handler_method: 'steal',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'eat',
 	verbs: ["eat", "consume", "munch", "swallow", "drink"],
 	stop_words: [],
@@ -458,7 +458,7 @@ Command.create(
 	handler_method: 'eat',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'converse',
 	verbs: [],
 	stop_words: [],
@@ -467,7 +467,7 @@ Command.create(
 	handler_method: 'converse',
 	response_kind: 'message',
 )
-Command.create(
+Message::Command.create(
 	name: 'context',
 	verbs: [],
 	stop_words: [],
