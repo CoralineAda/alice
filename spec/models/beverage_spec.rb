@@ -8,12 +8,12 @@ describe Beverage do
 
     it "returns a singleton message if there is already a beverage with that name" do
       user.stub_chain(:beverages, :already_exists?) { true }
-      expect(Beverage.brew("black coffee in bed", user)).to eq(Constants::THERE_CAN_BE_ONLY_ONE)
+      expect(Beverage.brew("black coffee in bed", user)).to eq(Util::Constants::THERE_CAN_BE_ONLY_ONE)
     end
 
     it "returns an encumberance message if the brewer has too much stuff" do
       user.stub(:can_brew?) { false }
-      expect(Beverage.brew("black coffee in bed", user)).to eq(Constants::THATS_ENOUGH_DONTCHA_THINK)
+      expect(Beverage.brew("black coffee in bed", user)).to eq(Util::Constants::THATS_ENOUGH_DONTCHA_THINK)
     end
 
     it "creates a beverage for the user" do
@@ -28,7 +28,7 @@ describe Beverage do
       user.stub_chain(:beverages, :create) { false }
       user.stub_chain(:beverages, :already_exists?) { false }
       user.stub(:can_brew?) { true }
-      expect(Beverage.brew("black coffee in Moscow", user)).to eq(Constants::UH_OH)
+      expect(Beverage.brew("black coffee in Moscow", user)).to eq(Util::Constants::UH_OH)
     end
 
   end

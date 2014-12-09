@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Handlers::Factoid" do
 
   let(:user)    { User.new(primary_nick: "zspenser") }
-  let(:message) { Message.new(user.primary_nick, "once found a bug") }
+  let(:message) { Message::Message.new(user.primary_nick, "once found a bug") }
   let(:handler) { Handlers::Factoid.new(message: message) }
 
   before do

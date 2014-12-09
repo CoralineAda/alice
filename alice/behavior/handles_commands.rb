@@ -8,7 +8,7 @@ module Behavior
     end
 
     def command_string
-      CommandString.new(self.message.trigger)
+      Message::CommandString.new(self.message.trigger)
     end
 
     module ClassMethods

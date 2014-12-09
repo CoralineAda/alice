@@ -34,12 +34,12 @@ class Beverage
   end
 
   def self.brew(name, user)
-    return Constants::THERE_CAN_BE_ONLY_ONE if user.beverages.already_exists?(name)
-    return Constants::THATS_ENOUGH_DONTCHA_THINK unless user.can_brew?
+    return Util::Constants::THERE_CAN_BE_ONLY_ONE if user.beverages.already_exists?(name)
+    return Util::Constants::THATS_ENOUGH_DONTCHA_THINK unless user.can_brew?
     if beverage = user.beverages.create(name: name, user: user)
       Alice::Util::Randomizer.brew_observation(name, user.current_nick, alcohol: beverage.is_alcohol?)
     else
-      Constants::UH_OH
+      Util::Constants::UH_OH
     end
   end
 
@@ -54,7 +54,7 @@ class Beverage
     if beverage = user.beverages.like(name)
       beverage.drink
     else
-      Constants::NO_SUCH_DRINK
+      Util::Constants::NO_SUCH_DRINK
     end
   end
 

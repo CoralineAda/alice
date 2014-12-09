@@ -53,7 +53,7 @@ class Factoid
   end
 
   def formatted(with_prefix=false)
-    return Constants::FAX_NOT_FOUND unless self.text.present?
+    return Util::Constants::FAX_NOT_FOUND unless self.text.present?
     fact = self.text
     if self.user.present?
       message = "#{self.user.primary_nick} once said \"#{fact}\""

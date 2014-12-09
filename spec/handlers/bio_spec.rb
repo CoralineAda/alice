@@ -3,8 +3,8 @@ require 'spec_helper'
 describe "Handlers::Bio" do
 
   let(:user)      { User.new(primary_nick: "Sindarina") }
-  let(:message_1) { Message.new(user.primary_nick, "\"is a star\"") }
-  let(:message_2) { Message.new(user.primary_nick, "") }
+  let(:message_1) { Message::Message.new(user.primary_nick, "\"is a star\"") }
+  let(:message_2) { Message::Message.new(user.primary_nick, "") }
   let(:handler_1) { Handlers::Bio.new(message: message_1) }
   let(:handler_2) { Handlers::Bio.new(message: message_2) }
 

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Handlers::OH" do
 
   let(:user)    { User.new(primary_nick: "brycek") }
-  let(:message) { Message.new(user.primary_nick, "are you recording this?") }
+  let(:message) { Message::Message.new(user.primary_nick, "are you recording this?") }
   let(:handler) { Handlers::OH.new(message: message) }
 
   before do

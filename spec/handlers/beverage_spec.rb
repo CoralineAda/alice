@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Handlers::Beverage" do
 
   let(:user)    { User.new(primary_nick: "Coraline") }
-  let(:message) { Message.new(user.primary_nick, "drink coffee") }
+  let(:message) { Message::Message.new(user.primary_nick, "drink coffee") }
   let(:handler) { Handlers::Beverage.new(message: message) }
 
   before do

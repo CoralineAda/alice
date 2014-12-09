@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Handlers::Greeting" do
 
   let(:user)    { User.new(primary_nick: "cflipse") }
-  let(:message) { Message.new(user.primary_nick, "joined the channel") }
+  let(:message) { Message::Message.new(user.primary_nick, "joined the channel") }
   let(:handler) { Handlers::Greeting.new(message: message) }
 
   before do

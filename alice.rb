@@ -19,7 +19,7 @@ module Alice
   end
 
   def self.bot
-    @@bot ||= Alice::Bot.new
+    @@bot ||= Alice::Util::Bot.new
   end
 
   class Daemon

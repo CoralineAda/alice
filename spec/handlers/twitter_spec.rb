@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Handlers::Twitter" do
 
   let(:user)    { User.new(primary_nick: "computionist") }
-  let(:message) { Message.new(user.primary_nick, "@computionist") }
+  let(:message) { Message::Message.new(user.primary_nick, "@computionist") }
   let(:handler) { Handlers::Twitter.new(message: message) }
 
   before do

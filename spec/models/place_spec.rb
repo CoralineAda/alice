@@ -31,7 +31,7 @@ describe Place do
     it "matches exits between rooms" do
       origin = Place.create(x: 0, y: 0, exits: ["east"])
 
-      Mapper.any_instance.stub(:create) { true }
+      Util::Mapper.any_instance.stub(:create) { true }
       Place.any_instance.stub(:save) { true }
       Place.stub(:random_description) { true }
 

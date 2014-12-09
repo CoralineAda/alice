@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Handlers::Actor" do
 
   let(:user)    { User.new(primary_nick: "fivetanley") }
-  let(:message) { Message.new(user.primary_nick, "!talk Poe") }
+  let(:message) { Message::Message.new(user.primary_nick, "!talk Poe") }
   let(:handler) { Handlers::Actor.new(message: message) }
   let(:actor)   { Actor.create!(name: "Poe") }
   before do

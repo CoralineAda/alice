@@ -311,10 +311,10 @@ module Alice
 
       def command
         return if state == :unparsed
-        @command ||=  Command.any_in(verbs: verb.to_s).first ||
-                      Command.any_in(verbs: this_property).first ||
-                      Command.any_in(indicators: verb).first ||
-                      Command.any_in(indicators: this_greeting).first
+        @command ||=  Message::Command.any_in(verbs: verb.to_s).first ||
+                      Message::Command.any_in(verbs: this_property).first ||
+                      Message::Command.any_in(indicators: verb).first ||
+                      Message::Command.any_in(indicators: this_greeting).first
       end
 
       def any_method_like?(array)

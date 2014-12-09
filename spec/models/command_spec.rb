@@ -1,17 +1,17 @@
 require 'spec_helper'
 
-describe Command do
+describe Message::Command do
 
   describe ".best_match" do
 
-    let(:command_1) { Command.new(verbs: ["quick", "brown", "fox", "jump"]) }
-    let(:command_2) { Command.new(verbs: ["lazy", "dog", "jump"]) }
-    let(:command_3) { Command.new(verbs: ["cow", "moon", "jump"]) }
+    let(:command_1) { Message::Command.new(verbs: ["quick", "brown", "fox", "jump"]) }
+    let(:command_2) { Message::Command.new(verbs: ["lazy", "dog", "jump"]) }
+    let(:command_3) { Message::Command.new(verbs: ["cow", "moon", "jump"]) }
 
     it "sorts by # of verbs, returning best match" do
       matches = [command_1, command_2, command_3]
       verbs= ["jump", "fox", "dog", "quick"]
-      expect(Command.best_verb_match(matches, verbs)).to eq(command_1)
+      expect(Message::Command.best_verb_match(matches, verbs)).to eq(command_1)
     end
 
   end
@@ -21,19 +21,19 @@ describe Command do
     let(:times) { 1000 }
 
     it "always meets odds if its odds are 1 in 1" do
-      command = Command.new(one_in_x_odds: 1)
+      command = Message::Command.new(one_in_x_odds: 1)
       results = (1..times).to_a.inject([]){ |a, i| a << (command.meets_odds? ? 1 : nil); a}.compact
       expect(results.count).to eq times
     end
 
     it "sometimes meets odds" do
-      command = Command.new(one_in_x_odds: 2)
+      command = Message::Command.new(one_in_x_odds: 2)
       results = (1..times).to_a.inject([]){ |a, i| a << (command.meets_odds? ? 1 : nil); a}.compact
       expect(results.count > 0).to be_truthy
     end
 
     it "doesn't always meet odds" do
-      command = Command.new(one_in_x_odds: 2)
+      command = Message::Command.new(one_in_x_odds: 2)
       results = (1..times).to_a.inject([]){ |a, i| a << (command.meets_odds? ? 1 : nil); a}.compact
       expect(results.count < times).to be_truthy
     end
@@ -42,7 +42,7 @@ describe Command do
 
   describe "#needs_cooldown?" do
 
-    let(:command) { Command.new }
+    let(:command) { Message::Command.new }
 
     it "returns false if the command was never triggered before" do
       command.stub(:last_said_at) { nil }
@@ -71,7 +71,7 @@ describe Command do
 
   describe "#terms" do
 
-    let(:command_1) { Command.new(verbs: ["QUICK", "Brown", "fox", "jumped"]) }
+    let(:command_1) { Message::Command.new(verbs: ["QUICK", "Brown", "fox", "jumped"]) }
 
     it "returns a populated TermList" do
       expect(command_1.terms.to_a).to eq(
@@ -83,7 +83,7 @@ describe Command do
 
   describe "#terms=" do
 
-    let(:command) { Command.new(verbs: ["quick", "brown"])}
+    let(:command) { Message::Command.new(verbs: ["quick", "brown"])}
 
     it "sets its inverbso the downcased words" do
       command.terms = ["lazy", "dog"]

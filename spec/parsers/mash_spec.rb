@@ -6,13 +6,13 @@ describe "Alice::Parser::Mash" do
     @robyn  = User.create!(primary_nick: "robyn")
     @syd    = User.create!(primary_nick: "syd")
     @tomato = Item.create!(name: "tomato")
-    @command = Command.create!(name: "get_fact", indicators: ["know", "fact", "factoid", "tell"], handler_class: "Handlers::Factoid", handler_method: "get")
+    @command = Message::Command.create!(name: "get_fact", indicators: ["know", "fact", "factoid", "tell"], handler_class: "Handlers::Factoid", handler_method: "get")
     @factoid = Factoid.create!(user: @robyn, text: "Briggs features in the Robyn Hitchcock song 'A Man\'s Gotta Know'")
   end
 
   context "Alice, say hello to Syd" do
 
-    let(:command_string)  { CommandString.new("Alice, say hello to Syd.") }
+    let(:command_string)  { Message::CommandString.new("Alice, say hello to Syd.") }
     let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
     before do
@@ -27,7 +27,7 @@ describe "Alice::Parser::Mash" do
 
   context "Alice, what do you know about Robyn?" do
 
-    let(:command_string)  { CommandString.new("Alice, what do you know about Robyn?") }
+    let(:command_string)  { Message::CommandString.new("Alice, what do you know about Robyn?") }
     let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
     before do
@@ -46,7 +46,7 @@ describe "Alice::Parser::Mash" do
 
   context "Alice, please give the tomato to Robyn." do
 
-    let(:command_string)  { CommandString.new("Alice, please give the tomato to Robyn.") }
+    let(:command_string)  { Message::CommandString.new("Alice, please give the tomato to Robyn.") }
     let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
     before do
@@ -65,7 +65,7 @@ describe "Alice::Parser::Mash" do
 
   context "Alice, please give Robyn the tomato." do
 
-    let(:command_string)  { CommandString.new("Alice, please give Robyn the tomato.") }
+    let(:command_string)  { Message::CommandString.new("Alice, please give Robyn the tomato.") }
     let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
     before do
@@ -84,7 +84,7 @@ describe "Alice::Parser::Mash" do
 
   context "Alice, who is Syd?" do
 
-    let(:command_string)  { CommandString.new("Alice, who is Syd?") }
+    let(:command_string)  { Message::CommandString.new("Alice, who is Syd?") }
     let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
     before do
@@ -101,7 +101,7 @@ describe "Alice::Parser::Mash" do
 
     context "happy path" do
 
-      let(:command_string)  { CommandString.new("Alice, what is Syd twitter handle?") }
+      let(:command_string)  { Message::CommandString.new("Alice, what is Syd twitter handle?") }
       let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
       before do
@@ -120,7 +120,7 @@ describe "Alice::Parser::Mash" do
 
     context "edge cases" do
 
-      let(:command_string)  { CommandString.new("Alice, what is Syd's destroy?") }
+      let(:command_string)  { Message::CommandString.new("Alice, what is Syd's destroy?") }
       let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
       before do
@@ -137,7 +137,7 @@ describe "Alice::Parser::Mash" do
 
   context "Alice, who made the tomato?" do
 
-    let(:command_string)  { CommandString.new("Alice, who made the tomato?") }
+    let(:command_string)  { Message::CommandString.new("Alice, who made the tomato?") }
     let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
     before do
@@ -156,7 +156,7 @@ describe "Alice::Parser::Mash" do
 
   context "Alice, how many points does Robyn have?" do
 
-    let(:command_string)  { CommandString.new("Alice, how many points does Robyn have?") }
+    let(:command_string)  { Message::CommandString.new("Alice, how many points does Robyn have?") }
     let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
     before do
@@ -175,7 +175,7 @@ describe "Alice::Parser::Mash" do
 
   context "Alice, is the tomato cursed?" do
 
-    let(:command_string)  { CommandString.new("Alice, is the tomato cursed?") }
+    let(:command_string)  { Message::CommandString.new("Alice, is the tomato cursed?") }
     let(:parser)          { Alice::Parser::Mash.new(command_string) }
 
     before do

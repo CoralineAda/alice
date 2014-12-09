@@ -4,7 +4,7 @@ describe "Handlers::Item" do
 
   let(:user)    { User.new(primary_nick: "Lydia") }
   let(:item)    { user.items.new(name: "Book") }
-  let(:message) { Message.new(user.primary_nick, "destroy book") }
+  let(:message) { Message::Message.new(user.primary_nick, "destroy book") }
   let(:handler) { Handlers::Item.new(message: message) }
 
   before do

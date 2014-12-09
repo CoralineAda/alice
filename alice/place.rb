@@ -49,7 +49,7 @@ class Place
       room.exits = (random_exits | exits_for_neighbors).flatten.compact.uniq
     end
     room.save
-    Mapper.new.create
+    Util::Mapper.new.create
     room
   end
 
