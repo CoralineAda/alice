@@ -167,7 +167,7 @@ class Place
   def enter
     Place.set_current_room(self)
     self.update_attribute(:last_visited, DateTime.now)
-    Mapper.new.create
+    Util::Mapper.new.create
     place_grue
     place_item
     handle_grue || describe

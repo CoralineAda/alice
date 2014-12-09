@@ -64,7 +64,7 @@ module Alice
       end
 
       def command
-        @command ||= Command.any_in(verbs: command_string.verb).first
+        @command ||= Message::Command.any_in(verbs: command_string.verb).first
       end
 
     end
