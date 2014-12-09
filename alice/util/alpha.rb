@@ -7,12 +7,13 @@ module Util
     attr_reader :answer
 
     CLIENT_OPTIONS = { format: 'plaintext' }
+
     def initialize(question)
       @question = question
     end
 
     def answer
-      Alice::Util::Logger.info "*** Alpha response: \"#{response.pods.first.inspect}\""
+      return unless ENV['ALPHA_ENABLED']
       return unless result_pod = response.find{|pod| pod.title == "Result"}
       result_pod.subpods[0].plaintext.gsub("\n", " ")
     end
