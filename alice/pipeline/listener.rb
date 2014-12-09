@@ -44,7 +44,7 @@ module Pipeline
     end
 
     def greet(emitted)
-      return if emitted.user.nick == Alice::Util::Mediator.bot_name
+      return if emitted.user.nick == Pipeline::Mediator.bot_name
       Pipeline::Processor.process(emitted.channel, message(emitted, emitted.user.nick), :greet_on_join)
     end
 

@@ -27,8 +27,8 @@ describe "Message Round Trip" do
     sender.stub(:recently_stole?) { true }
     User.stub(:find_or_create) { sender }
     Message::Command.stub(:any_in) { [command] }
-    Alice::Util::Mediator.stub(:emote)
-    Alice::Util::Mediator.stub(:reply_with)
+    Pipeline::Mediator.stub(:emote)
+    Pipeline::Mediator.stub(:reply_with)
   end
 
   context "!command" do

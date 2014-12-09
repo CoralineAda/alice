@@ -19,7 +19,7 @@ module Pipeline
     end
 
     def self.sleep
-      Alice::Util::Mediator.emote(ENV['PRIMARY_CHANNEL'], "reboots.")
+      Pipeline::Mediator.emote(ENV['PRIMARY_CHANNEL'], "reboots.")
     end
 
     def react
@@ -43,9 +43,9 @@ module Pipeline
     def respond
       if response = Pipeline::Commander.process(self.message).response
         if self.message.response_type == "emote"
-          Alice::Util::Mediator.emote(self.channel, response)
+          Pipeline::Mediator.emote(self.channel, response)
         else
-          Alice::Util::Mediator.reply_with(self.channel, response)
+          Pipeline::Mediator.reply_with(self.channel, response)
         end
       end
       message
@@ -53,7 +53,7 @@ module Pipeline
 
     def greet_on_join
       return unless Alice::Util::Randomizer.one_chance_in(4)
-      Alice::Util::Mediator.emote(
+      Pipeline::Mediator.emote(
         self.channel,
         Message::Response.greeting(self.message).response
         )
@@ -67,7 +67,7 @@ module Pipeline
     end
 
     def preview_url
-      Alice::Util::Mediator.reply_with(
+      Pipeline::Mediator.reply_with(
         self.channel,
         Message::Response.preview_url(self.message).response
         )
@@ -76,7 +76,7 @@ module Pipeline
 
     def well_actually
       return unless Alice::Util::Randomizer.one_chance_in(2)
-      Alice::Util::Mediator.reply_with(
+      Pipeline::Mediator.reply_with(
         self.channel,
         Message::Response.well_actually(self.message).response
         )
@@ -84,7 +84,7 @@ module Pipeline
     end
 
     def so_say_we_all
-      Alice::Util::Mediator.reply_with(
+      Pipeline::Mediator.reply_with(
         self.channel,
         Message::Response.so_say_we_all(self.message).response
         )

@@ -97,7 +97,7 @@ class User
   end
 
   def self.online
-    list = Alice::Util::Mediator.user_nicks
+    list = Pipeline::Mediator.user_nicks
     any_in(primary_nick: list) | any_in(alt_nicks: list)
   end
 
@@ -118,7 +118,7 @@ class User
   end
 
   def self.find_or_create(nick)
-    by_nick(nick) || Alice::Util::Mediator.exists?(nick) && create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
+    by_nick(nick) || Pipeline::Mediator.exists?(nick) && create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
   end
 
   def self.random
@@ -200,7 +200,7 @@ class User
   end
 
   def current_nick
-    (Alice::Util::Mediator.user_nicks & self.nicks).first || self.primary_nick
+    (Pipeline::Mediator.user_nicks & self.nicks).first || self.primary_nick
   end
 
   def dazed?
@@ -234,11 +234,11 @@ class User
   end
 
   def is_online?
-    (Alice::Util::Mediator.user_nicks & self.nicks).any?
+    (Pipeline::Mediator.user_nicks & self.nicks).any?
   end
 
   def is_op?
-    (Alice::Util::Mediator.op_nicks & self.nicks).any?
+    (Pipeline::Mediator.op_nicks & self.nicks).any?
   end
 
   def formatted_bio
