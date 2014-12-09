@@ -441,15 +441,6 @@ Message::Command.create(
 	response_kind: 'emote',
 )
 Message::Command.create(
-	name: 'sentinel',
-	verbs: [""],
-	stop_words: [""],
-	indicators: [],
-	handler_class: 'Handlers::Item',
-	handler_method: 'steal',
-	response_kind: 'message',
-)
-Message::Command.create(
 	name: 'eat',
 	verbs: ["eat", "consume", "munch", "swallow", "drink"],
 	stop_words: [],

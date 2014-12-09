@@ -80,6 +80,10 @@ class Actor
     self.catchphrases.create(text: text)
   end
 
+  def awake?
+    true
+  end
+
   def brew
     self.beverages << Beverage.brew_random
     self.beverages.last
