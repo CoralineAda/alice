@@ -36,7 +36,7 @@ module Alice
     end
 
     def stop
-      Processor.sleep
+      Pipeline::Processor.sleep
       Raad::Logger.info("Daemon stopped.")
     end
   end
