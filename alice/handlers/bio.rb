@@ -20,12 +20,10 @@ module Handlers
     end
 
     def return_bio
-      return unless subject
-      if subject.formatted_bio
-        message.set_response(subject.formatted_bio)
-      else
-        message.set_response(Util::Randomizer.got_nothing)
-      end
+      text = "I don't know who that is." unless subject
+      text = subject.formatted_bio if subject && subject.formatted_bio
+      text ||= "I don't seem to know anything about them."
+      message.set_response(text)
     end
 
     def subject

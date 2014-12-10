@@ -18,7 +18,8 @@ module Parser
       ],
       [:to_interrogative, [:to_info_verb,
                             [:to_subject, [:to_property]],
-                            [:to_object, [:to_property]]
+                            [:to_object, [:to_property]],
+                            [:to_topic]
                           ]
       ],
       [:to_info_verb,
