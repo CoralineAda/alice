@@ -8,7 +8,7 @@ module Parser
     attr_accessor :this_transfer_verb, :this_action_verb, :this_preposition
     attr_accessor :this_relation_verb, :this_topic, :this_noun, :this_adverb
     attr_accessor :relation_verb
-    attr_accessor :this_property, :this_greeting, :this_pronoun
+    attr_accessor :this_property, :this_greeting, :this_pronoun, :this_interrogative
 
     STRUCTURES = [
       [:to_greeting, [:to_subject]],
@@ -16,7 +16,11 @@ module Parser
                           [:to_info_verb, [:to_topic]],
                           [:to_info_verb, [:to_subject]]
       ],
-      [:to_interrogative, [:to_info_verb, [:to_subject]]],
+      [:to_interrogative, [:to_info_verb,
+                            [:to_subject, [:to_property]],
+                            [:to_object, [:to_property]]
+                          ]
+      ],
       [:to_info_verb,
                           [:to_pronoun],
                           [:to_adverb],
@@ -73,7 +77,7 @@ module Parser
       end
 
       event :info_verb do
-        transitions from: [:alice], to: :info_verb, guard: :info_verb?
+        transitions from: [:alice, :interrogative], to: :info_verb, guard: :info_verb?
       end
 
       event :action_verb do
@@ -81,7 +85,7 @@ module Parser
       end
 
       event :interrogative do
-        transitions from: [:alice], to: :interrogative, guard: :interrogative?
+        transitions from: [:alice], to: :interrogative, guard: :has_interrogative?
       end
 
       event :relation_verb do
@@ -233,8 +237,8 @@ module Parser
       self.this_info_verb
     end
 
-    def interrogative?
-      self.this_pronoun = "who" if any_content_in?(["who"])
+    def has_interrogative?
+      self.this_pronoun = "who" if any_content_in?(["who"]) && info_verb?
       self.this_pronoun
     end
 
