@@ -2,50 +2,41 @@ require 'spec_helper'
 
 describe Place do
 
-  describe ".exits_for_neighbors" do
+  describe "#exits" do
 
     before do
       Place.delete_all
-      Place.any_instance.stub(:ensure_description) { true }
-      @place = Place.create!(x:0, y:0, is_current: true )
-      @north = Place.create!(x: 0, y: -1)
-      @south = Place.create!(x: 0, y: 1)
-      @east = Place.create!(x: 1, y: 0)
-      @west = Place.create!(x: -1, y: 0)
     end
 
-    it "detects its neighbors" do
-      @place.neighbors.each do |neighbor|
-        expect([@north, @south, @east, @west].include?(neighbor)).to be_truthy
+    context "matches exits between rooms" do
+
+      before do
+        @origin = Place.generate!(x: 0, y: 0)
+        allow_any_instance_of(Util::Mapper).to receive(:create) { true }
       end
+
+      it "when the neighbor is to the east" do
+        neighbor = Place.generate!(x: @origin.x + 1, y: @origin.y)
+        expect(neighbor.exits.include?("west")).to be_truthy
+      end
+
+      it "when the neighbor is to the west" do
+        neighbor = Place.generate!(x: @origin.x - 1, y: @origin.y)
+        expect(neighbor.exits.include?("east")).to be_truthy
+      end
+
+      it "when the neighbor is to the north" do
+        neighbor = Place.generate!(x: @origin.x, y: @origin.y - 1)
+        expect(neighbor.exits.include?("south")).to be_truthy
+      end
+
+      it "when the neighbor is to the south" do
+        neighbor = Place.generate!(x: @origin, y: @origin.y + 1)
+        expect(neighbor.exits.include?("north")).to be_truthy
+      end
+
     end
 
-  end
-
-  describe ".generate" do
-
-    before do
-      Place.delete_all
-    end
-
-    it "matches exits between rooms" do
-      origin = Place.create(x: 0, y: 0, exits: ["east"])
-
-      Util::Mapper.any_instance.stub(:create) { true }
-      Place.any_instance.stub(:save) { true }
-      Place.stub(:random_description) { true }
-
-      how_many = 100
-
-      matches = how_many.times.map do
-        place = Place.generate!(x: 1, y: 0, is_current: true)
-        value = place.exits.include?('west') || nil
-        place.delete
-        value
-      end.compact
-
-      expect(matches.count).to eq(how_many)
-    end
   end
 
 end

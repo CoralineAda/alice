@@ -3,12 +3,10 @@ class Place
   include Mongoid::Document
 
   field :description
-  field :exits, type: Array, default: []
   field :is_current, type: Boolean
   field :x, type: Integer
   field :y, type: Integer
   field :is_dark, type: Boolean
-  field :locked_exit
   field :view_from_afar
   field :last_visited, type: DateTime
 
@@ -20,12 +18,19 @@ class Place
   index({ x: 1, y: 1 },    { unique: true })
   index({ is_current: 1 }, { unique: false })
 
+  before_create :set_exits
   after_create  :place_item
   after_create  :place_actor
   after_create  :place_wand
   before_create :ensure_description
 
   DIRECTIONS = ['north', 'south', 'east', 'west']
+  NEIGHBOR_COORDS = {
+    north:  [0,-1],
+    south:  [0,1],
+    east:   [1,0],
+    west:   [-1,0]
+  }
   PITCH_BLACK = "It is pitch black. You are likely to be eaten by a grue."
 
   def self.current
@@ -43,22 +48,8 @@ class Place
       description: description || random_description,
       is_dark: x == 0 && y == 0 || Util::Randomizer.one_chance_in(5)
     )
-    if room.origin_square?
-      room.exits = random_exits
-    else
-      room.exits = (random_exits | exits_for_neighbors).flatten.compact.uniq
-    end
-    room.save
     Util::Mapper.new.create
     room
-  end
-
-  def self.exits_for_neighbors
-    DIRECTIONS.select do |direction|
-      if neighbor = place_to(direction, false, false)
-        neighbor.exits.to_a.include?(opposite_direction(direction))
-      end
-    end.reject(&:nil?)
   end
 
   def self.go(direction)
@@ -83,15 +74,10 @@ class Place
       x = current.x
     end
 
-   room = Place.where(x: x, y: y).first
-    if create_place
-      room ||= Place.generate!(
-        x: x,
-        y:y,
-        entered_from: opposite_direction(direction)
-      )
+    unless room = Place.where(x: x, y: y).first
+      room = Place.generate!(x: x, y: y)
     end
-    return room.enter if room && party_moving
+    return room.enter if party_moving
     return room
   end
 
@@ -109,10 +95,6 @@ class Place
       Util::Randomizer.room_description
     ].join(' ') + "."
     description
-  end
-
-  def self.random_exits
-    DIRECTIONS.sample(rand(2) + 2)
   end
 
   def self.set_current_room(room)
@@ -173,8 +155,49 @@ class Place
     handle_grue || describe
   end
 
-  def exit_is_locked?(direction)
-    self.locked_exit == direction
+  def neighbors
+    @neighbors ||= NEIGHBOR_COORDS.values.map do |coords|
+      Place.where(x: self.x + coords[0], y: self.y + coords[1]).first
+    end.compact
+  end
+
+  def make_origin_exits
+    return unless origin_square?
+    NEIGHBOR_COORDS.values.each do |neighbor_x, neighbor_y|
+      coords_of_neighbor = [self.x + neighbor_x, self.y + neighbor_y]
+      door = Door.from(self.coords).to(coords_of_neighbor).save!
+    end
+  end
+
+  def make_random_exits
+    return if origin_square?
+    NEIGHBOR_COORDS.values.sample(rand(2) + 1).each do |neighbor_x, neighbor_y|
+      coords_of_neighbor = [self.x + neighbor_x, self.y + neighbor_y]
+      next if Place.where(x: coords_of_neighbor[0], y: coords_of_neighbor[1]).first
+      Door.from(self.coords).to(coords_of_neighbor).save!
+    end
+  end
+
+  def set_exits
+    make_origin_exits
+    make_random_exits
+    return true
+  end
+
+  def exits
+    NEIGHBOR_COORDS.map do |direction, ordinal_coords|
+      if Door.where(
+          to_coords: [self.x + ordinal_coords[0], self.y + ordinal_coords[1]],
+          from_coords: self.coords
+        ).first
+        direction.to_s
+      elsif Door.where(
+          to_coords: self.coords,
+          from_coords: [self.x + ordinal_coords[0], self.y + ordinal_coords[1]]
+        ).first
+        direction.to_s
+      end
+    end.compact.uniq
   end
 
   def handle_grue
@@ -190,7 +213,7 @@ class Place
   end
 
   def has_exit?(direction)
-    self.exits.include?(direction)
+    exits.include?(direction)
   end
 
   def has_item?
@@ -205,34 +228,12 @@ class Place
     self.actors.grue.present?
   end
 
-  def has_locked_door?
-    return false if self.exits.count == 1
-    return true if self.locked_exit.present?
-    candidates = self.exits - neighbors.select{|n| ! n[:room].already_visited? }.map{|n| n[:direction]}
-    if Util::Randomizer.one_chance_in(2)
-      self.update_attribute(:locked_exit, candidates.sample)
-      if room = neighbors.select{|n| n[:direction] == self.locked_exit}.first
-        room[:room].lock_door(Place.opposite_direction(locked_exit))
-      end
-    end
-  end
-
   def illuminate
     update_attributes(is_dark: false)
   end
 
   def lights_out
     update_attributes(is_dark: true)
-  end
-
-  def lock_door(direction)
-    self.exits ||= (random_exits | ['direction']).flatten.compact.uniq
-    self.locked_exit = direction
-    self.save
-  end
-
-  def neighbors
-    Place.where(x: ((self.x - 1)..(self.x + 1)), y: ((self.y - 1)..(self.y + 1))).reject{|p| p == self}
   end
 
   def origin_square?
@@ -258,8 +259,9 @@ class Place
   def place_item
     return false if self.origin_square? || Item.all.empty?
     if Util::Randomizer.one_chance_in(5)
-      item = Item.hidden.sample || Item.unplaced.unclaimed.sample
-      item.update_attribute(:place_id, self.id)
+      if item = Item.hidden.sample || Item.unplaced.unclaimed.sample
+        item.update_attribute(:place_id, self.id)
+      end
     end
   end
 
@@ -272,11 +274,6 @@ class Place
 
   def stuff
     @stuff ||= self.items + self.beverages + self.machines
-  end
-
-  def unlock
-    neighbors.select{|n| n[:direction] = self.locked_exit}.first[:room].update_attribute(:locked_exit, nil)
-    self.update_attribute(:locked_exit, nil)
   end
 
   def view

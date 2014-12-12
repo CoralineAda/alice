@@ -1,6 +1,7 @@
 class Dungeon
 
   def self.reset!
+    Door.delete_all
     Actor.reset_all
     Item.reset_cursed
     Beverage.sweep

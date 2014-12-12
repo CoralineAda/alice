@@ -4,7 +4,7 @@ module Handlers
     include PoroPlus
     include Behavior::HandlesCommands
 
-    FREQUENCY = 10
+    FREQUENCY = 4
     INACTIVITY_THRESHOLD = 5.minutes
 
     ACTIONS = [:summon_actor, :dismiss_actor, :steal, :actor_speaks, :suggest_topic]

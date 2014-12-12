@@ -71,9 +71,9 @@ class Actor
   end
 
   def self.reset_all
-    all.each{|actor| actor.in_play = false; actor.place_id = nil; actor.save}
-    10.times{create(name: Util::Randomizer.specific_person)}
-    all.sample(10).map(&:put_in_play)
+    all.each{ |actor| actor.in_play = false; actor.place_id = nil; actor.save }
+    10.times{ create(name: Util::Randomizer.specific_person) }
+    10.times{ all.sample.put_in_play }
     grue.put_in_play
   end
 
