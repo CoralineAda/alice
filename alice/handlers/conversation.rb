@@ -8,25 +8,20 @@ module Handlers
     include Behavior::HandlesCommands
     include ActiveSupport
 
-    attr_accessor :current_context
-
-    def initialize(*args)
-      self.current_context = global_context
-      super
-    end
-
     def converse
-      text = fact_from(predicate.split.last)
-      if set_context_from_predicate
-        text ||= fact_from(predicate)
+      unless text = fact_from(predicate.split.last)
+        set_context_from_predicate
+        unless text = fact_from(predicate.split.last)
+          context_stack.pop
+        end
       end
       text ||= default_response(predicate)
       set_response(text)
     end
 
     def give_context
-      text = if self.current_context
-        "I was just talking about #{self.current_context.topic}."
+      text = if current_context
+        "I was just talking about #{current_context.topic}."
       else
         "I wasn't talking about anything in particular."
       end
@@ -35,21 +30,29 @@ module Handlers
 
     private
 
+    def context_stack
+      @context_stack ||= Array.new([global_context])
+    end
+
+    def current_context
+      context_stack.last || Context.current
+    end
+
     def context_from(topic, subtopic=nil)
-      self.current_context = Context.any_from(topic.downcase, subtopic)
-      self.current_context ||= Context.find_or_create(topic.downcase)
-      self.current_context ||= global_context
-      self.current_context
+      new_context = Context.any_from(topic.downcase, subtopic)
+      new_context ||= Context.find_or_create(topic.downcase)
+      new_context ||= global_context
+      update_context(new_context)
     end
 
     def default_response(topic)
       return Util::Randomizer.i_dont_know if facts_exhausted?(topic)
       return "I don't know what we're talking about" if no_context?
-      return Util::Randomizer.talking_about(self.current_context.topic)
+      return Util::Randomizer.talking_about(current_context.topic)
     end
 
     def no_context?
-      self.current_context.nil?
+      current_context.nil?
     end
 
     def facts_exhausted?(topic)
@@ -57,16 +60,16 @@ module Handlers
     end
 
     def fact_from(topic, speak=true)
-      return unless self.current_context
+      return unless current_context
       return unless topic
 
-      fact = self.current_context.declarative_fact(topic.downcase, speak)
-      fact ||= self.current_context.declarative_fact(topic.downcase.pluralize, speak)
-      fact ||= self.current_context.declarative_fact(topic.downcase.singularize, speak)
+      fact = current_context.declarative_fact(topic.downcase, speak)
+      fact ||= current_context.declarative_fact(topic.downcase.pluralize, speak)
+      fact ||= current_context.declarative_fact(topic.downcase.singularize, speak)
 
-      fact ||= self.current_context.relational_fact(topic.downcase, speak)
-      fact ||= self.current_context.relational_fact(topic.downcase.pluralize, speak)
-      fact ||= self.current_context.relational_fact(topic.downcase.singularize, speak)
+      fact ||= current_context.relational_fact(topic.downcase, speak)
+      fact ||= current_context.relational_fact(topic.downcase.pluralize, speak)
+      fact ||= current_context.relational_fact(topic.downcase.singularize, speak)
     end
 
     def global_context
@@ -79,21 +82,15 @@ module Handlers
 
     def set_context_from_predicate
       return unless predicate && predicate.present?
-      return if (command_string.components & Parser::LanguageHelper::PRONOUNS).any?
-      if self.current_context = context_from(predicate.downcase)
-        return false if self.current_context == global_context
-        update_context
-        return true
+      if new_context = context_from(predicate.downcase)
+        update_context(new_context)
       end
     end
 
     def set_context_from_subject
       return unless subject
-      if self.current_context = context_from(subject.downcase)
-        return false if self.current_context == global_context
-        update_context
-        return true
-      end
+      return if (command_string.components & Parser::LanguageHelper::PRONOUNS).any?
+      update_context(context_from(subject.downcase))
     end
 
     def set_response(text)
@@ -105,14 +102,11 @@ module Handlers
       @subject ||= command_string.subject
     end
 
-    def update_context
-      if self.current_context
-        self.current_context.current!
-      else
-        self.current_context = global_context
-      end
-      return if self.current_context == global_context
-      Alice::Util::Logger.info("*** Switching context to #{self.current_context.topic}")
+    def update_context(new_context)
+      return unless new_context
+      context_stack.push(new_context)
+      new_context.current!
+      Alice::Util::Logger.info("*** Switching context to #{new_context.topic}")
     end
 
   end
