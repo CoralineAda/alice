@@ -20,6 +20,7 @@ module Pipeline
     listen_to :nick, method: :nick_update
     listen_to :join, method: :greet
     listen_to :ping, method: :heartbeat
+    listen_to :pong, method: :heartbeat
 
     def route(emitted, trigger)
       tuple = METHOD_MAP.detect { |k,m| k.match(trigger) }
