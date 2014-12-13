@@ -184,9 +184,9 @@ module Parser
       text = text.to_s
       re = Regexp.union((PREDICATE_INDICATORS).flatten.map{|w| /\b#{Regexp.escape(w)}\b/i})
       candidates = text.split(re).map(&:split).flatten
-      candidates = candidates.reject{|c| NOUN_INDICATORS.join =~ /#{c}/i}
-      candidates = candidates.reject{|c| CONJUNCTIONS.join =~ /#{c}/i}
-      candidates = candidates.reject{|c| PREPOSITIONS.join =~ /#{c}/i}
+      candidates = candidates.reject{|c| NOUN_INDICATORS.include?(c.downcase)}
+      candidates = candidates.reject{|c| CONJUNCTIONS.include?(c.downcase)}
+      candidates = candidates.reject{|c| PREPOSITIONS.include?(c.downcase)}
       candidates = candidates.map{|candidate| candidate.gsub(/[^a-zA-Z]/x, " ")}.compact
       candidates = candidates.map(&:split).flatten.compact.map(&:downcase)
     end

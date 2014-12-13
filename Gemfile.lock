@@ -88,6 +88,8 @@ GEM
       rspec-support (~> 3.1.0)
     rspec-support (3.1.2)
     ruby-stemmer (0.9.3)
+    ruby-web-search (0.0.2)
+      json
     rubyfish (0.0.6)
     sanitize (3.0.3)
       crass (~> 0.2.0)
@@ -129,6 +131,7 @@ DEPENDENCIES
   require_all
   rspec
   ruby-stemmer (>= 0.8.3)
+  ruby-web-search
   rubyfish
   sanitize (>= 3.0.2)
   wikipedia-client

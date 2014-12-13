@@ -11,18 +11,33 @@ module Parser
       @url = url
     end
 
+    def content
+      return unless source
+      ::Sanitize.fragment(source.content)
+    end
+
+    def source
+      @source ||= Nokogiri::HTML(open(url))
+      @source = nil unless @source.search("//html")
+      @source.search("//script").remove
+      @source.search("//css").remove
+      @source
+    rescue Exception => e
+      Alice::Util::Logger.info("*** Couldn't process URL for #{url}")
+      Alice::Util::Logger.info e.backtrace
+    end
+
     def preview
-      source = Nokogiri::HTML(open(url))
-      return unless source.content =~ /html/i
+      return unless source
       title_node = source.search("//title")
+      title_node ||= source.search("//h1")
+      title_node ||= source.search("//h2")
       snippet = source.xpath("//p").map(&:content).detect do |content|
         content.length > 25
       end
       snippet = truncate(snippet.to_s.strip.gsub(/[\n\r ]+/," ")).split('|')[0]
       title   = truncate(title_node.nil? ? '' : title_node.text)
       return [title, snippet].reject(&:empty?).join(' | ')
-    rescue Exception => e
-      Alice::Util::Logger.info("*** Couldn't process URL preview for #{url}: #{e.backtrace}")
     end
 
     private

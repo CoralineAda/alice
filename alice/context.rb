@@ -1,3 +1,4 @@
+require 'ruby-web-search'
 class Context
 
   include Mongoid::Document
@@ -88,13 +89,14 @@ class Context
 
   def define_corpus
     self.corpus ||= begin
-      sanitized = fetch_content_from_sources(self.topic)
+      sanitized = fetch_content_from_sources
       sanitized = Util::Sanitizer.scrub_wiki_content(sanitized)
       sanitized = sanitized.reject{|s| s.include?("may refer to") || s.include?("disambiguation") }
       sanitized = sanitized.reject{|s| s.size < MINIMUM_FACT_LENGTH}
       sanitized
     rescue Exception => e
       Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
+      Alice::Util::Logger.info e.backtrace
     end
   end
 
@@ -163,7 +165,7 @@ class Context
   def facts
     return [] unless corpus
     candidates = corpus.reject{|sentence| spoken.include? sentence}
-    candidates = candidates.reject{|sentence| sentence.include? "http"}
+#    candidates = candidates.reject{|sentence| sentence.include? "http"}
     candidates.to_a.sort do |a,b|
       (position_of("is", a) || position_of("was", a) || 100) - 100 <=> (position_of("is", b) || position_of("was", b) || 100) - 100
     end
@@ -186,7 +188,17 @@ class Context
   end
 
   def fetch_content_from_sources
-    Wikipedia.find(self.topic).sanitized_content
+    unless content = Wikipedia.find(self.topic).sanitized_content
+      begin
+        google_results = RubyWebSearch::Google.search(query: topic).results
+        content = google_results[0..2].map do |result|
+          Parser::URL.new(result[:url]).content
+        end.flatten.join(' ')
+      rescue
+        content = ""
+      end
+    end
+    content
   end
 
 end

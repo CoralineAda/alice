@@ -18,6 +18,7 @@ gem 'rake'
 gem 'require_all'
 gem 'rspec', :group => :test
 gem 'ruby-stemmer', '>=0.8.3', require: 'lingua/stemmer'
+gem 'ruby-web-search'
 gem 'rubyfish'
 gem 'sanitize', '>= 3.0.2'
 gem 'wikipedia-client'
