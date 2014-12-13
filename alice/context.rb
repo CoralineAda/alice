@@ -36,7 +36,6 @@ class Context
     from(topic) || create(topic: topic)
   end
 
-  # FIXME use ngrams here?
   def self.with_topic_matching(topic)
     ngrams = Parser::NgramFactory.new(topic).omnigrams
     ngrams = ngrams.map{|g| g.join(' ')}
@@ -45,7 +44,6 @@ class Context
     end
   end
 
-  # FIXME use ngrams here?
   def self.with_keywords_matching(topic)
     topic_keywords = keywords_from(topic)
     any_in(keywords: topic_keywords).sort do |a,b|
@@ -109,6 +107,8 @@ class Context
       candidates = Parser::LanguageHelper.probable_nouns_from(corpus.join(" "))
       candidates = candidates.inject(Hash.new(0)) {|h,i| h[i] += 1; h }
       candidates.select{|k,v| v > 1}.map(&:first)
+    rescue
+      []
     end.flatten
   end
 
