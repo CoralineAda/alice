@@ -9,6 +9,7 @@ class Context
   field :expires_at, type: DateTime
   field :is_current, type: Boolean
   field :spoken, type: Array, default: []
+  field :created_at, type: DateTime
 
   TTL = 5
   AMBIGUOUS = "That may refer to several different things. Can you clarify?"
@@ -52,7 +53,8 @@ class Context
     end.last
   end
 
-  def self.from(topic)
+  def self.from(*topic)
+    topic.join(' ') if topic.respond_to?(:join)
     with_topic_matching(topic) || with_keywords_matching(topic)
   end
 
@@ -97,6 +99,8 @@ class Context
     rescue Exception => e
       Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
       Alice::Util::Logger.info e.backtrace
+    ensure
+      ""
     end
   end
 
@@ -188,15 +192,14 @@ class Context
   end
 
   def fetch_content_from_sources
-    unless content = Wikipedia.find(self.topic).sanitized_content
-      begin
-        google_results = RubyWebSearch::Google.search(query: topic).results
-        content = google_results[0..2].map do |result|
-          Parser::URL.new(result[:url]).content
-        end.flatten.join(' ')
-      rescue
-        content = ""
-      end
+    if result = Wikipedia.find(self.topic)
+      content = result.sanitized_content
+    end
+    unless content.present?
+      google_results = RubyWebSearch::Google.search(query: topic).results
+      content = google_results[0..2].map do |result|
+        Parser::URL.new(result[:url]).content
+      end.flatten.join(' ')
     end
     content
   end

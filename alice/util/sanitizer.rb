@@ -75,7 +75,7 @@ module Util
 
     def self.scrub_wiki_content(content)
       sanitized = ::Sanitize.fragment(content)            # remove HTML
-      sanitized = sanitized.split(/[\r\n]/i)              # split at boundaries
+      sanitized = sanitized.split(/[\r\n\?\!]|\. /i)      # split at boundaries
       sanitized = sanitized.reject{|w| w == /^[^a-z]$/i}  # reject whitespace-only sentences
       sanitized = sanitized.reject{|w| w =~ /\=\=/}       # wikipedia madness
       sanitized = sanitized.reject{|w| w =~ /^\*/}        # more wikipedia madness

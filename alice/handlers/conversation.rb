@@ -9,13 +9,13 @@ module Handlers
     include ActiveSupport
 
     def converse
-      text = fact_from(predicate.split.last)
-      set_response(text) and return if text.present? && text != ::Context.AMBIGUOUS
-      set_context_from_predicate
       unless text = fact_from(predicate.split.last)
-        context_stack.pop
+        set_context_from_predicate
+        unless text = fact_from(predicate.split.last)
+          context_stack.pop
+        end
+        text ||= default_response(predicate)
       end
-      text ||= default_response(predicate)
       set_response(text)
     end
 
@@ -70,6 +70,8 @@ module Handlers
       fact ||= current_context.relational_fact(topic.downcase, speak)
       fact ||= current_context.relational_fact(topic.downcase.pluralize, speak)
       fact ||= current_context.relational_fact(topic.downcase.singularize, speak)
+
+      fact ||= Util::Randomizer.i_dont_know
     end
 
     def global_context
