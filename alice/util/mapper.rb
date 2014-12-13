@@ -28,7 +28,7 @@ module Util
       lines << %{<rect x="#{abs_x}" y="#{abs_y}" }
       lines << %{stroke="red" stroke-width="3" } if is_current
       lines << %{width="#{room_size}" height="#{room_size}" rx="5" ry="5"> }
-      lines << %{<title>#{Alice::Util::Sanitizer.process(desc)}</title> }
+      lines << %{<title>#{Util::Sanitizer.process(desc)}</title> }
       lines << %{</rect>}
       exits.each do |exit|
         case exit

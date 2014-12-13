@@ -127,8 +127,8 @@ class User
 
   def self.by_nick(nick)
     scrubbed_nick = nick.to_s.downcase
-    found = where(primary_nick: nick.downcase).first || where(primary_nick: scrubbed_nick).first
-    found ||= where(alt_nicks: nick.downcase).first || where(alt_nicks: scrubbed_nick).first
+    found = where(primary_nick: scrubbed_nick).first || where(primary_nick: scrubbed_nick).first
+    found ||= where(alt_nicks: scrubbed_nick).first || where(alt_nicks: scrubbed_nick).first
     found
   end
 

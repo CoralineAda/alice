@@ -10,7 +10,8 @@ class Context
   field :spoken, type: Array, default: []
 
   TTL = 5
-  PREDICATE_INDICATORS = %w{to from with on in about the and or near from by}
+  AMBIGUOUS = "That may refer to several different things. Can you clarify?"
+  MINIMUM_FACT_LENGTH = 30
 
   before_save :downcase_topic, :define_corpus, :extract_keywords
   before_create :set_expiry
@@ -22,38 +23,40 @@ class Context
   end
 
   def self.current
-    if context = where(is_current: true).desc(:expires_at).first
+    if context = where(is_current: true).desc(:expires_at).last
       ! context.expire && context
     end
+  end
+
+  def self.keywords_from(topic)
+    topic.to_s.downcase.split - Parser::LanguageHelper::PREDICATE_INDICATORS
   end
 
   def self.find_or_create(topic)
     from(topic) || create(topic: topic)
   end
 
-  def self.from(topic)
-    topic_keywords = topic.to_s.downcase.to_a
-    topic_keywords = topic_keywords - Parser::LanguageHelper::PREDICATE_INDICATORS
-    if exact_match = any_in(topic: topic_keywords).first
+  # FIXME use ngrams here
+  def self.with_topic_matching(topic)
+    if exact_match = any_in(topic: [topic.downcase, keywords_from(topic).join(" ")]).first
       return exact_match
     end
-    any_in(keywords: topic_keywords.join(" ")).sort do |a,b|
+  end
+
+  # FIXME use ngrams here
+  def self.with_keywords_matching(topic)
+    topic_keywords = keywords_from(topic)
+    any_in(keywords: topic_keywords).sort do |a,b|
       (a.keywords & topic_keywords).count <=> (b.keywords & topic_keywords).count
     end.last
   end
 
-  def self.about(topic, subtopic=nil)
-    return unless topic = from(topic)
-    if subtopic
-      topic.relational_fact(subtopic)
-    else
-      topic.targeted_fact(topic)
-    end
+  def self.from(topic)
+    with_topic_matching(topic) || with_keywords_matching(topic)
   end
 
-  def self.any_from(*topic)
-    topic_array = topic.to_a.compact.map(&:split).flatten.map(&:downcase)
-    from(topic) || about(topic_array[0..1])
+  def ambiguous?
+    self.corpus.map{|fact| fact.include?("may refer to") || fact.include?("disambiguation") }.any?
   end
 
   def current!
@@ -73,10 +76,8 @@ class Context
   end
 
   def describe
-    candidates = facts.select{ |sentence| near_match(self.topic, sentence) }
-    fact = candidates.compact.sort do |a,b|
-      position_of('is', a).to_i || position_of('was', a).to_i <=> position_of('is', b).to_i || position_of('was', b).to_i
-    end.first
+    return AMBIGUOUS if ambiguous?
+    fact = facts.select{ |sentence| near_match(self.topic, sentence) }.first
     record_spoken(fact)
     fact
   end
@@ -87,15 +88,10 @@ class Context
 
   def define_corpus
     self.corpus ||= begin
-      sanitized = ::Sanitize.fragment(Wikipedia.find(self.topic).sanitized_content)
-      sanitized = sanitized.split(/[\.\:\[\]\n\*\=] /)
-      sanitized = sanitized.reject{|w| w == " "}
-      sanitized = sanitized.reject{|w| w == "["}
-      sanitized = sanitized.reject{|w| w =~ /^\=/}
-      sanitized = sanitized.reject(&:empty?)
-      sanitized = sanitized.reject{|w| w =~ /^\*/}
-      sanitized = sanitized.reject{|s| s.size < 50}
-      sanitized = sanitized.map(&:strip)
+      sanitized = fetch_content_from_sources(self.topic)
+      sanitized = Util::Sanitizer.scrub_wiki_content(sanitized)
+      sanitized = sanitized.reject{|s| s.include?("may refer to") || s.include?("disambiguation") }
+      sanitized = sanitized.reject{|s| s.size < MINIMUM_FACT_LENGTH}
       sanitized
     rescue Exception => e
       Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
@@ -107,22 +103,19 @@ class Context
   end
 
   def extract_keywords
-    candidates = probable_nouns.inject(Hash.new(0)) {|h,i| h[i] += 1; h }
-    self.keywords = candidates.select{|k,v| v > 1}.map(&:first)
+    self.keywords = begin
+      candidates = Parser::LanguageHelper.probable_nouns_from(corpus.join(" "))
+      candidates = candidates.inject(Hash.new(0)) {|h,i| h[i] += 1; h }
+      candidates.select{|k,v| v > 1}.map(&:first)
+    end.flatten
   end
 
   def has_spoken_about?(topic)
     self.spoken.to_s.downcase.include?(topic.downcase)
   end
 
-  def probable_nouns
-    re = Regexp.union(PREDICATE_INDICATORS.map{|w| /\b#{Regexp.escape(w)}\b/i})
-    candidates = self.corpus.to_a.split(re).flatten
-    candidates = candidates.map{|candidate| candidate.gsub(/[^a-zA-Z]/x, " ")}.compact
-    candidates = candidates.map(&:split).map(&:last).flatten.compact.map(&:downcase)
-  end
-
   def random_fact
+    return AMBIGUOUS if ambiguous?
     facts.sample
   end
 
@@ -141,6 +134,7 @@ class Context
   end
 
   def declarative_fact(subtopic, spoken=true)
+    return AMBIGUOUS if ambiguous?
     fact = relational_facts(subtopic).select do |sentence|
       has_info_verb = sentence =~ /\b#{Parser::LanguageHelper::INFO_VERBS * '|\b'}/ix
       placement = position_of(subtopic.downcase, sentence.downcase)
@@ -151,12 +145,14 @@ class Context
   end
 
   def targeted_fact(subtopic, spoken=true)
+    return AMBIGUOUS if ambiguous?
     fact = targeted_fact_candidates(subtopic).sample
     record_spoken(fact) if spoken
     fact
   end
 
   def relational_fact(subtopic, spoken=true)
+    return AMBIGUOUS if ambiguous?
     fact = relational_facts(subtopic).sample
     record_spoken(fact) if spoken
     fact
@@ -167,8 +163,8 @@ class Context
     candidates = corpus.reject{|sentence| spoken.include? sentence}
     candidates = candidates.reject{|sentence| sentence.include? "http"}
     candidates.to_a.sort do |a,b|
-      (a =~ /is|was/i).to_i <=> (b =~ /is|was/i).to_i
-    end.reverse
+      (position_of("is", a) || position_of("was", a) || 100) - 100 <=> (position_of("is", b) || position_of("was", b) || 100) - 100
+    end
   end
 
   def record_spoken(fact)
@@ -185,6 +181,10 @@ class Context
 
   def position_of(word, sentence)
     sentence =~ /\b#{word}/i
+  end
+
+  def fetch_content_from_sources
+    Wikipedia.find(self.topic).sanitized_content
   end
 
 end

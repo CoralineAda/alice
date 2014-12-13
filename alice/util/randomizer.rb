@@ -399,7 +399,7 @@ module Util
     end
 
     def self.nth
-      (1..13).to_a.map{ |i| Alice::Util::Sanitizer.ordinal(i)}.sample
+      (1..13).to_a.map{ |i| Util::Sanitizer.ordinal(i)}.sample
     end
 
     def self.color

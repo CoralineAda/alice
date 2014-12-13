@@ -212,7 +212,7 @@ class Item
   end
 
   def name_with_article
-    Alice::Util::Sanitizer.process("#{Util::Randomizer.article} #{self.name_with_appendix}")
+    Util::Sanitizer.process("#{Util::Randomizer.article} #{self.name_with_appendix}")
   end
 
   def play

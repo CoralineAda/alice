@@ -289,16 +289,16 @@ module Parser
 
     def has_topic?
       if this_object
-        if match = Context.any_from(command_string.subject, this_object)
+        if match = Context.from(command_string.subject, this_object)
           self.this_topic = match
           self.this_info_verb = "converse"
           Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" "
         end
-      elsif match = Context.any_from(command_string.subject)
+      elsif match = Context.from(command_string.subject)
         self.this_topic = match
         self.this_info_verb = "converse"
         Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" "
-      elsif match = Context.any_from(command_string.predicate)
+      elsif match = Context.from(command_string.predicate)
         self.this_topic = match
         self.this_info_verb = "converse"
         Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" "

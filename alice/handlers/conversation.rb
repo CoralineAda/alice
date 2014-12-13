@@ -9,11 +9,11 @@ module Handlers
     include ActiveSupport
 
     def converse
+      text = fact_from(predicate.split.last)
+      set_response(text) and return if text.present? && text != ::Context.AMBIGUOUS
+      set_context_from_predicate
       unless text = fact_from(predicate.split.last)
-        set_context_from_predicate
-        unless text = fact_from(predicate.split.last)
-          context_stack.pop
-        end
+        context_stack.pop
       end
       text ||= default_response(predicate)
       set_response(text)
@@ -39,7 +39,7 @@ module Handlers
     end
 
     def context_from(topic, subtopic=nil)
-      new_context = Context.any_from(topic.downcase, subtopic)
+      new_context = Context.from(topic.downcase, subtopic)
       new_context ||= Context.find_or_create(topic.downcase)
       new_context ||= global_context
       update_context(new_context)

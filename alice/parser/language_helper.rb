@@ -1,5 +1,4 @@
 module Parser
-
   module LanguageHelper
 
     ARTICLES = %w{a the of an to and}
@@ -50,6 +49,67 @@ module Parser
     ADVERBS = [
       "lately",
       "recently"
+    ]
+
+    CONJUNCTIONS = [
+      "accordingly",
+      "after",
+      "also",
+      "although",
+      "and",
+      "assuming",
+      "because",
+      "before",
+      "besides",
+      "but",
+      "consequently",
+      "conversely",
+      "even",
+      "for",
+      "furthermore",
+      "hence",
+      "how",
+      "however",
+      "if",
+      "instead",
+      "lest",
+      "likewise",
+      "meanwhile",
+      "moreover",
+      "nevertheless",
+      "nonetheless",
+      "nor",
+      "now",
+      "once",
+      "or",
+      "otherwise",
+      "provided",
+      "rather",
+      "since",
+      "so that",
+      "so",
+      "still",
+      "than",
+      "that",
+      "then",
+      "therefore",
+      "though",
+      "thus",
+      "till",
+      "unless",
+      "until",
+      "what",
+      "whatever",
+      "when",
+      "whenever",
+      "whereas",
+      "whether",
+      "which",
+      "whichever",
+      "while",
+      "why",
+      "yet",
+      "wherever"
     ]
 
     INTERROGATIVES = [
@@ -120,6 +180,16 @@ module Parser
       RubyFish::Hamming.distance(original_word, test_word) <= 5
     end
 
-  end
+    def self.probable_nouns_from(text)
+      text = text.to_s
+      re = Regexp.union((PREDICATE_INDICATORS).flatten.map{|w| /\b#{Regexp.escape(w)}\b/i})
+      candidates = text.split(re).map(&:split).flatten
+      candidates = candidates.reject{|c| NOUN_INDICATORS.join =~ /#{c}/i}
+      candidates = candidates.reject{|c| CONJUNCTIONS.join =~ /#{c}/i}
+      candidates = candidates.reject{|c| PREPOSITIONS.join =~ /#{c}/i}
+      candidates = candidates.map{|candidate| candidate.gsub(/[^a-zA-Z]/x, " ")}.compact
+      candidates = candidates.map(&:split).flatten.compact.map(&:downcase)
+    end
 
+  end
 end

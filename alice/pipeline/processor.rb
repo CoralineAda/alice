@@ -103,10 +103,8 @@ module Pipeline
     private
 
     def track_sender
-      return unless self.message.sender
-      self.message.sender.active!
-    rescue Exception => e
-      Alice::Util::Logger.info("*** Could not track sender!")
+      return unless self.message.sender_nick
+      self.message.sender && self.message.sender.active!
     end
 
   end

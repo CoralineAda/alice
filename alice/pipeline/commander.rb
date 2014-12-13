@@ -3,7 +3,7 @@ module Pipeline
 
     def self.process(message)
       response = Message::Response.from(message).try(:response)
-      Alice::Util::Sanitizer.filter_for(message.sender, response)
+      Util::Sanitizer.filter_for(message.sender, response)
       message.response = response
       message
     end

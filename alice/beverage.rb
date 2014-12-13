@@ -139,7 +139,7 @@ class Beverage
   end
 
   def name_with_article
-    Alice::Util::Sanitizer.process("#{Util::Randomizer.article} #{self.name}")
+    Util::Sanitizer.process("#{Util::Randomizer.article} #{self.name}")
   end
 
 end

@@ -44,8 +44,8 @@ module Pipeline
 
     def self.send_raw(message)
       text = message.respond_to?(:response) ? message.response : message
-      text = Alice::Util::Sanitizer.process(text)
-      text = Alice::Util::Sanitizer.initial_upcase(text)
+      text = Util::Sanitizer.process(text)
+      text = Util::Sanitizer.initial_upcase(text)
       Alice.bot.bot.channels.first.send(text)
     end
 
@@ -54,14 +54,14 @@ module Pipeline
     end
 
     def self.reply_with(channel, message)
-      text = Alice::Util::Sanitizer.process(message)
-      text = Alice::Util::Sanitizer.initial_upcase(text)
+      text = Util::Sanitizer.process(message)
+      text = Util::Sanitizer.initial_upcase(text)
       Alice.bot.bot.channels.select{|c| c == channel}.first.send(text)
     end
 
     def self.emote(channel, message)
-      text = Alice::Util::Sanitizer.process(message)
-      text = Alice::Util::Sanitizer.initial_downcase(text)
+      text = Util::Sanitizer.process(message)
+      text = Util::Sanitizer.initial_downcase(text)
       Alice.bot.bot.channels.select{|c| c == channel}.first.action(text)
     end
 

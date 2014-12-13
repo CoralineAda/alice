@@ -21,6 +21,7 @@ module Message
     end
 
     def sender
+      return unless self.sender_nick
       @sender ||= User.find_or_create(self.sender_nick)
     end
 
