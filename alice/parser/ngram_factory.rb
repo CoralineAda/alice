@@ -20,7 +20,7 @@ module Parser
     def self.omnigrams_from(words)
       words = words.downcase.split(/[^a-zA-Z0-9\_\-]/).uniq
       words << words.map{|word| Lingua.stemmer(word.downcase)}
-      new(words).omnigrams.to_a.flatten.uniq.reject!(&:empty?)
+      new(words.flatten).omnigrams.to_a.flatten.uniq.reject!(&:empty?)
     end
 
     def initialize(target)

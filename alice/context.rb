@@ -36,14 +36,16 @@ class Context
     from(topic) || create(topic: topic)
   end
 
-  # FIXME use ngrams here
+  # FIXME use ngrams here?
   def self.with_topic_matching(topic)
-    if exact_match = any_in(topic: [topic.downcase, keywords_from(topic).join(" ")]).first
+    ngrams = Parser::NgramFactory.new(topic).omnigrams
+    ngrams = ngrams.map{|g| g.join(' ')}
+    if exact_match = any_in(topic: ngrams).first
       return exact_match
     end
   end
 
-  # FIXME use ngrams here
+  # FIXME use ngrams here?
   def self.with_keywords_matching(topic)
     topic_keywords = keywords_from(topic)
     any_in(keywords: topic_keywords).sort do |a,b|
