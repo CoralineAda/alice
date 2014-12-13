@@ -62,6 +62,7 @@ module Pipeline
     end
 
     def heartbeat
+      Alice::Util::Logger.info("*** Processing heartbeat")
       Pipeline::Mediator.reply_with(
         ENV['PRIMARY_CHANNEL'],
         Message::Response.heartbeat(self.message).response
