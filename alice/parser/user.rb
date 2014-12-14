@@ -17,8 +17,8 @@ module Parser
       is_boolean = /\?/.match(method_name)
       return(info) unless is_boolean
       info ? positive_response_for(user, method_name) : negative_response_for(user, method_name)
-    rescue
-      ""
+    # rescue
+    #   ""
     end
 
     def self.scrub_method_name(method_name)
@@ -26,11 +26,19 @@ module Parser
     end
 
     def self.positive_response_for(user, method)
-      "#{user.current_nick} #{scrub_method_name(method)}".gsub(/can([^ ])/, 'can \1')
+      if method =~ /can/
+        "#{user.current_nick} can #{scrub_method_name(method)}".gsub(/can[^ ]/, 'can \1')
+      else
+        "#{user.current_nick} is #{scrub_method_name(method)}".gsub(/is[^ ]/, 'is \1')
+      end
     end
 
-    def self.negative_response_for(method)
-      "#{user.current_nick} is not #{scrub_method_name(method)}".gsub(/can[^ ]/, 'can not \1')
+    def self.negative_response_for(user, method)
+      if method =~ /can/
+        "#{user.current_nick} cannot #{scrub_method_name(method)}".gsub(/can[^ ]/, 'cannot \1')
+      else
+        "#{user.current_nick} is not #{scrub_method_name(method)}".gsub(/is[^ ]/, 'is not \1')
+      end
     end
 
   end

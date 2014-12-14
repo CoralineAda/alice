@@ -319,14 +319,14 @@ class User
     return false if has_nick?(new_nick)
     update_attribute(:alt_nicks, [self.alt_nicks, new_nick.downcase].flatten.uniq)
   end
-  
+
   def info_factoids
     factoids.map(&:text)
   end
 
   alias_method :description, :describe
   alias_method :formatted_name, :proper_name
-  alias_method :info_formatted_bio, :formatted_bio 
+  alias_method :info_formatted_bio, :formatted_bio
 
 # Informational methods
   PROPERTIES.each do |property|
