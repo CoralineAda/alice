@@ -205,15 +205,15 @@ class User
   end
 
   def dazed?
-    self.filters.include?(:dazed)
+    self.filters.map(&:to_s).include?('dazed')
   end
 
   def disoriented?
-    self.filters.include?(:disoriented)
+    self.filters.map(&:to_s).include?('disoriented')
   end
 
   def drunk?
-    self.filters.include?(:drunk)
+    self.filters.map(&:to_s).include?('drunk')
   end
 
   def describe
@@ -324,9 +324,14 @@ class User
     factoids.map(&:text)
   end
 
+  def formatted_last_seen
+    "Last seen #{last_seen}."
+  end
+
   alias_method :description, :describe
   alias_method :formatted_name, :proper_name
   alias_method :info_formatted_bio, :formatted_bio
+  alias_method :info_formatted_last_seen, :formatted_last_seen
 
 # Informational methods
   PROPERTIES.each do |property|

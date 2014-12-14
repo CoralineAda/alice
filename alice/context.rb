@@ -8,6 +8,7 @@ class Context
   field :corpus
   field :expires_at, type: DateTime
   field :is_current, type: Boolean
+  field :is_ephemeral, type: Boolean
   field :spoken, type: Array, default: []
   field :created_at, type: DateTime
 
@@ -66,6 +67,12 @@ class Context
     self.corpus.map{|fact| fact.include?("may refer to") || fact.include?("disambiguation") }.any?
   end
 
+  def corpus_accessor
+    return corpus unless is_ephemeral
+    self.corpus = nil
+    define_corpus
+  end
+
   def current!
     update_attributes(is_current: true, expires_at: DateTime.now + TTL.minutes)
   end
@@ -83,6 +90,7 @@ class Context
 
   def define_corpus
     self.corpus ||= begin
+      p "HERE"
       sanitized = fetch_content_from_sources
       sanitized = Util::Sanitizer.scrub_wiki_content(sanitized)
       sanitized = sanitized.reject{|s| s.include?("may refer to") || s.include?("disambiguation") }
@@ -108,7 +116,7 @@ class Context
   end
 
   def facts
-    corpus.to_a.reject{|sentence| spoken.include? sentence}.sort do |a,b|
+    corpus_accessor.to_a.reject{|sentence| spoken.include? sentence}.sort do |a,b|
       is_was_sort_value(a) <=> is_was_sort_value(b)
     end
   end
@@ -170,6 +178,7 @@ class Context
         content = nil
       else
         self.corpus_from_user = true
+        self.is_ephemeral = true
         return content
       end
     end
