@@ -33,12 +33,12 @@ module Behavior
           if response_type == :emote
             message = "watches in wonder as #{proper_name} snatches the #{item.name} from #{item.owner_name}'s pocket!"
           else
-            message = "Hey, #{item.owner_name}, I just stole your #{proper_name}..."
+            message = "Hey, #{item.owner_name}, I just stole your #{item.name}..."
           end
         end
         item.remove
         item.reset_theft_attempts
-        self.items << item
+        item.change_owner(self)
         self.score_points if self.respond_to?(:score_points)
       else
         update_thefts
