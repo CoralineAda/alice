@@ -76,11 +76,11 @@ class Beverage
   end
 
   def is_coffee?
-    Dictionary.is_a?(:coffee_or_tea, self.name) == true
+    Grammar::Dictionary.is_a?(:coffee_or_tea, self.name) == true
   end
 
   def set_alcohol
-    return if Dictionary.is_a?(:coffee_or_tea, self.name) == true
+    return if Grammar::Dictionary.is_a?(:coffee_or_tea, self.name) == true
     beer = Beer.search(self.name)
     cocktail = MixedDrink.search(self.name)
     if drink = Grammar::LanguageHelper.similar_to(self.name, beer.canonical_name) && beer ||
