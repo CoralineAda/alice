@@ -8,12 +8,12 @@ module Handlers
     include Behavior::HandlesCommands
 
     def move
-      if Place.current.has_exit?(direction)
-        response = "#{message.sender_nick} dazedly leads the party #{direction}.\n\r" if message.sender.dazed?
-        response = "#{message.sender_nick} staggers #{direction}.\n\r" if message.sender.drunk?
-        response = "#{message.sender_nick} leads the party (hopefully) #{direction}.\n\r" if message.sender.disoriented?
+      if Place.current.has_exit?(movement_direction)
+        response = "#{message.sender_nick} dazedly leads the party #{movement_direction}.\n\r" if message.sender.dazed?
+        response = "#{message.sender_nick} staggers #{movement_direction}.\n\r" if message.sender.drunk?
+        response = "#{message.sender_nick} leads the party (hopefully) #{movement_direction}.\n\r" if message.sender.disoriented?
         response ||= ""
-        response << Place.go(direction)
+        response << Place.go(movement_direction)
       else
         response = "You can't go that way!"
       end
@@ -21,22 +21,10 @@ module Handlers
     end
 
     def look
-      if direction.present?
-        if Place.current.has_exit?(direction)
-          room = Place.current.neighbors.select{|r| r[:direction] == direction}.first[:room]
-          response = room.view
-        elsif direction
-          response = "A lovely wall you've found there."
-        end
-      elsif command_string.subject.length > 0 && subject = command_string.subject
-        if obj = (::User.from(subject) || ::Item.from(subject) || ::Beverage.from(subject) || ::Machine.from(subject) || ::Actor.from(subject))
-          response = obj.describe
-        elsif Place.current.description =~ /#{command_string.subject}/i
-          response = Util::Randomizer.item_description(command_string.subject)
-        else
-          response = "I don't see that here."
-        end
-      end
+      response = look_in_direction(looking_direction) if looking_direction.present?
+      response = describe_setting(command_string.subject) if Place.current.description =~ /#{command_string.subject}/i
+      response ||= extant_object(command_string.subject).try(:describe)
+      response ||= "I don't see that here." if command_string.subject.present?
       response ||= Place.current.describe
       message.set_response(response)
     end
@@ -44,7 +32,6 @@ module Handlers
     def map
       message.set_response("#{ENV['MAP_URL']}")
     end
-
 
     def xyzzy
       room = Place.all.sample
@@ -68,8 +55,29 @@ module Handlers
 
     private
 
-    def direction
-      @direction ||= ::Dungeon.direction_from(command_string.verb)
+    def describe_setting(aspect)
+      return unless aspect.present?
+      Util::Randomizer.item_description(aspect)
+    end
+
+    def looking_direction
+      @look_direction ||= ::Dungeon.direction_from(command_string.predicate)
+    end
+
+    def look_in_direction(direction)
+      if Place.current.has_exit?(direction)
+        response = Place.place_to(direction, party_moving=false, create_place=true).view_from_afar
+      else
+        response = "A lovely wall you've found there."
+      end
+    end
+
+    def movement_direction
+      @movement_direction ||= ::Dungeon.direction_from(command_string.verb)
+    end
+
+    def extant_object(name)
+      (::User.from(name) || ::Item.from(name) || ::Beverage.from(name) || ::Machine.from(name) || ::Actor.from(name))
     end
 
     def reset_maze

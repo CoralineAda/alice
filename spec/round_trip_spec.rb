@@ -18,7 +18,7 @@ describe "Message Round Trip" do
                             handler_method: :steal,
                             response_kind: :message
                           )
-                        }
+                       }
   let(:channel)        { Object.new }
 
   before do
