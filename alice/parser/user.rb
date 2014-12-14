@@ -4,7 +4,8 @@ module Parser
       user = ::User.from(topic)
       content = user_methods(user).map do |method|
         string_from_user_info(user, method)
-      end.flatten.reject(&:empty?).join('. ').gsub('.. ', '. ')
+      end.flatten.compact.reject(&:empty?).join('. ').gsub('.. ', '. ')
+      content + ". " + content
     end
 
     def self.user_methods(user)

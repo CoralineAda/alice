@@ -22,6 +22,8 @@ class Context
 
   store_in collection: "alice_contexts"
 
+  attr_accessor :corpus_from_user
+
   def self.with_keywords
     where(:keywords.not => { "$size" => 0 })
   end
@@ -84,8 +86,8 @@ class Context
       sanitized = fetch_content_from_sources
       sanitized = Util::Sanitizer.scrub_wiki_content(sanitized)
       sanitized = sanitized.reject{|s| s.include?("may refer to") || s.include?("disambiguation") }
-      sanitized = sanitized.reject{|s| s.size < MINIMUM_FACT_LENGTH}
-      sanitized
+      sanitized = sanitized.reject{|s| s.size < (self.corpus_from_user ? self.topic.length + 1 : MINIMUM_FACT_LENGTH)}
+      sanitized || ""
     rescue Exception => e
       Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
       Alice::Util::Logger.info e.backtrace
@@ -163,8 +165,15 @@ class Context
   end
 
   def fetch_content_from_sources
-    content = Parser::User.fetch(topic)
-    content += Parser::Wikipedia.fetch(topic).to_s
+    if content = Parser::User.fetch(topic)
+      if content.empty?
+        content = nil
+      else
+        self.corpus_from_user = true
+        return content
+      end
+    end
+    content = Parser::Wikipedia.fetch(topic).to_s
     content +=  Parser::Google.fetch(topic)
   end
 
