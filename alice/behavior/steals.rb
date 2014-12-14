@@ -27,7 +27,7 @@ module Behavior
           if response_type == :emote
             message = "stares in surprise as #{proper_name} steals the #{item.name}, worth #{item.point_value} Internet Points™, from #{item.owner_name}!"
           else
-            message = "I just stole the #{item.name} from #{item.owner_name}! And it's worth #{item.point_value} Internet Points™"
+            message = "I just stole the #{item.name} from #{item.owner_name}! And it's worth #{item.point_value} Internet Points™!"
           end
         else
           if response_type == :emote
