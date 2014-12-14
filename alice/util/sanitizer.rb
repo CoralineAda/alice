@@ -4,9 +4,9 @@ module Util
 
     # FIXME why isn't this being used instead of message.filtered_response?
     def self.filter_for(user, text)
-      text = Alice::Filters::Drunk.new.process(text) if user.drunk?
-      text = Alice::Filters::Dazed.new.process(text) if user.dazed?
-      text = Alice::Filters::Disoriented.new.process(text) if user.disoriented?
+      text = Filters::Drunk.new.process(text) if user.drunk?
+      text = Filters::Dazed.new.process(text) if user.dazed?
+      text = Filters::Disoriented.new.process(text) if user.disoriented?
     end
 
     def self.process(text)
