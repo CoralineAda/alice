@@ -186,7 +186,7 @@ class Item
     end
     text << "In the possession of #{self.owner_name},"
     text << "it's currently valued at #{self.point_value} Internet Points™."
-    text.join(" ").gsub(/\.\. /, '. ').gsub(/^ /,'')
+    text.join(" ").gsub(/\.\. /, '. ').gsub(/\?\./,'?').gsub(/^ /,'')
   end
 
   def destruct
