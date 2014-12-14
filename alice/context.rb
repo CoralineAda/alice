@@ -8,7 +8,7 @@ class Context
   field :corpus
   field :expires_at, type: DateTime
   field :is_current, type: Boolean
-  field :is_ephemeral, type: Boolean
+  field :is_ephemeral, type: Boolean, default: false
   field :spoken, type: Array, default: []
   field :created_at, type: DateTime
 
@@ -90,17 +90,16 @@ class Context
 
   def define_corpus
     self.corpus ||= begin
-      p "HERE"
       sanitized = fetch_content_from_sources
       sanitized = Util::Sanitizer.scrub_wiki_content(sanitized)
       sanitized = sanitized.reject{|s| s.include?("may refer to") || s.include?("disambiguation") }
       sanitized = sanitized.reject{|s| s.size < (self.corpus_from_user ? self.topic.length + 1 : MINIMUM_FACT_LENGTH)}
-      sanitized || ""
+      sanitized || []
     rescue Exception => e
       Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
       Alice::Util::Logger.info e.backtrace
     ensure
-      ""
+      []
     end
   end
 

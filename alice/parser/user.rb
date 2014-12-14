@@ -5,6 +5,7 @@ module Parser
       content = user_methods(user).map do |method|
         string_from_user_info(user, method)
       end.flatten.compact.reject(&:empty?).join('. ').gsub('.. ', '. ')
+      return unless content.present?
       content + ". " + content
     end
 

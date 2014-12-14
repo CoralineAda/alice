@@ -84,7 +84,7 @@ module Handlers
 
     def set_context_from_predicate
       return unless predicate.present?
-      return if (predicate.split & Grammar::LanguageHelper::PRONOUNS).count > 0
+      return if (command_string.components & Grammar::LanguageHelper::PRONOUNS).count > 0
       if new_context = context_from(predicate.downcase)
         update_context(new_context)
       end
