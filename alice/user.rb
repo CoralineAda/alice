@@ -42,7 +42,7 @@ class User
     :can_brew?,
     :can_forge?,
     :last_seen,
-    :can_play_games?,
+    :can_play_game?,
     :current_nick,
     :dazed?,
     :disoriented?,
@@ -53,7 +53,8 @@ class User
     :proper_name,
     :twitter_handle,
     :check_score,
-    :check_points
+    :check_points,
+    :formatted_twitter_handle
   ]
 
   INACTIVITY_THRESHOLD = 13
@@ -194,7 +195,7 @@ class User
     update_attribute(:last_game, DateTime.now)
   end
 
-  def can_play_games?
+  def can_play_game?
     self.last_game ||= DateTime.now - 1.day
     self.last_game <= DateTime.now - 13.minutes
   end
@@ -318,19 +319,18 @@ class User
     return false if has_nick?(new_nick)
     update_attribute(:alt_nicks, [self.alt_nicks, new_nick.downcase].flatten.uniq)
   end
-
+  
   def info_factoids
     factoids.map(&:text)
   end
 
   alias_method :description, :describe
   alias_method :formatted_name, :proper_name
+  alias_method :info_formatted_bio, :formatted_bio 
 
-=begin
-  # Informational methods
+# Informational methods
   PROPERTIES.each do |property|
     alias_method property.to_s.sub(/^/, 'info_').to_sym, property
   end
 
-=end
 end

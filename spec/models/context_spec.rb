@@ -30,9 +30,9 @@ describe Context do
   context "user context" do
 
     before do
-      allow_any_instance_of(Context).to receive(:define_corpus) { true }
       allow_any_instance_of(Context).to receive(:extract_keywords) { true }
-      allow_any_instance_of(Context).to receive(:fetch_content_from_sources) { "" }
+      allow(Parser::Wikipedia).to receive(:fetch) { "" }
+      allow(Parser::Google).to receive(:fetch) { "" }
 
       @user = User.create!(
         primary_nick: "NickCave",
@@ -43,7 +43,7 @@ describe Context do
       )
       Bio.create(user: @user, text: "is a musician, songwriter, author, screenwriter, composer and occasional film actor.")
       @user.factoids.create(text: "Nick Cave was born on September 22, 1957.")
-      @user.factoids.create(text: "He is Australian.")
+      @user.factoids.create(text: "He is Australian")
       @user.factoids.create(text: "Cave used to front the band The Birthday Party.")
       @user.factoids.create(text: "He had a music project called Grinderman, which was awful.")
       @context = Context.create(topic: "NickCave")
@@ -55,12 +55,15 @@ describe Context do
       end
 
       it "including bio" do
-        expected = "NickCave is a musician, songwriter, author, screenwriter, composer and occasional film actor."
+        expected = "Nickcave is a musician, songwriter, author, screenwriter, composer and occasional film actor"
+        p @context.corpus
+        p expected
+
         expect(@context.corpus.include?(expected)).to be_truthy
       end
 
       it "including attributes" do
-        expect(@context.corpus.include?("Find them on Twitter as @NickCave")).to be_truthy
+        expect(@context.corpus.include?("Nickcave is on Twitter as @NickCave")).to be_truthy
       end
     end
 

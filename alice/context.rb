@@ -12,7 +12,7 @@ class Context
   field :created_at, type: DateTime
 
   AMBIGUOUS = "That may refer to several different things. Can you clarify?"
-  MINIMUM_FACT_LENGTH = 20
+  MINIMUM_FACT_LENGTH = 15
   TTL = 5
 
   before_save :downcase_topic, :define_corpus, :extract_keywords
