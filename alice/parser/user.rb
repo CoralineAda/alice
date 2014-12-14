@@ -10,7 +10,7 @@ module Parser
     def self.user_methods(user)
       user.methods.select { |m| /^info_/.match(m) && user.method(m).arity.zero? }
     end
-  
+
     def self.string_from_user_info(user, method_name)
       info = user.public_send(method_name)
       is_boolean = /\?/.match(method_name)
@@ -19,11 +19,11 @@ module Parser
     rescue
       ""
     end
-  
+
     def self.scrub_method_name(method_name)
       method_name.to_s.gsub(/^info_|\?/, '').gsub('_', ' ')
     end
-    
+
     def self.positive_response_for(user, method)
       "#{user.current_nick} #{scrub_method_name(method)}".gsub(/can([^ ])/, 'can \1')
     end

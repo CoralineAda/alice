@@ -268,9 +268,9 @@ module Parser
     end
 
     def has_person?
-      (command_string.predicate.present? && User.like(command_string.predicate)) ||
-      (command_string.subject.present? && User.like(command_string.subject)) ||
-      User.from(command_string.subject) || User.from(command_string.predicate)
+      (command_string.predicate.present? && ::User.like(command_string.predicate)) ||
+      (command_string.subject.present? && ::User.like(command_string.subject)) ||
+      ::User.from(command_string.subject) || ::User.from(command_string.predicate)
     end
 
     def has_object?

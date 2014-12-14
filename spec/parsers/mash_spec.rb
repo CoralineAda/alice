@@ -3,8 +3,8 @@ require 'spec_helper'
 describe "Parser::Mash" do
 
   before do
-    @robyn  = User.create!(primary_nick: "robyn")
-    @syd    = User.create!(primary_nick: "syd")
+    @robyn  = ::User.create!(primary_nick: "robyn")
+    @syd    = ::User.create!(primary_nick: "syd")
     @tomato = Item.create!(name: "tomato")
     @command = Message::Command.create!(name: "get_fact", indicators: ["know", "fact", "factoid", "tell"], handler_class: "Handlers::Factoid", handler_method: "get")
     @factoid = Factoid.create!(user: @robyn, text: "Briggs features in the Robyn Hitchcock song 'A Man\'s Gotta Know'")

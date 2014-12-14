@@ -42,7 +42,7 @@ class User
     :can_brew?,
     :can_forge?,
     :last_seen,
-    :can_play_game?,
+    :can_play_games?,
     :current_nick,
     :dazed?,
     :disoriented?,
@@ -194,7 +194,7 @@ class User
     update_attribute(:last_game, DateTime.now)
   end
 
-  def can_play_game?
+  def can_play_games?
     self.last_game ||= DateTime.now - 1.day
     self.last_game <= DateTime.now - 13.minutes
   end
@@ -318,7 +318,7 @@ class User
     return false if has_nick?(new_nick)
     update_attribute(:alt_nicks, [self.alt_nicks, new_nick.downcase].flatten.uniq)
   end
-  
+
   def info_factoids
     factoids.map(&:text)
   end
