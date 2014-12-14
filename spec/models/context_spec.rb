@@ -49,10 +49,6 @@ describe Context do
       @context = Context.create(topic: "NickCave")
     end
 
-    it "detects a user" do
-      expect(@context.user).to eq(@user)
-    end
-
     context "derives a corpus from user data" do
       it "including factoids" do
         expect(@context.corpus.include?("He is Australian")).to be_truthy

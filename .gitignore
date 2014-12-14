@@ -10,3 +10,4 @@ log/*
 arkham.hect/*
 .capistrano/metrics
 alice.log
+user_setup.rb
