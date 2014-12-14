@@ -11,7 +11,7 @@ module Handlers
     private
 
     def answer
-      @answer ||= Util::Alpha.new(command_string.sentence).answer
+      @answer ||= Parser::Alpha.new(command_string.sentence).answer
     end
 
   end

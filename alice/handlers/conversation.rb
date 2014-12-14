@@ -91,7 +91,7 @@ module Handlers
 
     def set_context_from_subject
       return unless subject
-      return if (command_string.components & Parser::LanguageHelper::PRONOUNS).any?
+      return if (command_string.components & Grammar::LanguageHelper::PRONOUNS).any?
       update_context(context_from(subject.downcase))
     end
 

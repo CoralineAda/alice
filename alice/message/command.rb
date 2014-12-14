@@ -31,7 +31,7 @@ module Message
     end
 
     def self.words_from(message)
-      Parser::NgramFactory.filtered_grams_from(message)
+      Grammar::NgramFactory.filtered_grams_from(message)
     end
 
     def self.verb_from(trigger)

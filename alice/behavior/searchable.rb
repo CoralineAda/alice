@@ -15,11 +15,11 @@ module Behavior
       # Use when there are multiple words to parse, e.g. pulling a name from a string.
       def from(string)
         return unless string.present?
-        names = Parser::NgramFactory.new(string).omnigrams
+        names = Grammar::NgramFactory.new(string).omnigrams
         names = names.map{|g| g.join ' '} << string
-        names = names.uniq - Parser::LanguageHelper::IDENTIFIERS
+        names = names.uniq - Grammar::LanguageHelper::IDENTIFIERS
         objects = names.map do |name|
-          name = (name.split(/\s+/) - Parser::LanguageHelper::IDENTIFIERS).compact.join(' ')
+          name = (name.split(/\s+/) - Grammar::LanguageHelper::IDENTIFIERS).compact.join(' ')
           if name.present? && found = like(name) || found = where(name: name).first
             result = SearchResult.new(term: name, result: found)
           end

@@ -1,8 +1,7 @@
-module Parser
-
+module Grammar
   class Ngram
 
-    include Parser::LanguageHelper
+    include Grammar::LanguageHelper
 
     attr_accessor :contents
 

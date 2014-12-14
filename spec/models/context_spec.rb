@@ -25,6 +25,45 @@ describe Context do
     end
   end
 
+  context "user context" do
+
+    before do
+      @user = User.create!(
+        primary_nick: "NickCave",
+        twitter_handle: "@NickCave",
+        filter_applied: "drunk",
+        points: 11,
+        last_theft: Date.today - 1.day
+      )
+      Bio.create(user: @user, text: "is a musician, songwriter, author, screenwriter, composer and occasional film actor.")
+      @user.factoids.create(text: "Nick Cave was born on September 22, 1957.")
+      @user.factoids.create(text: "He is Australian.")
+      @user.factoids.create(text: "Cave used to front the band The Birthday Party.")
+      @user.factoids.create(text: "He had a music project called Grinderman, which was awful.")
+      @context = Context.create(topic: "NickCave")
+    end
+
+    it "detects a user" do
+      expect(@context.user).to eq(@user)
+    end
+
+    context "derives a corpus from user data" do
+      it "including factoids" do
+        expect(@context.corpus.include?("He is Australian")).to be_truthy
+      end
+
+      it "including bio" do
+        expected = "NickCave is a musician, songwriter, author, screenwriter, composer and occasional film actor."
+        expect(@context.corpus.include?(expected)).to be_truthy
+      end
+
+      it "including attributes" do
+        expect(@context.corpus.include?("Find them on Twitter as @NickCave")).to be_truthy
+      end
+    end
+
+  end
+
   describe "::keywords_from" do
     it "extracts keywords from a topic" do
       result = Context.keywords_from("tables chairs accessories")
@@ -186,6 +225,7 @@ describe Context do
         expect(context.facts.first).to eq("the spoon is shiny")
       end
     end
+
   end
 
 end

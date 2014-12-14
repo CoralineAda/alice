@@ -60,11 +60,11 @@ class User
 
   def self.from(string)
     return unless string.present?
-    names = Parser::NgramFactory.new(string).omnigrams
+    names = Grammar::NgramFactory.new(string).omnigrams
     names = names.map{|g| g.join ' '} << string
-    names = names.uniq - Parser::LanguageHelper::IDENTIFIERS
+    names = names.uniq - Grammar::LanguageHelper::IDENTIFIERS
     objects = names.map do |name|
-      name = (name.split(/\s+/) - Parser::LanguageHelper::IDENTIFIERS).compact.join(' ')
+      name = (name.split(/\s+/) - Grammar::LanguageHelper::IDENTIFIERS).compact.join(' ')
       if name.present? && found = like(name) || found = User.where(primary_nick: name).first || found = User.any_in(alt_nicks: name).first
         SearchResult.new(term: name, result: found)
       end

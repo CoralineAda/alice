@@ -1,4 +1,4 @@
-module Parser
+module Grammar
   module LanguageHelper
 
     ARTICLES = %w{a the of an to and}

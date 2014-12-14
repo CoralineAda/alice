@@ -1,12 +1,11 @@
-module Parser
-
+module Grammar
   class NgramFactory
 
     attr_accessor :options, :target
 
     def self.filtered_grams_from(words)
       filtered = words.gsub(/[^a-zA-Z0-9\-\_]/, ' ').split.map(&:strip)
-      filtered.reject!{|name| Parser::LanguageHelper::IDENTIFIERS.include?(name)}
+      filtered.reject!{|name| Grammar::LanguageHelper::IDENTIFIERS.include?(name)}
       filtered.reject!(&:empty?)
       new(filtered.join(' ')).omnigrams
     end
@@ -32,7 +31,7 @@ module Parser
       uni = ngrams(1).reject{|unigram| (exclude & unigram.flatten).count > 0}
       bi  = ngrams(2).reject{|unigram| (exclude & unigram.flatten).count > 0}
       tri = ngrams(3).reject{|unigram| (exclude & unigram.flatten).count > 0}
-      Parser::Ngram.new(uni + bi + tri)
+      Grammar::Ngram.new(uni + bi + tri)
     end
 
     def omnigrams
@@ -42,15 +41,15 @@ module Parser
     private
 
     def unigrams
-      Parser::Ngram.new(ngrams(1))
+      Grammar::Ngram.new(ngrams(1))
     end
 
     def bigrams
-      Parser::Ngram.new(ngrams(2))
+      Grammar::Ngram.new(ngrams(2))
     end
 
     def trigrams
-      Parser::Ngram.new(ngrams(3))
+      Grammar::Ngram.new(ngrams(3))
     end
 
    def ngrams(n)
@@ -58,5 +57,4 @@ module Parser
     end
 
   end
-
 end

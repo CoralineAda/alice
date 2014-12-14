@@ -15,17 +15,17 @@ module Message
     end
 
     def probable_nouns
-      re = Regexp.union(Parser::LanguageHelper::PREDICATE_INDICATORS.map{|w| /\s*\b#{Regexp.escape(w)}\b\s*/i})
+      re = Regexp.union(Grammar::LanguageHelper::PREDICATE_INDICATORS.map{|w| /\s*\b#{Regexp.escape(w)}\b\s*/i})
       candidates = self.content.split(re).map(&:split).compact.flatten.map{|word| word.gsub(/[\.\?\!]?$/, '')}
       remove_markers(candidates)
     end
 
     def remove_markers(list)
       list = list - [ "you", "your", "Alice", "Alice," ]
-      list = list - Parser::LanguageHelper::PRONOUNS
-      list = list - Parser::LanguageHelper::VERBS
-      list = list - Parser::LanguageHelper::INTERROGATIVES
-      list = list - Parser::LanguageHelper::NOUN_INDICATORS
+      list = list - Grammar::LanguageHelper::PRONOUNS
+      list = list - Grammar::LanguageHelper::VERBS
+      list = list - Grammar::LanguageHelper::INTERROGATIVES
+      list = list - Grammar::LanguageHelper::NOUN_INDICATORS
       list
     end
 
@@ -45,7 +45,7 @@ module Message
     end
 
     def predicate_positions
-      Parser::LanguageHelper::PREDICATE_INDICATORS.map{ |indicator| components.index(indicator) }.compact
+      Grammar::LanguageHelper::PREDICATE_INDICATORS.map{ |indicator| components.index(indicator) }.compact
     end
 
     def predicate_position

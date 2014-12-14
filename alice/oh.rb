@@ -22,7 +22,7 @@ class OH
 
   # TODO extract into module. Repeated in bio, factoid, OH
   def extract_keywords
-    self.keywords = Parser::NgramFactory.filtered_grams_from(self.text).flatten.uniq
+    self.keywords = Grammar::NgramFactory.filtered_grams_from(self.text).flatten.uniq
   end
 
 end

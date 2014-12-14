@@ -1,12 +1,16 @@
 require 'wolfram-alpha'
 
-module Util
+module Parser
   class Alpha
 
     attr_accessor :question
     attr_reader :answer
 
     CLIENT_OPTIONS = { format: 'plaintext' }
+
+    def self.fetch(topic)
+      new(topic).answer
+    end
 
     def initialize(question)
       @question = question

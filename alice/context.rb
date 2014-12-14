@@ -31,7 +31,7 @@ class Context
   end
 
   def self.keywords_from(topic)
-    topic.to_s.downcase.split - Parser::LanguageHelper::PREDICATE_INDICATORS
+    topic.to_s.downcase.split - Grammar::LanguageHelper::PREDICATE_INDICATORS
   end
 
   def self.find_or_create(topic)
@@ -39,7 +39,7 @@ class Context
   end
 
   def self.with_topic_matching(topic)
-    ngrams = Parser::NgramFactory.new(topic).omnigrams
+    ngrams = Grammar::NgramFactory.new(topic).omnigrams
     ngrams = ngrams.map{|g| g.join(' ')}
     if exact_match = any_in(topic: ngrams).first
       return exact_match
@@ -110,7 +110,7 @@ class Context
 
   def extract_keywords
     self.keywords = begin
-      candidates = Parser::LanguageHelper.probable_nouns_from(corpus.join(" "))
+      candidates = Grammar::LanguageHelper.probable_nouns_from(corpus.join(" "))
       candidates = candidates.inject(Hash.new(0)) {|h,i| h[i] += 1; h }
       candidates.select{|k,v| v > 1}.map(&:first)
     rescue
@@ -144,7 +144,7 @@ class Context
   def declarative_fact(subtopic, spoken=true)
     return AMBIGUOUS if ambiguous?
     fact = relational_facts(subtopic).select do |sentence|
-      has_info_verb = sentence =~ /\b#{Parser::LanguageHelper::INFO_VERBS * '|\b'}/ix
+      has_info_verb = sentence =~ /\b#{Grammar::LanguageHelper::INFO_VERBS * '|\b'}/ix
       placement = position_of(subtopic.downcase, sentence.downcase)
       has_info_verb && placement && placement.to_i < 100
     end.sample
@@ -192,14 +192,8 @@ class Context
   end
 
   def fetch_content_from_sources
-    if result = Wikipedia.find(self.topic)
-      content = result.sanitized_content
-    end
-    unless content.present?
-      google_results = RubyWebSearch::Google.search(query: topic).results
-      content = google_results[0..2].map do |result|
-        Parser::URL.new(result[:url]).content
-      end.flatten.join(' ')
+    content = Parser::Wikipedia.fetch(topic)
+    content ||= Parser::Google.fetch(topic)
     end
     content
   end

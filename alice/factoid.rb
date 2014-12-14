@@ -33,7 +33,7 @@ class Factoid
 
   def self.about(subject)
     return unless subject
-    subject = (subject.downcase.split - Parser::LanguageHelper::PREPOSITIONS).join(" ")
+    subject = (subject.downcase.split - Grammar::LanguageHelper::PREPOSITIONS).join(" ")
     user = User.from(subject)
     if user && user.factoids.present?
       return user.factoids && user.factoids.sample
@@ -46,8 +46,8 @@ class Factoid
   end
 
   def extract_keywords
-    terms = Parser::NgramFactory.filtered_grams_from(self.text.downcase).flatten.uniq
-    terms = terms - Parser::LanguageHelper::ARTICLES
+    terms = Grammar::NgramFactory.filtered_grams_from(self.text.downcase).flatten.uniq
+    terms = terms - Grammar::LanguageHelper::ARTICLES
     terms << terms.map{|word| Lingua.stemmer(word.downcase)}
     self.keywords = terms.flatten
   end

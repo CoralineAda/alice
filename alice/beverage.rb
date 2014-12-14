@@ -83,8 +83,8 @@ class Beverage
     return if Dictionary.is_a?(:coffee_or_tea, self.name) == true
     beer = Beer.search(self.name)
     cocktail = MixedDrink.search(self.name)
-    if drink = Parser::LanguageHelper.similar_to(self.name, beer.canonical_name) && beer ||
-               Parser::LanguageHelper.similar_to(self.name, cocktail.canonical_name) && cocktail.result
+    if drink = Grammar::LanguageHelper.similar_to(self.name, beer.canonical_name) && beer ||
+               Grammar::LanguageHelper.similar_to(self.name, cocktail.canonical_name) && cocktail.result
       self.name = "#{drink.container.downcase} of #{self.name}"
       self.description = drink.description
       self.is_alcohol = true

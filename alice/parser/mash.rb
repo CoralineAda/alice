@@ -222,18 +222,18 @@ module Parser
     end
 
     def has_preposition?
-      self.this_preposition = any_content_in?(Parser::LanguageHelper::PREPOSITIONS)
+      self.this_preposition = any_content_in?(Grammar::LanguageHelper::PREPOSITIONS)
     end
 
     def has_pronoun?
-      if self.this_pronoun = any_content_in?(Parser::LanguageHelper::PRONOUNS)
+      if self.this_pronoun = any_content_in?(Grammar::LanguageHelper::PRONOUNS)
         self.this_info_verb = "converse"
       end
     end
 
     def info_verb?
-      self.this_info_verb = any_content_in?(Parser::LanguageHelper::INFO_VERBS)
-      self.this_info_verb ||= "is" if any_content_in?(Parser::LanguageHelper::INTERROGATIVES)
+      self.this_info_verb = any_content_in?(Grammar::LanguageHelper::INFO_VERBS)
+      self.this_info_verb ||= "is" if any_content_in?(Grammar::LanguageHelper::INTERROGATIVES)
       self.this_info_verb ||= "is" if sentence.contains_possessive
       self.this_info_verb
     end
@@ -244,23 +244,23 @@ module Parser
     end
 
     def adverb?
-      self.this_adverb = any_content_in?(Parser::LanguageHelper::ADVERBS)
+      self.this_adverb = any_content_in?(Grammar::LanguageHelper::ADVERBS)
     end
 
     def relation_verb?
-      self.this_relation_verb = any_content_in?(Parser::LanguageHelper::RELATION_VERBS)
+      self.this_relation_verb = any_content_in?(Grammar::LanguageHelper::RELATION_VERBS)
     end
 
     def transfer_verb?
-      self.this_transfer_verb = any_content_in?(Parser::LanguageHelper::TRANSFER_VERBS)
+      self.this_transfer_verb = any_content_in?(Grammar::LanguageHelper::TRANSFER_VERBS)
     end
 
     def greeting?
-      self.this_greeting = "hi" if any_content_in?(Parser::LanguageHelper::GREETINGS)
+      self.this_greeting = "hi" if any_content_in?(Grammar::LanguageHelper::GREETINGS)
     end
 
     def action_verb?
-      self.this_action_verb = any_content_in?(Parser::LanguageHelper::ACTION_VERBS)
+      self.this_action_verb = any_content_in?(Grammar::LanguageHelper::ACTION_VERBS)
     end
 
     def verb
