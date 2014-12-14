@@ -326,9 +326,11 @@ class User
   alias_method :description, :describe
   alias_method :formatted_name, :proper_name
 
+=begin
   # Informational methods
   PROPERTIES.each do |property|
     alias_method property.to_s.sub(/^/, 'info_').to_sym, property
   end
 
+=end
 end

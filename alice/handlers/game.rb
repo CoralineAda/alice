@@ -6,7 +6,7 @@ module Handlers
     include Behavior::HandlesCommands
 
     def number_wang
-      return unless message.sender.can_play_game?
+      return unless message.sender.can_play_games?
       response = ""
       if Util::Randomizer.one_chance_in(24)
         3.times{message.sender.score_points}

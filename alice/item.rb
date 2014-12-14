@@ -217,7 +217,7 @@ class Item
 
   def play
     return "It's not safe to play with #{name_with_article}!" unless self.is_game?
-    if self.user.can_play_game?
+    if self.user.can_play_games?
       self.user.score_points(3)
       "#{owner_name} #{Util::Randomizer.play} a game of #{name} and wins!"
     else

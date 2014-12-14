@@ -40,18 +40,18 @@ describe User do
 
   end
 
-  describe "#can_play_game?" do
+  describe "#can_play_games?" do
 
     before do
       allow(jack).to receive(:last_game) { DateTime.now - 12.minute }
     end
 
     it "returns false if game was last played < 13 minutes ago" do
-      expect(jack.can_play_game?).to be_falsey
+      expect(jack.can_play_games?).to be_falsey
     end
 
     it "returns true if a game was never played" do
-      expect(jill.can_play_game?).to be_truthy
+      expect(jill.can_play_games?).to be_truthy
     end
 
   end
