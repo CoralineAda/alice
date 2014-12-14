@@ -71,7 +71,6 @@ module Handlers
       fact ||= current_context.relational_fact(topic.downcase.pluralize, speak)
       fact ||= current_context.relational_fact(topic.downcase.singularize, speak)
 
-      fact ||= Util::Randomizer.i_dont_know
     end
 
     def global_context
