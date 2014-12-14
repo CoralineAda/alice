@@ -47,13 +47,13 @@ module Handlers
     end
 
     def default_response(topic)
-      return Util::Randomizer.i_dont_know if facts_exhausted?(topic)
       return "I don't know what we're talking about" if no_context?
+      return Util::Randomizer.i_dont_know if facts_exhausted?(topic)
       return Util::Randomizer.talking_about(current_context.topic)
     end
 
     def description_from_context
-      current_context.describe
+      current_context && current_context.describe
     end
 
     def no_context?

@@ -30,6 +30,11 @@ describe Handlers::Conversation do
       handler.give_context
       expect(message.response).to end_with('nursery rhymes.')
     end
+    it "responds if no context" do
+      allow(handler).to receive(:current_context) { nil }
+      handler.give_context
+      expect(message.response).to end_with('particular.')
+    end
   end
 
   describe "converse" do
