@@ -11,7 +11,7 @@ module Handlers
     def converse
       unless text = fact_from(predicate.split.last)
         set_context_from_predicate
-        unless text = fact_from(predicate.split.last)
+        unless text = fact_from(predicate.split.last) || description_from_context
           context_stack.pop
         end
         text ||= default_response(predicate)
@@ -51,6 +51,10 @@ module Handlers
       return Util::Randomizer.talking_about(current_context.topic)
     end
 
+    def description_from_context
+      current_context.describe
+    end
+
     def no_context?
       current_context.nil?
     end
@@ -82,7 +86,7 @@ module Handlers
     end
 
     def set_context_from_predicate
-      return unless predicate && predicate.present?
+      return unless predicate.present?
       if new_context = context_from(predicate.downcase)
         update_context(new_context)
       end
