@@ -110,7 +110,6 @@ describe Context do
         [
           "Death may refer to the hooded grim reaper or a brand of cigarettes.",
           "Death is inevitable and unescapable."
-
         ]
       )
       expect(@context.ambiguous?).to be_truthy

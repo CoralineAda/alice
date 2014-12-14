@@ -163,8 +163,8 @@ class Context
   end
 
   def fetch_content_from_sources
-    content = Parser::Wikipedia.fetch(topic)
-    content ||= Parser::Google.fetch(topic)
+    content = Parser::Wikipedia.fetch(topic).to_s
+    content +=  Parser::Google.fetch(topic)
   end
 
   def near_match(subject, sentence)
