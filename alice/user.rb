@@ -42,7 +42,7 @@ class User
     :can_brew?,
     :can_forge?,
     :last_seen,
-    :can_play_game?,
+    :can_play_games?,
     :current_nick,
     :dazed?,
     :disoriented?,
@@ -195,7 +195,7 @@ class User
     update_attribute(:last_game, DateTime.now)
   end
 
-  def can_play_game?
+  def can_play_games?
     self.last_game ||= DateTime.now - 1.day
     self.last_game <= DateTime.now - 13.minutes
   end
