@@ -9,13 +9,14 @@ module Handlers
     include ActiveSupport
 
     def converse
-      unless text = fact_from(predicate.split.last)
+      unless text = fact_from(predicate)
         set_context_from_predicate
-        unless text = fact_from(predicate.split.last) || description_from_context
+        unless text = fact_from(predicate) || description_from_context
           context_stack.pop
+          text = default_response(predicate)
         end
-        text ||= default_response(predicate)
       end
+      text = text.sub(/\?\./, '?')
       set_response(text)
     end
 
@@ -98,7 +99,8 @@ module Handlers
 
     def set_response(text)
       return unless text
-      message.set_response((text + ".").gsub(/\.\.$/, '.'))
+      text = ((text + ".").gsub(/\.\.$/, '.')).sub('!.', '!').sub('?.', '?')
+      message.set_response(text)
     end
 
     def subject

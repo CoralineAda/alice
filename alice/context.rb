@@ -77,10 +77,6 @@ class Context
     update_attributes(is_current: true, expires_at: DateTime.now + TTL.minutes)
   end
 
-  def expire
-    expire! if (self.expires_at.nil? || self.expires_at < DateTime.now)
-  end
-
   def describe
     return AMBIGUOUS if ambiguous?
     fact = facts.select{ |sentence| near_match(self.topic, sentence) }.first
@@ -114,6 +110,10 @@ class Context
     fact
   end
 
+  def expire
+    expire! if (self.expires_at.nil? || self.expires_at < DateTime.now)
+  end
+
   def facts
     corpus_accessor.to_a.reject{|sentence| spoken.include? sentence}.sort do |a,b|
       is_was_sort_value(a) <=> is_was_sort_value(b)
@@ -142,7 +142,7 @@ class Context
 
   def targeted_fact(subtopic, spoken=true)
     return AMBIGUOUS if ambiguous?
-    fact = targeted_fact_candidates(subtopic).sample
+    fact = targeted_fact_candidates(subtopic).first
     record_spoken(fact) if spoken
     fact
   end
@@ -172,17 +172,18 @@ class Context
   end
 
   def fetch_content_from_sources
-    if content = Parser::User.fetch(topic)
-      if content.empty?
-        content = nil
+    return @content if @content
+    if @content = Parser::User.fetch(topic)
+      if @content.empty?
+        @content = nil
       else
         self.corpus_from_user = true
         self.is_ephemeral = true
-        return content
+        return @content
       end
     end
-    content = Parser::Wikipedia.fetch(topic).to_s
-    content +=  Parser::Google.fetch(topic)
+    @content = Parser::Wikipedia.fetch(topic).to_s
+    @content +=  Parser::Google.fetch(topic)
   end
 
   def near_match(subject, sentence)
@@ -200,8 +201,10 @@ class Context
   end
 
   def relational_facts(subtopic)
-    facts.select do |sentence|
-      next unless sentence =~ /\b#{subtopic}/ix
+    subtopic_ngrams = Grammar::NgramFactory.new(subtopic).omnigrams
+    subtopic_ngrams = subtopic_ngrams.map{|g| g.join(' ')}.reverse
+    candidates = subtopic_ngrams.map{ |ngram| facts.select{|fact| fact =~ /#{ngram}/i} }.compact.flatten
+    candidates.select do |sentence|
       placement = position_of(subtopic.downcase, sentence.downcase)
       placement && placement.to_i < 100
     end
@@ -212,8 +215,8 @@ class Context
   end
 
   def targeted_fact_candidates(subtopic)
-    candidates = facts.select{|fact| fact =~ /#{subtopic}/i} + facts.select{|sentence| sentence =~ /#{subtopic}/i}
-    candidates = candidates.reject{|candidate| candidate.size < topic.size + 10}
-    candidates
+    subtopic_ngrams = Grammar::NgramFactory.new(subtopic).omnigrams
+    subtopic_ngrams = subtopic_ngrams.map{|g| g.join(' ')}.reverse
+    subtopic_ngrams.map{ |ngram| facts.select{|fact| fact =~ /#{ngram}/i} }.compact.flatten
   end
 end
