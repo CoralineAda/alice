@@ -168,7 +168,7 @@ class Item
 
   def describe
     text= []
-    text << ["Ah yes," "Let's see,", "Take a look at", "Here we find", "Yet another example of"].sample
+    text << ["Ah yes, ", "Let's see, ", "Take a look at ", "Here we find ", "Yet another example of "].sample
     text << "the #{self.name}!"
     text << "#{self.properties[:description] || self.description}"
     text << "#{creator.proper_name} was its creator, "
