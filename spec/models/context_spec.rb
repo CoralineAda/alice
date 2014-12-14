@@ -3,9 +3,11 @@ require 'spec_helper'
 describe Context do
 
   describe "::current" do
+
     before do
       allow_any_instance_of(Context).to receive(:define_corpus) { true }
       allow_any_instance_of(Context).to receive(:extract_keywords) { true }
+      allow_any_instance_of(Context).to receive(:fetch_content_from_sources) { "" }
       @context_1 = Context.create(
         topic: "black rider",
         is_current: true,
@@ -28,6 +30,10 @@ describe Context do
   context "user context" do
 
     before do
+      allow_any_instance_of(Context).to receive(:define_corpus) { true }
+      allow_any_instance_of(Context).to receive(:extract_keywords) { true }
+      allow_any_instance_of(Context).to receive(:fetch_content_from_sources) { "" }
+
       @user = User.create!(
         primary_nick: "NickCave",
         twitter_handle: "@NickCave",
@@ -80,6 +86,7 @@ describe Context do
     before do
       allow_any_instance_of(Context).to receive(:define_corpus) { true }
       allow_any_instance_of(Context).to receive(:extract_keywords) { true }
+      allow_any_instance_of(Context).to receive(:fetch_content_from_sources) { "" }
       @context_1 = Context.create(topic: "black rider", keywords: ["black", "wings"])
     end
 
@@ -95,6 +102,7 @@ describe Context do
     before do
       allow_any_instance_of(Context).to receive(:define_corpus) { true }
       allow_any_instance_of(Context).to receive(:extract_keywords) { true }
+      allow_any_instance_of(Context).to receive(:fetch_content_from_sources) { "" }
       @context_1 = Context.create(topic: "black rider", keywords: ["bleached", "bones"])
       @context_2 = Context.create(topic: "coach and four", keywords: ["white", "bleached", "bones"])
     end

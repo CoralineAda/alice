@@ -7,8 +7,11 @@ describe "Handlers::Factoid" do
   let(:handler) { Handlers::Factoid.new(message: message) }
 
   before do
-   message.stub(:sender) { user }
-   handler.stub(:subject) { user }
+    message.stub(:sender) { user }
+    handler.stub(:subject) { user }
+    allow_any_instance_of(Context).to receive(:define_corpus) { true }
+    allow_any_instance_of(Context).to receive(:extract_keywords) { true }
+    allow_any_instance_of(Context).to receive(:fetch_content_from_sources) { "" }
   end
 
   describe "#set" do
