@@ -145,12 +145,6 @@ describe Context do
     end
   end
 
-  describe ".near_match" do
-    it "detects a sentence matching a subject" do
-      expect(Context.new.near_match("tom waits", "Tom Waits is my patronus")).to be_truthy
-    end
-  end
-
   describe ".define_corpus" do
 
     before do
@@ -197,7 +191,7 @@ describe Context do
     end
 
     it "finds and returns a list of high-frequency probable nouns" do
-      context.extract_keywords
+      context.send(:extract_keywords)
       expect(context.keywords).to match_array(
         ["fox", "dish", "spoon", "ran"]
       )

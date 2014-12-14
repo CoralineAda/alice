@@ -11,13 +11,15 @@ class Context
   field :spoken, type: Array, default: []
   field :created_at, type: DateTime
 
-  TTL = 5
   AMBIGUOUS = "That may refer to several different things. Can you clarify?"
-  MINIMUM_FACT_LENGTH = 30
+  MINIMUM_FACT_LENGTH = 20
+  TTL = 5
 
   before_save :downcase_topic, :define_corpus, :extract_keywords
   before_create :set_expiry
-  validates_uniqueness_of :topic
+
+  validates_uniqueness_of :topic, case_sensitive: false
+
   store_in collection: "alice_contexts"
 
   def self.with_keywords
@@ -66,16 +68,8 @@ class Context
     update_attributes(is_current: true, expires_at: DateTime.now + TTL.minutes)
   end
 
-  def set_expiry
-    self.expires_at = DateTime.now + TTL.minutes
-  end
-
   def expire
     expire! if (self.expires_at.nil? || self.expires_at < DateTime.now)
-  end
-
-  def expire!
-    update_attributes(is_current: false, spoken: [])
   end
 
   def describe
@@ -83,10 +77,6 @@ class Context
     fact = facts.select{ |sentence| near_match(self.topic, sentence) }.first
     record_spoken(fact)
     fact
-  end
-
-  def near_match(subject, sentence)
-    (sentence.downcase.split & subject.split).size > 0
   end
 
   def define_corpus
@@ -104,6 +94,52 @@ class Context
     end
   end
 
+  def declarative_fact(subtopic, spoken=true)
+    return AMBIGUOUS if ambiguous?
+    fact = relational_facts(subtopic).select do |sentence|
+      has_info_verb = sentence =~ /\b#{Grammar::LanguageHelper::INFO_VERBS * '|\b'}/ix
+      placement = position_of(subtopic.downcase, sentence.downcase)
+      has_info_verb && placement && placement.to_i < 100
+    end.sample
+    record_spoken(fact) if spoken
+    fact
+  end
+
+  def facts
+    corpus.to_a.reject{|sentence| spoken.include? sentence}.sort do |a,b|
+      is_was_sort_value(a) <=> is_was_sort_value(b)
+    end
+  end
+
+  def has_spoken_about?(topic)
+    self.spoken.to_s.downcase.include?(topic.downcase)
+  end
+
+  def inspect
+    %{#<Context _id: #{self.id}", topic: "#{self.topic}", keywords: #{self.keywords.count}, is_current: #{is_current}, expires_at: #{self.expires_at}"}
+  end
+
+  def random_fact
+    return AMBIGUOUS if ambiguous?
+    facts.sample
+  end
+
+  def relational_fact(subtopic, spoken=true)
+    return AMBIGUOUS if ambiguous?
+    fact = relational_facts(subtopic).sample
+    record_spoken(fact) if spoken
+    fact
+  end
+
+  def targeted_fact(subtopic, spoken=true)
+    return AMBIGUOUS if ambiguous?
+    fact = targeted_fact_candidates(subtopic).sample
+    record_spoken(fact) if spoken
+    fact
+  end
+
+  private
+
   def downcase_topic
     self.topic.downcase!
   end
@@ -118,13 +154,31 @@ class Context
     end.flatten
   end
 
-  def has_spoken_about?(topic)
-    self.spoken.to_s.downcase.include?(topic.downcase)
+  def is_was_sort_value(element)
+    (position_of("is", element) || position_of("was", element) || 100) - 100
   end
 
-  def random_fact
-    return AMBIGUOUS if ambiguous?
-    facts.sample
+  def expire!
+    update_attributes(is_current: false, spoken: [])
+  end
+
+  def fetch_content_from_sources
+    content = Parser::Wikipedia.fetch(topic)
+    content ||= Parser::Google.fetch(topic)
+  end
+
+  def near_match(subject, sentence)
+    (sentence.downcase.split & subject.split).size > 0
+  end
+
+  def position_of(word, sentence)
+    sentence =~ /\b#{word}/i
+  end
+
+  def record_spoken(fact)
+    return unless fact
+    self.spoken << fact
+    update_attribute(:spoken, self.spoken.uniq)
   end
 
   def relational_facts(subtopic)
@@ -135,67 +189,13 @@ class Context
     end
   end
 
+  def set_expiry
+    self.expires_at = DateTime.now + TTL.minutes
+  end
+
   def targeted_fact_candidates(subtopic)
     candidates = facts.select{|fact| fact =~ /#{subtopic}/i} + facts.select{|sentence| sentence =~ /#{subtopic}/i}
     candidates = candidates.reject{|candidate| candidate.size < topic.size + 10}
     candidates
   end
-
-  def declarative_fact(subtopic, spoken=true)
-    return AMBIGUOUS if ambiguous?
-    fact = relational_facts(subtopic).select do |sentence|
-      has_info_verb = sentence =~ /\b#{Grammar::LanguageHelper::INFO_VERBS * '|\b'}/ix
-      placement = position_of(subtopic.downcase, sentence.downcase)
-      has_info_verb && placement && placement.to_i < 100
-    end.sample
-    record_spoken(fact) if spoken
-    fact
-  end
-
-  def targeted_fact(subtopic, spoken=true)
-    return AMBIGUOUS if ambiguous?
-    fact = targeted_fact_candidates(subtopic).sample
-    record_spoken(fact) if spoken
-    fact
-  end
-
-  def relational_fact(subtopic, spoken=true)
-    return AMBIGUOUS if ambiguous?
-    fact = relational_facts(subtopic).sample
-    record_spoken(fact) if spoken
-    fact
-  end
-
-  def facts
-    return [] unless corpus
-    candidates = corpus.reject{|sentence| spoken.include? sentence}
-#    candidates = candidates.reject{|sentence| sentence.include? "http"}
-    candidates.to_a.sort do |a,b|
-      (position_of("is", a) || position_of("was", a) || 100) - 100 <=> (position_of("is", b) || position_of("was", b) || 100) - 100
-    end
-  end
-
-  def record_spoken(fact)
-    return unless fact
-    self.spoken << fact
-    update_attribute(:spoken, self.spoken.uniq)
-  end
-
-  def inspect
-    %{#<Context _id: #{self.id}", topic: "#{self.topic}", keywords: #{self.keywords.count}, is_current: #{is_current}, expires_at: #{self.expires_at}"}
-  end
-
-  private
-
-  def position_of(word, sentence)
-    sentence =~ /\b#{word}/i
-  end
-
-  def fetch_content_from_sources
-    content = Parser::Wikipedia.fetch(topic)
-    content ||= Parser::Google.fetch(topic)
-    end
-    content
-  end
-
 end
