@@ -7,8 +7,8 @@ describe "Handlers::Twitter" do
   let(:handler) { Handlers::Twitter.new(message: message) }
 
   before do
-   message.stub(:sender) { user }
-   handler.stub(:subject) { user }
+   allow(message).to receive(:sender) { user }
+   allow(handler).to receive(:subject) { user }
   end
 
   describe "#set" do

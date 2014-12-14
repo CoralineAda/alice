@@ -9,8 +9,8 @@ describe User do
   describe ".online" do
 
     before do
-      Pipeline::Mediator.stub(:user_nicks) { ["jack", "jill", "frederick"] }
-      User.stub(:any_in) { [jack, jill] }
+      allow(Pipeline::Mediator).to receive(:user_nicks) { ["jack", "jill", "frederick"] }
+      allow(User).to receive(:any_in) { [jack, jill] }
     end
 
     it "returns a list of online users" do
@@ -22,8 +22,8 @@ describe User do
   describe "#accepts_gifts?" do
 
     before do
-      jack.stub(:is_online?) { true }
-      jill.stub(:is_online?) { false }
+      allow(jack).to receive(:is_online?) { true }
+      allow(jill).to receive(:is_online?) { false }
     end
 
     it "returns false if user is a bot" do
@@ -43,7 +43,7 @@ describe User do
   describe "#can_play_game?" do
 
     before do
-      jack.stub(:last_game) { DateTime.now - 12.minute }
+      allow(jack).to receive(:last_game) { DateTime.now - 12.minute }
     end
 
     it "returns false if game was last played < 13 minutes ago" do
@@ -59,8 +59,8 @@ describe User do
   describe "#current_nick" do
 
     before do
-      Pipeline::Mediator.stub(:user_nicks) { ["jack_", "jill", "frederick"] }
-      jack.stub(:nicks) { ["jack", "jack_"] }
+      allow(Pipeline::Mediator).to receive(:user_nicks) { ["jack_", "jill", "frederick"] }
+      allow(jack).to receive(:nicks) { ["jack", "jack_"] }
     end
 
     it "matches nicks to user list nicks" do
@@ -74,14 +74,7 @@ describe User do
     it "returns #filter_applied if it exists" do
       now = DateTime.now
       jack.filter_applied = now
-      jack.filter_applied_date.should == now
-    end
-
-    it "returns yesterday if filter_applied is nil" do
-      now = DateTime.now
-      DateTime.stub(:now) { now }
-      jack.filter_applied = nil
-      jack.filter_applied_date.should eq(now - 1.day)
+      expect(jack.filter_applied_date).to eq(now)
     end
 
   end
@@ -123,12 +116,12 @@ describe User do
     end
 
     it "does not duplicate a nick" do
-      jill.should_not_receive(:update_attribute)
+      expect(jill).to_not receive(:update_attribute)
       jill.update_nick("jilly")
     end
 
     it "adds a new nick" do
-      jill.should_receive(:update_attribute).with(:alt_nicks, ["jilla", "jilly", "nancy"])
+      expect(jill).to receive(:update_attribute).with(:alt_nicks, ["jilla", "jilly", "nancy"])
       jill.update_nick("Nancy")
     end
 

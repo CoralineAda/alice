@@ -45,25 +45,25 @@ describe Message::Command do
     let(:command) { Message::Command.new }
 
     it "returns false if the command was never triggered before" do
-      command.stub(:last_said_at) { nil }
+      allow(command).to receive(:last_said_at) { nil }
       expect(command.needs_cooldown?).to be_falsey
     end
 
     it "returns false if there is no cooldown set" do
-      command.stub(:last_said_at) { Time.now }
-      command.stub(:cooldown_minutes) { 0 }
+      allow(command).to receive(:last_said_at) { Time.now }
+      allow(command).to receive(:cooldown_minutes) { 0 }
       expect(command.needs_cooldown?).to be_falsey
     end
 
     it "returns false if the cooldown period has passed" do
-      command.stub(:last_said_at) { Time.now - 10.minutes }
-      command.stub(:cooldown_minutes) { 9 }
+      allow(command).to receive(:last_said_at) { Time.now - 10.minutes }
+      allow(command).to receive(:cooldown_minutes) { 9 }
       expect(command.needs_cooldown?).to be_falsey
     end
 
     it "returns true if the cooldown period has not passed" do
-      command.stub(:last_said_at) { Time.now - 5.minutes }
-      command.stub(:cooldown_minutes) { 9 }
+      allow(command).to receive(:last_said_at) { Time.now - 5.minutes }
+      allow(command).to receive(:cooldown_minutes) { 9 }
       expect(command.needs_cooldown?).to be_truthy
     end
 

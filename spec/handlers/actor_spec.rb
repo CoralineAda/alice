@@ -6,9 +6,10 @@ describe "Handlers::Actor" do
   let(:message) { Message::Message.new(user.primary_nick, "!talk Poe") }
   let(:handler) { Handlers::Actor.new(message: message) }
   let(:actor)   { Actor.create!(name: "Poe") }
+
   before do
-    message.stub(:sender)  { user }
-    handler.stub(:subject) { actor }
+    allow(message).to receive(:sender)  { user }
+    allow(handler).to receive(:subject) { actor }
   end
 
   describe "#talk" do

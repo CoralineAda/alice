@@ -7,7 +7,7 @@ describe "Handlers::Inventory" do
   let(:handler) { Handlers::Inventory.new(message: message) }
 
   before do
-   message.stub(:sender) { user }
+   allow(message).to receive(:sender) { user }
   end
 
   describe "#inventory" do

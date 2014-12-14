@@ -7,7 +7,7 @@ describe "Handlers::OH" do
   let(:handler) { Handlers::OH.new(message: message) }
 
   before do
-   message.stub(:sender) { user }
+   allow(message).to receive(:sender) { user }
   end
 
   describe "#set" do

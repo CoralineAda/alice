@@ -64,17 +64,14 @@ module Handlers
     end
 
     def fact_from(topic, speak=true)
-      return unless current_context
-      return unless topic
-
-      fact = current_context.declarative_fact(topic.downcase, speak)
-      fact ||= current_context.declarative_fact(topic.downcase.pluralize, speak)
-      fact ||= current_context.declarative_fact(topic.downcase.singularize, speak)
-
-      fact ||= current_context.relational_fact(topic.downcase, speak)
-      fact ||= current_context.relational_fact(topic.downcase.pluralize, speak)
-      fact ||= current_context.relational_fact(topic.downcase.singularize, speak)
-
+      return unless current_context && topic
+      topic = topic.downcase
+      fact = current_context.declarative_fact(topic, speak)
+      fact ||= current_context.declarative_fact(topic.pluralize, speak)
+      fact ||= current_context.declarative_fact(topic.singularize, speak)
+      fact ||= current_context.relational_fact(topic, speak)
+      fact ||= current_context.relational_fact(topic.pluralize, speak)
+      fact ||= current_context.relational_fact(topic.singularize, speak)
     end
 
     def global_context

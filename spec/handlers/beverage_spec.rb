@@ -7,7 +7,7 @@ describe "Handlers::Beverage" do
   let(:handler) { Handlers::Beverage.new(message: message) }
 
   before do
-   message.stub(:sender) { user }
+   allow(message).to receive(:sender) { user }
   end
 
   describe "#brew" do

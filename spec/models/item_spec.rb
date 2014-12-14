@@ -9,7 +9,7 @@ describe Item do
     let(:existing_user) { User.new(id: 5) }
 
     it "returns its creator user" do
-      User.stub(:find) { existing_user }
+      allow(User).to receive(:find) { existing_user }
       expect(item_1.creator).to eq(existing_user)
     end
 

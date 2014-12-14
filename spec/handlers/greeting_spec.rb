@@ -7,9 +7,9 @@ describe "Handlers::Greeting" do
   let(:handler) { Handlers::Greeting.new(message: message) }
 
   before do
-    message.stub(:sender_nick) { user.primary_nick }
-    handler.stub(:subject) { user }
-    Pipeline::Mediator.stub(:exists?) { true }
+    allow(message).to receive(:sender_nick) { user.primary_nick }
+    allow(handler).to receive(:subject) { user }
+    allow(Pipeline::Mediator).to receive(:exists?) { true }
   end
 
   describe "#greet_sender" do

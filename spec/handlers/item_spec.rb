@@ -8,10 +8,10 @@ describe "Handlers::Item" do
   let(:handler) { Handlers::Item.new(message: message) }
 
   before do
-    handler.stub(:item) { item }
-    handler.stub(:item_for_user) { item }
-    handler.stub(:loose_item) { item }
-    message.stub(:sender) { user }
+    allow(handler).to receive(:item) { item }
+    allow(handler).to receive(:item_for_user) { item }
+    allow(handler).to receive(:loose_item) { item }
+    allow(message).to receive(:sender) { user }
   end
 
   describe "#destroy" do

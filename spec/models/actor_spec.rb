@@ -11,10 +11,10 @@ describe Actor do
       let(:actor_3) { Actor.new(in_play: true, place_id: 3) }
 
       before do
-        Actor.stub(:all) { [actor_1, actor_2, actor_3] }
-        Actor.stub(:grue) { actor_3 }
-        Actor.any_instance.stub(:save) { true }
-        Actor.any_instance.stub(:put_in_play) { true }
+        allow(Actor).to receive(:all) { [actor_1, actor_2, actor_3] }
+        allow(Actor).to receive(:grue) { actor_3 }
+        allow_any_instance_of(Actor).to receive(:save) { true }
+        allow_any_instance_of(Actor).to receive(:put_in_play) { true }
       end
 
       it "sets in_play to false" do
@@ -42,7 +42,7 @@ describe Actor do
     let(:beverage) { Beverage.new(name: "foo fizz") }
 
     before do
-      Beverage.stub(:brew_random) { beverage }
+      allow(Beverage).to receive(:brew_random) { beverage }
     end
 
     it "adds a beverage to its inventory" do
@@ -59,7 +59,7 @@ describe Actor do
     context "when random condition is not met" do
 
       it "returns false" do
-        Util::Randomizer.stub(:one_chance_in) { false }
+        allow(Util::Randomizer).to receive(:one_chance_in) { false }
         expect(actor.perform_random_action).to be_falsey
       end
 
@@ -68,11 +68,11 @@ describe Actor do
     context "when random condition is met" do
 
       before do
-        Actor::ACTIONS.stub(:sample) { :to_s }
+        allow(Actor::ACTIONS).to receive(:sample) { :to_s }
       end
 
       it "performs a random action" do
-        Util::Randomizer.stub(:one_chance_in) { true }
+        allow(Util::Randomizer).to receive(:one_chance_in) { true }
         expect(actor.perform_random_action).to be_truthy
       end
 
