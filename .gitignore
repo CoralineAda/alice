@@ -6,8 +6,10 @@ db/backups/*/**
 .DS_Store
 images/*
 doc/fukuzatsu/*
+doc/society/*
 log/*
 arkham.hect/*
 .capistrano/metrics
 alice.log
 user_setup.rb
+tmp/*
