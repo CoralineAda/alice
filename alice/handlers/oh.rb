@@ -1,5 +1,4 @@
 module Handlers
-
   class OH
 
     include PoroPlus
@@ -15,5 +14,4 @@ module Handlers
     end
 
   end
-
 end
