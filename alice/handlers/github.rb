@@ -15,7 +15,7 @@ module Handlers
     private
 
     def parser
-      Parser::GitHub.new
+      Parser::GitHub.fetch
     end
 
   end
