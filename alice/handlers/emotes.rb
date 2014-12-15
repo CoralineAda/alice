@@ -60,7 +60,10 @@ module Handlers
     end
 
     def source
-      message.set_response("My source code is available at #{ENV['GITHUB_URL']}.\nYou can see my latest commits with !commits, and a list of recent open issues with !issues.")
+      response = ["My source code is available at #{ENV['GITHUB_URL']}."]
+      response << "You can see my latest commits with !commits, and a list of recent open issues with !issues."
+      response << "For a list of contributors, try !contributors."
+      message.set_response(response.join("\n"))
     end
 
     def bug
