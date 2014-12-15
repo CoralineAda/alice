@@ -11,7 +11,11 @@ module Handlers
     def commits
       message.set_response(parser.commits.take(5).join("\n"))
     end
-  
+
+    def contributors
+      message.set_response("My contributors include #{parser.contributors.to_sentence}.")
+    end
+
     private
 
     def parser

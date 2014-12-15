@@ -494,4 +494,13 @@ Message::Command.create(
 	handler_method: 'commits',
 	response_kind: 'message',
 )
+Message::Command.create(
+	name: 'github_contributors',
+	verbs: ["contributors"],
+	stop_words: [],
+	indicators: [],
+	handler_class: 'Handlers::GitHub',
+	handler_method: 'contributors',
+	response_kind: 'message',
+)
 puts 'Command import complete.'

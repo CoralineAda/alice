@@ -23,6 +23,10 @@ module Parser
       raw_commits.map{ |commit| Commit.new(commit[:commit]).to_s }
     end
 
+    def contributors
+      Octokit::Client.new.contributors_stats(repo_path).map{|c| c[:author][:login]}
+    end
+
     private
 
     def repo
