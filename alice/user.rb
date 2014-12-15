@@ -122,6 +122,10 @@ class User
     by_nick(nick) || Pipeline::Mediator.exists?(nick) && create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
   end
 
+  def self.non_bot
+    where(is_bot: false)
+  end
+
   def self.random
     all.sample || User.new(primary_nick: "Eleanor Nobody")
   end

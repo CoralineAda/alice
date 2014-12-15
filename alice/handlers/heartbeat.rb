@@ -33,7 +33,7 @@ module Handlers
     end
 
     def steal
-      return unless target = ::User.active_and_online.to_a.sample
+      return unless target = ::User.active_and_online.non_bot.to_a.sample
       return unless item = target.items.sample
       User.bot.steal(item, :message)
     end
