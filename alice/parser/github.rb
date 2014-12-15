@@ -17,6 +17,11 @@ module Parser
       raw_issues.map{ |issue| Issue.new(issue).to_s }
     end
     
+    def commits
+      raw_commits = repo.rels[:commits].get.data
+      raw_commits.map{ |commit| Commit.new(commit[:commit]).to_s } 
+    end
+    
     private
       
     def repo
@@ -37,6 +42,21 @@ module Parser
       
       attr_reader :raw_issue
     end
+
+    class Commit
     
+      def initialize(raw_commit)
+        @raw_commit = raw_commit
+      end
+      
+      def to_s
+        "#{raw_commit[:message].lines.first} (Committed by #{raw_commit[:author][:name]} (#{raw_commit[:author][:email]}) on #{raw_commit[:author][:date]})"
+      end
+      
+      private
+      
+      attr_reader :raw_commit
+      
+    end
   end
 end
