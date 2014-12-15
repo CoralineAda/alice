@@ -5,17 +5,13 @@ module Handlers
     include Behavior::HandlesCommands
 
     def issues
-      message.set_response(issues)
+      message.set_response(parser.issues[0..4].join("\n"))
     end
 
     private
 
     def parser
-      Parser::Github.new(*ENV['GITHUB_URL'].split('/')[-2..-1])    
-    end
-    
-    def issues
-      parser.issues
+      Parser::GitHub.new(*ENV['GITHUB_URL'].split('/')[-2..-1])
     end
 
   end
