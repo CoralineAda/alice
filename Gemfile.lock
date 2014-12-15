@@ -15,6 +15,7 @@ GEM
     activesupport (3.2.21)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
+    addressable (2.3.6)
     brewery_db (0.2.4)
       faraday (~> 0.8.0)
       faraday_middleware (~> 0.8)
@@ -64,6 +65,8 @@ GEM
       mini_portile (~> 0.6.0)
     nokogumbo (1.1.12)
       nokogiri
+    octokit (3.7.0)
+      sawyer (~> 0.6.0, >= 0.5.3)
     origin (1.1.0)
     poro_plus (1.0.2)
     pry (0.10.1)
@@ -95,6 +98,9 @@ GEM
       crass (~> 0.2.0)
       nokogiri (>= 1.4.4)
       nokogumbo (= 1.1.12)
+    sawyer (0.6.0)
+      addressable (~> 2.3.5)
+      faraday (~> 0.8, < 0.10)
     slop (3.6.0)
     sshkit (1.5.1)
       colorize
@@ -124,6 +130,7 @@ DEPENDENCIES
   inflections
   marky_markov
   mongoid (~> 3.1.6)
+  octokit (~> 3.0)
   poro_plus
   pry
   raad
