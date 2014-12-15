@@ -476,4 +476,22 @@ Message::Command.create(
 	handler_method: 'answer_question',
 	response_kind: 'message',
 )
+Message::Command.create(
+	name: 'github_issues',
+	verbs: ["issues", "bugs"],
+	stop_words: [],
+	indicators: [],
+	handler_class: 'Handlers::GitHub',
+	handler_method: 'issues',
+	response_kind: 'message',
+)
+Message::Command.create(
+	name: 'github_commits',
+	verbs: ["commits"],
+	stop_words: [],
+	indicators: [],
+	handler_class: 'Handlers::GitHub',
+	handler_method: 'commits',
+	response_kind: 'message',
+)
 puts 'Command import complete.'
