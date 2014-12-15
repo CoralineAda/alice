@@ -13,7 +13,6 @@ class Place
   has_many :actors
   has_many :beverages
   has_many :items
-  has_many :machines
 
   index({ x: 1, y: 1 },    { unique: true })
   index({ is_current: 1 }, { unique: false })
@@ -273,7 +272,7 @@ class Place
   end
 
   def stuff
-    @stuff ||= self.items + self.beverages + self.machines
+    @stuff ||= self.items + self.beverages
   end
 
   def view

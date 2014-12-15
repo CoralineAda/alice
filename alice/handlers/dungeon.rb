@@ -77,7 +77,7 @@ module Handlers
     end
 
     def extant_object(name)
-      (::User.from(name) || ::Item.from(name) || ::Beverage.from(name) || ::Machine.from(name) || ::Actor.from(name))
+      (::User.from(name) || ::Item.from(name) || ::Beverage.from(name) || ::Actor.from(name))
     end
 
     def reset_maze

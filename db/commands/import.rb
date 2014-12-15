@@ -287,33 +287,7 @@ Message::Command.create(
 	handler_method: 'read',
 	response_kind: 'message',
 )
-Message::Command.create(
-	name: 'catalog',
-	verbs: ["catalog", "machines"],
-	stop_words: ["alice"],
-	indicators: [],
-	handler_class: 'Handlers::Machine',
-	handler_method: 'catalog',
-	response_kind: 'message',
-)
-Message::Command.create(
-	name: 'install',
-	verbs: ["install"],
-	stop_words: ["alice"],
-	indicators: [],
-	handler_class: 'Handlers::Machine',
-	handler_method: 'install',
-	response_kind: 'message',
-)
-Message::Command.create(
-	name: 'use',
-	verbs: ["use", "operate"],
-	stop_words: ["alice"],
-	indicators: [],
-	handler_class: 'Handlers::Machine',
-	handler_method: 'use',
-	response_kind: 'message',
-)
+
 Message::Command.create(
 	name: 'oh_set',
 	verbs: ["OH", "OH:"],

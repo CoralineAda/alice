@@ -8,7 +8,6 @@ class Dungeon
     Item.sweep
     Item.reset_hidden!
     Wand.sweep
-    Machine.sweep
     Place.delete_all
     Place.generate!(is_current: true)
     Item.create_defaults
