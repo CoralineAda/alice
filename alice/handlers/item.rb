@@ -54,7 +54,7 @@ module Handlers
     def give
       if recipient = User.from(command_string.predicate)
         thing = beverage_for_user || item_for_user
-        if user.accepts_gifts?
+        if recipient.accepts_gifts?
           message.set_response(thing.transfer_to(recipient))
         else
           message.set_response("Sorry, they're not accepting gifts right now.")

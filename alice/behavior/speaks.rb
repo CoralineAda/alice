@@ -22,7 +22,7 @@ module Behavior
       return @corpus if @corpus
       @corpus =  ::Factoid.all.map(&:formatted)
       @corpus << ::OH.all.map(&:text)
-      @corpus << seed_text.split(/[\.\:\[\]\n\*\=]/).flatten
+      @corpus << Grammar::LanguageHelper.sentences_from(seed_text)
       @corpus = @corpus.flatten
       @corpus
     end

@@ -174,10 +174,19 @@ module Grammar
 
     PRONOUNS = %w{ him her his him hers they theirs them he she it its this those these that }
 
+    WORDS_WITH_PERIODS = ["dr.", "mr.", "ms.", "phd.", "mrs."]
+
     def self.similar_to(original_word, test_word)
       return true if original_word =~ /#{test_word}/i
       return true if test_word =~ /#{original_word}/i
       RubyFish::Hamming.distance(original_word, test_word) <= 5
+    end
+
+    def self.sentences_from(text)
+      text = text.gsub(/(#{WORDS_WITH_PERIODS * '|'})/i, '\1@@@')
+      text = text.split(/[\.\?\!] /)
+      text = text.map{|t| t.split(/[\r\n]/)}.flatten
+      text = text.map{|t| t.gsub('@@@', '')}
     end
 
     def self.probable_nouns_from(text)
