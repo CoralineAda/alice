@@ -1,5 +1,4 @@
 module Behavior
-
   module Emotes
 
     def frown_with(actor)
@@ -38,5 +37,4 @@ module Behavior
     end
 
   end
-
 end
