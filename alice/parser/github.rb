@@ -3,13 +3,14 @@ module Parser
 
     attr_reader :user_name, :repo_name
     
-    def self.fetch(user_name, repo_name)
-      new(user_name, repo_name)
+    DEFAULT_REPO_PATH = ENV['GITHUB_URL'].split('/')[-2..-1]
+    
+    def self.fetch(repo_path=DEFAULT_REPO_PATH)
+      new(repo_path)
     end
 
-    def initialize(user_name, repo_name)
-      @user_name = user_name
-      @repo_name = repo_name
+    def initialize(repo_path)
+      @repo_path = repo_path
     end
     
     def issues
@@ -25,7 +26,7 @@ module Parser
     private
       
     def repo
-      @repo = Octokit.repo("#{self.user_name}/#{self.repo_name}")
+      @repo = Octokit.repo(repo_path)
     end
     
     class Issue

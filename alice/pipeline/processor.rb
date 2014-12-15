@@ -19,7 +19,8 @@ module Pipeline
     end
 
     def self.sleep
-      Pipeline::Mediator.emote(ENV['PRIMARY_CHANNEL'], "reboots.")
+      last_commit_message = Parser::GitHub.new.commits.first
+      Pipeline::Mediator.emote(ENV['PRIMARY_CHANNEL'], "reboots with master at '#{last_commit_message}'.")
     end
 
     def react

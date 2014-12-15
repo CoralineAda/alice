@@ -15,7 +15,7 @@ module Handlers
     private
 
     def parser
-      Parser::GitHub.new(*ENV['GITHUB_URL'].split('/')[-2..-1])
+      Parser::GitHub.new
     end
 
   end
