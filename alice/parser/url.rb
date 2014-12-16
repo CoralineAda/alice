@@ -22,6 +22,11 @@ module Parser
     def source
       file = open(url)
       file.content_type == "text/html" && file.read
+      @source ||= Nokogiri::HTML(open(url))
+      @source = nil unless @source.search("//html").any?
+      @source.search("//script").remove
+      @source.search("//css").remove
+      @source
     rescue Exception => e
       Alice::Util::Logger.info("*** Couldn't process URL for #{url}")
       Alice::Util::Logger.info e.backtrace
