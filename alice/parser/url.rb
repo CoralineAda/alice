@@ -27,6 +27,7 @@ module Parser
     rescue Exception => e
       Alice::Util::Logger.info("*** Couldn't process URL for #{url}")
       Alice::Util::Logger.info e.backtrace
+      nil
     end
 
     def preview
