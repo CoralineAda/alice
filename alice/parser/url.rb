@@ -12,16 +12,16 @@ module Parser
     end
 
     def content
-      return unless source
-      ::Sanitize.fragment(source.content)
+      return unless document_body = source
+      content = Nokogiri::HTML(document_body)
+      content.search("//script").remove
+      content.search("//css").remove
+      ::Sanitize.fragment(content.to_s)
     end
 
     def source
-      @source ||= Nokogiri::HTML(open(url))
-      @source = nil unless @source.search("//html")
-      @source.search("//script").remove
-      @source.search("//css").remove
-      @source
+      file = open(url)
+      file.content_type == "text/html" && file.read
     rescue Exception => e
       Alice::Util::Logger.info("*** Couldn't process URL for #{url}")
       Alice::Util::Logger.info e.backtrace
