@@ -18,7 +18,7 @@ module Parser
 
     def source
       @source ||= Nokogiri::HTML(open(url))
-      @source = nil unless @source.search("//html")
+      @source = nil unless @source.search("//html").any?
       @source.search("//script").remove
       @source.search("//css").remove
       @source
