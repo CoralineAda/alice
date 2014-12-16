@@ -13,31 +13,28 @@ module Parser
 
     def content
       return unless document_body = source
-      content = Nokogiri::HTML(document_body)
-      content.search("//script").remove
-      content.search("//css").remove
-      ::Sanitize.fragment(content.to_s)
+      @content ||= begin
+        this_content = Nokogiri::HTML(document_body.to_s)
+        this_content.search("//script").remove
+        this_content.search("//css").remove
+        this_content
+      end
     end
 
     def source
       file = open(url)
       file.content_type == "text/html" && file.read
-      @source ||= Nokogiri::HTML(open(url))
-      @source = nil unless @source.search("//html").any?
-      @source.search("//script").remove
-      @source.search("//css").remove
-      @source
     rescue Exception => e
       Alice::Util::Logger.info("*** Couldn't process URL for #{url}")
       Alice::Util::Logger.info e.backtrace
     end
 
     def preview
-      return unless source
-      title_node = source.search("//title")
-      title_node ||= source.search("//h1")
-      title_node ||= source.search("//h2")
-      snippet = source.xpath("//p").map(&:content).detect do |content|
+      return unless content.present?
+      title_node = content.search("//title")
+      title_node ||= content.search("//h1")
+      title_node ||= content.search("//h2")
+      snippet = content.xpath("//p").map(&:content).detect do |content|
         content.length > 25
       end
       snippet = truncate(snippet.to_s.strip.gsub(/[\n\r ]+/," ")).split('|')[0]
