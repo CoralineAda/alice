@@ -14,7 +14,6 @@ module Behavior
     def prepare
       return @prepared if @prepared
       @prepared = corpus.map{|sentence| dictionary.parse_string(sentence)}
-      @dictionary.save_dictionary!
       @prepared
     end
 
