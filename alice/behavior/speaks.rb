@@ -6,7 +6,7 @@ module Behavior
 
     def dictionary
       return @dictionary if @dictionary
-      @dictionary ||= MarkyMarkov::Dictionary.new('dictionary')
+      @dictionary ||= MarkyMarkov::TemporaryDictionary.new
       @dictionary.parse_file('./db/corpus/seeds.txt')
       @dictionary
     end
