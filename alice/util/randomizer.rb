@@ -948,7 +948,7 @@ module Util
         "Edison",
         "Bill Gates",
         "Steve Jobs",
-        "Alex Trebec",
+        "Alex Trebek",
         "Amelia Earhart",
         "Marlene Dietrich",
         "Billie Holiday",
