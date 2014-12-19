@@ -41,7 +41,7 @@ module Util
         "Some questions are best left unanswered.",
         "Who knows?",
         "Outlook unclear; ask again later.",
-        "What a quandry!",
+        "What a quandary!",
         "Science may never find an answer."
       ].sample
     end
