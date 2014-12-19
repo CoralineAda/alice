@@ -228,7 +228,7 @@ class User
     end
     message << "Find #{self.pronoun_objective} on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
     message << pronouns
-    message << "#{check_score} "
+    message << "#{check_score}. "
     message << "#{self.inventory} "
     message << "#{proper_name} is currently feeling a little #{self.filters.map(&:to_s).to_sentence}. " if self.filters.present?
     message
