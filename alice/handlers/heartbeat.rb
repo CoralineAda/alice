@@ -10,10 +10,10 @@ module Handlers
     ACTIONS = [:summon_actor, :dismiss_actor, :steal, :actor_speaks, :suggest_topic]
 
     def random_act
-      return unless channel_is_idle?
-      return unless Util::Randomizer.one_chance_in(FREQUENCY)
-      action = ACTIONS.sample
-      self.send(action)
+      # return unless channel_is_idle?
+      # return unless Util::Randomizer.one_chance_in(FREQUENCY)
+      # action = ACTIONS.sample
+      # self.send(action)
     end
 
     private
