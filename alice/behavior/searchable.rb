@@ -12,7 +12,7 @@ module Behavior
         :name
       end
 
-      # Use when there are multiple words to parse, e.g. pulling a name from a string.
+     # Use when there are multiple words to parse, e.g. pulling a name from a string.
       def from(string)
         return unless string.present?
         names = Grammar::NgramFactory.new(string).omnigrams

@@ -51,7 +51,9 @@ class Beverage
   end
 
   def self.consume(name, user)
-    if beverage = user.beverages.like(name)
+    beverage = user.beverages.where(name: /#{name}/).first
+    beverage ||= user.beverages.like(name)
+    if beverage
       beverage.drink
     else
       Util::Constants::NO_SUCH_DRINK
