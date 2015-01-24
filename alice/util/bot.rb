@@ -22,7 +22,11 @@ module Alice
       end
 
       def join(channel_name)
-        self.bot.join(channel_name)
+        if channel_name == ENV['PRIMARY_CHANNEL']
+          self.bot.join(channel_name, ENV['PRIMARY_CHANNEL_PASSWORD'])
+        else
+          self.bot.join(channel_name)
+        end
       end
 
       def leave(channel_name)
