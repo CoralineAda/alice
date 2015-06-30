@@ -63,7 +63,7 @@ namespace :deploy do
         execute :cp, '/home/coraline/alice/common/.env .env'
         execute :bundle, "install --path /home/coraline/alice/common/vendor/bundle"
         execute "ln -nfs /home/coraline/alice/common/vendor #{current_path}/vendor"
-        execute :ruby, 'alice.rb -dvs --name alice --log log/alice.log --timeout 1 start'
+        execute :ruby, 'alice.rb -e production -dvs --name alice --log log/alice.log --timeout 1 start'
       end
     end
   end

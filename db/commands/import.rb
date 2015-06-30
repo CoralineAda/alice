@@ -503,4 +503,13 @@ Message::Command.create(
 	handler_method: 'contributors',
 	response_kind: 'message',
 )
+Message::Command.create(
+	name: 'get_property',
+	verbs: [],
+	stop_words: [],
+	indicators: ["property"],
+	handler_class: 'Handlers::Properties',
+	handler_method: 'get_property',
+	response_kind: 'message',
+)
 puts 'Command import complete.'

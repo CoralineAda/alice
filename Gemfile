@@ -22,7 +22,7 @@ gem 'ruby-stemmer', '>=0.8.3', require: 'lingua/stemmer'
 gem 'ruby-web-search'
 gem 'rubyfish'
 gem 'sanitize', '>= 3.0.2'
-gem 'wikipedia-client'
+gem 'wikipedia-client', ">= 1.4.0"
 gem 'wolfram-alpha'
 gem 'yummly'
 
