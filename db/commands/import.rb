@@ -453,7 +453,7 @@ Message::Command.create(
 	name: 'converse',
 	verbs: [],
 	stop_words: [],
-	indicators: ["converse"],
+	indicators: ["converse", "know", "about"],
 	handler_class: 'Handlers::Conversation',
 	handler_method: 'converse',
 	response_kind: 'message',
