@@ -11,7 +11,10 @@ module Handlers
       elsif subject && message.sender.award_point_to(subject)
         message.set_response(subject.check_score)
       elsif subject.nil?
-         message.set_response("Yay for #{command_string.content.gsub('++','')}!")
+        this = command_string.content.gsub('++','')
+        unless this.downcase == "c"
+          message.set_response("Yay for #{this}!")
+        end
       else
         message.set_response("#{message.sender_nick} needs to let #{message.sender.pronoun_possessive} points cannon cool down.")
       end
