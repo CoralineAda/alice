@@ -20,6 +20,10 @@ module Handlers
       set_response(text)
     end
 
+    def love
+      "I love you too!"
+    end
+
     def give_context
       text = if current_context
         "I was just talking about #{current_context.topic}."
@@ -54,10 +58,6 @@ module Handlers
 
     def description_from_context
       current_context && current_context.describe
-    end
-
-    def love
-      "I love you too!"
     end
 
     def no_context?
