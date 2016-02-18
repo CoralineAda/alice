@@ -43,6 +43,7 @@ module Grammar
       "welcome",
       "thank",
       "thanks",
+      "love",
       "do"
     ]
 
