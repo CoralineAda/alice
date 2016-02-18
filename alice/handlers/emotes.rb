@@ -71,7 +71,7 @@ module Handlers
     end
 
     def love
-      set_response("I love you too!")
+      message.set_response("I love you too!")
     end
 
     def one_ring
