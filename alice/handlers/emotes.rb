@@ -70,6 +70,10 @@ module Handlers
       message.set_response("Please submit bug reports at #{ENV['ISSUES_URL']}")
     end
 
+    def love
+      set_response("I love you too!")
+    end
+
     def one_ring
       message.set_response("...and in the darkness bind them.")
     end
