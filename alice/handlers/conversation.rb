@@ -56,6 +56,10 @@ module Handlers
       current_context && current_context.describe
     end
 
+    def love
+      "I love you too!"
+    end
+
     def no_context?
       current_context.nil?
     end
