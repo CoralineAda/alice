@@ -24,6 +24,7 @@ module Handlers
       response = look_in_direction(looking_direction) if looking_direction.present?
       response = describe_setting(command_string.subject) if Place.current.description =~ /#{command_string.subject}/i
       response ||= extant_object(command_string.subject).try(:describe)
+      response ||= extant_object(command_string.fragment).try(:describe)
       response ||= "I don't see that here." if command_string.subject.present?
       response ||= Place.current.describe
       message.set_response(response)

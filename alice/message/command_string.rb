@@ -67,6 +67,10 @@ module Message
       return components[1..(predicate_position - 1)].join(' ').gsub(/[\.\,\?\'\!]+$/, '')
     end
 
+    def fragment
+      (components - [verb]).join(' ')
+    end
+
     def verb
       components[0].to_s.gsub(/^!/, '')
     end
