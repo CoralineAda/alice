@@ -1,10 +1,6 @@
-require 'cinch'
-
 module Pipeline
 
   class Listener
-
-    include ::Cinch::Plugin
 
     METHOD_MAP = {
       /^([0-9]+)/                           => :process_number,
@@ -15,68 +11,36 @@ module Pipeline
       /(.+)/                                => :process_text
     }
 
-    match /(.+)/, method: :route, use_prefix: false
-
-    listen_to :nick, method: :nick_update
-    listen_to :join, method: :greet
-    listen_to :ping, method: :heartbeat
-    listen_to :pong, method: :heartbeat
-
-    def route(emitted, trigger)
+    def route(username, trigger)
       tuple = METHOD_MAP.detect { |k,m| k.match(trigger) }
       return unless tuple.any?
       matching_method = tuple.last
       captured_match = tuple.first.match(trigger).to_s
-      self.public_send(matching_method, emitted, captured_match)
+      self.public_send(matching_method, username, captured_match)
     end
 
-    def heartbeat(emitted)
-      if emitted.user
-        Alice::Util::Logger.info("*** Received ping from #{emitted.user}")
-      else
-        Pipeline::Processor.process(ENV['PRIMARY_CHANNEL'], message(emitted, "ping", User.bot), :heartbeat)
-      end
+    def process_number(username, trigger)
+      Pipeline::Processor.process(message(username, "13"), :respond)
     end
 
-    def preview_url(emitted, trigger)
-      Pipeline::Processor.process(emitted.channel, message(emitted, trigger), :preview_url)
+    def process_points(username, trigger)
+      Pipeline::Processor.process(message(username, trigger), :respond)
     end
 
-    def process_number(emitted, trigger)
-      Pipeline::Processor.process(emitted.channel, message(emitted, "13"), :respond)
-    end
-
-    def process_points(emitted, trigger)
-      Pipeline::Processor.process(emitted.channel, message(emitted, trigger), :respond)
-    end
-
-    def process_text(emitted, trigger)
+    def process_text(username, trigger)
       return unless trigger[0] =~ /[a-zA-Z\!]/x
-      Pipeline::Processor.process(emitted.channel, message(emitted, trigger), :respond)
+      Pipeline::Processor.process(message(username, trigger), :respond)
     end
 
-    def greet(emitted)
-      return if emitted.user.nick == Pipeline::Mediator.bot_name
-      Pipeline::Processor.process(emitted.channel, message(emitted, emitted.user.nick), :greet_on_join)
-    end
-
-    def nick_update(emitted)
-      old_name = emitted.prefix.split("!")[0]
-      processor = Pipeline::Processor.process(emitted.channel || ENV['PRIMARY_CHANNEL'], message(emitted, emitted.params.first, old_name), :track_nick_change)
-    end
-
-    def well_actually(emitted)
-      Pipeline::Processor.process(emitted.channel, message(emitted, "well actually"), :well_actually)
-    end
-
-    def so_say_we_all(emitted)
-      Pipeline::Processor.process(emitted.channel, message(emitted, "so say we all"), :so_say_we_all)
+    def greet(username)
+      return if username == Pipeline::Mediator.bot_name
+      Pipeline::Processor.process(message(username, "hi"), :greet_on_join)
     end
 
     private
 
-    def message(emitted, trigger, user=nil)
-      Message::Message.new(user || emitted.user.nick, trigger)
+    def message(username, trigger)
+      Message::Message.new(username, trigger)
     end
 
   end

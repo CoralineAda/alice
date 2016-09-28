@@ -7,11 +7,10 @@ module Pipeline
 
     include PoroPlus
 
-    attr_accessor :channel, :message, :response_method, :trigger
+    attr_accessor :message, :response_method, :trigger
 
-    def self.process(channel, message, response_method)
+    def self.process(message, response_method)
       new(
-        channel: channel,
         message: message,
         response_method: response_method,
         trigger: message.trigger
@@ -20,7 +19,7 @@ module Pipeline
 
     def self.sleep
       last_commit_message = Parser::GitHub.fetch.commits.first
-      Pipeline::Mediator.emote(ENV['PRIMARY_CHANNEL'], "reboots with master at '#{last_commit_message}'.")
+      Pipeline::Mediator.emote("reboots with master at '#{last_commit_message}'.")
     end
 
     def react
@@ -50,55 +49,6 @@ module Pipeline
           Pipeline::Mediator.reply_with(self.channel, response)
         end
       end
-      message
-    end
-
-    def greet_on_join
-      return unless Util::Randomizer.one_chance_in(4)
-      Pipeline::Mediator.emote(
-        self.channel,
-        Message::Response.greeting(self.message).response
-      )
-      message
-    end
-
-    def heartbeat
-      Alice::Util::Logger.info("*** Processing heartbeat")
-      Pipeline::Mediator.reply_with(
-        ENV['PRIMARY_CHANNEL'],
-        Message::Response.heartbeat(self.message).response
-      )
-      message
-    end
-
-    def track_nick_change
-      user = User.find_or_create(message.sender_nick)
-      user.update_nick(message.trigger)
-      message
-    end
-
-    def preview_url
-      Pipeline::Mediator.reply_with(
-        self.channel,
-        Message::Response.preview_url(self.message).response
-      )
-      message
-    end
-
-    def well_actually
-      return unless Util::Randomizer.one_chance_in(2)
-      Pipeline::Mediator.reply_with(
-        self.channel,
-        Message::Response.well_actually(self.message).response
-      )
-      message
-    end
-
-    def so_say_we_all
-      Pipeline::Mediator.reply_with(
-        self.channel,
-        Message::Response.so_say_we_all(self.message).response
-      )
       message
     end
 

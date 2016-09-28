@@ -1,10 +1,11 @@
 require 'rubygems'
 require 'bundler'
 require 'bundler/setup'
-require 'cinch'
 require 'dotenv'
 require 'require_all'
-require 'raad'
+require 'slackbotsy'
+require 'sinatra'
+require 'open-uri'
 
 Dotenv.load
 Bundler.require
@@ -13,31 +14,20 @@ Mongoid.load!("config/mongoid.yml")
 require_all 'alice'
 
 module Alice
+  class Server < Sinatra::Base
 
-  def self.new
-    Daemon.new(bot)
-  end
-
-  def self.bot
-    @@bot ||= Alice::Util::Bot.new
-  end
-
-  class Daemon
-
-    attr_reader :bot
-
-    def initialize(bot)
-      @bot = bot
+    def self.config
+      config = {
+        'channel'          => '#main',
+        'name'             => 'alice',
+        'outgoing_token'        => ENV['SLACK_API_TOKEN']
+      }
     end
 
-    def start
-      Raad::Logger.info("Daemon started.")
-      self.bot.start
-    end
-
-    def stop
-      Pipeline::Processor.sleep
-      Raad::Logger.info("Daemon stopped.")
+    Slackbotsy::Bot.new(config) do
+      hear /(.+)/ do |mdata|
+        Pipeline::Listener::route(username, mdata[1])
+      end
     end
   end
 end
@@ -48,4 +38,3 @@ Yummly.configure do |config|
 end
 
 I18n.enforce_available_locales = false
-
