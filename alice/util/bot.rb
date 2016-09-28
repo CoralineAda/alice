@@ -11,7 +11,7 @@ module Alice
             config.channels = [ENV['PRIMARY_CHANNEL'], ENV['DEBUG_CHANNEL']]
             config.nick = ENV['IRC_NICK']
             config.user = ENV['IRC_USER']
-            config.logger = Raad::Logger
+            config.logger = Rack::Logger
             config.plugins.plugins = [
               Pipeline::Listener
             ]
