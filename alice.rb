@@ -17,7 +17,8 @@ require_all 'alice'
 config = {
   'channel'          => '#main',
   'name'             => 'alice',
-  'outgoing_token'        => ENV['SLACK_API_TOKEN']
+  'incoming_webhook' => ENV['INCOMING_WEBHOOK'],
+  'outgoing_token'   => ENV['SLACK_API_TOKEN']
 }
 
 Yummly.configure do |config|
