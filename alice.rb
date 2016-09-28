@@ -16,20 +16,20 @@ require_all 'alice'
 module Alice
   class Server < Sinatra::Base
 
-  def self.config
-    config = {
-      'channel'          => '#main',
-      'name'             => 'alice',
-      'api_token'        => ENV['SLACK_API_TOKEN']
-    }
-  end
+    def self.config
+      config = {
+        'channel'          => '#main',
+        'name'             => 'alice',
+        'outgoing_token'        => ENV['SLACK_API_TOKEN']
+      }
+    end
 
-  Slackbotsy::Bot.new(config) do
-    hear /(.+)/ do |mdata|
-      Pipeline::Listener::route(username, mdata[1])
+    Slackbotsy::Bot.new(config) do
+      hear /(.+)/ do |mdata|
+        Pipeline::Listener::route(username, mdata[1])
+      end
     end
   end
-
 end
 
 Yummly.configure do |config|
@@ -38,5 +38,3 @@ Yummly.configure do |config|
 end
 
 I18n.enforce_available_locales = false
-
-Alice.bot
