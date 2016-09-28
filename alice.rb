@@ -13,24 +13,12 @@ Mongoid.load!("config/mongoid.yml")
 
 require_all 'alice'
 
-module Alice
-  class Server < Sinatra::Base
 
-    def self.config
-      config = {
-        'channel'          => '#main',
-        'name'             => 'alice',
-        'outgoing_token'        => ENV['SLACK_API_TOKEN']
-      }
-    end
-
-    Slackbotsy::Bot.new(config) do
-      hear /(.+)/ do |mdata|
-        Pipeline::Listener::route(username, mdata[1])
-      end
-    end
-  end
-end
+config = {
+  'channel'          => '#main',
+  'name'             => 'alice',
+  'outgoing_token'        => ENV['SLACK_API_TOKEN']
+}
 
 Yummly.configure do |config|
   config.app_id = ENV['YUMMLY_APP_ID']
@@ -38,3 +26,9 @@ Yummly.configure do |config|
 end
 
 I18n.enforce_available_locales = false
+
+Slackbotsy::Bot.new(config) do
+  hear /(.+)/ do |mdata|
+    Pipeline::Listener::route(username, mdata[1])
+  end
+end

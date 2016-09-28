@@ -1,2 +1,2 @@
 require './alice'
-run Alice::Server
+run Sinatra::Application
