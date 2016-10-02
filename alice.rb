@@ -34,6 +34,5 @@ bot = Slackbotsy::Bot.new(config) do
 end
 
 post '/' do
-  raise  
   bot.handle_item(params)
 end
