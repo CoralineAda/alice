@@ -30,9 +30,7 @@ I18n.enforce_available_locales = false
 bot = Slackbotsy::Bot.new(config) do
   hear /(.+)/ do |mdata|
     response = Pipeline::Listener.new.route(user_name, mdata[1])
-    if response.present?
-      response
-    end
+    response.present? && response || ""
   end
 end
 
