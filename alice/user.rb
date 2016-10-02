@@ -166,7 +166,7 @@ class User
   end
 
   def current_nick
-    self.nicks.first
+    self.primary_nick
   end
 
   def last_seen

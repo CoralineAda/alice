@@ -29,7 +29,7 @@ module Pipeline
     def self.reply_with(message)
       text = Util::Sanitizer.process(message)
       text = Util::Sanitizer.initial_upcase(text)
-      text
+      text.to_s
     end
 
     def self.emote(message)
