@@ -13,6 +13,7 @@ Mongoid.load!("config/mongoid.yml")
 
 require_all 'alice'
 
+puts "HERE"
 
 config = {
   'channel'          => '#main',
