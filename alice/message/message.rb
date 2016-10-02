@@ -30,5 +30,9 @@ module Message
       self
     end
 
+    def to_s
+      response
+    end
+    
   end
 end
