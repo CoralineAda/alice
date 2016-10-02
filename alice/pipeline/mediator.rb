@@ -26,13 +26,13 @@ module Pipeline
       User.from(channel_user)
     end
 
-    def self.reply_with(channel, message)
+    def self.reply_with(message)
       text = Util::Sanitizer.process(message)
       text = Util::Sanitizer.initial_upcase(text)
       text
     end
 
-    def self.emote(channel, message)
+    def self.emote(message)
       text = Util::Sanitizer.process(message)
       text = Util::Sanitizer.initial_downcase(text)
       "/me #{text}"

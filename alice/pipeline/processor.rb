@@ -44,9 +44,9 @@ module Pipeline
     def respond
       if response = Pipeline::Commander.process(self.message).response
         if self.message.response_type == "emote"
-          Pipeline::Mediator.emote(self.channel, response)
+          Pipeline::Mediator.emote(response)
         else
-          Pipeline::Mediator.reply_with(self.channel, response)
+          Pipeline::Mediator.reply_with(response)
         end
       end
       message
