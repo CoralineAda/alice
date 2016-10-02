@@ -29,9 +29,9 @@ I18n.enforce_available_locales = false
 
 bot = Slackbotsy::Bot.new(config) do
   hear /(.+)/ do |mdata|
-    puts "!!! => #{mdata.inspect}"
+    STDOUT.puts "!!! => #{mdata.inspect}"
     response = Pipeline::Listener.new.route(user_name, mdata[1])
-    puts "!!! => #{response.inspect}"
+    STDOUT.puts "!!! => #{response.inspect}"
     response
   end
 end
