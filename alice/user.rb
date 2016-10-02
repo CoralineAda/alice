@@ -200,10 +200,6 @@ class User
     self.last_game <= DateTime.now - 13.minutes
   end
 
-  def current_nick
-    (Pipeline::Mediator.user_nicks & self.nicks).first || self.primary_nick
-  end
-
   def dazed?
     self.filters.map(&:to_s).include?('dazed')
   end
@@ -235,7 +231,7 @@ class User
   end
 
   def is_online?
-    (Pipeline::Mediator.user_nicks & self.nicks).any?
+    true
   end
 
   def is_op?
