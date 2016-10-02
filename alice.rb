@@ -28,8 +28,12 @@ end
 
 I18n.enforce_available_locales = false
 
-Slackbotsy::Bot.new(config) do
+bot = Slackbotsy::Bot.new(config) do
   hear /(.+)/ do |mdata|
     Pipeline::Listener::route(username, mdata[1])
   end
+end
+
+post '/' do
+  bot.handle_item(params)
 end
