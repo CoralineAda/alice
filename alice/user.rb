@@ -98,13 +98,8 @@ class User
     online.last
   end
 
-  def self.online
-    list = Pipeline::Mediator.user_nicks
-    any_in(primary_nick: list) | any_in(alt_nicks: list)
-  end
-
   def self.active_and_online
-    active.online
+    active
   end
 
   def self.bot
