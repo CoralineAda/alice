@@ -165,6 +165,10 @@ class User
     self.items.count < 10
   end
 
+  def current_nick
+    self.nicks.first
+  end
+
   def last_seen
 
     secs  = (Time.now - self.updated_at).to_i
