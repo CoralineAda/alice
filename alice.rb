@@ -13,8 +13,6 @@ Mongoid.load!("config/mongoid.yml")
 
 require_all 'alice'
 
-raise
-
 config = {
   'channel'          => '#main',
   'name'             => 'alice',
@@ -36,5 +34,6 @@ bot = Slackbotsy::Bot.new(config) do
 end
 
 post '/' do
+  raise  
   bot.handle_item(params)
 end
