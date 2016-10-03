@@ -29,12 +29,11 @@ I18n.enforce_available_locales = false
 
 bot = Slackbotsy::Bot.new(config) do
   hear /(.+)/ do |mdata|
-    response = Pipeline::Listener.new.route(user_name, mdata[1])
-    STDOUT.puts "!!! => #{response}"
-    say response if response.present?
+    Pipeline::Listener.new.route(user_name, mdata[1])
   end
 end
 
 post '/' do
-  bot.handle_item(params)
+  output = bot.handle_item(params)
+  bot.say(outpout) unless output.class == Message::Message
 end
