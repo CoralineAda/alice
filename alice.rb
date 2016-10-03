@@ -35,5 +35,5 @@ end
 
 post '/' do
   output = bot.handle_item(params)
-  bot.say(outpout) unless output.class == Message::Message
+  bot.say(output) unless output.class == Message::Message
 end
