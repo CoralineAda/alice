@@ -25,8 +25,10 @@ class User
   field :pronoun_possessive,  default: "their"
   field :pronoun_predicate,   default: "theirs"
   field :filter_applied,      type: DateTime
+  field :slack_id
 
   index({ primary_nick: 1 },  { unique: true })
+  index({ slack_id: 1 },      { unique: true })
   index({ alt_nicks: 1 },     { unique: true })
 
   has_one  :bio
@@ -59,8 +61,9 @@ class User
 
   INACTIVITY_THRESHOLD = 13
 
-  def self.ensure_user(user_name)
-    find_or_create(user_name)
+  def self.ensure_user(user_name, slack_id)
+    user = find_or_create(user_name)
+    user.update_attribute(slack_id: slack_id) unless user.user_id
   end
 
   def self.from(string)
@@ -71,7 +74,7 @@ class User
     names = names.uniq - Grammar::LanguageHelper::IDENTIFIERS
     objects = names.map do |name|
       name = (name.split(/\s+/) - Grammar::LanguageHelper::IDENTIFIERS).compact.join(' ')
-      if name.present? && found = like(name) || found = User.where(primary_nick: name).first || found = User.any_in(alt_nicks: name).first
+      if name.present? && found = like(name) || found = User.where(primary_nick: name).first || found = User.any_in(alt_nicks: name).first || User.where(slack_id: name)
         SearchResult.new(term: name, result: found)
       end
     end.compact
