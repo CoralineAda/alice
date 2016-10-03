@@ -59,6 +59,10 @@ class User
 
   INACTIVITY_THRESHOLD = 13
 
+  def self.ensure_user(user_name)
+    find_or_create(user_name)
+  end
+
   def self.from(string)
     return unless string.present?
     names = Grammar::NgramFactory.new(string).omnigrams
@@ -115,7 +119,7 @@ class User
   end
 
   def self.find_or_create(nick)
-    by_nick(nick) || Pipeline::Mediator.exists?(nick) && create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
+    by_nick(nick) || create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
   end
 
   def self.non_bot
