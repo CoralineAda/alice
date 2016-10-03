@@ -63,7 +63,7 @@ class User
 
   def self.ensure_user(user_name, slack_id)
     user = find_or_create(user_name)
-    user.update_attribute(slack_id: slack_id) unless user.slack_id
+    user.update_attributes(slack_id: slack_id) unless user.slack_id
   end
 
   def self.from(string)
