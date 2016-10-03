@@ -34,6 +34,6 @@ bot = Slackbotsy::Bot.new(config) do
 end
 
 post '/' do
-  output = bot.handle_item(params)
+  output = bot.handle_item(params)['text']
   bot.say(output) unless output.class == Message::Message
 end
