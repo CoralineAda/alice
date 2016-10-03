@@ -34,6 +34,7 @@ bot = Slackbotsy::Bot.new(config) do
 end
 
 post '/' do
-  output = bot.handle_item(params)
+  output = JSON.parse(bot.handle_item(params))['text']
+  STDOUT.puts "!!! => #{output}"
   bot.say(output) unless output =~ /Message\:\:Message/
 end
