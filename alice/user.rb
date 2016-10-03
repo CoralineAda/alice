@@ -65,6 +65,7 @@ class User
 
   def self.from(string)
     return unless string.present?
+    string.gsub!('@', '')
     names = Grammar::NgramFactory.new(string).omnigrams
     names = names.map{|g| g.join ' '} << string
     names = names.uniq - Grammar::LanguageHelper::IDENTIFIERS
