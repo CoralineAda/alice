@@ -63,13 +63,12 @@ class User
 
   def self.ensure_user(user_name, slack_id)
     user = find_or_create(user_name)
-    user.update_attributes(slack_id: slack_id) unless user.slack_id
+    user.update_attribute(:slack_id, slack_id) unless user.slack_id
     user
   end
 
   def self.from(string)
     return unless string.present?
-    string.gsub!('@', '')
     names = Grammar::NgramFactory.new(string).omnigrams
     names = names.map{|g| g.join ' '} << string
     names = names.uniq - Grammar::LanguageHelper::IDENTIFIERS

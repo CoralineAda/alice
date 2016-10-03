@@ -29,7 +29,6 @@ I18n.enforce_available_locales = false
 
 bot = Slackbotsy::Bot.new(config) do
   hear /(.+)/ do |mdata|
-    STDOUT.puts "!!! => #{user_id}"
     name = User.ensure_user(user_name, user_id).primary_nick
     Pipeline::Listener.new.route(name, mdata[1])
   end
