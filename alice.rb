@@ -30,7 +30,7 @@ I18n.enforce_available_locales = false
 bot = Slackbotsy::Bot.new(config) do
   hear /(.+)/ do |mdata|
     begin
-      Alice::User.ensure_user(user_name)
+      User.ensure_user(user_name)
       Pipeline::Listener.new.route(user_name, mdata[1])
     rescue
       ""
