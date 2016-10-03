@@ -31,7 +31,7 @@ bot = Slackbotsy::Bot.new(config) do
   hear /(.+)/ do |mdata|
     begin
       User.ensure_user(user_name, user_id)
-      Pipeline::Listener.new.route(user_name, user_id, mdata[1])
+      Pipeline::Listener.new.route(user_name, mdata[1])
     rescue
       ""
     end
