@@ -11,7 +11,7 @@ module Pipeline
       /(.+)/                                => :process_text
     }
 
-    def route(username, user_id, trigger)
+    def route(username, trigger)
       tuple = METHOD_MAP.detect { |k,m| k.match(trigger) }
       return unless tuple.any?
       matching_method = tuple.last
