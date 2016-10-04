@@ -5,9 +5,6 @@ module Pipeline
     METHOD_MAP = {
       /^([0-9]+)/                           => :process_number,
       /(.+\+\+)$/x                          => :process_points,
-      /well,* actually/i                    => :well_actually,
-      /so say we all/i                      => :so_say_we_all,
-      %r{(https?://.*?)(?:\s|$|,|\.\s|\.$)} => :preview_url,
       /(.+)/                                => :process_text
     }
 
