@@ -35,7 +35,7 @@ module Pipeline
     def self.emote(message)
       text = Util::Sanitizer.process(message)
       text = Util::Sanitizer.initial_downcase(text)
-      "/me #{text}"
+      "_#{text}_"
     end
 
   end
