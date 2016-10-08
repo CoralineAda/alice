@@ -27,14 +27,12 @@ module Pipeline
     end
 
     def self.reply_with(message)
-      Alice::Util::Logger.info("!!! replying")
       text = Util::Sanitizer.process(message)
       text = Util::Sanitizer.initial_upcase(text)
       text.to_s
     end
 
     def self.emote(message)
-      Alice::Util::Logger.info("!!! emoting")
       text = Util::Sanitizer.process(message)
       text = Util::Sanitizer.initial_downcase(text)
       "/me #{text}"
