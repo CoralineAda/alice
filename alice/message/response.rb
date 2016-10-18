@@ -23,7 +23,11 @@ module Message
     end
 
     def self.preview_url(message)
-      message.response = Parser::URL.new(message.trigger).preview
+      begin
+        message.response = Parser::URL.new(message.trigger).preview
+      rescue
+        message.response = ""
+      end
       message
     end
 
