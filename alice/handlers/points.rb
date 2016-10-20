@@ -11,8 +11,8 @@ module Handlers
       elsif subject && message.sender.award_point_to(subject)
         message.set_response(subject.check_score)
       elsif subject.nil?
+        return message if command_string.content.downcase =~ /\sc\+\+/
         this = command_string.content.gsub('++','')
-        return if this.downcase =~ /\sc\+\+/
         message.set_response("Yay for #{this}!")
       else
         message.set_response("#{message.sender_nick} needs to let #{message.sender.pronoun_possessive} points cannon cool down.")
