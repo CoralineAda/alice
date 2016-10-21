@@ -238,6 +238,7 @@ class User
     message << "#{check_score}. "
     message << "#{self.inventory} "
     message << "#{proper_name} is currently feeling a little #{self.filters.map(&:to_s).to_sentence}. " if self.filters.present?
+    message.gsub!("?.", "?")
     message
   end
 
