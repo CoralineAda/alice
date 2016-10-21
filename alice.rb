@@ -37,6 +37,7 @@ end
 post '/' do
   if output = bot.handle_item(params)
     parsed_output = JSON.parse(output)
+    p "!!! #{params}"
     bot.say(params) unless parsed_output['text'] =~ /Message\:\:Message/
   end
 end
