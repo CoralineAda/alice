@@ -7,7 +7,7 @@ module Behavior
     end
 
     def drop
-      return unless self.user
+      return "You don't have anything like that!" unless self.user
       return "It seems that the #{name} is cursed and cannot be dropped!" if self.is_cursed?
       previous_owner = self.user.current_nick
       self.place = Place.current
