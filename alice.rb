@@ -14,7 +14,7 @@ Mongoid.load!("config/mongoid.yml")
 require_all 'alice'
 
 config = {
-  'channel'          => '#main',
+#  'channel'          => '#main',
   'name'             => 'alice',
   'incoming_webhook' => ENV['INCOMING_WEBHOOK'],
   'outgoing_token'   => ENV['SLACK_API_TOKEN']
