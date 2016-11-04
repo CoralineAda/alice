@@ -49,9 +49,9 @@ class Item
 
   attr_accessor :is_ephemeral, :message
 
-  belongs_to  :actor
-  belongs_to  :user, inverse_of: :items
-  belongs_to  :place
+  belongs_to  :actor, optional: true
+  belongs_to  :user, inverse_of: :items, optional: true
+  belongs_to  :place, optional: true
 
   before_create :check_if_cursed
   before_create :check_if_not_ephemeral
@@ -262,4 +262,3 @@ class Item
   end
 
 end
-

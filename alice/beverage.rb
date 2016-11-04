@@ -22,9 +22,9 @@ class Beverage
   index({ is_hidden: 1 },   { unique: false })
   index({ creator_id: 1 },  { unique: false })
 
-  belongs_to :actor
-  belongs_to :user
-  belongs_to :place
+  belongs_to :actor, optional: true
+  belongs_to :user, optional: true
+  belongs_to :place, optional: true
 
   before_create :set_alcohol
   before_create :ensure_description
