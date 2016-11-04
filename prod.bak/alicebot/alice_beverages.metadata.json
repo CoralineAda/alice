@@ -1,1 +1,0 @@
-{"indexes":[{"v":1,"key":{"_id":1},"ns":"alicebot.alice_beverages","name":"_id_"},{"v":1,"key":{"name":1},"unique":true,"ns":"alicebot.alice_beverages","name":"name_1"},{"v":1,"key":{"is_hidden":1},"ns":"alicebot.alice_beverages","name":"is_hidden_1"},{"v":1,"key":{"creator_id":1},"ns":"alicebot.alice_beverages","name":"creator_id_1"}]}

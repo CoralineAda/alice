@@ -1,1 +1,0 @@
-{"indexes":[{"v":1,"key":{"_id":1},"ns":"alicebot.alice_places","name":"_id_"},{"v":1,"key":{"x":1,"y":1},"unique":true,"ns":"alicebot.alice_places","name":"x_1_y_1"},{"v":1,"key":{"is_current":1},"ns":"alicebot.alice_places","name":"is_current_1"}]}
