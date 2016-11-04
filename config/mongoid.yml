@@ -20,9 +20,9 @@ production:
       # server setup, and at least 3 for a replica set. Hosts must be
       # an array of host:port pairs. This session is single server.
       hosts:
-        - <%= ENV['MONGOHQ_URL'] %>
+        - <%= ENV['MONGODB_URI'] %>
       # Define the default database name.
-      database: app57192940
+#      database: app57192940
       # Since this database points at a session connected to MongoHQ, we must
       # provide the authentication details.
   options:
