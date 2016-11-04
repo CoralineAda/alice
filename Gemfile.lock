@@ -42,7 +42,7 @@ GEM
     i18n (0.6.11)
     inflections (3.2.12.20130314)
       activesupport (~> 3.2.0)
-    json (1.8.1)
+    json (1.8.3)
     marky_markov (0.3.5)
       msgpack
     method_source (0.8.2)
@@ -153,3 +153,6 @@ DEPENDENCIES
   wikipedia-client (>= 1.4.0)
   wolfram-alpha
   yummly
+
+BUNDLED WITH
+   1.13.6

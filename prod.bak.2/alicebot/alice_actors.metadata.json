@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"alicebot.alice_actors"},{"v":1,"unique":true,"key":{"name":1},"name":"name_1","ns":"alicebot.alice_actors"}]}
