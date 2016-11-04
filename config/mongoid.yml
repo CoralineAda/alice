@@ -22,7 +22,7 @@ production:
       hosts:
         - <%= ENV['DB_HOST'] %>
       # Define the default database name.
-      database: app57192940
+      database: alicebot
       # Since this database points at a session connected to MongoHQ, we must
       # provide the authentication details.
       username: <%= ENV['DB_USER'] %>
