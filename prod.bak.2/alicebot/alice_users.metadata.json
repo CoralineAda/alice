@@ -1,1 +1,0 @@
-{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"alicebot.alice_users"},{"v":1,"unique":true,"key":{"primary_nick":1},"name":"primary_nick_1","ns":"alicebot.alice_users"}]}
