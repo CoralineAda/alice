@@ -6,7 +6,7 @@ module Handlers
     include Behavior::HandlesCommands
 
     def process
-      handle_bio(command_string.content.to_s)
+      handle_bio(command_string.content.to_s, sender)
     end
 
     private
@@ -20,8 +20,10 @@ module Handlers
     end
 
     def return_bio
-      text = "I don't know who that is." unless subject
-      text = subject.formatted_bio if subject && subject.formatted_bio
+      who = subject
+      who ||= sender
+      text = "I don't know who that is." unless who
+      text = who.formatted_bio if who && who.formatted_bio
       text ||= "I don't seem to know anything about them."
       message.set_response(text)
     end
