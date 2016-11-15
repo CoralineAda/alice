@@ -231,7 +231,7 @@ class User
     message = ""
     message << self.bio.formatted if self.bio.present?
     if self.created_at
-      message << "#{self.pronoun_primary} first joined us on #{self.created_at.strftime("%B %-d, %Y")}. "
+      message << "#{self.primary_nick} first joined us on #{self.created_at.strftime("%B %-d, %Y")}. "
     end
     message << "Find #{self.pronoun_objective} on Twitter as #{self.twitter_handle}. " if self.twitter_handle.present?
     message << pronouns
