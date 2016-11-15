@@ -6,22 +6,22 @@ module Handlers
     include Behavior::HandlesCommands
 
     def process
-      handle_bio(command_string.content.to_s, sender)
+      handle_bio(command_string.content.to_s, message.sender)
     end
 
     private
 
-    def handle_bio(quoted)
+    def handle_bio(quoted, sender)
       if command_string.predicate && ! command_string.content.include?("who is")
         update_bio(command_string.raw_command)
       else
-        return_bio
+        return_bio(sender)
       end
     end
 
-    def return_bio
+    def return_bio(sender)
       who = subject
-      who ||= message.sender
+      who ||= sender
       text = "I don't know who that is." unless who
       text = who.formatted_bio if who && who.formatted_bio
       text ||= "I don't seem to know anything about them."
