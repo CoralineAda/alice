@@ -47,7 +47,7 @@ class Place
       description: description || random_description,
       is_dark: x == 0 && y == 0 || Util::Randomizer.one_chance_in(5)
     )
-    Util::Mapper.new.create
+#    Util::Mapper.new.create
     room
   end
 
