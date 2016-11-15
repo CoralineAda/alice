@@ -21,7 +21,7 @@ module Handlers
 
     def return_bio
       who = subject
-      who ||= sender
+      who ||= message.sender
       text = "I don't know who that is." unless who
       text = who.formatted_bio if who && who.formatted_bio
       text ||= "I don't seem to know anything about them."
