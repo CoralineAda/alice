@@ -61,7 +61,7 @@ module Message
       command_string = ::Message::CommandString.new(trigger)
       match = Parser::Mash.new(command_string).parse!
       match ||= Parser::Banger.new(command_string).parse!
-      match ||= find_verb(trigger) if trigger.includes?("++") || trigger.downcase.include?(ENV['BOT_SHORT_NAME'].downcase)
+      match ||= find_verb(trigger) if trigger.include?("++") || trigger.downcase.include?(ENV['BOT_SHORT_NAME'].downcase)
       if match
         match.message = message
         Alice::Util::Logger.info "*** Executing #{match.name} with \"#{trigger}\" with context #{Context.current && Context.current.topic || "none"} ***"
