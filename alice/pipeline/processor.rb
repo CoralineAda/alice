@@ -29,8 +29,7 @@ module Pipeline
 
     def should_respond?
       return true if self.trigger[0] == "!"
-      return true if self.trigger =~ %r{(https?://.*?)(?:\s|$|,|\.\s|\.$)}
-      return true if self.trigger =~ /\+\+/
+      return true if self.trigger =~ /\+\+/ && self.trigger !~ /$\s*c\+\+/i
       return true if self.trigger =~ /^[0-9\.\-]+$/
       return true if self.trigger =~ /well[,]* actually/i
       return true if self.trigger =~ /so say we all/i

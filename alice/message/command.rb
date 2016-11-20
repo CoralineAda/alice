@@ -57,11 +57,11 @@ module Message
     end
 
     def self.from(message)
-      trigger = message.trigger
+      trigger = message.trigger.downcase
       command_string = CommandString.new(trigger)
-      match = Parser::Banger.new(command_string).parse!
       match ||= Parser::Mash.new(command_string).parse!
-      match ||= find_verb(trigger)
+      match ||= Parser::Banger.new(command_string).parse!
+      match ||= find_verb(trigger) if trigger =~ /#{ENV['BOT_SHORT_NAME']}/i
       if match
         match.message = message
         Alice::Util::Logger.info "*** Executing #{match.name} with \"#{trigger}\" with context #{Context.current && Context.current.topic || "none"} ***"

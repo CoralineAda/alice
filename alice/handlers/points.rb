@@ -11,7 +11,7 @@ module Handlers
       elsif subject && message.sender.award_point_to(subject)
         message.set_response(subject.check_score)
       elsif subject.nil?
-        return message if command_string.content.downcase =~ /\sc\+\+/
+        return message if message.trigger =~ /$\s*c\+\+/s
         this = command_string.content.gsub('++','')
         message.set_response("Yay for #{this}!")
       else
