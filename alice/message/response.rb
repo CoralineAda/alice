@@ -4,7 +4,7 @@ module Message
     attr_accessor :message
 
     def self.from(message)
-      Command.process(message)
+      Message::Command.process(message)
     end
 
     def self.name_change(message)
