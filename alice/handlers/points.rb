@@ -42,7 +42,7 @@ module Handlers
     private
 
     def subject
-      ::User.from(command_string.components)
+      ::User.from(command_string.components.map{|c| c.gsub("++", "")}.join(' '))
     end
 
   end
