@@ -201,8 +201,8 @@ module Parser
       alice
       parse_transfer
       command
-    rescue AASM::InvalidTransition => e
-      Alice::Util::Logger.info "*** Mash can't set state: \"#{e}\" "
+    # rescue AASM::InvalidTransition => e
+    #   Alice::Util::Logger.info "*** Mash can't set state: \"#{e}\" "
     ensure
       Alice::Util::Logger.info "*** Final mash state is  \"#{aasm.current_state}\" "
       Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
@@ -269,7 +269,7 @@ module Parser
 
     def has_person?
       (command_string.predicate.present? && ::User.like(command_string.predicate)) ||
-      (command_string.subject.present? && ::User.like(command_string.subject)) ||
+      (command_string.subject.present? && ::User.like(command_string.subject.gusb)) ||
       ::User.from(command_string.subject) || ::User.from(command_string.predicate)
     end
 

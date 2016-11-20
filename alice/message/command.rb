@@ -58,7 +58,7 @@ module Message
 
     def self.from(message)
       trigger = message.trigger.downcase
-      command_string = CommandString.new(trigger)
+      command_string = ::Message::CommandString.new(trigger)
       match ||= Parser::Mash.new(command_string).parse!
       match ||= Parser::Banger.new(command_string).parse!
       match ||= find_verb(trigger) if trigger =~ /#{ENV['BOT_SHORT_NAME']}/i
