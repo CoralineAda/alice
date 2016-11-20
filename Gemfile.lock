@@ -92,8 +92,6 @@ GEM
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
     ruby-stemmer (0.9.6)
-    ruby-web-search (0.0.2)
-      json
     rubyfish (0.0.6)
     sanitize (4.4.0)
       crass (~> 1.0.2)
@@ -139,6 +137,7 @@ DEPENDENCIES
   google-search (~> 1.0)
   marky_markov
   mongoid (~> 6.0.0)
+  nokogiri
   octokit (~> 3.0)
   poro_plus
   pry
@@ -146,7 +145,6 @@ DEPENDENCIES
   require_all
   rspec
   ruby-stemmer (>= 0.8.3)
-  ruby-web-search
   rubyfish
   sanitize (>= 3.0.2)
   sinatra

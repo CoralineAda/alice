@@ -1,4 +1,3 @@
-require 'ruby-web-search'
 class Context
 
   include Mongoid::Document
@@ -183,7 +182,7 @@ class Context
       end
     end
     @content = Parser::Wikipedia.fetch(topic).to_s
-    @content +=  Parser::Google.fetch(topic)
+    #@content +=  Parser::Google.fetch(topic)
   end
 
   def near_match(subject, sentence)

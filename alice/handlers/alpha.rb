@@ -11,7 +11,8 @@ module Handlers
     private
 
     def answer
-      @answer ||= Parser::Alpha.new(command_string.sentence.gsub(/alice/i,"")).answer
+      @answer = Parser::Alpha.new(command_string.sentence.gsub(/alice/i,"")).answer
+      @answer ||= Parser::Google.new(command_string.sentence).answer
     end
 
   end
