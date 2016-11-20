@@ -331,10 +331,10 @@ module Parser
       return if state == :unparsed
       @command ||= Message::Command.any_in(verbs: verb.to_s).first
       @command ||= Message::Command.any_in(verbs: this_property).first
+      @command ||= Message::Command.any_in(indicators: "alpha").first
       @command ||= Message::Command.any_in(indicators: verb).first
       @command ||= Message::Command.any_in(indicators: this_greeting).first
       @command ||= Message::Command.any_in(indicators: this_pronoun).first
-      @command ||= Message::Command.any_in(indicators: "alpha").first
     end
 
     def any_method_like?(array)
