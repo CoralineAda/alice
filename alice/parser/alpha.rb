@@ -13,7 +13,7 @@ module Parser
     end
 
     def initialize(question)
-      @question = question.gsub(/[^[:alpha:] 0-9]/,'').gsub(/alice/i, "")
+      @question = question.gsub(/alice/i, "")
     end
 
     def answer

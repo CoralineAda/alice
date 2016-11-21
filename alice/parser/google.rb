@@ -7,7 +7,7 @@ module Parser
     attr_reader :answer
 
     def initialize(question)
-      @question = question.gsub(/[^[:alpha:] 0-9]/,'').gsub(/alice/i, "").gsub(" ", "+")
+      @question = question.gsub(/alice/i, "").gsub(" ", "+")
     end
 
     def answer
