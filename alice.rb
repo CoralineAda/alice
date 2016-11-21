@@ -29,8 +29,13 @@ I18n.enforce_available_locales = false
 
 bot = Slackbotsy::Bot.new(config) do
   hear /(.+)/ do |mdata|
-    name = User.ensure_user(user_name, user_id).primary_nick
-    Pipeline::Listener.new.route(name, mdata[1])
+    begin
+      name = User.ensure_user(user_name, user_id).primary_nick
+      Pipeline::Listener.new.route(name, mdata[1])
+    rescue Exception => e
+      Alice::Util::Logger.info "*** Unable to process \"#{mdata[1]}\": #{e}"
+      Alice::Util::Logger.info e.backtrace
+    end
   end
 end
 
