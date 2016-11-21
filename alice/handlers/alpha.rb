@@ -12,16 +12,11 @@ module Handlers
 
     def answer
       Alice::Util::Logger.info "sentence = #{sentence}"
-      begin
-        answer = Parser::Alpha.new(sentence).answer
-        answer ||= Parser::Google.new(sentence).answer
-      rescue
-        answer ||= Parser::Google.new(sentence).answer
-      end
+      Parser::Alpha.new(sentence).answer || Parser::Google.new(sentence).answer
     end
 
     def sentence
-      @sentence ||= message.trigger.downcase.gsub("alice", "").gsub(",", "").strip
+      @sentence ||= message.trigger.downcase.gsub("alice", "").gsub(",", "").co
     end
 
   end
