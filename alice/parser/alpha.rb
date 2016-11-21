@@ -19,7 +19,9 @@ module Parser
     def answer
       return unless enabled?
       return unless result_pod = response.find{|pod| pod.title == "Result"}
-      result_pod.subpods[0].plaintext.gsub("\n", " ")
+      answer = result_pod.subpods[0].plaintext.gsub("\n", " ")
+      Alice::Util::Logger.info "*** Parser::Alpha: Answered \"#{self.question}\" with #{answer}"
+      return answer
     rescue Exception => e
       Alice::Util::Logger.info "*** Parser::Alpha: Unable to process \"#{self.question}\": #{e}"
       Alice::Util::Logger.info e.backtrace

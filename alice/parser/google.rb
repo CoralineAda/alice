@@ -18,7 +18,9 @@ module Parser
 
     def results
       doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{question}"))
-      result = doc.css("div span.st").map(&:text).sort{|a,b| a.length <=> b.length}.last
+      answer = doc.css("div span.st").map(&:text).sort{|a,b| a.length <=> b.length}.last
+      Alice::Util::Logger.info "*** Parser::Alpha: Answered \"#{self.question}\" with #{answer}"
+      return answer
     rescue Exception => e
       Alice::Util::Logger.info "*** Parser::Google: Unable to process \"#{self.question}\": #{e}"
       Alice::Util::Logger.info e.backtrace
