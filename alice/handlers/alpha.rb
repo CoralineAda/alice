@@ -16,7 +16,7 @@ module Handlers
     end
 
     def sentence
-      @sentence ||= message.trigger.downcase.gsub("alice", "")
+      @sentence ||= message.trigger.downcase.gsub("alice", "").gsub(",", "").strip
     end
 
   end
