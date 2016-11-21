@@ -12,7 +12,12 @@ module Handlers
 
     def answer
       Alice::Util::Logger.info "sentence = #{sentence}"
-      Parser::Alpha.new(sentence).answer || Parser::Google.new(sentence).answer
+      begin
+        answer = Parser::Alpha.new(sentence).answer
+        answer ||= Parser::Google.new(sentence).answer
+      rescue
+        answer ||= Parser::Google.new(sentence).answer
+      end
     end
 
     def sentence
