@@ -13,7 +13,7 @@ module Parser
     end
 
     def initialize(question)
-      @question = question.gsub(/alice/i, "")
+      @question = question.gsub(/alice/i, "").gsub("+", "plus")
     end
 
     def answer
