@@ -16,7 +16,7 @@ module Handlers
     end
 
     def sentence
-      @sentence ||= command_string.sentence.downcase#.gsub("alice", "")
+      @sentence ||= message.trigger.gsub("alice", "")
     end
 
   end
