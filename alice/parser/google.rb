@@ -18,8 +18,7 @@ module Parser
 
     def results
       doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{question}"))
-      answer = doc.css("div span.st").map(&:text).sort{|a,b| a.length <=> b.length}.last
-      answer = answer.split.join(' ')
+      answer = doc.css("div span.st").map(&:text).sort{|a,b| a.length <=> b.length}.last.split.join(' ')
       Alice::Util::Logger.info "*** Parser::Alpha: Answered \"#{self.question}\" with #{answer}"
       return answer
     rescue Exception => e
