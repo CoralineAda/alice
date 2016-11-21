@@ -11,6 +11,7 @@ module Handlers
     private
 
     def answer
+      Alice::Util::Logger.info "sentence = #{sentence}"
       Parser::Alpha.new(sentence).answer || Parser::Google.new(sentence).answer
     end
 
