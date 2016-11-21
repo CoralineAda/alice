@@ -11,9 +11,11 @@ module Handlers
     private
 
     def answer
-      answer = Parser::Alpha.new(command_string.sentence).answer
-      answer = Parser::Google.new(command_string.sentence).answer if answer.blank?
-      answer
+      Parser::Alpha.new(sentence).answer || Parser::Google.new(sentence).answer
+    end
+
+    def sentence
+      @sentence ||= command_string.sentence
     end
 
   end
