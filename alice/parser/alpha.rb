@@ -18,7 +18,6 @@ module Parser
 
     def answer
       return unless enabled?
-    begin
       return unless result_pod = response.find{|pod| pod.title == "Result"}
       result_pod.subpods[0].plaintext.gsub("\n", " ")
     rescue
