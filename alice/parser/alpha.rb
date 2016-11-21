@@ -13,7 +13,7 @@ module Parser
     end
 
     def initialize(question)
-      @question = question.gsub(/\+/, "plus")
+      @question = question#.gsub(/\+/, "plus")
       Alice::Util::Logger.info "question = #{self.question}"
     end
 
