@@ -18,7 +18,7 @@ module Parser
 
     def results
       doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{question}"))
-      result = doc.css("div span.st").map(&:inner_html).sort{|a,b| a.length <=> b.length}.last
+      result = doc.css("div span.st").map(&:text).sort{|a,b| a.length <=> b.length}.last
     end
 
   end
