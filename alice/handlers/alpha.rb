@@ -15,7 +15,7 @@ module Handlers
     end
 
     def sentence
-      @sentence ||= command_string.sentence
+      @sentence ||= command_string.sentence.gsub(/alice/i, "").
     end
 
   end

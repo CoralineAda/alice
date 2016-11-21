@@ -13,7 +13,8 @@ module Parser
     end
 
     def initialize(question)
-      @question = question.gsub(/alice/i, "").gsub("+", "plus")
+      @question = question.gsub("+", "plus")
+      Alice::Util::Logger.info "question = #{self.question}"
     end
 
     def answer
@@ -25,7 +26,7 @@ module Parser
     rescue Exception => e
       Alice::Util::Logger.info "*** Parser::Alpha: Unable to process \"#{self.question}\": #{e}"
       Alice::Util::Logger.info e.backtrace
-      ""
+      nil
     end
 
     private
