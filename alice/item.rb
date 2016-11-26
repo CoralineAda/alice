@@ -98,7 +98,7 @@ class Item
     if new_item.save
       "#{new_item.owner.current_nick} forges a #{name} #{Util::Randomizer.forge}."
     else
-      Alice::Util::Logger.info "*** Unable to forge \"#{new_item.name\""
+      Alice::Util::Logger.info "*** Unable to forge \"#{new_item.name}\""
       Alice::Util::Logger.info new_item.errors
     end
   end
