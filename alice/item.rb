@@ -98,7 +98,7 @@ class Item
     errors = new_item.errors
     if new_item.save
       "#{new_item.owner.current_nick} forges a #{name} #{Util::Randomizer.forge}."
-    elsif errors && errors.messages[:name] =~ "is already taken"
+    elsif errors && errors.messages[:name].present?
       "Sorry, there's already something with that name. Be more creative!"
     else
       Alice::Util::Logger.info "*** Unable to forge \"#{new_item.name}\""
