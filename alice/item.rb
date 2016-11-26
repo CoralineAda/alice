@@ -95,8 +95,12 @@ class Item
     new_item.creator && new_item.creator.score_points
     new_item.check_if_cursed
     new_item.ensure_description
-    new_item.save
-    "#{new_item.owner.current_nick} forges a #{name} #{Util::Randomizer.forge}."
+    if new_item.save
+      "#{new_item.owner.current_nick} forges a #{name} #{Util::Randomizer.forge}."
+    else
+      Alice::Util::Logger.info "*** Unable to forge \"#{new_item.name\""
+      Alice::Util::Logger.info e.errors
+    end
   end
 
   def self.fruitcake
