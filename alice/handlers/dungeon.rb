@@ -26,7 +26,7 @@ module Handlers
       response ||= extant_object(command_string.subject).try(:describe)
       response ||= extant_object(command_string.fragment).try(:describe)
       response ||= extant_object(command_string.predicate).try(:describe)
-      response ||= "I don't see that here." if command_string.subject.present?
+      response ||= "I don't see that here." unless command_string.subject.empty?
       response ||= Place.current.describe
       message.set_response(response)
     end
