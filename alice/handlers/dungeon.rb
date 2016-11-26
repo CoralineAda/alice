@@ -21,7 +21,7 @@ module Handlers
     end
 
     def look
-      subject = command_string.subject.gsub(/$look/, '')
+      subject = command_string.subject.gsub(/^look/, '')
       Alice::Util::Logger.info "*** Look subject is \"#{command_string.subject.inspect}\""
       response = look_in_direction(looking_direction) if looking_direction.present?
       response = describe_setting(subject) if Place.current.description =~ /#{subject}/i
