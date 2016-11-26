@@ -26,8 +26,8 @@ module Handlers
       response = look_in_direction(looking_direction) if looking_direction.present?
       response = describe_setting(subject) if Place.current.description =~ /#{subject}/i
       response ||= extant_object(subject).try(:describe)
-      response ||= extant_object(fragment).try(:describe)
-      response ||= extant_object(predicate).try(:describe)
+      response ||= extant_object(command_string.fragment).try(:describe)
+      response ||= extant_object(command_string.predicate).try(:describe)
       response ||= Place.current.describe if subject.downcase == "look"
       response ||= "I don't see that here." unless subject.empty?
       message.set_response(response)
