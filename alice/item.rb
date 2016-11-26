@@ -95,9 +95,10 @@ class Item
     new_item.creator && new_item.creator.score_points
     new_item.check_if_cursed
     new_item.ensure_description
+    errors = new_item.errors
     if new_item.save
       "#{new_item.owner.current_nick} forges a #{name} #{Util::Randomizer.forge}."
-    elsif new_item.errors.messages =~ "is already taken"
+    elsif errors && errors.messages[:name] =~ "is already taken"
       "Sorry, there's already something with that name. Be more creative!"
     else
       Alice::Util::Logger.info "*** Unable to forge \"#{new_item.name}\""
