@@ -97,6 +97,8 @@ class Item
     new_item.ensure_description
     if new_item.save
       "#{new_item.owner.current_nick} forges a #{name} #{Util::Randomizer.forge}."
+    elsif new_item.errors.messages =~ "is already taken"
+      "Sorry, there's already something with that name. Be more creative!"
     else
       Alice::Util::Logger.info "*** Unable to forge \"#{new_item.name}\""
       Alice::Util::Logger.info new_item.errors.messages
