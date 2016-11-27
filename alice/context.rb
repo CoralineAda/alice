@@ -106,7 +106,7 @@ class Context
       has_info_verb && placement && placement.to_i < 100
     end
     factogram = Hash.new([])
-    facts.each{|fact| factogram(declarative_index(fact)) << fact }
+    facts.each{|fact| factogram[declarative_index(fact)] << fact }
     fact = factogram[factogram.keys.sort.first].sample
     record_spoken(fact) if spoken
     fact
