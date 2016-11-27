@@ -180,9 +180,9 @@ class Context
       self.is_ephemeral = true
       return @content
     end
-    @content ||= Parser::Wikipedia.fetch(topic).to_s
-    @content +=  " " + Parser::Google.fetch(topic).to_s
-    @content +=  " " + Parser::Alpha.fetch(topic).to_s
+    @content ||= [Parser::Wikipedia.fetch(topic).to_s]
+    @content << Parser::Google.fetch(topic).to_s
+    @content << Parser::Alpha.fetch(topic).to_s
   end
 
   def is_was_sort_value(element)

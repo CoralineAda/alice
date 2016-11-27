@@ -1,4 +1,5 @@
 require 'wolfram-alpha'
+require 'timeout'
 
 module Parser
   class Alpha
@@ -39,7 +40,12 @@ module Parser
     end
 
     def response
-      @response ||= client.query(self.question)
+      return @response if @response
+      Timeout::timeout(10) do
+        @response = client.query(self.question)
+      end
+    rescue Timeout::Error
+      @response = ""
     end
 
   end
