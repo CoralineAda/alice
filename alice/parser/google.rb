@@ -34,7 +34,7 @@ module Parser
     end
 
     def declarative_index(answer)
-      answer =~ ::Grammar::LanguageHelper::DECLARATIVE_DETECTOR || 1000
+      (answer =~ ::Grammar::LanguageHelper::DECLARATIVE_DETECTOR) || 1000
     end
 
   end
