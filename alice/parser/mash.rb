@@ -307,6 +307,7 @@ module Parser
         self.this_info_verb = "converse"
         Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" "
       end
+      match
     end
 
     def has_property?
