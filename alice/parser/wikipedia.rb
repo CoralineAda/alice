@@ -12,20 +12,10 @@ module Parser
     end
 
     def answer
-      if result = ::Wikipedia.find(topic)
-        content = result.sanitized_content
-        Grammar::LanguageHelper.sentences_from.each do |sentence|
-      end
-
+      result.sample
     end
 
     private
-
-    def store_facts
-      results.each do |result|
-        Factoid.create(text: result) if 
-      end
-    end
 
     def results
       if result = ::Wikipedia.find(topic)
