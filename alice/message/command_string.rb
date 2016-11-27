@@ -9,8 +9,12 @@ module Message
     end
 
     def components
-      @components ||= self.content.split(' ').reject(&:blank?).map do |c|
-        c.gsub(/\'s/, ' for').gsub(/^\!/,'').gsub(/\+/, '').gsub(/[\?\!\.\,]$/, '')
+      @components ||= do
+        sanitized = self.content.split(' ').reject(&:blank?).reject{|c| c.downcase == ENV['BOT_SHORT_NAME'].downcase}
+        sanitized.map do |c|
+          c.gsub(/\'s/, ' for').gsub(/^\!/,'').gsub(/\+/, '').gsub(/[\?\!\.\,]$/, '')
+        end
+        sanitized
       end
     end
 
