@@ -25,7 +25,7 @@ module Parser
       else
         content = []
       end
-      content
+      content[0..10]
     end
 
   end
