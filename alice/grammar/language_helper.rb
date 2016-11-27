@@ -1,29 +1,36 @@
 module Grammar
   module LanguageHelper
 
+    DECLARATIVE_DETECTOR = /\b#{INFO_VERBS * '|\b'}/ix
+
     ARTICLES = %w{a the of an to and}
 
     INFO_VERBS = [
+      "are",
+      "created",
       "delete",
       "describe",
+      "did",
+      "do",
+      "does",
       "does",
       "examine",
+      "had",
+      "has",
       "hear",
       "heard",
       "hearing",
       "hid",
       "inspect",
       "is",
-      "are",
       "know",
       "look",
+      "made",
       "set",
       "tell",
       "think",
       "was",
-      "do",
-      "does",
-      "did"
+      "wrote"
     ]
 
     RELATION_VERBS = [

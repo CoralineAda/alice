@@ -6,8 +6,6 @@ module Parser
     attr_accessor :question
     attr_reader :answer
 
-    DECLARATIVE_DETECTOR = /\b#{Grammar::LanguageHelper::INFO_VERBS * '|\b'}/ix
-
     def initialize(question)
       @question = question.gsub("+", "plus").gsub(" ", "+")
     end
@@ -32,7 +30,7 @@ module Parser
     end
 
     def declarative_index(answer)
-      answer =~ DECLARATIVE_DETECTOR || 1000
+      answer =~ Grammer::LanguageHelper::DECLARATIVE_DETECTOR || 1000
     end
 
   end

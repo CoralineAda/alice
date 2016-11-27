@@ -100,11 +100,14 @@ class Context
 
   def declarative_fact(subtopic, spoken=true)
     return AMBIGUOUS if ambiguous?
-    fact = relational_facts(subtopic).select do |sentence|
+    facts = relational_facts(subtopic).select do |sentence|
       has_info_verb = sentence =~ /\b#{Grammar::LanguageHelper::INFO_VERBS * '|\b'}/ix
       placement = position_of(subtopic.downcase, sentence.downcase)
       has_info_verb && placement && placement.to_i < 100
-    end.sample
+    end
+    weighted_facts = facts.map{|fact| [declarative_index(fact), fact] }
+    best_facts = facts.reject{|index| index[0] > 5}
+    fact = best_facts.sample
     record_spoken(fact) if spoken
     fact
   end
@@ -148,6 +151,10 @@ class Context
 
   private
 
+  def declarative_index(sentence)
+    sentence =~ Grammer::LanguageHelper::DECLARATIVE_DETECTOR || 1000
+  end
+
   def downcase_topic
     self.topic.downcase!
   end
@@ -173,15 +180,10 @@ class Context
   def fetch_content_from_sources
     return @content if @content
     if @content = Parser::User.fetch(topic)
-      if @content.empty?
-        @content = nil
-      else
-        self.corpus_from_user = true
-        self.is_ephemeral = true
-        return @content
-      end
+      self.corpus_from_user = true
+      self.is_ephemeral = true
     end
-    @content = Parser::Wikipedia.fetch(topic).to_s
+    @content ||= Parser::Wikipedia.fetch(topic).to_s
     #@content +=  Parser::Google.fetch(topic)
   end
 

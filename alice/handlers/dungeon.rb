@@ -21,15 +21,15 @@ module Handlers
     end
 
     def look
-      subject = command_string.subject.gsub(/^look/, '')
-      Alice::Util::Logger.info "*** Look subject is \"#{command_string.subject.inspect}\""
+      subject = command_string.subject
+      Alice::Util::Logger.info "*** Look subject is \"#{command_string.subject}\""
       response = look_in_direction(looking_direction) if looking_direction.present?
       response = describe_setting(subject) if Place.current.description =~ /#{subject}/i
       response ||= extant_object(subject).try(:describe)
       response ||= extant_object(command_string.fragment).try(:describe)
       response ||= extant_object(command_string.predicate).try(:describe)
       response ||= Place.current.describe if subject.downcase == "look"
-      response ||= "I don't see that here." unless subject.empty?
+      response ||= "I don't see that here."
       message.set_response(response)
     end
 

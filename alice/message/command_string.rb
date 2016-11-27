@@ -9,7 +9,7 @@ module Message
     end
 
     def components
-      @components ||= self.content.split(' ').reject{|w| w.blank? }.map do |c|
+      @components ||= self.content.split(' ').reject(&:blank?).map do |c|
         c.gsub(/\'s/, ' for').gsub(/^\!/,'').gsub(/\+/, '').gsub(/[\?\!\.\,]$/, '')
       end
     end
@@ -63,7 +63,7 @@ module Message
     end
 
     def subject
-      return components[0..(predicate_position - 1)].join(' ').gsub(/[\.\,\?\'\!]+$/, '').gsub("++", "")
+      return (components[0..(predicate_position - 1)] - [verb]).join(' ').gsub(/[\.\,\?\'\!]+$/, '').gsub("++", "")
     end
 
     def fragment
