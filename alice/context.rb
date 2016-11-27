@@ -169,10 +169,6 @@ class Context
     end.flatten
   end
 
-  def is_was_sort_value(element)
-    (position_of("is", element) || position_of("was", element) || 100) - 100
-  end
-
   def expire!
     update_attributes(is_current: false, spoken: [])
   end
@@ -182,10 +178,15 @@ class Context
     if @content = Parser::User.fetch(topic)
       self.corpus_from_user = true
       self.is_ephemeral = true
+      return @content
     end
     @content ||= Parser::Wikipedia.fetch(topic).to_s
     @content +=  Parser::Google.fetch(topic)
     @content +=  Parser::Alpha.fetch(topic)
+  end
+
+  def is_was_sort_value(element)
+    (position_of("is", element) || position_of("was", element) || 100) - 100
   end
 
   def near_match(subject, sentence)

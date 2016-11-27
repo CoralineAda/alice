@@ -6,7 +6,7 @@ module Parser
     attr_accessor :question
     attr_reader :answer
 
-    def fetch(topic)
+    def self.fetch(topic)
       new(topic).answer
     end
 
