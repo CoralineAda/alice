@@ -88,6 +88,7 @@ class Context
       sanitized = Grammar::LanguageHelper.sentences_from(fetch_content_from_sources)
         .reject{|s| s.include?("may refer to") || s.include?("disambiguation") }
         .reject{|s| s.size < (self.corpus_from_user ? self.topic.length + 1 : MINIMUM_FACT_LENGTH)}
+        .map{|s| s.gsub(/^\**/, "") }
       sanitized || []
     rescue Exception => e
       Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
