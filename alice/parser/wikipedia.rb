@@ -12,7 +12,7 @@ module Parser
     end
 
     def answer
-      result.sample
+      results.sample
     end
 
     private
