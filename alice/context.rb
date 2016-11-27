@@ -63,7 +63,7 @@ class Context
   end
 
   def ambiguous?
-    self.corpus.map{|fact| fact.include?("may refer to") || fact.include?("disambiguation") }.any?
+    self.corpus && self.corpus.map{|fact| fact.include?("may refer to") || fact.include?("disambiguation") }.any?
   end
 
   def corpus_accessor
