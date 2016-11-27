@@ -9,13 +9,7 @@ module Message
     end
 
     def components
-      @components ||= do
-        sanitized = self.content.split(' ').reject(&:blank?).reject{|c| c.downcase == ENV['BOT_SHORT_NAME'].downcase}
-        sanitized.map do |c|
-          c.gsub(/\'s/, ' for').gsub(/^\!/,'').gsub(/\+/, '').gsub(/[\?\!\.\,]$/, '')
-        end
-        sanitized
-      end
+      @components ||= sanitized_content
     end
 
     def probable_nouns
@@ -76,6 +70,13 @@ module Message
 
     def verb
       components[0].to_s.gsub(/^!/, '')
+    end
+
+    private
+
+    def sanitized_content
+      sanitized = self.content.split(' ').reject(&:blank?).reject{|c| c.downcase == ENV['BOT_SHORT_NAME'].downcase}
+      sanitized.map{ |c| c.gsub(/\'s/, ' for').gsub(/^\!/,'').gsub(/\+/, '').gsub(/[\?\!\.\,]$/, '') }
     end
 
   end
