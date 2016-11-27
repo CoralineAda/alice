@@ -75,7 +75,7 @@ module Message
     private
 
     def sanitized_content
-      sanitized = self.content.split(' ').reject(&:blank?).reject{|c| c.downcase == ENV['BOT_SHORT_NAME'].downcase}
+      sanitized = self.content.split(' ').reject(&:blank?).reject{|c| c.downcase.include? ENV['BOT_SHORT_NAME'].downcase}
       sanitized.map{ |c| c.gsub(/\'s/, ' for').gsub(/^\!/,'').gsub(/\+/, '').gsub(/[\?\!\.\,]$/, '') }
     end
 
