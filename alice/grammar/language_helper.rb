@@ -179,7 +179,7 @@ module Grammar
 
     PREDICATE_INDICATORS = PREPOSITIONS + NOUN_INDICATORS + INFO_VERBS + ACTION_VERBS + TRANSFER_VERBS + RELATION_VERBS
 
-    PRONOUNS = %w{ him her his him hers they theirs them he she it its this those these that }
+    PRONOUNS = %w{ him her his him hers they their their them he she its this those these that }
 
     WORDS_WITH_PERIODS = ["dr.", "mr.", "ms.", "phd.", "mrs."]
 
