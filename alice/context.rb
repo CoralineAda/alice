@@ -183,7 +183,7 @@ class Context
     @content ||= Parser::Wikipedia.fetch_all(topic)
     @content << Parser::Google.fetch(topic).to_s
     @content << Parser::Alpha.fetch(topic).to_s
-    @content = @content.map{ |fact| Sanitize.clean(fact) }
+    @content = @content.map{ |fact| Sanitize.clean(fact).strip }.join('. ')
   end
 
   def is_was_sort_value(element)
