@@ -12,7 +12,12 @@ module Handlers
 
     def answer
       Alice::Util::Logger.info "sentence = #{sentence}"
-      Parser::Alpha.new(sentence).answer || Parser::Google.new(sentence).answer
+      Timeout::timeout(10) do
+        answer = Parser::Alpha.new(sentence).answer
+      end
+      rescue Timeout::Error
+        answer = Parser::Google.new(sentence).answer
+      end
     end
 
     def sentence
