@@ -17,9 +17,10 @@ module Handlers
       Timeout::timeout(10) do
         answer = Parser::Alpha.new(sentence).answer
       end
-      rescue Timeout::Error
-        answer = Parser::Google.new(sentence).answer
-      end
+    rescue Timeout::Error
+      answer = Parser::Google.new(sentence).answer
+    ensure
+      answer
     end
 
     def sentence
