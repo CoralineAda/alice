@@ -85,10 +85,10 @@ class Context
 
   def define_corpus
     self.corpus ||= begin
-      sanitized = fetch_content_from_sources
-      sanitized = Util::Sanitizer.scrub_wiki_content(sanitized)
-      sanitized = sanitized.reject{|s| s.include?("may refer to") || s.include?("disambiguation") }
-      sanitized = sanitized.reject{|s| s.size < (self.corpus_from_user ? self.topic.length + 1 : MINIMUM_FACT_LENGTH)}
+      sanitized = Grammar::LanguageHelper.sentences_from(fetch_content_from_sources)
+        .map{|sentence| Util::Sanitizer.scrub_wiki_content(sentece) }
+        .reject{|s| s.include?("may refer to") || s.include?("disambiguation") }
+        .reject{|s| s.size < (self.corpus_from_user ? self.topic.length + 1 : MINIMUM_FACT_LENGTH)}
       sanitized || []
     rescue Exception => e
       Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
