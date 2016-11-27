@@ -1,8 +1,6 @@
 module Grammar
   module LanguageHelper
 
-    DECLARATIVE_DETECTOR = /\b#{INFO_VERBS * '|\b'}/ix
-
     ARTICLES = %w{a the of an to and}
 
     INFO_VERBS = [
@@ -173,6 +171,8 @@ module Grammar
     ]
 
     VERBS = TRANSFER_VERBS + INFO_VERBS + ACTION_VERBS + RELATION_VERBS
+
+    DECLARATIVE_DETECTOR = /\b#{INFO_VERBS * '|\b'}/ix
 
     NOUN_INDICATORS = %w{ the a an this about }
 
