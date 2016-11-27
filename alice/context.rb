@@ -86,7 +86,6 @@ class Context
   def define_corpus
     self.corpus ||= begin
       sanitized = Grammar::LanguageHelper.sentences_from(fetch_content_from_sources)
-        .map{|sentence| Util::Sanitizer.scrub_wiki_content(sentence) }
         .reject{|s| s.include?("may refer to") || s.include?("disambiguation") }
         .reject{|s| s.size < (self.corpus_from_user ? self.topic.length + 1 : MINIMUM_FACT_LENGTH)}
       sanitized || []
