@@ -22,7 +22,7 @@ Run the following from Terminal to initialize basic commands:
 
 ### Running the Bot
 
-Deploy to your favorite hosting environment and set up incoming and outgoing integrations with Slack according to their [documentation](https://api.slack.com/custom-integrations)
+Deploy to your favorite hosting environment and set up incoming and outgoing integrations with Slack according to their [documentation](https://api.slack.com/custom-integrations).
 
 If you're using Heroku, be sure to copy the relevant values from the `.env` file to your application's configuration.
 
