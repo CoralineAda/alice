@@ -7,6 +7,10 @@ module Parser
       new(topic).answer
     end
 
+    def self.fetch_all(topic)
+      new(topic).results
+    end
+
     def initialize(topic)
       @topic = topic
     end
@@ -14,8 +18,6 @@ module Parser
     def answer
       results.sample
     end
-
-    private
 
     def results
       if result = ::Wikipedia.find(topic)
