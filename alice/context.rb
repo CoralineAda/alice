@@ -152,7 +152,7 @@ class Context
   private
 
   def declarative_index(sentence)
-    sentence =~ Grammer::LanguageHelper::DECLARATIVE_DETECTOR || 1000
+    sentence =~ Grammar::LanguageHelper::DECLARATIVE_DETECTOR || 1000
   end
 
   def downcase_topic
