@@ -6,6 +6,10 @@ module Parser
     attr_accessor :question
     attr_reader :answer
 
+    def fetch(topic)
+      new(topic).answer
+    end
+
     def initialize(question)
       @question = question.gsub("+", "plus").gsub(" ", "+")
     end

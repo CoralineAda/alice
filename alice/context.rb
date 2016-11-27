@@ -105,9 +105,9 @@ class Context
       placement = position_of(subtopic.downcase, sentence.downcase)
       has_info_verb && placement && placement.to_i < 100
     end
-    weighted_facts = facts.map{|fact| [declarative_index(fact), fact] }
-    best_facts = facts.reject{|index| index[0] > 5}
-    fact = best_facts.sample
+    factogram = {[]}
+    facts.each{|fact| factogram(declarative_index(fact)) << fact }
+    fact = factogram[factogram.keys.sort.first].sample
     record_spoken(fact) if spoken
     fact
   end
@@ -184,7 +184,8 @@ class Context
       self.is_ephemeral = true
     end
     @content ||= Parser::Wikipedia.fetch(topic).to_s
-    #@content +=  Parser::Google.fetch(topic)
+    @content +=  Parser::Google.fetch(topic)
+    @content +=  Parser::Alpha.fetch(topic)
   end
 
   def near_match(subject, sentence)
