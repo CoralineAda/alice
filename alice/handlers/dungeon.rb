@@ -28,7 +28,7 @@ module Handlers
       response ||= extant_object(subject).try(:describe)
       response ||= extant_object(command_string.fragment).try(:describe)
       response ||= extant_object(command_string.predicate).try(:describe)
-      response ||= Place.current.describe if subject.downcase == "look"
+      response ||= Place.current.describe if subject.empty?
       response ||= "I don't see that here."
       message.set_response(response)
     end
