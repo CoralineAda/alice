@@ -18,7 +18,7 @@ config = {
   'name'             => 'alice',
   'incoming_webhook' => ENV['INCOMING_WEBHOOK'],
   'outgoing_token'   => ENV['SLACK_API_TOKEN'],
-  'api_token'        => ENV['SLACK_API_TOKEN']
+  'api_token'        => ENV['API_TOKEN']
 }
 
 Yummly.configure do |config|
