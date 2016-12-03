@@ -17,8 +17,7 @@ config = {
   'channel'          => '#main,#mudroom',
   'name'             => 'alice',
   'incoming_webhook' => ENV['INCOMING_WEBHOOK'],
-  'outgoing_token'   => ENV['SLACK_API_TOKEN'],
-  'api_token'        => ENV['API_TOKEN']
+  'outgoing_token'   => ENV['SLACK_API_TOKEN']
 }
 
 Yummly.configure do |config|
@@ -43,23 +42,6 @@ end
 post '/' do
   if output = bot.handle_item(params)
     parsed_output = JSON.parse(output)
-    Alice::Util::Logger.info "params = #{params}"
-    payload = {'channel' => params['channel_name']}
-    Alice::Util::Logger.info "payload = #{payload}"
-    bot.post_message(parsed_output['text'], payload) unless parsed_output['text'] =~ /Message\:\:Message/
+    bot.say(parsed_output['text'], {channel: params['channel_name'], mrkdwn: true}) unless parsed_output['text'] =~ /Message\:\:Message/
   end
 end
-
-
-# def post_message(text, options = {})
-#   payload = {
-#     username: @options['name'],
-#     channel:  @options['channel'],
-#     text:     text,
-#     as_user:  true
-#   }.merge(options)
-#   payload[:channel] = payload[:channel].gsub(/^#?/, '#') # chat.postMessage needs leading # on channel
-#   @api.join(payload[:channel])
-#   @api.post_message(payload)
-#   return nil # be quiet in webhook reply
-# end
