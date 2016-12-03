@@ -17,7 +17,8 @@ config = {
   'channel'          => '#main,#mudroom',
   'name'             => 'alice',
   'incoming_webhook' => ENV['INCOMING_WEBHOOK'],
-  'outgoing_token'   => ENV['SLACK_API_TOKEN']
+  'outgoing_token'   => ENV['SLACK_API_TOKEN'],
+  'api_token'        => ENV['SLACK_API_TOKEN']
 }
 
 Yummly.configure do |config|
