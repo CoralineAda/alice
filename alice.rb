@@ -42,6 +42,6 @@ end
 post '/' do
   if output = bot.handle_item(params)
     parsed_output = JSON.parse(output)
-    bot.post_message(parsed_output['text'], {channel: params['channel_name']}) unless parsed_output['text'] =~ /Message\:\:Message/
+    bot.post_message(parsed_output['text'], {channel: params['channel']}) unless parsed_output['text'] =~ /Message\:\:Message/
   end
 end
