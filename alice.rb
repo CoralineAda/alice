@@ -42,6 +42,20 @@ end
 post '/' do
   if output = bot.handle_item(params)
     parsed_output = JSON.parse(output)
-    bot.post_message(parsed_output['text'], {channel: params['channel']}) unless parsed_output['text'] =~ /Message\:\:Message/
+    bot.post_message(parsed_output['text'], {'channel' => params['channel']}) unless parsed_output['text'] =~ /Message\:\:Message/
   end
+end
+
+
+def post_message(text, options = {})
+  payload = {
+    username: @options['name'],
+    channel:  @options['channel'],
+    text:     text,
+    as_user:  true
+  }.merge(options)
+  payload[:channel] = payload[:channel].gsub(/^#?/, '#') # chat.postMessage needs leading # on channel
+  @api.join(payload[:channel])
+  @api.post_message(payload)
+  return nil # be quiet in webhook reply
 end
