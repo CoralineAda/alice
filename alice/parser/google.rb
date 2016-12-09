@@ -25,7 +25,7 @@ module Parser
       answers = doc.css("div span.st").map(&:text)
       answers.reject!{|a| a.include?("...")}
       sorted_answers = answers.sort{|a,b| declarative_index(a) <=> declarative_index(b)}
-      best_answer = sorted_answers && sorted_answers.first.split.join(' ') || ""
+      best_answer = sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
       Alice::Util::Logger.info "*** Parser::Google: Answered \"#{self.question}\" with #{best_answer}"
       return best_answer
     rescue Exception => e
