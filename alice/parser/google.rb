@@ -24,7 +24,8 @@ module Parser
       doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{question}"))
       answers = doc.css("div span.st").map(&:text)
       answers.reject!{|a| a.include?("...")}
-      best_answer = answers.sort{|a,b| declarative_index(a) <=> declarative_index(b)}.first.split.join(' ')
+      sorted_answers = answers.sort{|a,b| declarative_index(a) <=> declarative_index(b)}
+      best_answer = sorted_answers && sorted_answers.first.split.join(' ') || ""
       Alice::Util::Logger.info "*** Parser::Google: Answered \"#{self.question}\" with #{best_answer}"
       return best_answer
     rescue Exception => e
