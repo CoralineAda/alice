@@ -1,12 +1,12 @@
 ## Overall Architecture
 
-![Alice Architecture](https://github.com/CoralineAda/alice/blob/master/doc/architecture.png)
+![Alice Architecture](https://github.com/CoralineAda/alice/blob/master/doc/architecture2.png)
 
 ## Key Models & Namespaces
 
 ![Key Models and Namespaces](https://github.com/CoralineAda/alice/blob/master/doc/models_and_namespaces.png)
 
-## Setting Up a Local Alice for Development
+## Setting Up Alice
 
 ### Prepping Alice
 
@@ -14,15 +14,15 @@ Before you start, make sure to run `bundle`
 
 Next, rename `config/mongoid.yml.sample` to `mongoid.yml`
 
-Also rename `.env.sample` to `.env`
+Also rename `.env.sample` to `.env` and set the appropriate environment variables.
 
 Run the following from Terminal to initialize basic commands:
 
     ruby db/commands/import.rb
 
-### Starting the Bot
+### Running the Bot
 
-    ruby ./alice.rb
+Deploy to your favorite hosting environment and set up incoming and outgoing integrations with Slack according to their [documentation](https://api.slack.com/custom-integrations).
 
-Alice should be waiting for you! Experiment away by hitting localhost on port 4567 with POST requests.
+If you're using Heroku, be sure to copy the relevant values from the `.env` file to your application's configuration.
 
