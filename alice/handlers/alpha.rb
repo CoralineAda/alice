@@ -11,17 +11,16 @@ module Handlers
     private
 
     def answer
-      sorted_answers = answers.sort{|a,b| declarative_index(a) <=> declarative_index(b)}
-      sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
+      if result = Parser::Alpha.new(sentence).answer
+        result
+      else
+        sorted_answers = answers.sort{|a,b| declarative_index(a) <=> declarative_index(b)}
+        sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
+      end
     end
 
     def answers
-      answers = ([Parser::Alpha.new(sentence).answer] + Parser::Google.new(sentence).all_answers + [Parser::Evi.new(sentence).answer]).compact
-    end
-
-    def answer_old
-      Alice::Util::Logger.info "sentence = #{sentence}"
-      Parser::Alpha.new(sentence).answer || Parser::Google.new(sentence).answer
+      answers = (Parser::Google.new(sentence).all_answers + [Parser::Evi.new(sentence).answer]).compact
     end
 
     def declarative_index(phrase)
