@@ -203,7 +203,7 @@ module Grammar
       candidates = candidates.reject{|c| NOUN_INDICATORS.include?(c.downcase)}
       candidates = candidates.reject{|c| CONJUNCTIONS.include?(c.downcase)}
       candidates = candidates.reject{|c| PREPOSITIONS.include?(c.downcase)}
-      candidates = candidates.map{|candidate| candidate.gsub(/[^a-zA-Z]/x, " ")}.compact
+      candidates = candidates.map{|candidate| candidate.gsub(/[^a-zA-Z0-9]/x, " ")}.compact
       candidates = candidates.map(&:split).flatten.compact.map(&:downcase)
     end
 

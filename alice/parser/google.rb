@@ -4,7 +4,6 @@ module Parser
   class Google
 
     attr_accessor :question
-    attr_reader :answer
 
     def self.fetch(topic)
       new(topic).answer
@@ -18,11 +17,16 @@ module Parser
       results
     end
 
+    def all_answers
+      answers = full_search + reductivist_search
+      answers.reject!{|a| a.include?("...")}
+      answers
+    end
+
     private
 
     def results
-      doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{question}"))
-      answers = doc.css("div span.st").map(&:text)
+      answers = full_search + reductivist_search
       answers.reject!{|a| a.include?("...")}
       sorted_answers = answers.sort{|a,b| declarative_index(a) <=> declarative_index(b)}
       best_answer = sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
@@ -32,6 +36,20 @@ module Parser
       Alice::Util::Logger.info "*** Parser::Google: Unable to process \"#{self.question}\": #{e}"
       Alice::Util::Logger.info e.backtrace
       ""
+    end
+
+    def full_search
+      doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{question}"))
+      doc.css("div span.st").map(&:text)
+    end
+
+    def reductivist_search
+      doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{simplified_question}"))
+      doc.css("div span.st").map(&:text)
+    end
+
+    def simplified_question
+      Grammar::LanguageHelper.probable_nouns_from(question)
     end
 
     def declarative_index(answer)
