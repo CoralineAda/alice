@@ -24,6 +24,7 @@ module Handlers
     end
 
     def declarative_index(phrase)
+      return 500 if phrase.include?("?")
       (phrase =~ ::Grammar::LanguageHelper::DECLARATIVE_DETECTOR) || 1000
     end
 
