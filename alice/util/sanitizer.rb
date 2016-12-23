@@ -7,6 +7,7 @@ module Util
       text = Filters::Drunk.new.process(text) if user.drunk?
       text = Filters::Dazed.new.process(text) if user.dazed?
       text = Filters::Disoriented.new.process(text) if user.disoriented?
+      text
     end
 
     def self.process(text)

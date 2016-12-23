@@ -6,7 +6,7 @@ module Handlers
     include Behavior::HandlesCommands
 
     def cast
-      message.set_response(Util::Randomizer.spell_effect(message.sender_nick, command_string.predicate))
+      message.response = Util::Randomizer.spell_effect(message.sender_nick, command_string.predicate)
     end
 
     def dance
@@ -20,7 +20,7 @@ module Handlers
       elsif actor = ::Actor.from(command_string.subject)
         response = Util::Randomizer.dance(message.sender_nick, actor.proper_name)
       end
-      message.set_response(response)
+      message.response = response
     end
 
     def commands
@@ -29,7 +29,7 @@ module Handlers
         verb = verbs.detect{|verb| verb =~ /[a-z]+/ && "!#{verb}"}
         verb.present? && "!#{verb}" || nil
       end.flatten.compact.sort.join(", ")
-      message.set_response(response)
+      message.response = response
     end
 
     def help
@@ -40,13 +40,13 @@ module Handlers
       response << "!pronouns sets your preferred pronouns (just type !pronouns for help)."
       response << "!look, !inventory, !forge, and !brew can come in handy sometimes."
       response << "Also: beware the fruitcake."
-      message.set_response(response.join("\r\n"))
+      message.response = response.join("\r\n")
     end
 
     def seen
       user = ::User.from(command_string.subject)
       response = "I last saw #{user.current_nick} #{user.last_seen}."
-      message.set_response(response)
+      message.response = response
     end
 
     def stats
@@ -56,34 +56,34 @@ module Handlers
       response << "I've overheard #{::OH.count} things and I know #{::Factoid.count} facts."
       response << "I can converse on #{Context.count} different topics, including #{Context.with_keywords.sample.topic}."
       response << "Pretty cool, huh?"
-      message.set_response(response.join("\r\n"))
+      message.response = response.join("\r\n")
     end
 
     def source
       response = ["My source code is available at #{ENV['GITHUB_URL']}."]
       response << "You can see my latest commits with !commits, and a list of recent open issues with !issues."
       response << "For a list of contributors, try !contributors."
-      message.set_response(response.join("\n"))
+      message.response = response.join("\n")
     end
 
     def bug
-      message.set_response("Please submit bug reports at #{ENV['ISSUES_URL']}")
+      message.response = "Please submit bug reports at #{ENV['ISSUES_URL']}"
     end
 
     def love
-      message.set_response("I love you, #{message.sender_nick}.")
+      message.response = "I love you, #{message.sender_nick}."
     end
 
     def one_ring
-      message.set_response("...and in the darkness bind them.")
+      message.response = "...and in the darkness bind them."
     end
 
     def so_say_we_all
-      message.set_response("So say we all!")
+      message.response = "So say we all!"
     end
 
     def youre_welcome
-      message.set_response(Util::Randomizer.thanks_response(message.sender_nick))
+      message.response = Util::Randomizer.thanks_response(message.sender_nick)
     end
 
   end

@@ -7,7 +7,7 @@ module Handlers
 
     def set
       message.sender.set_factoid(command_string.raw_command)
-      message.set_response("Got it!")
+      message.response = "Got it!"
     end
 
     def get
@@ -16,11 +16,11 @@ module Handlers
         context.current!
       end
       if factoid
-        message.set_response(factoid)
+        message.response = factoid
       elsif context
-        message.set_response(context.describe)
+        message.response = context.describe
       else
-        message.set_response(Util::Randomizer.got_nothing)
+        message.response = Util::Randomizer.got_nothing
       end
     end
 

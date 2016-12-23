@@ -2,9 +2,9 @@ module Pipeline
   class Commander
 
     def self.process(message)
-      response = Message::Response.from(message).try(:response)
-      Util::Sanitizer.filter_for(message.sender, response)
-      message.response = response
+      ::Message::Command.process(message)
+      filtered_result = Util::Sanitizer.filter_for(message.sender, message.response.content)
+      message.response = filtered_result
       message
     end
 

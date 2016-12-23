@@ -17,7 +17,7 @@ module Handlers
       else
         response = "You can't go that way!"
       end
-      message.set_response(response)
+      message.response = response
     end
 
     def look
@@ -30,11 +30,11 @@ module Handlers
       response ||= extant_object(command_string.predicate).try(:describe)
       response ||= Place.current.describe if subject.empty?
       response ||= "I don't see that here."
-      message.set_response(response)
+      message.response = response
     end
 
     def map
-      message.set_response("#{ENV['MAP_URL']}")
+      message.response = "#{ENV['MAP_URL']}"
     end
 
     def xyzzy
@@ -42,18 +42,18 @@ module Handlers
       Place.set_current_room(room)
       response = "Everything spins around!\n\r"
       response << room.describe
-      message.set_response(response)
+      message.response = response
     end
 
     def attack
       if command_string.subject =~ /darkness/ && Place.current.is_dark?
-        message.set_response("You attack the darkness! A voice to the east whines, 'Where is the Mountain Dew?'")
+        message.response = "You attack the darkness! A voice to the east whines, 'Where is the Mountain Dew?'"
       elsif command_string.subject =~ /gazebo/ && Place.current.description =~ /gazebo/
         response = "The gazebo kills you all!\n\r"
         response << reset_maze
-        message.set_response(response)
+        message.response = response
       else
-        message.set_response("That's not very nice.")
+        message.response = "That's not very nice."
       end
     end
 
@@ -85,7 +85,7 @@ module Handlers
     end
 
     def reset_maze
-      message.set_response(Dungeon.reset_maze)
+      message.response = Dungeon.reset_maze
     end
 
   end

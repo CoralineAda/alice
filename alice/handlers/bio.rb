@@ -25,7 +25,7 @@ module Handlers
       text = "I don't know who that is." unless who
       text = who.formatted_bio if who && who.formatted_bio
       text ||= "I don't seem to know anything about them."
-      message.set_response(text)
+      message.response = text
     end
 
     def subject
@@ -35,7 +35,7 @@ module Handlers
     def update_bio(quoted)
       return unless quoted
       message.sender.update_bio(quoted)
-      message.set_response("I've recorded the details in my notebook.")
+      message.response = "I've recorded the details in my notebook."
     end
 
   end

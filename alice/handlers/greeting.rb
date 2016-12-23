@@ -6,7 +6,7 @@ module Handlers
     include Behavior::HandlesCommands
 
     def greet_sender
-      message.set_response(Util::Randomizer.greeting(subject.current_nick))
+      message.response = Util::Randomizer.greeting(subject.current_nick)
     end
 
     private

@@ -7,12 +7,12 @@ module Handlers
 
     def set
       message.sender.set_twitter_handle(command_string.subject)
-      message.set_response("I'll remember that.")
+      message.response = "I'll remember that."
     end
 
     def get
       return unless subject
-      message.set_response(subject.formatted_twitter_handle)
+      message.response = subject.formatted_twitter_handle
     end
 
     private

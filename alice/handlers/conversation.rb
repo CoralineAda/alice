@@ -100,7 +100,7 @@ module Handlers
     def set_response(text)
       return unless text
       text = ((text + ".").gsub(/\.\.$/, '.')).sub('!.', '!').sub('?.', '?')
-      message.set_response(text)
+      message.response = text
     end
 
     def subject

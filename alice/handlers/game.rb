@@ -19,7 +19,7 @@ module Handlers
         response << "We like those decimals. " if message.trigger =~ /\./
         response << "The points go to #{message.sender_nick}.  "
       end
-      message.set_response(response)
+      message.response = response
     end
 
   end

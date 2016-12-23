@@ -91,6 +91,7 @@ module Message
       command = from(message)
       message.response_type = command.response_kind
       command.invoke!
+      message
     end
 
     def self.with_verbs(verbs)

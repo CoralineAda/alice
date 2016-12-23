@@ -6,7 +6,7 @@ module Handlers
     include Behavior::HandlesCommands
 
     def inventory
-      message.set_response(message.sender.inventory)
+      message.response = message.sender.inventory
     end
 
   end

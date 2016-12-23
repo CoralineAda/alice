@@ -6,11 +6,11 @@ module Handlers
 
     def set
       ::OH.from(command_string.subject)
-      message.set_response("I'll remember that.")
+      message.response = "I'll remember that."
     end
 
     def get
-      message.set_response("Someone said \"#{::OH.sample.text}\"")
+      message.response = "Someone said \"#{::OH.sample.text}\""
     end
 
   end
