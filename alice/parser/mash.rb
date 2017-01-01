@@ -3,7 +3,7 @@ module Parser
   class Mash
 
     attr_accessor :command_string
-    attr_accessor :sentence
+    attr_accessor :sentence, :unparsed_sentence
     attr_accessor :this_object, :this_subject, :this_info_verb
     attr_accessor :this_transfer_verb, :this_action_verb, :this_preposition
     attr_accessor :this_relation_verb, :this_topic, :this_noun, :this_adverb
@@ -125,7 +125,25 @@ module Parser
 
     def initialize(command_string)
       self.command_string = command_string
-      self.sentence = Sentence.new(command_string.content.downcase.gsub(/[\?\,\!]+/, '').split(' '))
+      to_parse = command_string.content.downcase.gsub(/[\?\,\!]+/, '')
+      self.unparsed_sentence = to_parse.split(' ')
+      self.sentence = Grammar::SentenceParser.parse(to_parse)
+    end
+
+    def parse!
+      alice
+      parse_transfer
+      command
+    rescue AASM::InvalidTransition => e
+      Alice::Util::Logger.info "*** Mash can't set state: \"#{e}\" "
+    ensure
+      Alice::Util::Logger.info "*** Final mash state is  \"#{aasm.current_state}\" "
+      Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
+      return command
+    end
+
+    def state
+      aasm.current_state
     end
 
     def parse_transfer(structures=STRUCTURES)
@@ -197,70 +215,52 @@ module Parser
       property
     end
 
-    def parse!
-      alice
-      parse_transfer
-      command
-    rescue AASM::InvalidTransition => e
-      Alice::Util::Logger.info "*** Mash can't set state: \"#{e}\" "
-    ensure
-      Alice::Util::Logger.info "*** Final mash state is  \"#{aasm.current_state}\" "
-      Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
-      return command
-    end
-
-    def state
-      aasm.current_state
-    end
-
     # Guards
     # ========================================================================
 
     def has_alice?
-      command_string.content =~ /\balice/i
-      sentence.remove("Alice")
+      sentence.nouns.join(' ') =~ /\balice/i# && sentence.remove("alice")
     end
 
     def has_preposition?
-      self.this_preposition = any_content_in?(Grammar::LanguageHelper::PREPOSITIONS)
+      self.this_preposition = sentence.prepositions.first
     end
 
     def has_pronoun?
-      if self.this_pronoun = any_content_in?(Grammar::LanguageHelper::PRONOUNS)
+      if self.this_pronoun = sentence.pronouns.first
         self.this_info_verb = "converse"
       end
     end
 
     def info_verb?
-      self.this_info_verb = any_content_in?(Grammar::LanguageHelper::INFO_VERBS)
-      self.this_info_verb ||= "is" if any_content_in?(Grammar::LanguageHelper::INTERROGATIVES)
+      self.this_info_verb = (Grammar::LanguageHelper::INFO_VERBS & sentence.verbs).first
+      self.this_info_verb ||= "is" if sentence.interrogatives.any?
       self.this_info_verb ||= "is" if sentence.contains_possessive
       self.this_info_verb
     end
 
     def has_interrogative?
-      self.this_pronoun = "who" if any_content_in?(["who"]) && info_verb?
-      self.this_pronoun
+      self.this_pronoun = "who" if sentence.pronouns.include?("who")
     end
 
     def adverb?
-      self.this_adverb = any_content_in?(Grammar::LanguageHelper::ADVERBS)
+      self.this_adverb = (Grammar::LanguageHelper::ADVERBS & sentence.adverbs).first
     end
 
     def relation_verb?
-      self.this_relation_verb = any_content_in?(Grammar::LanguageHelper::RELATION_VERBS)
+      self.this_relation_verb = (Grammar::LanguageHelper::RELATION_VERBS & sentence.verbs).first
     end
 
     def transfer_verb?
-      self.this_transfer_verb = any_content_in?(Grammar::LanguageHelper::TRANSFER_VERBS)
+      self.this_transfer_verb = (Grammar::LanguageHelper::TRANSFER_VERBS & sentence.verbs).first
     end
 
     def greeting?
-      self.this_greeting = "hi" if any_content_in?(Grammar::LanguageHelper::GREETINGS)
+      self.this_greeting = "hi" if (Grammar::LanguageHelper::GREETINGS & unparsed_sentence).first
     end
 
     def action_verb?
-      self.this_action_verb = any_content_in?(Grammar::LanguageHelper::ACTION_VERBS)
+      self.this_action_verb = (Grammar::LanguageHelper::ACTION_VERBS & sentence.verbs).first
     end
 
     def verb
@@ -268,19 +268,16 @@ module Parser
     end
 
     def has_person?
-      (command_string.predicate.present? && ::User.like(command_string.predicate)) ||
-      (command_string.subject.present? && ::User.like(command_string.subject.gusb)) ||
-      ::User.from(command_string.subject) || ::User.from(command_string.predicate)
+      sentence.nouns.map{ |noun| ::User.from(noun) }.compact.first
     end
 
     def has_object?
-      self.this_object = Item.from(potential_nouns.join(' ')) ||
-                         Beverage.from(potential_nouns.join(' ')) ||
-                         Wand.from(potential_nouns.join(' '))
+      joined_nouns = sentence.nouns.join(' ')
+      self.this_object = Item.from(joined_nouns) || Beverage.from(joined_nouns) || Wand.from(joined_nouns)
     end
 
     def has_noun?
-      self.this_noun = has_object? || has_person?
+      self.this_noun = sentence.nouns.first
     end
 
     def has_subject?
@@ -289,16 +286,16 @@ module Parser
 
     def has_topic?
       if this_object
-        if match = Context.from(command_string.subject, this_object)
+        if match = Context.from(sentence.nouns.first, sentence.nouns.last)
           self.this_topic = match
           self.this_info_verb = "converse"
           Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" "
         end
-      elsif match = Context.from(command_string.subject)
+      elsif match = Context.from(sentence.nouns.first)
         self.this_topic = match
         self.this_info_verb = "converse"
         Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" "
-      elsif match = Context.from(command_string.predicate)
+      elsif match = Context.from(sentence.nouns.last)
         self.this_topic = match
         self.this_info_verb = "converse"
         Alice::Util::Logger.info "*** Topic is \"#{match.topic}\" "
@@ -316,7 +313,7 @@ module Parser
         hash[property] = property.to_s.split("_").reject{|value| value == "can"}.map{|w| w.gsub("?","")}
         hash
       end
-      candidate = (map.values.flatten & sentence).first
+      candidate = (map.values.flatten & unparsed_sentence).first
       match = map.select{|k,v| v.include?(candidate) }.first
       self.this_property = match && match[0]
     end
@@ -325,7 +322,7 @@ module Parser
     # ========================================================================
 
     def potential_nouns
-      command_string.probable_nouns
+      sentence.nouns
     end
 
     def command
@@ -339,7 +336,7 @@ module Parser
     end
 
     def any_method_like?(array)
-      array.select { |n| sentence.map { |m| Regexp.new(m, 'i').match(n) }.any? }
+      array.select { |n| unparsed_sentence.map { |m| Regexp.new(m, 'i').match(n) }.any? }
     end
 
     def method_from(name)
@@ -348,36 +345,7 @@ module Parser
 
     def properties(klass)
       method_names = klass::PROPERTIES.map{ |method| method.to_s.gsub(/_/, ' ') }
-      method_names.select{ |n| sentence.map{ |m| Regexp.new(m, 'i').match(n) }.any? }
-    end
-
-    def any_content_in?(array)
-      common = (array & sentence)
-      common.count > 0 && common.first
-    end
-
-    def position_of(word)
-      split_content.find_index(word)
-    end
-
-    def split_content
-      @split_content ||= begin
-        bits = command_string.content.split.map(&:downcase)
-        pieces = bits.map{|word| Lingua.stemmer(word.downcase)}
-        (bits + pieces).uniq
-      end
-    end
-
-    class Sentence < Array
-      def contains_possessive
-        self.select{|word| word =~ /\'s/}.any?
-      end
-      def remove(what)
-        return self if what.nil?
-        regexp = Regexp.new(what.to_s + "(?:'s)?", 'i')
-        result = self.reject!{|e| regexp.match(e) }
-        result
-      end
+      method_names.select{ |n| unparsed_sentence.map{ |m| Regexp.new(m, 'i').match(n) }.any? }
     end
 
   end

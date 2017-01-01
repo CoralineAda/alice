@@ -32,6 +32,14 @@ module Parser
 
     end
 
+    def self.parse(command_string)
+      parser = new(command_string)
+      {
+        command: parser.parse!,
+        topic: ""
+      }
+    end
+
     def initialize(command_string)
       self.command_string = command_string
     end

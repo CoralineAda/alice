@@ -17,11 +17,6 @@ module Pipeline
       ).react
     end
 
-    def self.sleep
-      last_commit_message = Parser::GitHub.fetch.commits.first
-      Pipeline::Mediator.emote("reboots with master at '#{last_commit_message}'.")
-    end
-
     def react
       track_sender
       should_respond? ? public_send(self.response_method) : message
@@ -42,6 +37,7 @@ module Pipeline
 
     def respond
       if response = Pipeline::Commander.process(self.message).response.content
+        persist_message
         if self.message.response_type == "emote"
           Pipeline::Mediator.emote(response)
         else
@@ -52,6 +48,12 @@ module Pipeline
     end
 
     private
+
+    def persist_message
+      if context = Context.current
+        context.messages.create(Message::Serializer.serialize(message))
+      end
+    end
 
     def track_sender
       return unless self.message.sender_nick

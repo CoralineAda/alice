@@ -59,16 +59,19 @@ module Message
     def self.from(message)
       trigger = message.trigger.downcase
       command_string = ::Message::CommandString.new(trigger)
-      match = Parser::Mash.new(command_string).parse!
-      match ||= Parser::Banger.new(command_string).parse!
-      match ||= find_verb(trigger) if trigger.include?("++") || trigger.downcase.include?(ENV['BOT_SHORT_NAME'].downcase)
+      match = Parser::Mash.parse(command_string)
+      match ||= Parser::Banger.parse(command_string)
       if match
-        match.message = message
-        Alice::Util::Logger.info "*** Executing #{match.name} with \"#{trigger}\" with context #{Context.current && Context.current.topic || "none"} ***"
+        find_or_create_context(match[:topic]) if match[:topic]
+        match[:command].message = message
       else
-        Alice::Util::Logger.info "*** Received unhandled trigger \"#{trigger}\" ***"
-        match = default
+        command = find_verb(trigger) if (trigger.include?("++") || trigger.downcase.include?(ENV['BOT_SHORT_NAME'].downcase))
+        match = {
+          command: command
+        }
+        match[:command] ||= default
       end
+      Alice::Util::Logger.info "*** Executing #{match[:command].name} with \"#{trigger}\" with context #{Context.current && Context.current.topic || "none"} ***"
       match
     end
 
@@ -87,8 +90,14 @@ module Message
       with_indicators(grams).without_stopwords(indicator_words).last
     end
 
+    def self.find_or_create_context(topic)
+      context = Context.from(topic) || Context.create(topic: topic)
+      context.current!
+      context
+    end
+
     def self.process(message)
-      command = from(message)
+      command = from(message)[:command]
       message.response_type = command.response_kind
       command.invoke!
       message

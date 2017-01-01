@@ -11,6 +11,8 @@ class Context
   field :spoken, type: Array, default: []
   field :created_at, type: DateTime
 
+  has_many :messages, class_name: "Message::Persisted"
+
   AMBIGUOUS = "That may refer to several different things. Can you clarify?"
   MINIMUM_FACT_LENGTH = 15
   TTL = 5
