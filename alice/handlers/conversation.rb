@@ -80,7 +80,7 @@ module Handlers
     end
 
     def predicate
-      @predicate ||= command_string.predicate
+      @predicate ||= command.predicate
     end
 
     def set_context_from_predicate
@@ -100,11 +100,11 @@ module Handlers
     def set_response(text)
       return unless text
       text = ((text + ".").gsub(/\.\.$/, '.')).sub('!.', '!').sub('?.', '?')
-      message.set_response(text)
+      message.response = text
     end
 
     def subject
-      @subject ||= command_string.subject
+      @subject ||= command.subject
     end
 
     def update_context(new_context)

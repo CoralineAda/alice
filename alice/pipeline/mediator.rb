@@ -26,8 +26,8 @@ module Pipeline
       User.from(channel_user)
     end
 
-    def self.reply_with(message)
-      text = Util::Sanitizer.process(message)
+    def self.reply_with(text)
+      text = Util::Sanitizer.process(text)
       text = Util::Sanitizer.initial_upcase(text)
       text.to_s
     end

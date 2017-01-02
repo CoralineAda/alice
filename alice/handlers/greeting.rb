@@ -6,13 +6,14 @@ module Handlers
     include Behavior::HandlesCommands
 
     def greet_sender
-      message.set_response(Util::Randomizer.greeting(subject.current_nick))
+      message.response = Util::Randomizer.greeting(subject.current_nick)
     end
 
     private
 
     def subject
-      ::User.from(command_string.predicate) || message.sender
+      return command.subject if command.subject.is_a? ::User
+      ::User.from(command.subject) || message.sender
     end
 
   end

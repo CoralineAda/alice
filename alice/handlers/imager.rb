@@ -4,7 +4,7 @@ module Handlers
     include Behavior::HandlesCommands
 
     def call
-      message.set_response("Image: #{image}")
+      message.response = "Image: #{image}"
     end
 
     private

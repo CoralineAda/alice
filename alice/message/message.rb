@@ -1,11 +1,16 @@
 module Message
   class Message
 
-    attr_accessor :sender_nick, :recipient_nick, :type, :trigger, :response_type, :response
+    attr_accessor :sender_nick, :recipient_nick, :type, :trigger
+    attr_reader :response
+
+    delegate :response_type, to: :response
+    delegate :response_type=, to: :response
 
     def initialize(sender_nick, trigger)
-      self.sender_nick = sender_nick
-      self.trigger = trigger
+      @sender_nick = sender_nick
+      @trigger = trigger
+      @response = Response.new("")
     end
 
     def content
@@ -25,14 +30,9 @@ module Message
       @sender ||= User.find_or_create(self.sender_nick)
     end
 
-    def set_response(content)
-      self.response = content
-      self
+    def response=(content)
+      @response = Response.new(content)
     end
 
-    def to_s
-      response
-    end
-    
   end
 end

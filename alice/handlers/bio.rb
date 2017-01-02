@@ -12,7 +12,7 @@ module Handlers
     private
 
     def handle_bio(quoted, sender)
-      if command_string.predicate && ! command_string.content.include?("who is")
+      if command.predicate && ! command_string.content.include?("who is")
         update_bio(command_string.raw_command)
       else
         return_bio(sender)
@@ -25,7 +25,7 @@ module Handlers
       text = "I don't know who that is." unless who
       text = who.formatted_bio if who && who.formatted_bio
       text ||= "I don't seem to know anything about them."
-      message.set_response(text)
+      message.response = text
     end
 
     def subject
@@ -35,7 +35,7 @@ module Handlers
     def update_bio(quoted)
       return unless quoted
       message.sender.update_bio(quoted)
-      message.set_response("I've recorded the details in my notebook.")
+      message.response = "I've recorded the details in my notebook."
     end
 
   end

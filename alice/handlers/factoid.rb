@@ -7,27 +7,27 @@ module Handlers
 
     def set
       message.sender.set_factoid(command_string.raw_command)
-      message.set_response("Got it!")
+      message.response = "Got it!"
     end
 
     def get
-      factoid = ::Factoid.about(command_string.predicate).try(:formatted)
-      if context = Context.find_or_create(command_string.predicate)
+      factoid = ::Factoid.about(command.predicate).try(:formatted)
+      if context = Context.find_or_create(command.predicate)
         context.current!
       end
       if factoid
-        message.set_response(factoid)
+        message.response = factoid
       elsif context
-        message.set_response(context.describe)
+        message.response = context.describe
       else
-        message.set_response(Util::Randomizer.got_nothing)
+        message.response = Util::Randomizer.got_nothing
       end
     end
 
     private
 
     def subject
-      ::User.from(command_string.subject)
+      ::User.from(command.subject)
     end
 
   end

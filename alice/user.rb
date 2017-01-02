@@ -49,8 +49,6 @@ class User
     :dazed?,
     :disoriented?,
     :drunk?,
-    :is_online?,
-    :is_op?,
     :bio,
     :proper_name,
     :twitter_handle,

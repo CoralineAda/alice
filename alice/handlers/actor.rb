@@ -6,17 +6,17 @@ module Handlers
     include Behavior::HandlesCommands
 
     def summon
-      message.set_response(subject.summon_for(message.sender_nick, message.is_sudo?))
+      message.response = subject.summon_for(message.sender_nick, message.is_sudo?)
     end
 
     def talk
       if subject
-        message.set_response("#{subject.proper_name} says, \"#{subject.speak}\"")
+        message.response = "#{subject.proper_name} says, \"#{subject.speak}\""
       else
         context = Context.current
         context ||= Context.with_keywords.sample
         if context
-          message.set_response("Hmm. Today's topic is '#{context.topic}'.")
+          message.response = "Hmm. Today's topic is '#{context.topic}'."
         end
       end
     end
@@ -24,7 +24,7 @@ module Handlers
     private
 
     def subject
-      @actor ||= ::Actor.from(command_string.subject)
+      @actor ||= ::Actor.from(command.subject)
     end
 
   end
