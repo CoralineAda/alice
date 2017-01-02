@@ -52,7 +52,7 @@ module Grammar
     end
 
     def verbs
-      tokens.select{|token| token.part_of_speech.tag == :VERB}.map(&:text)
+      @verbs ||= tokens.select{|token| token.part_of_speech.tag == :VERB}.map(&:text)
     end
 
   end

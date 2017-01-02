@@ -140,6 +140,7 @@ module Parser
 
     def parse
       alice
+      binding.pry
       parse_transfer
       command
     rescue AASM::InvalidTransition => e
@@ -159,7 +160,7 @@ module Parser
         head, tail = structure.first, structure[1..-1]
         if can_transition_to?(head)
           Alice::Util::Logger.info "*** Mash state is  \"#{head}\" "
-          sentence.remove(self.public_send(head.to_s.gsub(/to_/, 'this_')))
+          sentence.remove(self.public_send(head.to_s.gsub(/to_/, 'this_')))# unless head == :info_verb
           self.public_send(head)
           return unless tail.present?
           parse_transfer(tail)
@@ -235,7 +236,7 @@ module Parser
     end
 
     def has_pronoun?
-      if self.this_pronoun = sentence.pronouns.first
+      if self.this_pronoun = (Grammar::LanguageHelper::INFO_VERBS & sentence.pronouns).first
         self.this_info_verb = "converse"
       end
     end
