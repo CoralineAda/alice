@@ -8,8 +8,13 @@ module Handlers
     def get_property
       parser.parse!
       sanitized_property = property.to_s.gsub("_", " ")
-      response = result ? "#{result}." : "no."
-      message.set_response("#{message.sender_nick}: #{response}")
+      if result
+        message.response = result ? "#{result}." : "no."
+      elsif subject = parser.this_subject
+        message.response = subject.bio.formatted
+      else
+        message.response = "#{message.sender_nick}: #{response}"
+      end
     rescue
       message.set_response("I'm not sure I understand, can you say that another way?")
     end
