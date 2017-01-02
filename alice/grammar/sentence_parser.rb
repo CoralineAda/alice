@@ -40,7 +40,7 @@ module Grammar
     end
 
     def nouns
-      tokens.select{|token| token.part_of_speech.tag == :NOUN || token.label == :ATTR || token.label == :POBJ}.map(&:text)
+      tokens.select{|token| token.part_of_speech.tag == :NOUN || token.label == :ATTR || token.label == :POBJ || token.part_of_speech.tag == :X}.map(&:text)
     end
 
     def prepositions
