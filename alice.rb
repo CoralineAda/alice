@@ -40,7 +40,7 @@ bot = Slackbotsy::Bot.new(config) do
 end
 
 post '/' do
-  if output = bot.handle_item(params)
+  if output = bot.handle_item(params).response
     parsed_output = JSON.parse(output)
     Alice::Util::Logger.info "*** parsed_output = #{parsed_output}"
 
