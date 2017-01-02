@@ -28,8 +28,8 @@ module Handlers
     def take
       if item = loose_item
         message.response = item.transfer_to(message.sender)
-      elsif Place.current.description =~ /#{command_string.subject}/i
-        message.response = Util::Randomizer.cant_pick_up(command_string.subject)
+      elsif Place.current.description =~ /#{command.subject}/i
+        message.response = Util::Randomizer.cant_pick_up(command.subject)
       else
         message.response = "I don't see that here."
       end
@@ -52,7 +52,7 @@ module Handlers
     end
 
     def give
-      if recipient = User.from(command_string.predicate)
+      if recipient = User.from(command.predicate)
         thing = beverage_for_user || item_for_user
         if recipient.accepts_gifts?
           message.response = thing.transfer_to(recipient)
@@ -60,7 +60,7 @@ module Handlers
           message.response = "Sorry, they're not accepting gifts right now."
         end
       else
-        message.response = "Sorry, I don't see #{command_string.predicate} here right now."
+        message.response = "Sorry, I don't see #{command.predicate} here right now."
       end
     end
 
@@ -107,22 +107,22 @@ module Handlers
 
     def item_for_user
       user = message.sender
-      ::Item.for_user(user).from(command_string.subject) ||
-        ::Item.for_user(user).from(command_string.subject.split(':')[0]) ||
+      ::Item.for_user(user).from(command.subject) ||
+        ::Item.for_user(user).from(command.subject.split(':')[0]) ||
         ::Item.for_user(user).from(command_string.raw_command) ||
         ::Item.ephemeral
     end
 
     def beverage_for_user
       user = message.sender
-      ::Beverage.for_user(user).from(command_string.subject) ||
-        ::Beverage.for_user(user).from(command_string.subject.split(':')[0]) ||
+      ::Beverage.for_user(user).from(command.subject) ||
+        ::Beverage.for_user(user).from(command.subject.split(':')[0]) ||
         ::Beverage.for_user(user).from(command_string.raw_command)
     end
 
     def item
-      @item ||= ::Item.from(command_string.subject) ||
-                  ::Item.from(command_string.subject.split(':')[0]) ||
+      @item ||= ::Item.from(command.subject) ||
+                  ::Item.from(command.subject.split(':')[0]) ||
                   ::Item.from(command_string.raw_command) ||
                   ::Item.ephemeral
     end

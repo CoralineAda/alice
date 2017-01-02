@@ -8,7 +8,7 @@ module Behavior
     end
 
     def command_string
-      @command_string ||= CommandString.new(message.trigger)
+      @command_string ||= Message::CommandString.new(message.trigger)
     end
 
     def parser

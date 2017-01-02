@@ -24,7 +24,7 @@ module Handlers
     private
 
     def subject
-      @actor ||= ::Actor.from(command_string.subject)
+      @actor ||= ::Actor.from(command.subject)
     end
 
   end

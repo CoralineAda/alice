@@ -123,6 +123,14 @@ module Parser
 
     end
 
+    def self.parse(command_string)
+      if command = new(command_string).parse
+        {
+          command: command
+        }
+      end
+    end
+
     def initialize(command_string)
       self.command_string = command_string
       to_parse = command_string.content.downcase.gsub(/[\?\,\!]+/, '')
@@ -130,7 +138,7 @@ module Parser
       self.sentence = Grammar::SentenceParser.parse(to_parse)
     end
 
-    def parse!
+    def parse
       alice
       parse_transfer
       command
@@ -139,7 +147,7 @@ module Parser
     ensure
       Alice::Util::Logger.info "*** Final mash state is  \"#{aasm.current_state}\" "
       Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
-      return command
+      command
     end
 
     def state
@@ -151,8 +159,8 @@ module Parser
         head, tail = structure.first, structure[1..-1]
         if can_transition_to?(head)
           Alice::Util::Logger.info "*** Mash state is  \"#{head}\" "
-          self.public_send(head)
           sentence.remove(self.public_send(head.to_s.gsub(/to_/, 'this_')))
+          self.public_send(head.to_s.gsub(/to_/, 'this_'))
           return unless tail.present?
           parse_transfer(tail)
         end
@@ -219,7 +227,7 @@ module Parser
     # ========================================================================
 
     def has_alice?
-      sentence.nouns.join(' ') =~ /\balice/i# && sentence.remove("alice")
+      sentence.nouns.join(' ') =~ /\balice/i && sentence.remove("alice")
     end
 
     def has_preposition?
@@ -310,7 +318,7 @@ module Parser
     def has_property?
       thing = self.this_subject || self.this_object
       map = thing.class::PROPERTIES.inject({}) do |hash, property|
-        hash[property] = property.to_s.split("_").reject{|value| value == "can"}.map{|w| w.gsub("?","")}
+        hash[property] = property.to_s.split("_").reject{ |value| value == "can" }.map{|w| w.gsub("?","")}
         hash
       end
       candidate = (map.values.flatten & unparsed_sentence).first
@@ -333,6 +341,9 @@ module Parser
       @command ||= Message::Command.any_in(indicators: this_greeting).first
       @command ||= Message::Command.any_in(indicators: "alpha").first
       # @command ||= Message::Command.any_in(indicators: this_pronoun).first
+      @command.subject = this_subject
+      @command.predicate = this_object
+      @command
     end
 
     def any_method_like?(array)

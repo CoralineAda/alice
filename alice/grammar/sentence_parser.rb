@@ -17,12 +17,6 @@ module Grammar
       language = Google::Cloud::Language.new
       document = language.document(self.sentence)
       @tokens = document.syntax.tokens
-      # PopulatedSentence.new(
-      #   subject: subject_from(tokens),
-      #   object: object_from(tokens),
-      #   verb: verb_from(tokens),
-      #   predicate: predicate_from(tokens)
-      # )
       self
     end
 
@@ -46,7 +40,7 @@ module Grammar
     end
 
     def nouns
-      tokens.select{|token| token.part_of_speech.tag == :NOUN}.map(&:text)
+      tokens.select{|token| token.part_of_speech.tag == :NOUN || token.label == :ATTR || token.label == :POBJ}.map(&:text)
     end
 
     def prepositions

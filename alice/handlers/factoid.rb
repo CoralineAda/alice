@@ -11,8 +11,8 @@ module Handlers
     end
 
     def get
-      factoid = ::Factoid.about(command_string.predicate).try(:formatted)
-      if context = Context.find_or_create(command_string.predicate)
+      factoid = ::Factoid.about(command.predicate).try(:formatted)
+      if context = Context.find_or_create(command.predicate)
         context.current!
       end
       if factoid
@@ -27,7 +27,7 @@ module Handlers
     private
 
     def subject
-      ::User.from(command_string.subject)
+      ::User.from(command.subject)
     end
 
   end

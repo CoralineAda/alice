@@ -80,7 +80,7 @@ module Handlers
     end
 
     def predicate
-      @predicate ||= command_string.predicate
+      @predicate ||= command.predicate
     end
 
     def set_context_from_predicate
@@ -104,7 +104,7 @@ module Handlers
     end
 
     def subject
-      @subject ||= command_string.subject
+      @subject ||= command.subject
     end
 
     def update_context(new_context)

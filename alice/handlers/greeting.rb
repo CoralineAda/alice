@@ -12,7 +12,7 @@ module Handlers
     private
 
     def subject
-      ::User.from(command_string.predicate) || message.sender
+      ::User.from(command.predicate) || message.sender
     end
 
   end

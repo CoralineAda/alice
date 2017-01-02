@@ -16,7 +16,7 @@ module Handlers
     private
 
     def wand
-      ::Wand.from(command_string.subject)
+      ::Wand.from(command.subject)
     end
 
   end

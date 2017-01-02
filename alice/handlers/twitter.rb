@@ -6,7 +6,7 @@ module Handlers
     include Behavior::HandlesCommands
 
     def set
-      message.sender.set_twitter_handle(command_string.subject)
+      message.sender.set_twitter_handle(command.subject)
       message.response = "I'll remember that."
     end
 
@@ -18,7 +18,7 @@ module Handlers
     private
 
     def subject
-      ::User.from(command_string.subject)
+      ::User.from(command.subject)
     end
 
   end

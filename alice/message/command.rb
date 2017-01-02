@@ -24,7 +24,7 @@ module Message
 
     store_in collection: 'commands'
 
-    attr_accessor :message, :terms
+    attr_accessor :message, :terms, :subject, :predicate, :verb
 
     def self.default
       Command.where(handler_class: "Handlers::Unknown").first || Command.new(handler_class: 'Handlers::Unknown')
@@ -59,17 +59,15 @@ module Message
     def self.from(message)
       trigger = message.trigger.downcase
       command_string = ::Message::CommandString.new(trigger)
-      match = Parser::Mash.parse(command_string)
-      match ||= Parser::Banger.parse(command_string)
-      if match
-        find_or_create_context(match[:topic]) if match[:topic]
+      if match = Parser::Banger.parse(command_string)
         match[:command].message = message
+      elsif match = Parser::Mash.parse(command_string)
+        match[:command].message = message
+        find_or_create_context(match[:topic]) if match[:topic]
       else
         command = find_verb(trigger) if (trigger.include?("++") || trigger.downcase.include?(ENV['BOT_SHORT_NAME'].downcase))
-        match = {
-          command: command
-        }
-        match[:command] ||= default
+        command.message = message
+        match = { command: command || default }
       end
       Alice::Util::Logger.info "*** Executing #{match[:command].name} with \"#{trigger}\" with context #{Context.current && Context.current.topic || "none"} ***"
       match
@@ -133,7 +131,7 @@ module Message
         return self.message
       end
       self.update_attribute(:last_said_at, Time.now)
-      eval(self.handler_class).process(self.message, self.handler_method)
+      eval(self.handler_class).process(self.message, self, self.handler_method)
     end
 
     def terms

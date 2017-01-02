@@ -5,7 +5,7 @@ module Handlers
     include Behavior::HandlesCommands
 
     def set
-      ::OH.from(command_string.subject)
+      ::OH.from(command.subject)
       message.response = "I'll remember that."
     end
 

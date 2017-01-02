@@ -12,7 +12,7 @@ module Handlers
     private
 
     def handle_bio(quoted, sender)
-      if command_string.predicate && ! command_string.content.include?("who is")
+      if command.predicate && ! command_string.content.include?("who is")
         update_bio(command_string.raw_command)
       else
         return_bio(sender)

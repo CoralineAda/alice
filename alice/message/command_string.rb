@@ -16,10 +16,6 @@ module Message
       self.content.gsub(/^.?#{verb} /, "")
     end
 
-    def subject
-      return (components[0..(predicate_position - 1)] - [verb]).join(' ').gsub(/[\.\,\?\'\!]+$/, '').gsub("++", "")
-    end
-
     def fragment
       (components - [verb]).join(' ')
     end

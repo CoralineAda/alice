@@ -21,13 +21,13 @@ module Handlers
     end
 
     def look
-      subject = command_string.subject
-      Alice::Util::Logger.info "*** Look subject is \"#{command_string.subject}\""
+      subject = command.subject
+      Alice::Util::Logger.info "*** Look subject is \"#{command.subject}\""
       response = look_in_direction(looking_direction) if looking_direction.present?
       response = describe_setting(subject) if Place.current.description =~ /#{subject}/i
       response ||= extant_object(subject).try(:describe)
       response ||= extant_object(command_string.fragment).try(:describe)
-      response ||= extant_object(command_string.predicate).try(:describe)
+      response ||= extant_object(command.predicate).try(:describe)
       response ||= Place.current.describe if subject.empty?
       response ||= "I don't see that here."
       message.response = response
@@ -46,9 +46,9 @@ module Handlers
     end
 
     def attack
-      if command_string.subject =~ /darkness/ && Place.current.is_dark?
+      if command.subject =~ /darkness/ && Place.current.is_dark?
         message.response = "You attack the darkness! A voice to the east whines, 'Where is the Mountain Dew?'"
-      elsif command_string.subject =~ /gazebo/ && Place.current.description =~ /gazebo/
+      elsif command.subject =~ /gazebo/ && Place.current.description =~ /gazebo/
         response = "The gazebo kills you all!\n\r"
         response << reset_maze
         message.response = response
@@ -65,7 +65,7 @@ module Handlers
     end
 
     def looking_direction
-      @look_direction ||= ::Dungeon.direction_from(command_string.predicate)
+      @look_direction ||= ::Dungeon.direction_from(command.predicate)
     end
 
     def look_in_direction(direction)

@@ -14,7 +14,7 @@ module Handlers
     end
 
     def set
-      message.sender.set_pronouns(command_string.subject)
+      message.sender.set_pronouns(command.subject)
       message.response = "Thanks! I'll remember this."
     end
 
@@ -34,7 +34,7 @@ module Handlers
     private
 
     def subject
-      ::User.from(command_string.subject)
+      ::User.from(command.subject)
     end
 
   end

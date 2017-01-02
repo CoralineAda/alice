@@ -6,18 +6,18 @@ module Handlers
     include Behavior::HandlesCommands
 
     def cast
-      message.response = Util::Randomizer.spell_effect(message.sender_nick, command_string.predicate)
+      message.response = Util::Randomizer.spell_effect(message.sender_nick, command.predicate)
     end
 
     def dance
       response = "Looks like you're dancing with yourself there."
-      if person = ::User.from(command_string.subject)
+      if person = ::User.from(command.subject)
         if person.is_online? && person != message.sender
           response = Util::Randomizer.dance(message.sender_nick, person.current_nick)
         elsif ! person.is_online?
           response = "You can't dance with #{person.pronoun_objective} when #{person.pronoun_contraction} asleep!"
         end
-      elsif actor = ::Actor.from(command_string.subject)
+      elsif actor = ::Actor.from(command.subject)
         response = Util::Randomizer.dance(message.sender_nick, actor.proper_name)
       end
       message.response = response
@@ -44,7 +44,7 @@ module Handlers
     end
 
     def seen
-      user = ::User.from(command_string.subject)
+      user = ::User.from(command.subject)
       response = "I last saw #{user.current_nick} #{user.last_seen}."
       message.response = response
     end
