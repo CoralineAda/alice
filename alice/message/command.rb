@@ -24,7 +24,7 @@ module Message
 
     store_in collection: 'commands'
 
-    attr_accessor :message, :terms
+    attr_accessor :message, :terms, :subject, :predicate, :verb
 
     def self.default
       Command.where(handler_class: "Handlers::Unknown").first || Command.new(handler_class: 'Handlers::Unknown')
@@ -59,16 +59,17 @@ module Message
     def self.from(message)
       trigger = message.trigger.downcase
       command_string = ::Message::CommandString.new(trigger)
-      match = Parser::Mash.new(command_string).parse!
-      match ||= Parser::Banger.new(command_string).parse!
-      match ||= find_verb(trigger) if trigger.include?("++") || trigger.downcase.include?(ENV['BOT_SHORT_NAME'].downcase)
-      if match
-        match.message = message
-        Alice::Util::Logger.info "*** Executing #{match.name} with \"#{trigger}\" with context #{Context.current && Context.current.topic || "none"} ***"
+      if match = Parser::Banger.parse(command_string)
+        match[:command].message = message
+      elsif match = Parser::Mash.parse(command_string)
+        match[:command].message = message
+#        find_or_create_context(match[:topic]) if match[:topic]
       else
-        Alice::Util::Logger.info "*** Received unhandled trigger \"#{trigger}\" ***"
-        match = default
+        command = find_verb(trigger) if (trigger.include?("++") || trigger.downcase.include?(ENV['BOT_SHORT_NAME'].downcase))
+        command.message = message if command
+        match = { command: command || default }
       end
+      Alice::Util::Logger.info "*** Executing #{match[:command].name} with \"#{trigger}\" with context #{Context.current && Context.current.topic || "none"} ***"
       match
     end
 
@@ -87,10 +88,17 @@ module Message
       with_indicators(grams).without_stopwords(indicator_words).last
     end
 
+    def self.find_or_create_context(topic)
+      context = Context.from(topic) || Context.create(topic: topic)
+      context.current!
+      context
+    end
+
     def self.process(message)
-      command = from(message)
+      command = from(message)[:command]
       message.response_type = command.response_kind
       command.invoke!
+      message
     end
 
     def self.with_verbs(verbs)
@@ -123,7 +131,7 @@ module Message
         return self.message
       end
       self.update_attribute(:last_said_at, Time.now)
-      eval(self.handler_class).process(self.message, self.handler_method)
+      eval(self.handler_class).process(self.message, self, self.handler_method)
     end
 
     def terms

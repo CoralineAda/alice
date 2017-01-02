@@ -7,16 +7,16 @@ module Handlers
 
     def use
       if wand && message.sender.wands.include?(wand)
-        message.set_response(wand.employ)
+        message.response = wand.employ
       else
-        message.set_response("I don't think you have that.")
+        message.response = "I don't think you have that."
       end
     end
 
     private
 
     def wand
-      ::Wand.from(command_string.subject)
+      ::Wand.from(command.subject)
     end
 
   end

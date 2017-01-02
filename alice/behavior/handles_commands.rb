@@ -4,6 +4,7 @@ module Behavior
 
     def self.included(klass)
       klass.send(:attr_accessor, :message)
+      klass.send(:attr_accessor, :command)
       klass.extend(ClassMethods)
     end
 
@@ -12,9 +13,9 @@ module Behavior
     end
 
     module ClassMethods
-      def process(message, method)
+      def process(message, command, method)
         method ||= :process
-        handler = new(message: message)
+        handler = new(message: message, command: command)
         handler.public_send(method)
       end
     end

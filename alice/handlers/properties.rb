@@ -6,7 +6,7 @@ module Handlers
     include Behavior::HandlesTriggers
 
     def get_property
-      parser.parse!
+      parser.parse
       sanitized_property = property.to_s.gsub("_", " ")
       if result
         message.response = result ? "#{result}." : "no."
@@ -16,7 +16,7 @@ module Handlers
         message.response = "#{message.sender_nick}: #{response}"
       end
     rescue
-      message.set_response("I'm not sure I understand, can you say that another way?")
+      message.response = "I'm not sure I understand, can you say that another way?"
     end
 
     private

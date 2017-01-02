@@ -6,17 +6,17 @@ require_relative '../alice'
 
 RSpec.configure do |config|
 
-  config.before(:suite) do
-    DatabaseCleaner.orm = "mongoid"
-#    DatabaseCleaner.strategy = :truncation
- #   DatabaseCleaner.clean_with(:truncation)
-  end
-
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
+#   config.before(:suite) do
+#     DatabaseCleaner.orm = "mongoid"
+# #    DatabaseCleaner.strategy = :truncation
+#  #   DatabaseCleaner.clean_with(:truncation)
+#   end
+#
+#   config.around(:each) do |example|
+#     DatabaseCleaner.cleaning do
+#       example.run
+#     end
+#   end
 
 end
 

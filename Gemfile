@@ -2,10 +2,12 @@ source 'https://rubygems.org'
 
 gem 'aasm'
 gem 'activesupport'
-gem 'brewery_db'
+gem 'brewery_db', git: "https://github.com/CoralineAda/brewery_db.git"
 gem 'capistrano'
 gem 'database_cleaner', '~> 1.3.0', group: :test #s :github => 'bmabey/database_cleaner', group: :test
 gem 'dotenv'
+gem 'google-cloud'
+gem 'google-cloud-language'
 gem 'google-search', '~> 1.0'
 gem 'marky_markov'
 gem 'mongoid', '~> 6.0.0'

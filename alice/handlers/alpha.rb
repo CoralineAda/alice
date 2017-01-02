@@ -5,7 +5,7 @@ module Handlers
     include Behavior::HandlesCommands
 
     def answer_question
-      message.set_response(answer || Util::Randomizer.i_dont_know)
+      message.response = answer || Util::Randomizer.i_dont_know
     end
 
     private

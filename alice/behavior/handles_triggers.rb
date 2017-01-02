@@ -8,7 +8,7 @@ module Behavior
     end
 
     def command_string
-      @command_string ||= CommandString.new(message.trigger)
+      @command_string ||= Message::CommandString.new(message.trigger)
     end
 
     def parser
@@ -16,7 +16,7 @@ module Behavior
     end
 
     module ClassMethods
-      def process(message, method)
+      def process(message, command, method)
         method ||= :process
         handler = new(message: message)
         handler.public_send(method)
