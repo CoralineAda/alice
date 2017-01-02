@@ -140,7 +140,6 @@ module Parser
 
     def parse
       alice
-      binding.pry
       parse_transfer
       command
     rescue AASM::InvalidTransition => e
