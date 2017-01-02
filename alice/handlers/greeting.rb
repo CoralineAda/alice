@@ -12,7 +12,8 @@ module Handlers
     private
 
     def subject
-      ::User.from(command.predicate) || message.sender
+      return command.subject if command.subject.is_a? ::User
+      ::User.from(command.subject) || message.sender
     end
 
   end

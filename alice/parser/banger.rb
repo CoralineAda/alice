@@ -77,7 +77,8 @@ module Parser
 
     def command
       return @command if @command
-      if @command = Message::Command.any_in(verbs: sentence.verbs.first).first
+      verb = command_string.content.gsub("!", "").split(' ').first
+      if @command = Message::Command.any_in(verbs: verb).first
         @command.subject = sentence.nouns.first
         @command.predicate = sentence.nouns.last
         @command.verb = sentence.verbs.first
