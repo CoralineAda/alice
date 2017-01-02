@@ -9,14 +9,14 @@ module Handlers
       parser.parse
       sanitized_property = property.to_s.gsub("_", " ")
       if result
-        response = result ? "#{result}." : "no."
+        message.response = result ? "#{result}." : "no."
       elsif subject = parser.this_subject
-        response = subject.bio
+        message.response = subject.bio
       else
         message.response = "#{message.sender_nick}: #{response}"
       end
-    # rescue
-    #   message.response = "I'm not sure I understand, can you say that another way?"
+    rescue
+      message.response = "I'm not sure I understand, can you say that another way?"
     end
 
     private
