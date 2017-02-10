@@ -17,6 +17,7 @@ module Pipeline
     end
 
     def process_number(username, trigger)
+      Alice::Util::Logger.info "*** processing number"
       Pipeline::Processor.process(message(username, "13"), :respond)
     end
 
