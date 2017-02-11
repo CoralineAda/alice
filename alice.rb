@@ -48,12 +48,16 @@ post '/' do
   if output = bot.handle_item(params)
     response = JSON.parse(output)
     Alice::Util::Logger.info "*** response = #{response}"
-    
-    parsed_response = JSON.parse(output["text"])
-    text = parsed_response["content"]
-    response_type = response["response_type"]
+
+    parsed_response = JSON.parse(response["text"])
+    raw_text = parsed_response["content"]
+    if response["response_type"] == "emote"
+      processed_text = "_#{raw_text}_"
+    else
+      processed_text = raw_text
+    end
     Alice::Util::Logger.info "*** text = #{text}"
     Alice::Util::Logger.info "*** response_type = #{response_type}"
-    bot.say(text, {channel: params['channel_name'], mrkdwn: 'true'}) unless parsed_output['text'] =~ /Message\:\:Message/
+    bot.say(processed_text, {channel: params['channel_name'], mrkdwn: 'true'}) unless parsed_output['text'] =~ /Message\:\:Message/
   end
 end
