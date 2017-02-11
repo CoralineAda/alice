@@ -97,7 +97,6 @@ module Message
     def self.process(message)
       command = from(message)[:command]
       message.response_type = command.response_kind
-      Alice::Util::Logger.info "*** command message.response_type = #{message.response_type}"
       command.invoke!
       [command, message]
     end

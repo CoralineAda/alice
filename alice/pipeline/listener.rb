@@ -28,7 +28,7 @@ module Pipeline
 
     def process_text(username, trigger)
       return unless trigger[0] =~ /[a-zA-Z\!]/x
-      Pipeline::Processor.process(message(username, trigger), :respond)
+      Pipeline::Processor.process(message(username, trigger.gsub('@', '')), :respond)
     end
 
     private
