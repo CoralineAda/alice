@@ -3,14 +3,16 @@ module Pipeline
   class Listener
 
     METHOD_MAP = {
-      /^([0-9]+)/                           => :process_number,
-      /(.+\+\+)$/x                          => :process_points,
+      /^[0-9]+/                             => :process_number,
+      /(.+\+\+)/x                           => :process_points,
+      /hi|hello|greet/                      => :greet,
       /(.+)/                                => :process_text
     }
 
     def route(username, trigger)
-      tuple = METHOD_MAP.detect { |k,m| k.match(trigger) }
-      return unless tuple.any?
+      tuple = METHOD_MAP.find{ |k,m| k.match(trigger) }
+      Alice::Util::Logger.info "*** tuple = #{tuple}"
+      return unless tuple
       matching_method = tuple.last
       captured_match = tuple.first.match(trigger).to_s
       self.public_send(matching_method, username, captured_match)
@@ -18,7 +20,7 @@ module Pipeline
 
     def process_number(username, trigger)
       Alice::Util::Logger.info "*** processing number"
-      Pipeline::Processor.process(message(username, "13"), :respond)
+      Pipeline::Processor.process(message(username, "!13"), :respond)
     end
 
     def process_points(username, trigger)
@@ -30,9 +32,10 @@ module Pipeline
       Pipeline::Processor.process(message(username, trigger), :respond)
     end
 
-    def greet(username)
+    def greet(username, trigger)
       return if username == Pipeline::Mediator.bot_name
-      Pipeline::Processor.process(message(username, "hi"), :greet_on_join)
+      Alice::Util::Logger.info "*** processing greet"
+      Pipeline::Processor.process(message(trigger, "!hello"), :respond)
     end
 
     private

@@ -50,7 +50,7 @@ module Parser
     def parse!
       bang && verb && (known_verb? || person || object) && command
     rescue
-      return false
+      command || false
     ensure
       Alice::Util::Logger.info "*** Final banger state is  \"#{aasm.current_state}\" "
       Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "

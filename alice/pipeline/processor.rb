@@ -29,9 +29,6 @@ module Pipeline
       return true if self.trigger =~ /well[,]* actually/i
       return true if self.trigger =~ /so say we all/i
       return true if self.trigger =~ /#{ENV['BOT_SHORT_NAME']}/i
-      return true if self.response_method == :greet_on_join
-      return true if self.response_method == :track_nick_change
-      return true if self.response_method == :heartbeat
       false
     end
 
