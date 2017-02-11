@@ -47,8 +47,9 @@ end
 post '/' do
   if output = bot.handle_item(params)
     response = JSON.parse(output)
-    text = response[:content]
-    response_type = response[:response_type]
+    parsed_response = JSON.parse(output["text"])
+    text = parsed_response["content"]
+    response_type = response["response_type"]
     Alice::Util::Logger.info "*** response = #{response}"
     Alice::Util::Logger.info "*** text = #{text}"
     Alice::Util::Logger.info "*** response_type = #{response_type}"
