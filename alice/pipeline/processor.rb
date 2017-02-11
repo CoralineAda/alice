@@ -35,6 +35,7 @@ module Pipeline
     def respond
       if response = Pipeline::Commander.process(self.message).response.content
         Alice::Util::Logger.info "*** response = #{response}"
+        Alice::Util::Logger.info "*** response_type = #{message.response_type}"
 #        persist_message
         if self.message.response_type == "emote"
           Pipeline::Mediator.emote(response)
