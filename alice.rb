@@ -32,7 +32,8 @@ bot = Slackbotsy::Bot.new(config) do
     begin
       name = User.ensure_user(user_name, user_id).primary_nick
       if message = Pipeline::Listener.new.route(name, mdata[1])
-        message#.response.content
+        @response_type = message.response_type
+        message.response.content
       end
     rescue Exception => e
       Alice::Util::Logger.info "*** Unable to process \"#{mdata[1]}\": #{e}"
@@ -42,8 +43,10 @@ bot = Slackbotsy::Bot.new(config) do
 end
 
 post '/' do
-  if message = bot.handle_item(params)
-    Alice::Util::Logger.info "*** message = #{message}"
-    bot.say(message.response.content, {channel: params['channel_name'], mrkdwn: 'true'}) unless parsed_output['text'] =~ /Message\:\:Message/
+  if output = bot.handle_item(params)
+    parsed_output = JSON.parse(output)
+    Alice::Util::Logger.info "*** parsed_output = #{parsed_output}"
+    Alice::Util::Logger.info "*** @response_type = #{@response_type}"
+    bot.say(parsed_output['text'], {channel: params['channel_name'], mrkdwn: 'true'}) unless parsed_output['text'] =~ /Message\:\:Message/
   end
 end
