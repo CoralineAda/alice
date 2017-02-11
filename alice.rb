@@ -35,7 +35,7 @@ bot = Slackbotsy::Bot.new(config) do
         {
           content: message.response.content,
           response_type: message.response_type
-        }
+        }.to_json
       end
     rescue Exception => e
       Alice::Util::Logger.info "*** Unable to process \"#{mdata[1]}\": #{e}"
@@ -46,9 +46,11 @@ end
 
 post '/' do
   if output = bot.handle_item(params)
-    parsed_output = JSON.parse(output)
-    Alice::Util::Logger.info "*** parsed_output = #{parsed_output}"
-    Alice::Util::Logger.info "*** @response_type = #{@response_type}"
+    response = JSON.parse(output)
+    text = JSON.parse(response)["content"]
+    response_type = JSON.parse(response)["response_type"]
+    Alice::Util::Logger.info "*** text = #{text}"
+    Alice::Util::Logger.info "*** response_type = #{response_type}"
     bot.say(parsed_output['text'], {channel: params['channel_name'], mrkdwn: 'true'}) unless parsed_output['text'] =~ /Message\:\:Message/
   end
 end
