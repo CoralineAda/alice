@@ -96,10 +96,10 @@ module Message
 
     def self.process(message)
       command = from(message)[:command]
-      Alice::Util::Logger.info "*** command response_type = #{command.response_kind}"
       message.response_type = command.response_kind
+      Alice::Util::Logger.info "*** command message.response_type = #{message.response_type}"
       command.invoke!
-      message
+      [command, message]
     end
 
     def self.with_verbs(verbs)
