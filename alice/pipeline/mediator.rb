@@ -29,6 +29,7 @@ module Pipeline
     def self.reply_with(text)
       text = Util::Sanitizer.process(text)
       text = Util::Sanitizer.initial_upcase(text)
+      Alice::Util::Logger.info "*** replying with \"#{text}\" ***"
       text.to_s
     end
 
