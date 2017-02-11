@@ -32,8 +32,10 @@ bot = Slackbotsy::Bot.new(config) do
     begin
       name = User.ensure_user(user_name, user_id).primary_nick
       if message = Pipeline::Listener.new.route(name, mdata[1])
-        @response_type = message.response_type
-        message.response.content
+        {
+          content: message.response.content,
+          response_type: message.response_type
+        }
       end
     rescue Exception => e
       Alice::Util::Logger.info "*** Unable to process \"#{mdata[1]}\": #{e}"
