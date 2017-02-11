@@ -44,6 +44,7 @@ end
 post '/' do
   if output = bot.handle_item(params)
     parsed_output = JSON.parse(output)
+    Alice::Util::Logger.info "*** parsed_output = #{parsed_output}"
     bot.say(parsed_output['text'], {channel: params['channel_name'], mrkdwn: 'true'}) unless parsed_output['text'] =~ /Message\:\:Message/
   end
 end
