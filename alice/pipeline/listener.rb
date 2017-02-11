@@ -5,7 +5,6 @@ module Pipeline
     METHOD_MAP = {
       /^[0-9]+/                             => :process_number,
       /(.+\+\+)/x                           => :process_points,
-      /hi|hello|greet/                      => :greet,
       /(.+)/                                => :process_text
     }
 
@@ -30,12 +29,6 @@ module Pipeline
     def process_text(username, trigger)
       return unless trigger[0] =~ /[a-zA-Z\!]/x
       Pipeline::Processor.process(message(username, trigger), :respond)
-    end
-
-    def greet(username, trigger)
-      return if username == Pipeline::Mediator.bot_name
-      Alice::Util::Logger.info "*** processing greet"
-      Pipeline::Processor.process(message(trigger, "!hello"), :respond)
     end
 
     private
