@@ -49,8 +49,9 @@ post '/' do
     response = JSON.parse(output)
     text = response["content"]
     response_type = response["response_type"]
+    Alice::Util::Logger.info "*** response = #{response}"
     Alice::Util::Logger.info "*** text = #{text}"
     Alice::Util::Logger.info "*** response_type = #{response_type}"
-    bot.say(parsed_output['text'], {channel: params['channel_name'], mrkdwn: 'true'}) unless parsed_output['text'] =~ /Message\:\:Message/
+    bot.say(text, {channel: params['channel_name'], mrkdwn: 'true'}) unless parsed_output['text'] =~ /Message\:\:Message/
   end
 end
