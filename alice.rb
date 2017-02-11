@@ -47,8 +47,6 @@ end
 post '/' do
   if output = bot.handle_item(params)
     response = JSON.parse(output)
-    Alice::Util::Logger.info "*** response = #{response}"
-
     parsed_response = JSON.parse(response["text"])
     raw_text = parsed_response["content"]
     if response["response_type"] == "emote"
@@ -56,6 +54,6 @@ post '/' do
     else
       processed_text = raw_text
     end
-    bot.say(processed_text, {channel: params['channel_name'], mrkdwn: 'true'}) unless parsed_output['text'] =~ /Message\:\:Message/
+    bot.say(processed_text, {channel: params['channel_name'], mrkdwn: 'true'})
   end
 end
