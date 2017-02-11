@@ -145,7 +145,6 @@ module Parser
     rescue AASM::InvalidTransition => e
       Alice::Util::Logger.info "*** Mash can't set state: \"#{e}\" "
     ensure
-      Alice::Util::Logger.info "*** Subject is  \"#{this_subject}\" "
       Alice::Util::Logger.info "*** Final mash state is  \"#{aasm.current_state}\" "
       Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
       command
