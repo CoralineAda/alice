@@ -36,7 +36,7 @@ module Pipeline
     def self.emote(message)
       text = Util::Sanitizer.process(message)
       text = Util::Sanitizer.initial_downcase(text)
-      text = "_#{text}_"
+      text = "*#{text}*"
       Alice::Util::Logger.info "*** emoting \"#{text}\" ***"
       text
     end
