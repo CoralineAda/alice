@@ -56,8 +56,6 @@ post '/' do
     else
       processed_text = raw_text
     end
-    Alice::Util::Logger.info "*** text = #{text}"
-    Alice::Util::Logger.info "*** response_type = #{response_type}"
     bot.say(processed_text, {channel: params['channel_name'], mrkdwn: 'true'}) unless parsed_output['text'] =~ /Message\:\:Message/
   end
 end
