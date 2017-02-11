@@ -147,6 +147,7 @@ module Parser
     ensure
       Alice::Util::Logger.info "*** Final mash state is  \"#{aasm.current_state}\" "
       Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
+      Alice::Util::Logger.info "*** Subject is  \"#{this_subject}\" "
       command
     end
 
@@ -159,7 +160,7 @@ module Parser
         head, tail = structure.first, structure[1..-1]
         if can_transition_to?(head)
           Alice::Util::Logger.info "*** Mash state is  \"#{head}\" "
-          sentence.remove(self.public_send(head.to_s.gsub(/to_/, 'this_')))# unless head == :info_verb
+          sentence.remove(self.public_send(head.to_s.gsub(/to_/, 'this_')))
           self.public_send(head)
           return unless tail.present?
           parse_transfer(tail)
