@@ -49,7 +49,7 @@ post '/' do
     response = JSON.parse(output)
     parsed_response = JSON.parse(response["text"])
     raw_text = parsed_response["content"]
-    if response["response_type"] == "emote"
+    if parsed_response["response_type"] == "emote"
       processed_text = "_#{raw_text}_"
     else
       processed_text = raw_text
