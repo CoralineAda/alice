@@ -9,8 +9,6 @@ module Grammar
       "delete",
       "describe",
       "did",
-      # "do",
-      # "does",
       "examine",
       "had",
       "has",
@@ -27,7 +25,9 @@ module Grammar
       "tell",
       "think",
       "was",
-      "wrote"
+      "wrote",
+      "do",
+      "does"      
     ]
 
     RELATION_VERBS = [

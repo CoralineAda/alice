@@ -3,10 +3,26 @@ require 'spec_helper'
 describe "Parser::Mash" do
 
   before do
+    User.destroy_all
+    Item.destroy_all
+    Factoid.destroy_all
     @robyn  = ::User.create!(primary_nick: "robyn")
     @syd    = ::User.create!(primary_nick: "syd")
     @tomato = Item.create!(name: "tomato")
-    @command = Message::Command.create!(name: "get_fact", indicators: ["know", "fact", "factoid", "tell"], handler_class: "Handlers::Factoid", handler_method: "get")
+    @command = Message::Command.find_or_create_by(
+      name: "get_fact",
+      indicators: ["know", "fact", "factoid", "tell"],
+      handler_class: "Handlers::Factoid",
+      handler_method: "get"
+    )
+    Message::Command.find_or_create_by(
+      name: "properties",
+      verbs: ["can_brew?", "can_forge?", "last_seen", "can_play_game?", "current_nick", "dazed?", "disoriented?", "drunk?", "is_online?", "is_op?", "bio", "proper_name", "twitter_handle", "twitter_url", "points", "check_points", "check_score"],
+      stop_words: [],
+      indicators: ["can_brew?", "can_forge?", "last_seen", "can_play_game?", "current_nick", "dazed?", "disoriented?", "drunk?", "is_online?", "is_op?", "bio", "proper_name", "twitter_handle", "twitter_url"],
+      handler_class: "Handlers::Properties",
+      handler_method: "get_property"
+    )
     @factoid = Factoid.create!(user: @robyn, text: "Briggs features in the Robyn Hitchcock song 'A Man\'s Gotta Know'")
   end
 
@@ -16,7 +32,7 @@ describe "Parser::Mash" do
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
-      parser.parse!
+      parser.parse
     end
 
     it "recognizes Syd" do
@@ -31,7 +47,7 @@ describe "Parser::Mash" do
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
-      parser.parse!
+      parser.parse
     end
 
     it "recognizes Robyn" do
@@ -50,7 +66,7 @@ describe "Parser::Mash" do
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
-      parser.parse!
+      parser.parse
     end
 
     it "recognizes the tomato object" do
@@ -69,7 +85,7 @@ describe "Parser::Mash" do
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
-      parser.parse!
+      parser.parse
     end
 
     it "recognizes the tomato object" do
@@ -88,7 +104,7 @@ describe "Parser::Mash" do
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
-      parser.parse!
+      parser.parse
     end
 
     it "recognizes the Syd user" do
@@ -101,11 +117,11 @@ describe "Parser::Mash" do
 
     context "happy path" do
 
-      let(:command_string)  { Message::CommandString.new("Alice, what is Syd twitter handle?") }
+      let(:command_string)  { Message::CommandString.new("Alice, what is Syd's twitter handle?") }
       let(:parser)          { Parser::Mash.new(command_string) }
 
       before do
-        parser.parse!
+        parser.parse
       end
 
       it "recognizes the Syd user" do
@@ -124,7 +140,7 @@ describe "Parser::Mash" do
       let(:parser)          { Parser::Mash.new(command_string) }
 
       before do
-        parser.parse!
+        parser.parse
       end
 
       it "does not map to a non-whitelisted instance method" do
@@ -141,7 +157,7 @@ describe "Parser::Mash" do
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
-      parser.parse!
+      parser.parse
     end
 
     it "recognizes the tomato object" do
@@ -160,7 +176,7 @@ describe "Parser::Mash" do
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
-      parser.parse!
+      parser.parse
     end
 
     it "recognizes the Robyn user" do
@@ -179,7 +195,7 @@ describe "Parser::Mash" do
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
-      parser.parse!
+      parser.parse
     end
 
     it "recognizes the tomato object" do
