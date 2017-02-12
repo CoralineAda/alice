@@ -6,6 +6,7 @@ describe Place do
 
     before do
       Place.delete_all
+      Door.delete_all
     end
 
     context "matches exits between rooms" do
