@@ -9,9 +9,7 @@ module Pipeline
     }
 
     def route(username, trigger)
-      tuple = METHOD_MAP.find{ |k,m| k.match(trigger) }
-      Alice::Util::Logger.info "*** tuple = #{tuple}"
-      return unless tuple
+      return unless tuple = METHOD_MAP.find{ |k,m| k.match(trigger) }
       matching_method = tuple.last
       captured_match = tuple.first.match(trigger).to_s
       self.public_send(matching_method, username, captured_match)

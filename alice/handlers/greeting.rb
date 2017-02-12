@@ -13,6 +13,7 @@ module Handlers
 
     def subject
       return command.subject if command.subject.is_a? ::User
+      Alice::Util::Logger.info "*** command.subject = #{command.subject}"
       ::User.from(command.subject) || message.sender
     end
 
