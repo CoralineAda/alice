@@ -356,7 +356,7 @@ module Parser
       @command ||= Message::Command.any_in(indicators: verb).first
       @command ||= Message::Command.any_in(indicators: this_greeting).first
       @command ||= Message::Command.any_in(indicators: this_thanks).first
-      @command ||= Message::Command.any_in(indicators: "alpha").first unless state == :alice || state == :thanks
+      @command ||= Message::Command.any_in(indicators: "alpha").first unless state == :alice
       @command ||= Message::Command.default
       # @command ||= Message::Command.any_in(indicators: this_pronoun).first
       @command.subject = this_subject
