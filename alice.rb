@@ -47,13 +47,15 @@ end
 post '/' do
   if output = bot.handle_item(params)
     response = JSON.parse(output)
-    parsed_response = JSON.parse(response["text"])
-    raw_text = parsed_response["content"]
-    if parsed_response["response_type"] == "emote"
-      processed_text = "_#{raw_text}_"
-    else
-      processed_text = raw_text
+    if response["text"]
+      parsed_response = JSON.parse(response["text"])
+      raw_text = parsed_response["content"]
+      if parsed_response["response_type"] == "emote"
+        processed_text = "_#{raw_text}_"
+      else
+        processed_text = raw_text
+      end
+      bot.say(processed_text, {channel: params['channel_name'], mrkdwn: 'true'})
     end
-    bot.say(processed_text, {channel: params['channel_name'], mrkdwn: 'true'})
   end
 end
