@@ -12,8 +12,8 @@ module Parser
     attr_accessor :this_thanks
 
     STRUCTURES = [
-      [:to_thanks],
-      [:to_greeting, [:to_subject]],
+      [:to_thanks,        []],
+      [:to_greeting,      [:to_subject]],
       [:to_object,        [:to_info_verb, [:to_object]],
                           [:to_info_verb, [:to_topic]],
                           [:to_info_verb, [:to_subject]]
@@ -69,7 +69,7 @@ module Parser
       end
 
       event :thanks do
-        transitions from: [:unparsed, :alice], to: :thanks, guard: :has_thanks?
+        transitions from: [:alice], to: :thanks, guard: :has_thanks?
       end
 
       event :adverb do
@@ -148,14 +148,12 @@ module Parser
     def parse
       alice
       parse_transfer
-      command
     rescue AASM::InvalidTransition => e
-      Alice::Util::Logger.info "*** Mash can't set state: \"#{e}\" #{e.backtrace}"
-      command
+      Alice::Util::Logger.info "*** Mash can't set state: \"#{e}\""
     ensure
       Alice::Util::Logger.info "*** Final mash state is  \"#{aasm.current_state}\" "
       Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
-      command
+      return command
     end
 
     def state
@@ -351,6 +349,8 @@ module Parser
 
     def command
       return if state == :unparsed
+      return @command if defined?(@command)
+
       @command ||= Message::Command.any_in(verbs: verb.to_s).first
       @command ||= Message::Command.any_in(verbs: this_property).first
       @command ||= Message::Command.any_in(indicators: verb).first
@@ -358,7 +358,6 @@ module Parser
       @command ||= Message::Command.any_in(indicators: this_thanks).first
       @command ||= Message::Command.any_in(indicators: "alpha").first unless state == :alice
       @command ||= Message::Command.default
-      # @command ||= Message::Command.any_in(indicators: this_pronoun).first
       @command.subject = this_subject
       @command.predicate = this_object
       @command
