@@ -35,7 +35,6 @@ module Message
     end
 
     def self.verb_from(trigger)
-      Alice::Logger.info("*** trigger = #{trigger}")
       if verb = trigger.split(' ').select{|w| w[0] == "!"}.first
         verb[1..-1]
       elsif trigger =~ /^.+\+\+/
