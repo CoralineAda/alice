@@ -246,9 +246,11 @@ class Item
 
   def read
     return "#{name_with_article} is not a very interesting read." unless self.is_readable?
-    sample = Factoid.sample.formatted(false)
-    read if sample.nil? || sample.empty?
-    return "It reads, \"#{sample}\"."
+    if sample = Factoid.sample.formatted(false)
+      "It reads, \"#{sample}\"."
+    else
+      read
+    end
   end
 
   def increment_theft_attempts
