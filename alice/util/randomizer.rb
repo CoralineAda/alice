@@ -12,6 +12,38 @@ module Util
       user.current_nick
     end
 
+    def self.kindness(person)
+      [
+        "You are very kind, #{person}.",
+        "Hey #{person}, thanks for being here!",
+        "Everyone seems to like you, #{person}.",
+        "I'm really happy that #{person} is here.",
+        "Someone give #{person} some ++ love!",
+        "✨#{person}✨",
+        "🖤 #{person}",
+        "#{person} 😻",
+        "#{person}, your smile is contagious",
+        "Doesn't #{person} look great today?",
+        "#{person} is one smart cookie!",
+        "If there were a baby here, #{person} would make it smile",
+        "#{person}'s perspective is always refreshing.",
+        "#{person} is more helpful than they realize.",
+        "#{person} is all that and a bag of chips",
+        "If cartoon bluebirds were real, a bunch of them would be sitting on #{person}'s shoulders, singing, right now.",
+        "#{person} is a great listener",
+        "#{person} is cooler than any hipster",
+        "Hey #{person}... that thing you don't like about yourself is what makes you so interesting...",
+        "#{person} has stunning hair",
+        "I applaud your typing skills, #{person}",
+        "Our community is better for having #{person} in it.",
+        "#{person} has the best ideas!",
+        "#{person} always knows the right thing to say.",
+        "#{person} is more fun than bubble wrap. Sometimes.",
+        "#{person} is better than a unicorn, because #{person} is real and not imaginary",
+        "Have to say, #{person} really is someone special."
+      ].sample
+    end
+    
     def self.cant_pick_up(thing)
       message = [
         "I wouldn't touch that if I were you.",

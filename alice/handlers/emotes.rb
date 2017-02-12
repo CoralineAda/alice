@@ -83,6 +83,10 @@ module Handlers
       message.response = "So say we all!"
     end
 
+    def say_something_nice
+      message.response = Util::Randomizer.kindness(message.sender_nick)
+    end
+
     def youre_welcome
       message.response = Util::Randomizer.thanks_response(message.sender_nick)
     end
