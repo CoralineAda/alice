@@ -26,7 +26,11 @@ module Pipeline
 
     def process_text(username, trigger)
       return unless trigger[0] =~ /[a-zA-Z\!]/x
-      Pipeline::Processor.process(message(username, trigger.gsub('@', '')), :respond)
+      message = Pipeline::Processor.process(message(username, trigger.gsub('@', '')), :respond)
+      if message.response.content.empty? && Util::Randomizer.one_chance_in(5)
+        message.response.content = Util::Randomizer.kindness(username)
+      end
+      message
     end
 
     private
