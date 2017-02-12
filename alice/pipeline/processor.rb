@@ -29,6 +29,7 @@ module Pipeline
       return true if self.trigger =~ /well[,]* actually/i
       return true if self.trigger =~ /so say we all/i
       return true if self.trigger =~ /#{ENV['BOT_SHORT_NAME']}/i
+      return true if self.trigger =~ /nice|good|kind|sweet|cool|great/i
       false
     end
 
