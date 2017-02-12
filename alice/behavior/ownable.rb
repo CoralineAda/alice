@@ -37,14 +37,14 @@ module Behavior
       original_owner = self.user
       change_owner(recipient)
       if original_owner && original_owner != recipient
-        Util::Randomizer.give_message(original_owner.current_nick, recipient.current_nick, self.name_with_article)
+        Util::Randomizer.give_message(original_owner.primary_nick, recipient.primary_nick, self.name_with_article)
       else
         if is_hidden
           self.owner.score_points(1)
           update_attribute(:is_hidden, false)
           return "You found the #{self.name} and win a point!"
         else
-          "#{self.user.current_nick} now has the #{self.name}."
+          "#{self.user.primary_nick} now has the #{self.name}."
         end
       end
     end

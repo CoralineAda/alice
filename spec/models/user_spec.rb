@@ -6,19 +6,6 @@ describe User do
   let(:jill) { User.new(primary_nick: "jill") }
   let(:bot1) { User.new(primary_nick: "alice", is_bot: true) }
 
-  describe ".online" do
-
-    before do
-      allow(Pipeline::Mediator).to receive(:user_nicks) { ["jack", "jill", "frederick"] }
-      allow(User).to receive(:any_in) { [jack, jill] }
-    end
-
-    it "returns a list of online users" do
-      expect(User.online).to eq([jack, jill])
-    end
-
-  end
-
   describe "#accepts_gifts?" do
 
     before do
@@ -52,19 +39,6 @@ describe User do
 
     it "returns true if a game was never played" do
       expect(jill.can_play_games?).to be_truthy
-    end
-
-  end
-
-  describe "#current_nick" do
-
-    before do
-      allow(Pipeline::Mediator).to receive(:user_nicks) { ["jack_", "jill", "frederick"] }
-      allow(jack).to receive(:nicks) { ["jack", "jack_"] }
-    end
-
-    it "matches nicks to user list nicks" do
-      expect(jack.current_nick).to eq("jack_")
     end
 
   end

@@ -16,7 +16,7 @@ class Dungeon
     response = ""
     response << "Everything goes black and you feel like you are suddenly somewhere else!\n\r"
     response << "Please wait while we regenerate the matrix...\n\r"
-    response << "#{Item.fruitcake.user.current_nick} has been given a special gift.\n\r"
+    response << "#{Item.fruitcake.user.primary_nick} has been given a special gift.\n\r"
     response << Place.current.describe
     response
   end

@@ -37,7 +37,7 @@ class Beverage
     return Util::Constants::THERE_CAN_BE_ONLY_ONE if user.beverages.already_exists?(name)
     return Util::Constants::THATS_ENOUGH_DONTCHA_THINK unless user.can_brew?
     if beverage = user.beverages.create(name: name, user: user)
-      Util::Randomizer.brew_observation(name, user.current_nick, alcohol: beverage.is_alcohol?)
+      Util::Randomizer.brew_observation(name, user.primary_nick, alcohol: beverage.is_alcohol?)
     else
       Util::Constants::UH_OH
     end

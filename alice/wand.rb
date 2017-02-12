@@ -62,7 +62,7 @@ class Wand
 
   def fruitcake
     Item.deliver_fruitcake(self.owner)
-    "#{self.owner.current_nick} has received a special gift!"
+    "#{self.owner.primary_nick} has received a special gift!"
   end
 
   def light

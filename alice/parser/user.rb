@@ -31,14 +31,14 @@ module Parser
     end
 
     def self.positive_response_for(user, method)
-      "#{user.current_nick} is #{scrub_method_name(method)}".gsub(" is can ", " can ").gsub(" is is ", " is ")
+      "#{user.primary_nick} is #{scrub_method_name(method)}".gsub(" is can ", " can ").gsub(" is is ", " is ")
     end
 
     def self.negative_response_for(user, method)
       if method =~ /can/
-        "#{user.current_nick} #{scrub_method_name(method)}".gsub(" can ", " cannot ")
+        "#{user.primary_nick} #{scrub_method_name(method)}".gsub(" can ", " cannot ")
       else
-        "#{user.current_nick} is #{scrub_method_name(method)}".gsub(" is ", " is not " )
+        "#{user.primary_nick} is #{scrub_method_name(method)}".gsub(" is ", " is not " )
       end
     end
 

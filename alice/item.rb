@@ -97,7 +97,7 @@ class Item
     new_item.ensure_description
     errors = new_item.errors
     if new_item.save
-      "#{new_item.owner.current_nick} forges a #{name} #{Util::Randomizer.forge}."
+      "#{new_item.owner.primary_nick} forges a #{name} #{Util::Randomizer.forge}."
     elsif errors && errors.messages[:name].present?
       "Sorry, there's already something with that name. Be more creative!"
     else

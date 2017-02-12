@@ -26,7 +26,7 @@ module Handlers
         else
           points = rand(13) + 1
           u.score_points(points)
-          message.response = "#{u.current_nick} gets #{points} bonus points!"
+          message.response = "#{u.primary_nick} gets #{points} bonus points!"
         end
       end
     end

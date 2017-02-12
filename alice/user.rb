@@ -45,7 +45,6 @@ class User
     :can_forge?,
     :last_seen,
     :can_play_games?,
-    :current_nick,
     :dazed?,
     :disoriented?,
     :drunk?,
@@ -176,12 +175,7 @@ class User
     self.items.count < 10
   end
 
-  def current_nick
-    "@#{self.primary_nick}"
-  end
-
   def last_seen
-
     secs  = (Time.now - self.updated_at).to_i
     minutes = secs / 60
     hours = minutes / 60

@@ -13,7 +13,7 @@ module Handlers
       response = "Looks like you're dancing with yourself there."
       if person = ::User.from(command.subject)
         if person.is_online? && person != message.sender
-          response = Util::Randomizer.dance(message.sender_nick, person.current_nick)
+          response = Util::Randomizer.dance(message.sender_nick, person.primary_nick)
         elsif ! person.is_online?
           response = "You can't dance with #{person.pronoun_objective} when #{person.pronoun_contraction} asleep!"
         end
@@ -46,7 +46,7 @@ module Handlers
 
     def seen
       user = ::User.from(command.subject)
-      response = "I last saw #{user.current_nick} #{user.last_seen}."
+      response = "I last saw #{user.primary_nick} #{user.last_seen}."
       message.response = response
     end
 

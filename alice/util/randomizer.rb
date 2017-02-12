@@ -9,7 +9,7 @@ module Util
     def self.random_user
       user = User.active_and_online.sample
       user ||= User.all.sample
-      user.current_nick
+      user.primary_nick
     end
 
     def self.kindness(person)
