@@ -20,13 +20,21 @@ module Pipeline
       Pipeline::Processor.process(message(username, "!13"), :respond)
     end
 
+    def process_kindness(username, trigger)
+      Pipeline::Processor.process(message(username, "nice"), :respond)
+    end
+
     def process_points(username, trigger)
       Pipeline::Processor.process(message(username, trigger), :respond)
     end
 
     def process_text(username, trigger)
       return unless trigger[0] =~ /[a-zA-Z\!]/x
-      Pipeline::Processor.process(message(username, trigger.gsub('@', '')), :respond)
+      message = Pipeline::Processor.process(message(username, trigger.gsub('@', '')), :respond)
+      if message.response.content.empty? && trigger =~ /nice|good|kind|sweet|cool|great/i
+        message = Pipeline::Processor.process(message(username, "nice"), :respond)
+      end
+      message
     end
 
     private
