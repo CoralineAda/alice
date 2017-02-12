@@ -2,26 +2,28 @@ require 'spec_helper'
 
 describe Context do
 
+  before do
+    allow(Parser::Wikipedia).to receive(:fetch) { "" }
+    allow(Parser::Google).to receive(:fetch) { "" }
+    allow(Parser::Alpha).to receive(:fetch) { "" }
+
+    Context.destroy_all
+
+    @context_1 = Context.create!(
+      topic: "black rider",
+      is_current: true,
+      keywords: ["white bones"],
+      expires_at: Time.now + 30.minutes
+    )
+    @context_2 = Context.create!(
+      topic: "coaches and four",
+      is_current: true,
+      keywords: ["bleached white bones"],
+      expires_at: Time.now - 5.minutes
+    )
+  end
+
   describe "::current" do
-
-    before do
-      allow_any_instance_of(Context).to receive(:define_corpus) { true }
-      allow_any_instance_of(Context).to receive(:extract_keywords) { true }
-      allow_any_instance_of(Context).to receive(:fetch_content_from_sources) { "" }
-      @context_1 = Context.create(
-        topic: "black rider",
-        is_current: true,
-        keywords: [],
-        expires_at: Time.now + 30.minutes
-      )
-      @context_2 = Context.create(
-        topic: "coach and four",
-        is_current: true,
-        keywords: [],
-        expires_at: Time.now - 5.minutes
-      )
-    end
-
     it "selects the most current context" do
       expect(Context.current).to eq(@context_1)
     end
@@ -31,22 +33,17 @@ describe Context do
 
     before do
       allow_any_instance_of(Context).to receive(:extract_keywords) { true }
-      allow(Parser::Wikipedia).to receive(:fetch) { "" }
-      allow(Parser::Google).to receive(:fetch) { "" }
 
-      @user = User.create!(
-        primary_nick: "NickCave",
-        twitter_handle: "@NickCave",
-        filter_applied: "drunk",
-        points: 11,
-        last_theft: Date.today - 1.day
+      @user = User.find_or_create_by(
+        primary_nick: "nickcave",
+        twitter_handle: "@nickcave"
       )
       Bio.create(user: @user, text: "is a musician, songwriter, author, screenwriter, composer and occasional film actor.")
-      @user.factoids.create(text: "Nick Cave was born on September 22, 1957.")
-      @user.factoids.create(text: "He is Australian")
-      @user.factoids.create(text: "Cave used to front the band The Birthday Party.")
-      @user.factoids.create(text: "He had a music project called Grinderman, which was awful.")
-      @context = Context.create(topic: "NickCave")
+      @user.factoids.find_or_create_by(user_id: @user.id, text: "Nick Cave was born on September 22, 1957.")
+      @user.factoids.find_or_create_by(user_id: @user.id, text: "He is Australian")
+      @user.factoids.find_or_create_by(user_id: @user.id, text: "Cave used to front the band The Birthday Party.")
+      @user.factoids.find_or_create_by(user_id: @user.id, text: "He had a music project called Grinderman, which was awful.")
+      @context = Context.find_or_create_by(topic: "nickcave")
     end
 
     context "derives a corpus from user data" do
@@ -56,14 +53,11 @@ describe Context do
 
       it "including bio" do
         expected = "Nickcave is a musician, songwriter, author, screenwriter, composer and occasional film actor"
-        p @context.corpus
-        p expected
-
         expect(@context.corpus.include?(expected)).to be_truthy
       end
 
       it "including attributes" do
-        expect(@context.corpus.include?("Nickcave is on Twitter as @NickCave")).to be_truthy
+        expect(@context.corpus.include?("Nickcave is on Twitter as @nickcave")).to be_truthy
       end
     end
 
@@ -86,7 +80,6 @@ describe Context do
       allow_any_instance_of(Context).to receive(:define_corpus) { true }
       allow_any_instance_of(Context).to receive(:extract_keywords) { true }
       allow_any_instance_of(Context).to receive(:fetch_content_from_sources) { "" }
-      @context_1 = Context.create(topic: "black rider", keywords: ["black", "wings"])
     end
 
     it "returns an exact topic match" do
@@ -98,14 +91,6 @@ describe Context do
   end
 
   describe "::with_keywords_matching" do
-    before do
-      allow_any_instance_of(Context).to receive(:define_corpus) { true }
-      allow_any_instance_of(Context).to receive(:extract_keywords) { true }
-      allow_any_instance_of(Context).to receive(:fetch_content_from_sources) { "" }
-      @context_1 = Context.create(topic: "black rider", keywords: ["bleached", "bones"])
-      @context_2 = Context.create(topic: "coach and four", keywords: ["white", "bleached", "bones"])
-    end
-
     it "picks the strongest keyword correlation" do
       expect(Context.with_keywords_matching("bleached white bones")).to eq(@context_2)
     end

@@ -1,12 +1,16 @@
 module Parser
   class User
     def self.fetch(topic)
-      user = ::User.from(topic)
-      content = user_methods(user).map do |method|
-        string_from_user_info(user, method)
-      end.flatten.compact.reject(&:empty?).join('. ').gsub('.. ', '. ')
-      return unless content.present?
-      content + ". " + content
+      if user = ::User.from(topic)
+        content = user_methods(user).map do |method|
+          string_from_user_info(user, method)
+        end.flatten.compact.reject(&:empty?)
+        content << user.factoids.map(&:text)
+        return unless content.any?
+        content.flatten.join('. ').gsub('.. ', '. ')
+      else
+        ""
+      end
     end
 
     def self.user_methods(user)

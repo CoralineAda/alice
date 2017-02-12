@@ -3,7 +3,7 @@ class Context
   include Mongoid::Document
 
   field :topic
-  field :keywords, type: Array
+  field :keywords, type: Array, default: []
   field :corpus
   field :expires_at, type: DateTime
   field :is_current, type: Boolean
@@ -54,7 +54,7 @@ class Context
 
   def self.with_keywords_matching(topic)
     topic_keywords = keywords_from(topic)
-    any_in(keywords: topic_keywords).sort do |a,b|
+    any_in(keywords: topic_keywords + [topic_keywords.join(" ")]).sort do |a,b|
       (a.keywords & topic_keywords).count <=> (b.keywords & topic_keywords).count
     end.last
   end
@@ -91,6 +91,7 @@ class Context
         .reject{|s| s.include?("may refer to") || s.include?("disambiguation") }
         .reject{|s| s.size < (self.corpus_from_user ? self.topic.length + 1 : MINIMUM_FACT_LENGTH)}
         .map{|s| s.gsub(/^\**/, "") }
+        .uniq
       sanitized || []
     rescue Exception => e
       Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
@@ -121,7 +122,7 @@ class Context
   def facts
     corpus_accessor.to_a.reject{|sentence| spoken.include? sentence}.sort do |a,b|
       is_was_sort_value(a) <=> is_was_sort_value(b)
-    end
+    end.uniq
   end
 
   def has_spoken_about?(topic)
@@ -129,7 +130,7 @@ class Context
   end
 
   def inspect
-    %{#<Context _id: #{self.id}", topic: "#{self.topic}", keywords: #{self.keywords.count}, is_current: #{is_current}, expires_at: #{self.expires_at}"}
+    %{#<Context _id: #{self.id}", topic: "#{self.topic}", keywords: #{self.keywords}, is_current: #{is_current}, expires_at: #{self.expires_at}"}
   end
 
   def random_fact
@@ -162,13 +163,13 @@ class Context
   end
 
   def extract_keywords
-    self.keywords = begin
+    self.keywords += begin
       candidates = Grammar::LanguageHelper.probable_nouns_from(corpus.join(" "))
       candidates = candidates.inject(Hash.new(0)) {|h,i| h[i] += 1; h }
       candidates.select{|k,v| v > 1}.map(&:first)
     rescue
       []
-    end.flatten
+    end
   end
 
   def expire!
@@ -176,7 +177,7 @@ class Context
   end
 
   def fetch_content_from_sources
-    return @content if @content
+    return @content if defined?(@content)
     if @content = Parser::User.fetch(topic)
       self.corpus_from_user = true
       self.is_ephemeral = true
@@ -185,7 +186,7 @@ class Context
     @content ||= Parser::Wikipedia.fetch_all(topic)
     @content << Parser::Google.fetch(topic).to_s
     @content << Parser::Alpha.fetch(topic).to_s
-    @content = @content.map{ |fact| Sanitize.clean(fact).strip }.join('. ')
+    @content = @content.map{ |fact| Sanitize.clean(fact).strip }.join('. ').uniq
   end
 
   def is_was_sort_value(element)

@@ -48,7 +48,7 @@ module Handlers
     end
 
     def forge
-      message.response = ::Item.forge(command_string.raw_command, message.sender)
+      message.response = ::Item.forge(command_string.fragment, message.sender)
     end
 
     def give
@@ -109,7 +109,7 @@ module Handlers
       user = message.sender
       ::Item.for_user(user).from(command.subject) ||
         ::Item.for_user(user).from(command.subject.split(':')[0]) ||
-        ::Item.for_user(user).from(command_string.raw_command) ||
+        ::Item.for_user(user).from(command_string.fragment) ||
         ::Item.ephemeral
     end
 
@@ -117,13 +117,13 @@ module Handlers
       user = message.sender
       ::Beverage.for_user(user).from(command.subject) ||
         ::Beverage.for_user(user).from(command.subject.split(':')[0]) ||
-        ::Beverage.for_user(user).from(command_string.raw_command)
+        ::Beverage.for_user(user).from(command_string.fragment)
     end
 
     def item
       @item ||= ::Item.from(command.subject) ||
                   ::Item.from(command.subject.split(':')[0]) ||
-                  ::Item.from(command_string.raw_command) ||
+                  ::Item.from(command_string.fragment) ||
                   ::Item.ephemeral
     end
 

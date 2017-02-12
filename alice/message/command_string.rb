@@ -12,10 +12,6 @@ module Message
       @components ||= sanitized_content
     end
 
-    def raw_command
-      self.content.gsub(/^.?#{verb} /, "")
-    end
-
     def fragment
       (components - [verb]).join(' ')
     end

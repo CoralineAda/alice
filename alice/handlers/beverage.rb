@@ -29,7 +29,7 @@ module Handlers
       user = message.sender
       ::Beverage.for_user(user).from(command.subject) ||
         ::Beverage.for_user(user).from(command.subject.split(':')[0]) ||
-        ::Beverage.for_user(user).from(command_string.raw_command) ||
+        ::Beverage.for_user(user).from(command_string.fragment) ||
         ::Beverage.ephemeral
     end
 
