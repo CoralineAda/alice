@@ -52,8 +52,6 @@ module Parser
     rescue
       command || false
     ensure
-      Alice::Util::Logger.info "*** Subject is  \"#{command && command.subject}\" "
-      Alice::Util::Logger.info "*** Predicate is  \"#{command && command.predicate}\" "
       Alice::Util::Logger.info "*** Final banger state is  \"#{aasm.current_state}\" "
       Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
     end

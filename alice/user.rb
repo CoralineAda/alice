@@ -85,9 +85,11 @@ class User
   def self.like(name)
     name = name.respond_to?(:join) && name.join(' ') || name
     name.gsub!('@', '')
+    name.gsub!(/<>/, '')
     match = where(primary_nick: /^#{Regexp.escape(name)}$/i).first
     match ||= where(alt_nicks: name).first
     match ||= where(primary_nick: /\b#{Regexp.escape(name)}\b/i).first
+    match ||= where(slack_id: /\b#{Regexp.escape(name)}\b/i).first
     match
   end
 
