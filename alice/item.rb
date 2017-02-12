@@ -247,7 +247,7 @@ class Item
   def read
     return "#{name_with_article} is not a very interesting read." unless self.is_readable?
     sample = Factoid.sample.formatted(false)
-    read if sample.empty?
+    read if sample.nil? || sample.empty?
     return "It reads, \"#{sample}\"."
   end
 
