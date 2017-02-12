@@ -9,8 +9,10 @@ module Parser
     attr_accessor :this_relation_verb, :this_topic, :this_noun, :this_adverb
     attr_accessor :relation_verb
     attr_accessor :this_property, :this_greeting, :this_pronoun, :this_interrogative
+    attr_accessor :this_thanks
 
     STRUCTURES = [
+      [:to_thanks],
       [:to_greeting, [:to_subject]],
       [:to_object,        [:to_info_verb, [:to_object]],
                           [:to_info_verb, [:to_topic]],
@@ -58,11 +60,16 @@ module Parser
       state :pronoun
       state :subject
       state :item
+      state :thanks
       state :topic
       state :property
 
       event :alice do
         transitions from: :unparsed, to: :alice, guard: :has_alice?
+      end
+
+      event :thanks do
+        transitions from: :alice, to: :thanks, guard: :has_thanks?
       end
 
       event :adverb do
@@ -179,6 +186,10 @@ module Parser
       action_verb
     end
 
+    def to_thanks
+      thanks
+    end
+
     def to_greeting
       greeting
     end
@@ -228,6 +239,11 @@ module Parser
 
     def has_alice?
       sentence.nouns.join(' ') =~ /\balice/i && sentence.remove("alice")
+    end
+
+    def has_thanks?
+      sentence.nouns.include?("thanks") || sentence.verbs.include?("thank")
+      self.this_thanks = "thanks"
     end
 
     def has_preposition?
@@ -339,8 +355,9 @@ module Parser
       @command ||= Message::Command.any_in(verbs: this_property).first
       @command ||= Message::Command.any_in(indicators: verb).first
       @command ||= Message::Command.any_in(indicators: this_greeting).first
-      @command ||= Message::Command.any_in(indicators: "alpha").first unless state == :alice
-      return unless @command
+      @command ||= Message::Command.any_in(indicators: this_thanks).first
+      @command ||= Message::Command.any_in(indicators: "alpha").first unless state == :alice || state == :thanks
+      @command ||= Message::Command.default
       # @command ||= Message::Command.any_in(indicators: this_pronoun).first
       @command.subject = this_subject
       @command.predicate = this_object
