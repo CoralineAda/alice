@@ -39,6 +39,8 @@ module Message
         verb[1..-1]
       elsif trigger =~ /^.+\+\+/
         "+"
+      elsif trigger =~ /nice|good|kind|sweet|cool|great/i
+        "kindness"
       elsif trigger == "13"
         "13"
       end
