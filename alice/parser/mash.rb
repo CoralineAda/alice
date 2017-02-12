@@ -242,8 +242,7 @@ module Parser
     end
 
     def has_thanks?
-      sentence.nouns.include?("thanks") || sentence.verbs.include?("thank")
-      self.this_thanks = "thanks"
+      (sentence.nouns.include?("thanks") || sentence.verbs.include?("thank")) && self.this_thanks = "thanks"
     end
 
     def has_preposition?
