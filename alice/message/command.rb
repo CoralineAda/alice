@@ -40,7 +40,7 @@ module Message
       elsif trigger =~ /^.+\+\+/
         "+"
       elsif trigger =~ /nice|good|kind|sweet|cool|great/i
-        "kindness"
+        "nice"
       elsif trigger == "13"
         "13"
       end
