@@ -339,7 +339,8 @@ module Parser
       @command ||= Message::Command.any_in(verbs: this_property).first
       @command ||= Message::Command.any_in(indicators: verb).first
       @command ||= Message::Command.any_in(indicators: this_greeting).first
-      @command ||= Message::Command.any_in(indicators: "alpha").first
+      @command ||= Message::Command.any_in(indicators: "alpha").first unless state == :alice
+      return unless @command
       # @command ||= Message::Command.any_in(indicators: this_pronoun).first
       @command.subject = this_subject
       @command.predicate = this_object
