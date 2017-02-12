@@ -69,7 +69,7 @@ module Parser
       end
 
       event :thanks do
-        transitions from: :alice, to: :thanks, guard: :has_thanks?
+        transitions from: [:unparsed, :alice], to: :thanks, guard: :has_thanks?
       end
 
       event :adverb do
@@ -150,7 +150,8 @@ module Parser
       parse_transfer
       command
     rescue AASM::InvalidTransition => e
-      Alice::Util::Logger.info "*** Mash can't set state: \"#{e}\" "
+      Alice::Util::Logger.info "*** Mash can't set state: \"#{e}\" #{e.backtrace}"
+      command
     ensure
       Alice::Util::Logger.info "*** Final mash state is  \"#{aasm.current_state}\" "
       Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
