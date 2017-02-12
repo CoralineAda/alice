@@ -31,7 +31,7 @@ module Behavior
       # Use when you need to do a case-insensitive match
       def like(name)
         name = name.respond_to?(:join) && name.join(' ') || name
-        match = where("#{search_attr}" => name).first
+        match = where("#{search_attr}" => /#{name}/i).first
         match ||= where("#{search_attr}" => /^#{Regexp.escape(name)}$/i).first
         match ||= where("#{search_attr}" => /\s#{Regexp.escape(name)}\b/i).first
         match

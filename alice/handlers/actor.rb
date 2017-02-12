@@ -24,6 +24,7 @@ module Handlers
     private
 
     def subject
+      Alice::Util::Logger.info "*** Command subject is #{command.subject}"
       @actor ||= ::Actor.from(command.subject)
     end
 

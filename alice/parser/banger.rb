@@ -35,6 +35,7 @@ module Parser
     def self.parse(command_string)
       parser = new(command_string)
       command = parser.parse!
+
       if command
         {
           command: command,
@@ -54,6 +55,7 @@ module Parser
     ensure
       Alice::Util::Logger.info "*** Final banger state is  \"#{aasm.current_state}\" "
       Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
+      Alice::Util::Logger.info "*** Command is  \"#{command.inspect}\" "
     end
 
     def has_bang?
