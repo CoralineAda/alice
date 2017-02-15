@@ -356,11 +356,15 @@ module Parser
       @command ||= Message::Command.any_in(indicators: verb).first
       @command ||= Message::Command.any_in(indicators: this_greeting).first
       @command ||= Message::Command.any_in(indicators: this_thanks).first
-      @command ||= Message::Command.any_in(indicators: "alpha").first unless state == :alice
+      @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
       @command ||= Message::Command.default
       @command.subject = this_subject
       @command.predicate = this_object
       @command
+    end
+
+    def is_query?
+      unparsed_sentence =~ /\?/
     end
 
     def any_method_like?(array)
