@@ -34,33 +34,25 @@ describe "Message Round Trip" do
   context "!command" do
     it "returns a response" do
       message = Message::Message.new(emitted.user.primary_nick, trigger_1)
-      response_message = Pipeline::Processor.process(channel, message, :respond)
-      expect(response_message.response).to eq("thinks that Lydia shouldn't press their luck on the thievery front.")
+      response_message = Pipeline::Processor.process(message, :respond).response
+      p response_message
+      expect(response_message.content).to eq("thinks that Lydia shouldn't press their luck on the thievery front.")
     end
   end
 
   context "contains Alice" do
     it "returns a response" do
       message = Message::Message.new(emitted.user.primary_nick, trigger_3)
-      response_message = Pipeline::Processor.process(channel, message, :respond)
-      expect(response_message.response).to eq("thinks that Lydia shouldn't press their luck on the thievery front.")
+      response_message = Pipeline::Processor.process(message, :respond).response
+      expect(response_message.content).to eq("thinks that Lydia shouldn't press their luck on the thievery front.")
     end
   end
 
   context "should not respond" do
     it "does not return a response" do
       message = Message::Message.new(emitted.user.primary_nick, trigger_2)
-      response_message = Pipeline::Processor.process(channel, message, :respond)
-      expect(response_message.response).to be_nil
-    end
-  end
-
-  context "user join" do
-    it "responds to a join message" do
-      allow(Util::Randomizer).to receive(:one_chance_in) { true }
-      message = Message::Message.new(emitted.user.primary_nick, trigger_1)
-      response_message = Pipeline::Processor.process(channel, message, :greet_on_join)
-      expect(response_message.response).to eq("Hi there, Lydia.")
+      response_message = Pipeline::Processor.process(message, :respond).response
+      expect(response_message.content).to be_empty
     end
   end
 

@@ -11,6 +11,7 @@ module Grammar
 
     def initialize(sentence)
       @sentence = sentence
+      return unless sentence =~ /\balice/i
     end
 
     def parse
