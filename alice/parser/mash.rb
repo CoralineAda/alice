@@ -3,7 +3,7 @@ module Parser
   class Mash
 
     attr_accessor :command_string
-    attr_accessor :sentence, :unparsed_sentence
+    attr_accessor :to_parse, :unparsed_sentence
     attr_accessor :this_object, :this_subject, :this_info_verb
     attr_accessor :this_transfer_verb, :this_action_verb, :this_preposition
     attr_accessor :this_relation_verb, :this_topic, :this_noun, :this_adverb
@@ -140,9 +140,8 @@ module Parser
 
     def initialize(command_string)
       self.command_string = command_string
-      to_parse = command_string.content.downcase.gsub(/[\?\,\!]+/, '')
+      self.to_parse = command_string.content.downcase.gsub(/[\?\,\!]+/, '')
       self.unparsed_sentence = to_parse.split(' ')
-      self.sentence = Grammar::SentenceParser.parse(to_parse)
     end
 
     def parse
@@ -154,6 +153,10 @@ module Parser
       Alice::Util::Logger.info "*** Final mash state is  \"#{aasm.current_state}\" "
       Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
       return command
+    end
+
+    def sentence
+      @sentence ||= Grammar::SentenceParser.parse(to_parse)
     end
 
     def state
@@ -237,6 +240,7 @@ module Parser
     # ========================================================================
 
     def has_alice?
+      return false unless unparsed_sentence.include?("alice") || unparsed_sentence.include?("Alice") || unparsed_sentence.include?("@alice")
       sentence.nouns.join(' ') =~ /\balice/i && sentence.remove("alice")
     end
 
