@@ -287,7 +287,7 @@ class User
 
   def set_pronouns(pronouns)
     pronouns = pronouns.split("/")
-    update_attributes(
+    update_attributes!(
       pronoun_primary: pronouns[0] || "they",
       pronoun_objective: pronouns[1] || "them",
       pronoun_possessive: pronouns[2] || "their",
