@@ -14,7 +14,7 @@ module Handlers
     end
 
     def set
-      message.sender.set_pronouns(command.fragment)
+      message.sender.set_pronouns(command_string.fragment)
       Alice::Util::Logger.info "*** Command subject is #{command.subject}"
       message.response = "Thanks! I'll remember this."
     end
