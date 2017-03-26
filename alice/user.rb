@@ -287,6 +287,7 @@ class User
 
   def set_pronouns(pronouns)
     pronouns = pronouns.split("/")
+    Alice::Util::Logger.info "*** New pronouns for #{primary_nick} now #{pronouns}"
     update_attributes!(
       pronoun_primary: pronouns[0] || "they",
       pronoun_objective: pronouns[1] || "them",
