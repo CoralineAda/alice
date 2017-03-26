@@ -368,7 +368,7 @@ module Parser
     end
 
     def is_query?
-      unparsed_sentence =~ /\?/
+      command_string.content =~ /\?/
     end
 
     def any_method_like?(array)
