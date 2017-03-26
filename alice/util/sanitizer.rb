@@ -71,7 +71,14 @@ module Util
     end
 
     def self.ordinal(number)
-      number == 1 && "1st" || number == 2 && "2nd" || number == 3 && "3rd" || "#{number}th"
+      return "#{number}th" if number > 3 && number < 14
+      case number.to_s.split[-1]
+      when 1; "#{number}st"
+      when 2; "#{number}nd"
+      when 3; "#{number}rd"
+      else
+        "#{number}th"
+      end
     end
 
     def self.scrub_wiki_content(content)
