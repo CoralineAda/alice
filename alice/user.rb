@@ -300,6 +300,10 @@ class User
     "Preferred pronouns: #{self.pronoun_primary}/#{pronoun_objective}/#{pronoun_possessive}/#{pronoun_predicate}. "
   end
 
+  def name
+    self.proper_name
+  end
+
   def pronoun_contraction
     return "she's" if pronoun_objective == "she"
     return "he's" if pronoun_objective == "he"

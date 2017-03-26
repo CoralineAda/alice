@@ -29,8 +29,8 @@ module Parser
                           [:to_adverb],
                           [:to_subject, [:to_property]],
                           [:to_object, [:to_property]],
-                          [:to_topic],
                           [:to_object, [:to_subject]]
+                          [:to_topic]
       ],
       [:to_action_verb,   [],
                           [:to_subject, [:to_object]],
@@ -109,7 +109,7 @@ module Parser
       end
 
       event :topic do
-        transitions from: [:info_verb], to: :topic, guard: :has_topic?
+        transitions from: :info_verb, to: :topic, guard: :has_topic?
       end
 
       event :preposition do
@@ -299,7 +299,7 @@ module Parser
 
     def has_object?
       joined_nouns = sentence.nouns.join(' ')
-      self.this_object = Item.from(joined_nouns) || Beverage.from(joined_nouns) || Wand.from(joined_nouns)
+      self.this_object = User.from(joined_nouns) || Item.from(joined_nouns) || Beverage.from(joined_nouns) || Wand.from(joined_nouns)
     end
 
     def has_noun?
@@ -363,7 +363,7 @@ module Parser
       @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
       @command ||= Message::Command.default
       @command.subject = this_subject
-      @command.predicate = this_object
+      @command.predicate = this_object || this_topic
       @command
     end
 

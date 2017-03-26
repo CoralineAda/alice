@@ -9,12 +9,10 @@ module Handlers
     include ActiveSupport
 
     def converse
-      unless text = fact_from(predicate)
-        set_context_from_predicate
-        unless text = fact_from(predicate) || description_from_context
-          context_stack.pop
-          text = default_response(predicate)
-        end
+      set_context_from_subject_or_predicate
+      unless text = fact_from(current_context.topic) || description_from_context
+        context_stack.pop
+        text = default_response(current_context.topic)
       end
       text = text.sub(/\?\./, '?')
       set_response(text)
@@ -79,22 +77,32 @@ module Handlers
       @global_context ||= Context.current
     end
 
+    def subject_or_predicate
+      subject || predicate
+    end
+
+    def subject
+      @subject ||= command.subject
+    end
+
     def predicate
       @predicate ||= command.predicate
+    end
+
+    def set_context_from_subject_or_predicate
+      set_context_from_predicate || set_context_from_subject
     end
 
     def set_context_from_predicate
       return unless predicate.present?
       return if (command_string.components & Grammar::LanguageHelper::PRONOUNS).count > 0
-      if new_context = context_from(predicate.downcase)
-        update_context(new_context)
-      end
+      update_context(context_from(predicate.respond_to?(:downcase) && predicate.downcase || predicate.name.downcase))
     end
 
     def set_context_from_subject
       return unless subject
       return if (command_string.components & Grammar::LanguageHelper::PRONOUNS).any?
-      update_context(context_from(subject.downcase))
+      update_context(context_from(subject.respond_to?(:downcase) && subject.downcase || subject.name.downcase))
     end
 
     def set_response(text)
