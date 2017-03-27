@@ -19,7 +19,7 @@
     end
 
     def parse
-      return unless has_alice? && is_query?
+      return unless has_alice?
       command
     end
 
@@ -30,7 +30,7 @@
       @command ||= Message::Command.any_in(indicators: greeting).first
       @command ||= Message::Command.any_in(indicators: thanks).first
       @command ||= Message::Command.any_in(indicators: pronoun).first
-      @command ||= Message::Command.any_in(indicators: "alpha").first
+      @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
       @command ||= Message::Command.default
       @command.subject = subject
       @command.predicate = object || topic

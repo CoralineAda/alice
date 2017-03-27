@@ -26,3 +26,10 @@ Deploy to your favorite hosting environment and set up incoming and outgoing int
 
 If you're using Heroku, be sure to copy the relevant values from the `.env` file to your application's configuration.
 
+### Debugging
+
+`irb -r ./alice.rb`
+
+```message = Message::Message.new("coraline", "Alice, who is @alva?")
+::Message::Command.process(message)
+```
