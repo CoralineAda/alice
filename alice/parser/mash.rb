@@ -1,8 +1,8 @@
-module Parser
+ module Parser
 
   class Mash
 
-    attr_reader :command_string, :to_parse, :unparsed_sentence
+    attr_reader :command_string, :to_parse, :words
 
     def self.parse(command_string)
       if command = new(command_string).parse
@@ -15,7 +15,7 @@ module Parser
     def initialize(command_string)
       @command_string = command_string
       @to_parse = command_string.content.downcase.gsub(/[\?\,\!]+/, '')
-      @unparsed_sentence = to_parse.split(' ')
+      @words = to_parse.split(' ')
     end
 
     def parse
@@ -49,7 +49,7 @@ module Parser
     end
 
     def greeting
-      (Grammar::LanguageHelper::GREETINGS & unparsed_sentence)#.first && "hi"
+      (Grammar::LanguageHelper::GREETINGS & words).any? && "hi"
     end
 
     def thanks
@@ -77,14 +77,15 @@ module Parser
     end
 
     def property
+      return @property if @property
       thing = subject || object
-      map = thing.class::PROPERTIES.inject({}) do |hash, property|
-        hash[property] = property.to_s.split("_").reject{ |value| value == "can" }.map{|w| w.gsub("?","")}
+      properties = thing.class::PROPERTIES.inject({}) do |hash, property|
+        hash[property.to_s] = property.to_s.split("_").reject{ |value| value == "can" }.map{|w| w.gsub("?","")}
         hash
       end
-      candidate = (map.values.flatten & unparsed_sentence).first
-      match = map.select{|k,v| v.include?(candidate) }.first
-      match && match[0]
+      matches = (properties.values.flatten & words)
+      matching_property = properties.find{|k,v| (v & matches).any? }
+      matching_property && matching_property.first.to_sym
     end
 
   end
