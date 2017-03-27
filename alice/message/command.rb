@@ -96,8 +96,8 @@ module Message
       context
     end
 
-    def self.process(message)
-      command = from(message)[:command]
+    def self.process(message, command=nil)
+      command ||= from(message)[:command]
       message.response_type = command.response_kind
       command.invoke!
       [command, message]

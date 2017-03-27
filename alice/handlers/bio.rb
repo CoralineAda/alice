@@ -15,7 +15,13 @@ module Handlers
       if command.predicate && ! command_string.content.include?("who is")
         update_bio(command_string.fragment)
       else
-        return_bio(sender)
+        if command_string.content[0] == "!"
+          return_bio(sender)
+        elsif subject
+          return_bio(subject)
+        else
+          message.response = "I don't know anyone by that name."
+        end
       end
     end
 

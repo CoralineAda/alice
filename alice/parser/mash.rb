@@ -83,7 +83,7 @@
 
     def property
       return @property if @property
-      thing = subject || object
+      return unless thing = subject || object
       properties = thing.class::PROPERTIES.inject({}) do |hash, property|
         hash[property.to_s] = property.to_s.split("_").reject{ |value| value == "can" }.map{|w| w.gsub("?","")}
         hash
