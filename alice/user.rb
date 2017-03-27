@@ -71,7 +71,8 @@ class User
     names = names.uniq - Grammar::LanguageHelper::IDENTIFIERS
     objects = names.map do |name|
       name = (name.split(/\s+/) - Grammar::LanguageHelper::IDENTIFIERS).compact.join(' ')
-      name.gsub!("<@","")
+      name.gsub!("@","")
+      name.gsub!("<","")
       name.gsub!(">","")
       if name.present? && found = like(name) || found = User.where(primary_nick: name).first || found = User.any_in(alt_nicks: name).first || User.where(slack_id: name).first
         SearchResult.new(term: name, result: found)
