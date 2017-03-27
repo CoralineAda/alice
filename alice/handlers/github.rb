@@ -5,7 +5,12 @@ module Handlers
     include Behavior::HandlesCommands
 
     def issues
-      message.response = parser.issues.take(5).join("\n")
+      issues = parser.issues
+      if issues.any?
+        message.response = issues.take(5).join("\n")
+      else
+        message.response = "No open bugs, hooray! If you find one, report it at #{ENV['ISSUES_URL']}"
+      end
     end
 
     def commits
