@@ -19,7 +19,7 @@
     end
 
     def parse
-      return unless has_alice?
+      return unless has_alice? && is_query?
       command
     end
 
