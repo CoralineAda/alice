@@ -29,7 +29,8 @@
       @command ||= Message::Command.any_in(indicators: verbs).first
       @command ||= Message::Command.any_in(indicators: greeting).first
       @command ||= Message::Command.any_in(indicators: thanks).first
-      @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
+      @command ||= Message::Command.any_in(indicators: pronoun).first
+      @command ||= Message::Command.any_in(indicators: "alpha").first
       @command ||= Message::Command.default
       @command.subject = subject
       @command.predicate = object || topic
@@ -60,6 +61,10 @@
       verbs = (Grammar::LanguageHelper::VERBS & sentence.verbs)
       verbs = ["is"] if sentence.interrogatives.any? || sentence.contains_possessive
       verbs
+    end
+
+    def pronoun
+      sentence.pronouns.first
     end
 
     def subject
