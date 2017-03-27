@@ -42,7 +42,7 @@
     end
 
     def has_alice?
-      to_parse =~ /\balice/i
+      to_parse =~ /\balice\,/i
     end
 
     def is_query?
