@@ -74,7 +74,7 @@ class User
       name.gsub!("@","")
       name.gsub!("<","")
       name.gsub!(">","")
-      if name.present? && found = like(name) || found = User.where(primary_nick: name).first || found = User.any_in(alt_nicks: name).first || User.where(slack_id: name).first
+      if name.present? && found = like(name) || found = User.where(primary_nick: name).first || found = User.any_in(alt_nicks: name).first || User.where(slack_id: name.downcase).first
         SearchResult.new(term: name, result: found)
       end
     end.compact

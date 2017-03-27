@@ -2,10 +2,6 @@ module Behavior
 
   module Ownable
 
-    def self.included(klass)
-      klass.extend ClassMethods
-    end
-
     def owned_time
       event = self.picked_up_at || self.created_at
       hours = (Time.now.minus_with_coercion(event)/3600).round

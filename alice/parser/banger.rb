@@ -82,7 +82,7 @@ module Parser
       verb = command_string.content.gsub("!", "").split(' ').first
       if @command = Message::Command.any_in(verbs: verb).first
         @command.subject = (sentence.nouns - [verb]).first
-        @command.predicate = sentence.nouns.last
+        @command.predicate = (sentence.nouns - [">"]).last
         @command.verb = sentence.verbs.first
       end
       @command
