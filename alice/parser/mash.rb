@@ -29,7 +29,7 @@ module Parser
                           [:to_adverb],
                           [:to_subject, [:to_property]],
                           [:to_object, [:to_property]],
-                          [:to_object, [:to_subject]]
+                          [:to_object, [:to_subject]],
                           [:to_topic]
       ],
       [:to_action_verb,   [],
@@ -163,17 +163,24 @@ module Parser
       aasm.current_state
     end
 
-    def parse_transfer(structures=STRUCTURES)
-      structures.map do |structure|
-        head, tail = structure.first, structure[1..-1]
-        if can_transition_to?(head)
-          Alice::Util::Logger.info "*** Mash state is  \"#{head}\" "
-          sentence.remove(self.public_send(head.to_s.gsub(/to_/, 'this_')))
-          self.public_send(head)
-          return unless tail.present?
-          parse_transfer(tail)
-        end
+    def stack
+      @stack ||= STRUCTURES.clone
+      Alice::Util::Logger.info "*** Stack is \"#{@stack}\" "
+      @stack
+    end
+
+    def parse_transfer(structures=stack)
+      head, tail = structures.shift, structures.shift
+      Alice::Util::Logger.info "*** Head is \"#{head}\" "
+      Alice::Util::Logger.info "*** Tail is \"#{tail}\" "
+      if can_transition_to?(head)
+        Alice::Util::Logger.info "*** Mash state is \"#{head}\" "
+        sentence.remove(self.public_send(head.to_s.gsub(/to_/, 'this_')))
+        self.public_send(head)
+        Alice::Util::Logger.info "*** Tail is \"#{tail}\" "
+        parse_transfer(tail)
       end
+      parse_transfer(structures.shift)
     end
 
     def can_transition_to?(event)
@@ -298,8 +305,9 @@ module Parser
     end
 
     def has_object?
-      joined_nouns = sentence.nouns.join(' ')
-      self.this_object = User.from(joined_nouns) || Item.from(joined_nouns) || Beverage.from(joined_nouns) || Wand.from(joined_nouns)
+      self.this_object = sentence.objects.map do |noun|
+        ::User.from(noun) || ::Item.from(noun) || ::Beverage.from(noun) || ::Wand.from(noun)
+      end.compact.last
     end
 
     def has_noun?
@@ -307,6 +315,7 @@ module Parser
     end
 
     def has_subject?
+      binding.pry
       self.this_subject ||= has_person?
     end
 
@@ -346,10 +355,6 @@ module Parser
 
     # Util
     # ========================================================================
-
-    def potential_nouns
-      sentence.nouns
-    end
 
     def command
       return if state == :unparsed
