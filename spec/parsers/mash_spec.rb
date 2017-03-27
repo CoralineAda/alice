@@ -36,7 +36,7 @@ describe "Parser::Mash" do
     end
 
     it "recognizes Syd" do
-      expect(parser.this_subject).to eq(@syd)
+      expect(parser.subject).to eq(@syd)
     end
 
   end
@@ -51,7 +51,7 @@ describe "Parser::Mash" do
     end
 
     it "recognizes Robyn" do
-      expect(parser.this_subject).to eq(@robyn)
+      expect(parser.subject).to eq(@robyn)
     end
 
     it "recognizes factoids" do
@@ -70,11 +70,11 @@ describe "Parser::Mash" do
     end
 
     it "recognizes the tomato object" do
-      expect(parser.this_object).to eq(@tomato)
+      expect(parser.object).to eq(@tomato)
     end
 
     it "recognizes the Robyn user" do
-      expect(parser.this_subject).to eq(@robyn)
+      expect(parser.subject).to eq(@robyn)
     end
 
   end
@@ -89,11 +89,11 @@ describe "Parser::Mash" do
     end
 
     it "recognizes the tomato object" do
-      expect(parser.this_object).to eq(@tomato)
+      expect(parser.object).to eq(@tomato)
     end
 
     it "recognizes the Robyn user" do
-      expect(parser.this_subject).to eq(@robyn)
+      expect(parser.subject).to eq(@robyn)
     end
 
   end
@@ -108,7 +108,7 @@ describe "Parser::Mash" do
     end
 
     it "recognizes the Syd user" do
-      expect(parser.this_subject).to eq(@syd)
+      expect(parser.subject).to eq(@syd)
     end
 
   end
@@ -125,11 +125,11 @@ describe "Parser::Mash" do
       end
 
       it "recognizes the Syd user" do
-        expect(parser.this_subject).to eq(@syd)
+        expect(parser.subject).to eq(@syd)
       end
 
       it "maps the object to a whitelisted instance method" do
-        expect(parser.this_property).to eq :twitter_handle
+        expect(parser.property).to eq :twitter_handle
       end
 
     end
@@ -144,7 +144,7 @@ describe "Parser::Mash" do
       end
 
       it "does not map to a non-whitelisted instance method" do
-        expect(parser.this_property).to be_nil
+        expect(parser.property).to be_nil
       end
 
     end
@@ -161,11 +161,11 @@ describe "Parser::Mash" do
     end
 
     it "recognizes the tomato object" do
-      expect(parser.this_object).to eq(@tomato)
+      expect(parser.object).to eq(@tomato)
     end
 
     it "maps to the object's creator method" do
-      expect(parser.this_property).to eq(:made_by)
+      expect(parser.property).to eq(:made_by)
     end
 
   end
@@ -180,11 +180,11 @@ describe "Parser::Mash" do
     end
 
     it "recognizes the Robyn user" do
-      expect(parser.this_subject).to eq(@robyn)
+      expect(parser.subject).to eq(@robyn)
     end
 
     it "maps to Robyn's check_points method" do
-      expect(parser.this_property).to eq(:check_points)
+      expect(parser.property).to eq(:check_points)
     end
 
   end
@@ -199,11 +199,11 @@ describe "Parser::Mash" do
     end
 
     it "recognizes the tomato object" do
-      expect(parser.this_object).to eq(@tomato)
+      expect(parser.object).to eq(@tomato)
     end
 
     it "maps to the object's is_cursed? method" do
-      expect(parser.this_property).to eq(:is_cursed?)
+      expect(parser.property).to eq(:is_cursed?)
     end
 
   end

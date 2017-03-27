@@ -43,6 +43,10 @@ module Grammar
       tokens.select{|token| token.part_of_speech.tag == :NOUN || token.label == :ATTR || token.label == :POBJ || token.part_of_speech.tag == :X}.map(&:text)
     end
 
+    def objects
+      tokens.select{|token| token.part_of_speech.tag == :NOUN && token.label == :DOBJ}.map(&:text)
+    end
+
     def prepositions
       tokens.select{|token| token.part_of_speech.tag == :PREP}.map(&:text)
     end
