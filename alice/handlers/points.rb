@@ -11,6 +11,7 @@ module Handlers
       elsif subject && message.sender.award_point_to(subject)
         message.response = subject.check_score
       elsif subject.nil?
+        return if command_string.content =~ /c\+\+/i
         this = command_string.content.gsub('++','')
         message.response = "Yay for #{this}!"
       else
