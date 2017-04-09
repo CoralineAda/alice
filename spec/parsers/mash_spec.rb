@@ -28,7 +28,7 @@ describe "Parser::Mash" do
 
   context "Alice, say hello to Syd" do
 
-    let(:command_string)  { Message::CommandString.new("Alice, say hello to Syd.") }
+    let(:command_string)  { Message::CommandString.new("#{ENV['BOT_NAME']}, say hello to Syd.") }
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
@@ -43,7 +43,7 @@ describe "Parser::Mash" do
 
   context "Alice, what do you know about Robyn?" do
 
-    let(:command_string)  { Message::CommandString.new("Alice, what do you know about Robyn?") }
+    let(:command_string)  { Message::CommandString.new("#{ENV['BOT_NAME']}, what do you know about Robyn?") }
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
@@ -62,7 +62,7 @@ describe "Parser::Mash" do
 
   context "Alice, please give the tomato to Robyn." do
 
-    let(:command_string)  { Message::CommandString.new("Alice, please give the tomato to Robyn.") }
+    let(:command_string)  { Message::CommandString.new("#{ENV['BOT_NAME']}, please give the tomato to Robyn.") }
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
@@ -81,7 +81,7 @@ describe "Parser::Mash" do
 
   context "Alice, please give Robyn the tomato." do
 
-    let(:command_string)  { Message::CommandString.new("Alice, please give Robyn the tomato.") }
+    let(:command_string)  { Message::CommandString.new("#{ENV['BOT_NAME']}, please give Robyn the tomato.") }
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
@@ -100,7 +100,7 @@ describe "Parser::Mash" do
 
   context "Alice, who is Syd?" do
 
-    let(:command_string)  { Message::CommandString.new("Alice, who is Syd?") }
+    let(:command_string)  { Message::CommandString.new("#{ENV['BOT_NAME']}, who is Syd?") }
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
@@ -117,7 +117,7 @@ describe "Parser::Mash" do
 
     context "happy path" do
 
-      let(:command_string)  { Message::CommandString.new("Alice, what is Syd's twitter handle?") }
+      let(:command_string)  { Message::CommandString.new("#{ENV['BOT_NAME']}, what is Syd's twitter handle?") }
       let(:parser)          { Parser::Mash.new(command_string) }
 
       before do
@@ -136,7 +136,7 @@ describe "Parser::Mash" do
 
     context "edge cases" do
 
-      let(:command_string)  { Message::CommandString.new("Alice, what is Syd's destroy?") }
+      let(:command_string)  { Message::CommandString.new("#{ENV['BOT_NAME']}, what is Syd's destroy?") }
       let(:parser)          { Parser::Mash.new(command_string) }
 
       before do
@@ -153,7 +153,7 @@ describe "Parser::Mash" do
 
   context "Alice, who made the tomato?" do
 
-    let(:command_string)  { Message::CommandString.new("Alice, who made the tomato?") }
+    let(:command_string)  { Message::CommandString.new("#{ENV['BOT_NAME']}, who made the tomato?") }
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
@@ -172,7 +172,7 @@ describe "Parser::Mash" do
 
   context "Alice, how many points does Robyn have?" do
 
-    let(:command_string)  { Message::CommandString.new("Alice, how many points does Robyn have?") }
+    let(:command_string)  { Message::CommandString.new("#{ENV['BOT_NAME']}, how many points does Robyn have?") }
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do
@@ -191,7 +191,7 @@ describe "Parser::Mash" do
 
   context "Alice, is the tomato cursed?" do
 
-    let(:command_string)  { Message::CommandString.new("Alice, is the tomato cursed?") }
+    let(:command_string)  { Message::CommandString.new("#{ENV['BOT_NAME']}, is the tomato cursed?") }
     let(:parser)          { Parser::Mash.new(command_string) }
 
     before do

@@ -6,7 +6,7 @@ describe "Message Round Trip" do
 
   let(:trigger_1)      { "!steal power from superman" }
   let(:trigger_2)      { "drain power from superman" }
-  let(:trigger_3)      { "Alice, steal power from superman" }
+  let(:trigger_3)      { "#{ENV['BOT_SHORT_NAME']}, steal power from superman" }
   let(:emitted_struct) { Struct.new(:user) }
   let(:sender)         { User.new(primary_nick: "Lydia") }
   let(:emitted)        { emitted_struct.new(sender) }
@@ -23,7 +23,7 @@ describe "Message Round Trip" do
     Message::Command.new(
       name: "give_points",
       verbs: ["+"],
-      stop_words: ["alice"],
+      stop_words: [ENV['BOT_SHORT_NAME'].downcase],
       indicators: [],
       handler_class: "Handlers::Points",
       handler_method: "give",
@@ -62,7 +62,7 @@ describe "Message Round Trip" do
     end
   end
 
-  context "contains Alice" do
+  context "contains bot name" do
     before do
       allow(Message::Command).to receive(:any_in) { [steal_command] }
     end
