@@ -72,7 +72,7 @@ module Util
 
     def self.ordinal(number)
       return "#{number}th" if number > 3 && number < 14
-      case number.to_s.split[-1]
+      case number.to_s[-1]
       when "1"; "#{number}st"
       when "2"; "#{number}nd"
       when "3"; "#{number}rd"
