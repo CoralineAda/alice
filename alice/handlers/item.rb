@@ -123,6 +123,7 @@ module Handlers
     def item
       @item ||= ::Item.from(command.subject) ||
                   ::Item.from(command.subject.split(':')[0]) ||
+                  ::Item.from(command.predicate)
                   ::Item.from(command_string.fragment) ||
                   ::Item.ephemeral
     end
