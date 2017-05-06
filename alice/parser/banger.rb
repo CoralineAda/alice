@@ -59,7 +59,7 @@ module Parser
     end
 
     def has_bang?
-      self.command_string.content[0] == "!"
+      self.command_string.content =~ /^\!/
     end
 
     def known_verb?
