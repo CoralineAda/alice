@@ -43,7 +43,7 @@ module Util
         "Have to say, #{person} really is someone special."
       ].sample
     end
-    
+
     def self.cant_pick_up(thing)
       message = [
         "I wouldn't touch that if I were you.",

@@ -31,6 +31,17 @@ describe "Message Round Trip" do
     )
   }
 
+  let(:youre_welcome_command) {
+    Message::Command.new(
+      name: "youre_welcome",
+      verbs: ["thank", "thanks"],
+      stop_words: [],
+      indicators: [],
+      handler_class: "Handlers::Emotes",
+      handler_method: "youre_welcome",
+      response_kind: "message"
+    )
+  }
   before do
     allow_any_instance_of(Pipeline::Processor).to receive(:track_sender) { true }
     allow(Util::Randomizer).to receive(:greeting) { "Hi there, Lydia." }
@@ -71,6 +82,13 @@ describe "Message Round Trip" do
       response_message = Pipeline::Processor.process(message, :respond).response
       expect(response_message.content).to eq("thinks that Lydia shouldn't press their luck on the thievery front.")
     end
+  end
+
+  it "says you're welcome" do
+    allow(Message::Command).to receive(:any_in) { [youre_welcome_command] }
+    message = Message::Message.new(emitted.user.primary_nick, "Thanks Alice")
+    response_message = Pipeline::Processor.process(message, :respond).response
+    expect(response_message.content).to_not be_nil
   end
 
   context "should not respond" do

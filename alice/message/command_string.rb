@@ -16,6 +16,10 @@ module Message
       (components - [verb]).join(' ')
     end
 
+    def predicate
+      self.content.split[1..-1].join(' ')
+    end
+
     def verb
       components[0].to_s.gsub(/^!/, '')
     end
