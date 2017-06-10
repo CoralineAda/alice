@@ -27,7 +27,6 @@ class Item
   field :is_hidden,           type: Boolean
   field :is_weapon,           type: Boolean
   field :is_game,             type: Boolean
-  field :is_hidden,           type: Boolean
   field :is_key,              type: Boolean
   field :is_readable,         type: Boolean
   field :picked_up_at,        type: DateTime
