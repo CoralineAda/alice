@@ -25,7 +25,7 @@ module Handlers
 
     def commands
       response = "I understand the following commands: "
-      response << Command.all.map(&:verbs).map do |verbs|
+      response << Message::Command.all.map(&:verbs).map do |verbs|
         verb = verbs.detect{|verb| verb =~ /[a-z]+/ && "!#{verb}"}
         verb.present? && "!#{verb}" || nil
       end.flatten.compact.sort.join(", ")
@@ -39,6 +39,7 @@ module Handlers
       response << "!bio sets your bio, !fact sets a fact about yourself, and !twitter sets your Twitter handle."
       response << "!pronouns sets your preferred pronouns (just type !pronouns for help)."
       response << "!look, !inventory, !forge, and !brew can come in handy sometimes."
+      response << "For a full list, type !commands."
       response << "Our code of conduct is here: https://gist.github.com/CoralineAda/46d3c98289aa9924171fd1db827b7713"
       response << "Also: beware the fruitcake."
       message.response = response.join("\r\n")
