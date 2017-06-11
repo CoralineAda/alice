@@ -25,8 +25,8 @@ module Handlers
 
     def commands
       response = "I understand the following commands: "
-      response << Message::Command.all.map(&:verbs).map do |verbs|
-        verb = verbs.detect{|verb| verb =~ /[a-z]+/ && "!#{verb}"}
+      response << Message::Command.all.where(one_in_x_odds: 1, indicators: []).map(&:verbs).map do |verbs|
+        verb = verbs.detect{|verb| verb =~ /[a-z]+/ && verb !~ /\?/ && "!#{verb}"}
         verb.present? && "!#{verb}" || nil
       end.flatten.compact.sort.join(", ")
       message.response = response
