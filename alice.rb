@@ -27,7 +27,13 @@ end
 
 I18n.enforce_available_locales = false
 
-bot = Slackbotsy::Bot.new(config) do
+bot_interface_handler = Slackbotsy::Bot
+# SLACK_API_TOKEN of 'xxx' is the .env.sample default
+if ENV['SLACK_API_TOKEN'] == 'xxx' || ENV['USE_TESTBOTSY'] == 'true'
+  bot_interface_handler = Testbotsy
+end
+
+bot = bot_interface_handler.new(config) do
   hear /(.+)/ do |mdata|
     begin
       name = User.ensure_user(user_name, user_id).primary_nick
