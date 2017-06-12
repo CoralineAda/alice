@@ -4,7 +4,6 @@ class Testbotsy
     @patterns = []
     @running = true
     return if ENV['RSPEC_RUN'] == 'true'
-    binding.pry
     self.instance_exec([],&block)
     Thread.new do
       sleep 1
