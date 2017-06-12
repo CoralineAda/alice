@@ -27,7 +27,7 @@ module Util
         "#{person} is one smart cookie!",
         "If there were a baby here, #{person} would make it smile",
         "#{person}'s perspective is always refreshing.",
-        "#{person} is more helpful than #{pronoun} realize.",
+        "#{person} is more helpful than #{pronoun} realize#{pronoun == 'they' ? '' : 's'}.",
         "#{person} is all that and a bag of chips",
         "If cartoon bluebirds were real, a bunch of them would be sitting on #{person}'s shoulders, singing, right now.",
         "#{person} is a great listener",
