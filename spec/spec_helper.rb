@@ -2,6 +2,7 @@ require 'rubygems'
 require 'rspec'
 require 'database_cleaner'
 
+ENV['RSPEC_RUN'] = 'true'
 require_relative '../alice'
 
 RSpec.configure do |config|
