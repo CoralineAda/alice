@@ -12,7 +12,7 @@ module Util
       user.primary_nick
     end
 
-    def self.kindness(person)
+    def self.kindness(person, pronoun)
       [
         "You are very kind, #{person}.",
         "Hey #{person}, thanks for being here!",
@@ -27,7 +27,7 @@ module Util
         "#{person} is one smart cookie!",
         "If there were a baby here, #{person} would make it smile",
         "#{person}'s perspective is always refreshing.",
-        "#{person} is more helpful than they realize.",
+        "#{person} is more helpful than #{pronoun} realize.",
         "#{person} is all that and a bag of chips",
         "If cartoon bluebirds were real, a bunch of them would be sitting on #{person}'s shoulders, singing, right now.",
         "#{person} is a great listener",

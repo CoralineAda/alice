@@ -85,7 +85,8 @@ module Handlers
     end
 
     def say_something_nice
-      message.response = Util::Randomizer.kindness(message.sender_nick)
+      user = ::User.from(message.sender_nick)
+      message.response = Util::Randomizer.kindness(message.sender_nick, user.pronoun_primary)
     end
 
     def youre_welcome
