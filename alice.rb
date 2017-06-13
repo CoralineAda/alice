@@ -15,7 +15,7 @@ require_all 'alice'
 
 config = {
   'channel'          => '#main,#mudroom',
-  'name'             => 'alice',
+  'name'             => ENV['BOT_NAME'],
   'incoming_webhook' => ENV['INCOMING_WEBHOOK'],
   'outgoing_token'   => ENV['SLACK_API_TOKEN']
 }
