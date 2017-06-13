@@ -13,3 +13,4 @@ alice.log
 user_setup.rb
 tmp/*
 production.bak
+google_language_api.json
