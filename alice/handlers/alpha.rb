@@ -24,6 +24,7 @@ module Handlers
     end
 
     def declarative_index(phrase)
+      phrase = phrase.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
       return 500 if phrase.include?("?")
       (phrase =~ ::Grammar::LanguageHelper::DECLARATIVE_DETECTOR) || 1000
     end
