@@ -20,7 +20,7 @@ module Parser
     def answer
       return unless enabled?
       return unless result_pod = response.find{|pod| pod.title == "Result"}
-      answer = result_pod.subpods[0].plaintext.gsub("\n", " ")
+      answer = result_pod.subpods[0].plaintext.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').gsub("\n", " ")
       Alice::Util::Logger.info "*** Parser::Alpha: Answered \"#{self.question}\" with #{answer}"
       return answer
     rescue Exception => e
