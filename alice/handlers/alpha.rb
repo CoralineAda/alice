@@ -14,7 +14,7 @@ module Handlers
       if result = Parser::Alpha.new(sentence).answer
         result
       else
-        sorted_answers = answers.sort{|a,b| declarative_index(a) <=> declarative_index(b)}
+        sorted_answers = answers.sort{|a,b| declarative_index(a) <=> declarative_index(b)}.map{|a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
         sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
       end
     end
@@ -24,7 +24,6 @@ module Handlers
     end
 
     def declarative_index(phrase)
-      phrase = phrase.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
       return 500 if phrase.include?("?")
       (phrase =~ ::Grammar::LanguageHelper::DECLARATIVE_DETECTOR) || 1000
     end
