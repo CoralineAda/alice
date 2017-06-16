@@ -39,6 +39,10 @@ module Grammar
       tokens.select{|token| Grammar::LanguageHelper::INTERROGATIVES.include? token}.map(&:text)
     end
 
+    def nominative_pronouns
+      tokens.select{|token| token.part_of_speech.tag == :PRON && token.part_of_speech.case == :NOMINATIVE}.map(&:text)
+    end
+
     def nouns
       tokens.select{|token| token.part_of_speech.tag == :NOUN || token.label == :ATTR || token.label == :POBJ || token.part_of_speech.tag == :X}.map(&:text)
     end

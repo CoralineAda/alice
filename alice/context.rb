@@ -11,8 +11,6 @@ class Context
   field :spoken, type: Array, default: []
   field :created_at, type: DateTime
 
-#  has_many :messages, class_name: "Message::Persisted"
-
   AMBIGUOUS = "That may refer to several different things. Can you clarify?"
   MINIMUM_FACT_LENGTH = 15
   TTL = 5
@@ -90,7 +88,7 @@ class Context
       sanitized = Grammar::LanguageHelper.sentences_from(fetch_content_from_sources)
         .reject{|s| s.include?("may refer to") || s.include?("disambiguation") }
         .reject{|s| s.size < (self.corpus_from_user ? self.topic.length + 1 : MINIMUM_FACT_LENGTH)}
-        .map{|s| s.gsub(/^\**/, "") }
+        .map{|s| Grammar::LanguageHelper.to_third_person(s.gsub(/^\**/, "")) }
         .uniq
       sanitized || []
     rescue Exception => e
@@ -166,7 +164,7 @@ class Context
     self.keywords += begin
       candidates = Grammar::LanguageHelper.probable_nouns_from(corpus.join(" "))
       candidates = candidates.inject(Hash.new(0)) {|h,i| h[i] += 1; h }
-      candidates.select{|k,v| v > 1}.map(&:first)
+      candidates.select{|k,v| v > 1}.map(&:first).uniq
     rescue
       []
     end
@@ -180,6 +178,7 @@ class Context
     return @content if defined?(@content)
     if @content = Parser::User.fetch(topic)
       self.corpus_from_user = true
+#      self.user = User.from(topic)
       self.is_ephemeral = true
       return @content
     end

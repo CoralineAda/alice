@@ -32,7 +32,7 @@
       @command ||= Message::Command.any_in(indicators: pronoun).first
       @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
       @command ||= Message::Command.default
-      @command.subject = subject
+      @command.subject = subject || subject_from_context
       @command.predicate = object || topic
       @command
     end
@@ -69,6 +69,11 @@
 
     def subject
       @subject ||= sentence.nouns.map{ |noun| ::User.from(noun) }.compact.last
+    end
+
+    def subject_from_context
+      return unless context = Context.current
+      @subject_from_context ||= sentence.nominative_pronouns.any? ? Context.current.topic : nil
     end
 
     def object

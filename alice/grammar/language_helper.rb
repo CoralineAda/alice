@@ -27,7 +27,7 @@ module Grammar
       "was",
       "wrote",
       "do",
-      "does"      
+      "does"
     ]
 
     RELATION_VERBS = [
@@ -205,6 +205,13 @@ module Grammar
       candidates = candidates.reject{|c| PREPOSITIONS.include?(c.downcase)}
       candidates = candidates.map{|candidate| candidate.gsub(/[^a-zA-Z0-9]/x, " ")}.compact
       candidates = candidates.map(&:split).flatten.compact.map(&:downcase)
+    end
+
+    def self.to_third_person(text)
+      text.gsub("I ", "they ")
+          .gsub("am ", "are ")
+          .gsub("have ", "has ")
+          .gsub("my ", "their ")
     end
 
   end
