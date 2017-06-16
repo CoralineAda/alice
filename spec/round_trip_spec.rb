@@ -34,9 +34,9 @@ describe "Message Round Trip" do
   let(:youre_welcome_command) {
     Message::Command.new(
       name: "youre_welcome",
-      verbs: ["thank", "thanks"],
+      verbs: [],
       stop_words: [],
-      indicators: [],
+      indicators: ["thank", "thanks"],
       handler_class: "Handlers::Emotes",
       handler_method: "youre_welcome",
       response_kind: "message"
