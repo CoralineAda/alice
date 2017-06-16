@@ -10,7 +10,7 @@ module Handlers
       sanitized_property = property.to_s.gsub("_", " ")
       if result
         message.response = result ? "#{result}." : "no."
-      elsif subject = parser.subject
+      elsif subject
         message.response = subject.bio.formatted
       else
         message.response = "#{message.sender_nick}: #{response}"
@@ -22,13 +22,13 @@ module Handlers
     private
 
     def result
-      subject.public_send(property)
+      @result ||= subject.public_send(property)
     rescue
-      "not known to me."
+      "not known to me"
     end
 
     def subject
-      parser.subject
+      @subject ||= parser.subject
     end
 
     def property

@@ -12,11 +12,14 @@ module Handlers
     private
 
     def handle_bio(quoted, sender)
-      if subject || (command.predicate != "bio" && !command_string.content.include?("who is"))
+      if subject && (command.predicate != "bio" && !command_string.content =~ /who is/)
         update_bio(command_string.predicate)
       else
         if command_string.content[0] == "!"
           return_bio(sender)
+        elsif subject
+          Context.from(subject.primary_nick).current!
+          return_bio(subject)
         else
           message.response = "I don't know anyone by that name."
         end

@@ -69,6 +69,7 @@
 
     def subject
       @subject ||= sentence.nouns.map{ |noun| ::User.from(noun) }.compact.last
+      @subject ||= ::User.from(subject_from_context)
     end
 
     def subject_from_context
@@ -88,7 +89,7 @@
 
     def property
       return @property if @property
-      return unless thing = subject || object
+      return unless thing = subject || user_from_context || object
       properties = thing.class::PROPERTIES.inject({}) do |hash, property|
         hash[property.to_s] = property.to_s.split("_").reject{ |value| value == "can" }.map{|w| w.gsub("?","")}
         hash

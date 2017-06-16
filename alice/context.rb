@@ -13,7 +13,7 @@ class Context
 
   AMBIGUOUS = "That may refer to several different things. Can you clarify?"
   MINIMUM_FACT_LENGTH = 15
-  TTL = 5
+  TTL = 30
 
   before_save :downcase_topic, :define_corpus, :extract_keywords
   before_create :set_expiry
@@ -59,7 +59,7 @@ class Context
 
   def self.from(*topic)
     topic.join(' ') if topic.respond_to?(:join)
-    with_topic_matching(topic) || with_keywords_matching(topic)
+    with_topic_matching(topic) || with_keywords_matching(topic) || new(topic: topic.first)
   end
 
   def ambiguous?

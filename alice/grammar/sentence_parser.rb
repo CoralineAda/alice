@@ -40,7 +40,7 @@ module Grammar
     end
 
     def nominative_pronouns
-      tokens.select{|token| token.part_of_speech.tag == :PRON && token.part_of_speech.case == :NOMINATIVE}.map(&:text)
+      tokens.select{|token| token.part_of_speech.tag == :PRON && token.part_of_speech.case == :NOMINATIVE || token.part_of_speech.case == :GENITIVE}.map(&:text)
     end
 
     def nouns

@@ -65,7 +65,6 @@ module Message
         match[:command].message = message
       elsif match = Parser::Mash.parse(command_string)
         match[:command].message = message
-#        find_or_create_context(match[:topic]) if match[:topic]
       else
         command = find_verb(trigger) if (trigger.include?("++") || trigger.downcase.include?(ENV['BOT_SHORT_NAME'].downcase))
         command.message = message if command
@@ -88,12 +87,6 @@ module Message
       indicator_words = words_from(trigger)
       grams = indicator_words.map{|words| words.join(' ')}
       with_indicators(grams).without_stopwords(indicator_words).last
-    end
-
-    def self.find_or_create_context(topic)
-      context = Context.from(topic) || Context.create(topic: topic)
-      context.current!
-      context
     end
 
     def self.process(message, command=nil)
