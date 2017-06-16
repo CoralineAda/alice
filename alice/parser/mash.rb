@@ -20,9 +20,6 @@
 
     def parse
       return unless has_alice?
-      if new_context_topic = subject ? subject.primary_nick : topic
-        Context.from(new_context_topic).current!
-      end
       command
     end
 
