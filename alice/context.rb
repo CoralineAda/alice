@@ -59,7 +59,7 @@ class Context
 
   def self.from(*topic)
     topic.join(' ') if topic.respond_to?(:join)
-    with_topic_matching(topic) || with_keywords_matching(topic) || new(topic: topic.first)
+    with_topic_matching(topic) || with_keywords_matching(topic) || new(topic: topic.first.dup)
   end
 
   def ambiguous?
@@ -73,6 +73,7 @@ class Context
   end
 
   def current!
+    Context.all.each{|context| context.update_attribute(:is_current, false) }
     update_attributes(is_current: true, expires_at: DateTime.now + TTL.minutes)
   end
 
@@ -178,7 +179,6 @@ class Context
     return @content if defined?(@content)
     if @content = Parser::User.fetch(topic)
       self.corpus_from_user = true
-#      self.user = User.from(topic)
       self.is_ephemeral = true
       return @content
     end

@@ -35,19 +35,12 @@ module Pipeline
 
     def respond
       if response = Pipeline::Commander.process(self.message).response
-#        persist_message
         Pipeline::Mediator.reply_with(response.content)
       end
       message
     end
 
     private
-
-    def persist_message
-      if context = Context.current
-        context.messages.create(Message::Serializer.serialize(message))
-      end
-    end
 
     def track_sender
       return unless self.message.sender_nick

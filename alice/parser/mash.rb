@@ -20,16 +20,15 @@
 
     def parse
       return unless has_alice?
+      if new_context_topic = subject ? subject.primary_nick : topic
+        Context.from(new_context_topic).current!
+      end
       command
     end
 
     def command
-      @command = Message::Command.any_in(verbs: verbs).first
-      @command ||= Message::Command.any_in(verbs: property).first
-      @command ||= Message::Command.any_in(indicators: verbs).first
-      @command ||= Message::Command.any_in(indicators: greeting).first
-      @command ||= Message::Command.any_in(indicators: thanks).first
-      @command ||= Message::Command.any_in(indicators: pronoun).first
+      @command = Message::Command.any_in(verbs: (verbs + [property]).compact).first
+      @command ||= Message::Command.any_in(indicators: (verbs + [greeting] + [thanks] + [pronoun].compact)).first
       @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
       @command ||= Message::Command.default
       @command.subject = subject || subject_from_context
@@ -84,7 +83,11 @@
     end
 
     def topic
-      sentence.nouns.last
+      if preposition = sentence.prepositions.last
+        words[(words.index(preposition)+1)..-1].join(' ')
+      else
+        sentence.nouns.last
+      end
     end
 
     def property

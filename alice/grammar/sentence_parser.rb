@@ -52,7 +52,7 @@ module Grammar
     end
 
     def prepositions
-      tokens.select{|token| token.part_of_speech.tag == :PREP}.map(&:text)
+      tokens.select{|token| token.label == :PREP}.map(&:text)
     end
 
     def pronouns

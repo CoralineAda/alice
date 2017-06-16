@@ -12,7 +12,7 @@ module Handlers
     private
 
     def handle_bio(quoted, sender)
-      if subject && (command.predicate != "bio" && !command_string.content =~ /who is/)
+      if subject && (command && command.predicate != "bio" && command_string.content !~ /^who is/)
         update_bio(command_string.predicate)
       else
         if command_string.content[0] == "!"
