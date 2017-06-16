@@ -22,7 +22,14 @@ module Handlers
     private
 
     def result
-      @result ||= subject.public_send(property)
+      @result ||= begin
+        result = subject.public_send(property)
+        if result == false
+          "no"
+        elsif result == true
+          "yes"
+        end
+      end
     rescue
       "not known to me"
     end
