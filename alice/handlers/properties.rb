@@ -7,9 +7,10 @@ module Handlers
 
     def get_property
       parser.parse
-      sanitized_property = property.to_s.gsub("_", " ")
-      if result
-        message.response = result ? "#{result}." : "no."
+      sanitized_property = property.to_s.gsub("_", " ").split.last
+      response = result(sanitized_property)
+      if response.present?
+        message.response = response ? "#{response}." : "no."
       elsif subject
         message.response = subject.bio.formatted
       else
@@ -21,17 +22,16 @@ module Handlers
 
     private
 
-    def result
-      @result ||= begin
-        result = subject.public_send(property)
-        if result == false
-          "no"
-        elsif result == true
-          "yes"
-        end
+    def result(property)
+      call_result = subject.public_send(property)
+      if call_result == false
+        "no"
+      elsif call_result == true
+        "yes"
       end
+      call_result
     rescue
-      "not known to me"
+      ""
     end
 
     def subject

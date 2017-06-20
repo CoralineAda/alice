@@ -20,7 +20,7 @@ module Parser
     def self.string_from_user_info(user, method_name)
       info = user.public_send(method_name)
       is_boolean = /\?/.match(method_name)
-      return(info) unless is_boolean
+      return(info.to_s) unless is_boolean
       info ? positive_response_for(user, method_name) : negative_response_for(user, method_name)
     rescue
       ""

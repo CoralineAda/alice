@@ -53,6 +53,7 @@ class User
     :twitter_handle,
     :check_score,
     :check_points,
+    :points,
     :formatted_twitter_handle
   ]
 
@@ -243,10 +244,6 @@ class User
 
   def is_online?
     true
-  end
-
-  def is_op?
-    (Pipeline::Mediator.op_nicks & self.nicks).any?
   end
 
   def formatted_bio

@@ -8,7 +8,7 @@ describe "Message Round Trip" do
   let(:trigger_2)      { "drain power from superman" }
   let(:trigger_3)      { "#{ENV['BOT_SHORT_NAME']}, steal power from superman" }
   let(:emitted_struct) { Struct.new(:user) }
-  let(:sender)         { User.new(primary_nick: "Lydia") }
+  let(:sender)         { User.new(primary_nick: "Lydia", points: 2) }
   let(:emitted)        { emitted_struct.new(sender) }
   let(:steal_command)   { Message::Command.new(
                             name: 'steal',
@@ -42,6 +42,19 @@ describe "Message Round Trip" do
       response_kind: "message"
     )
   }
+
+  let(:attributes_command) {
+    Message::Command.new(
+      name: "attributes",
+      verbs: ["points"],
+      stop_words: [],
+      indicators: [],
+      handler_class: "Handlers::Properties",
+      handler_method: "get_property",
+      response_kind: "message"
+    )
+  }
+
   before do
     allow_any_instance_of(Pipeline::Processor).to receive(:track_sender) { true }
     allow(Util::Randomizer).to receive(:greeting) { "Hi there, Lydia." }

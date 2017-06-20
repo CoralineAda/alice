@@ -36,7 +36,8 @@ describe Context do
 
       @user = User.find_or_create_by(
         primary_nick: "nickcave",
-        twitter_handle: "@nickcave"
+        twitter_handle: "@nickcave",
+        points: 2
       )
       Bio.create(user: @user, text: "is a musician, songwriter, author, screenwriter, composer and occasional film actor.")
       @user.factoids.find_or_create_by(user_id: @user.id, text: "Nick Cave was born on September 22, 1957.")
@@ -59,6 +60,7 @@ describe Context do
       it "including attributes" do
         expect(@context.corpus.include?("Nickcave is on Twitter as @nickcave")).to be_truthy
       end
+
     end
 
   end

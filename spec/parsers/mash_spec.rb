@@ -17,9 +17,9 @@ describe "Parser::Mash" do
     )
     Message::Command.find_or_create_by(
       name: "properties",
-      verbs: ["can_brew?", "can_forge?", "last_seen", "can_play_game?", "current_nick", "dazed?", "disoriented?", "drunk?", "is_online?", "is_op?", "bio", "proper_name", "twitter_handle", "twitter_url", "points", "check_points", "check_score"],
+      verbs: ["can_brew?", "can_forge?", "last_seen", "can_play_game?", "current_nick", "dazed?", "disoriented?", "drunk?", "is_online?", "bio", "proper_name", "twitter_handle", "twitter_url", "points", "check_points", "check_score"],
       stop_words: [],
-      indicators: ["can_brew?", "can_forge?", "last_seen", "can_play_game?", "current_nick", "dazed?", "disoriented?", "drunk?", "is_online?", "is_op?", "bio", "proper_name", "twitter_handle", "twitter_url"],
+      indicators: ["can_brew?", "can_forge?", "last_seen", "can_play_game?", "current_nick", "dazed?", "disoriented?", "drunk?", "is_online?", "bio", "proper_name", "twitter_handle", "twitter_url"],
       handler_class: "Handlers::Properties",
       handler_method: "get_property"
     )
