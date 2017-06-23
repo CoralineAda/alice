@@ -81,6 +81,7 @@
 
     def topic
       if preposition = sentence.prepositions.last
+        return if preposition == "@"
         words[(words.index(preposition)+1)..-1].join(' ')
       else
         sentence.nouns.last
