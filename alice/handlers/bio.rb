@@ -36,7 +36,7 @@ module Handlers
     end
 
     def subject
-      ::User.from(command_string.components.join(' '))
+      ::User.from(command_string.components.join(' ')) || message.sender
     end
 
     def update_bio(quoted)
