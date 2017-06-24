@@ -12,7 +12,6 @@ module Handlers
     private
 
     def handle_bio(quoted, sender)
-#      require 'pry'; binding.pry
       if command_string.verb == "bio"
         if command_string.predicate.present?
           message.sender.update_bio(command_string.predicate)
