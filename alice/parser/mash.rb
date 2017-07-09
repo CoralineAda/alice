@@ -38,7 +38,7 @@
     end
 
     def has_alice?
-      command_string.content =~ /\b#{ENV['BOT_NAME']}\,/i
+      command_string.content =~ /\b#{ENV['BOT_NAME']}\b/i
     end
 
     def is_query?

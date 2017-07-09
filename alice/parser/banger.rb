@@ -49,7 +49,7 @@ module Parser
     end
 
     def parse!
-      bang && verb && (known_verb? || person || object) && command
+      bang? && verb? && (known_verb? || person || object) && command
     rescue
       command || false
     ensure
