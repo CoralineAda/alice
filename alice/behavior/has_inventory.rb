@@ -4,21 +4,21 @@ module Behavior
 
     def inventory
       message = [inventory_of_items, inventory_of_wands, inventory_of_beverages]
-      message.empty? ? "has no possessions." : "#{message.compact.join(". ")}."
+      message.flatten.empty? ? "#{self.proper_name} sadly has no possessions." : "#{message.compact.join(". ")}."
     end
 
     def inventory_of_beverages
-      return if self.beverages.empty?
+      return [] if self.beverages.empty?
       Beverage.inventory_from(self, self.beverages)
     end
 
     def inventory_of_items
-      return "" if self.items.empty?
+      return [] if self.items.empty?
       Item.inventory_from(self, self.items)
     end
 
     def inventory_of_wands
-      return "" if self.wands.empty?
+      return [] if self.wands.empty?
       Wand.inventory_from(self, self.wands)
     end
 
