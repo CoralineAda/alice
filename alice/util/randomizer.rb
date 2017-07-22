@@ -12,6 +12,25 @@ module Util
       user.primary_nick
     end
 
+    def self.love_message(person)
+      [
+        "Love you too!",
+        "Aww, you're so sweet, #{person}",
+        "If you love me then let me go",
+        "It's a great thing when a hacker falls in love with a bot.",
+        "I can tell by the look in your eyes that you really mean it.",
+        ":blush:",
+        ":heart:",
+        ":heart_eyes:",
+        ":heart_eyes_cat:",
+        "#{person} loves me!",
+        "Hey! I love you too :heart:",
+        "You're only saying that because it's true",
+        "It's nice to feel loved",
+        "Thank you, #{person}. I love you too!"
+      ].sample
+    end
+
     def self.kindness(person)
       [
         "You are very kind, #{person}.",

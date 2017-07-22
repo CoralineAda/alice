@@ -9,6 +9,10 @@ module Handlers
       message.response = Util::Randomizer.spell_effect(message.sender_nick, command.predicate)
     end
 
+    def love
+      message.response = Util::Randomizer.love_message(message.sender_nick)
+    end
+
     def dance
       response = "Looks like you're dancing with yourself there."
       if person = ::User.from(command.subject)
