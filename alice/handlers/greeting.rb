@@ -13,7 +13,7 @@ module Handlers
 
     def subject
       if command.subject.is_a?(::User)
-        !command.subject.is_bot? && command.user || message.sender
+        !command.subject.is_bot? && command.subject || message.sender
       else
         command.subject != ENV['BOT_NAME'] && ::User.from(command.subject) || message.sender
       end
