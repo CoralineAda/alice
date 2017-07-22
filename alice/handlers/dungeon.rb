@@ -25,6 +25,7 @@ module Handlers
       Alice::Util::Logger.info "*** Look subject is \"#{command.subject}\""
       response = look_in_direction(looking_direction) if looking_direction.present?
       response = describe_setting(subject) if Place.current.description =~ /#{subject}/i
+      response ||= subject.describe if subject.is_a? User
       response ||= extant_object(subject).try(:describe)
       response ||= extant_object(command_string.fragment).try(:describe)
       response ||= extant_object(command.predicate).try(:describe)

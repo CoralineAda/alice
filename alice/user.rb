@@ -67,6 +67,7 @@ class User
 
   def self.from(string)
     return unless string.present?
+    string = string.primary_nick if string.is_a? User
     names = Grammar::NgramFactory.new(string).omnigrams
     names = names.map{|g| g.join ' '} << string
     names = names.uniq - Grammar::LanguageHelper::IDENTIFIERS

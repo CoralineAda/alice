@@ -4,34 +4,6 @@ module Parser
 
     attr_accessor :command_string
 
-    include AASM
-
-    aasm do
-      state :unparsed, initial: true
-      state :bang
-      state :verb
-      state :preposition
-      state :person
-      state :object
-
-      event :bang do
-        transitions :from => :unparsed, :to => :bang, :guard => :has_bang?
-      end
-
-      event :verb do
-        transitions :from => :bang, :to => :verb, :guard => :known_verb?
-      end
-
-      event :person do
-        transitions :from => :verb, :to => :person, :guard => :known_person?
-      end
-
-      event :object do
-        transitions :from => :verb, :to => :object, :guard => :known_object?
-      end
-
-    end
-
     def self.parse(command_string)
       parser = new(command_string)
       command = parser.parse!
@@ -49,13 +21,12 @@ module Parser
     end
 
     def parse!
-      bang? && verb? && (known_verb? || person || object) && command
-    rescue
-      command || false
-    ensure
-      Alice::Util::Logger.info "*** Final banger state is  \"#{aasm.current_state}\" "
-      Alice::Util::Logger.info "*** Command state is  \"#{command && command.name}\" "
-      Alice::Util::Logger.info "*** Command is  \"#{command.inspect}\" "
+      if has_bang? && (known_verb? || person || object) && command
+        Alice::Util::Logger.info "*** Command is  \"#{command.inspect}\" "
+        return command
+      else
+        return false
+      end
     end
 
     def has_bang?
