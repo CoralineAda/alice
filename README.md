@@ -32,5 +32,5 @@ If you're using Heroku, be sure to copy the relevant values from the `.env` file
 
 ```
 message = Message::Message.new("coraline", "Alice, who is @alva?")
-::Message::Command.process(message)
+Message::Command.process(message)
 ```

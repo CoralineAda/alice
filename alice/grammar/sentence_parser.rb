@@ -31,6 +31,10 @@ module Grammar
       result
     end
 
+    def adjectives
+      tokens.select{|token| token.part_of_speech.tag == :ADJ}.map(&:text)
+    end
+
     def adverbs
       tokens.select{|token| token.part_of_speech.tag == :ADVMOD}.map(&:text)
     end

@@ -12,6 +12,16 @@ module Util
       user.primary_nick
     end
 
+    def self.quirky_response
+      [
+        "Admit it: that's what you love about me.",
+        "You say 'quirky', I say 'free-spirited'.",
+        "Don't hate.",
+        "Hey now!",
+        "I think you mean 'Alice really has personality'."
+      ].sample
+    end
+
     def self.love_message(person)
       [
         "Love you too!",

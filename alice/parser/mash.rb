@@ -25,7 +25,7 @@
 
     def command
       @command = Message::Command.any_in(verbs: (verbs + [property]).compact).first
-      @command ||= Message::Command.any_in(indicators: (verbs + [greeting] + [thanks] + [pronoun].compact)).first
+      @command ||= Message::Command.any_in(indicators: (verbs + adjectives + [greeting] + [thanks] + [pronoun].compact)).first
       @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
       @command ||= Message::Command.default
       @command.subject = subject || subject_from_context
@@ -47,6 +47,10 @@
 
     def greeting
       (Grammar::LanguageHelper::GREETINGS & words).any? && "hi"
+    end
+
+    def adjectives
+      sentence.adjectives
     end
 
     def thanks

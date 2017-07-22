@@ -13,6 +13,10 @@ module Handlers
       message.response = Util::Randomizer.love_message(message.sender_nick)
     end
 
+    def quirky
+      message.response = Util::Randomizer.quirky_response
+    end
+
     def dance
       response = "Looks like you're dancing with yourself there."
       if person = ::User.from(command.subject)
