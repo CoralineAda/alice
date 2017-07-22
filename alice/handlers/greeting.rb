@@ -12,9 +12,11 @@ module Handlers
     private
 
     def subject
-      return command.subject if command.subject.is_a? ::User
-      Alice::Util::Logger.info "*** command.subject = #{command.subject}"
-      ::User.from(command.subject) || message.sender
+      if command.subject.is_a?(::User)
+        !command.subject.is_bot? && command.user || message.sender
+      else
+        command.subject != ENV['BOT_NAME'] && ::User.from(command.subject) || message.sender
+      end
     end
 
   end
