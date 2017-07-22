@@ -39,7 +39,7 @@ module Grammar
       "holds"
     ]
 
-    GREETINGS = %w{hi hello evening morning hii hiii hiiii guten ohai hai ahoy yo heya}
+    GREETINGS = %w{hi hello good+evening good+morning good+night good+afternoon hii hiii hiiii guten ohai hai ahoy yo heya}
 
     ACTION_VERBS = [
       "say",

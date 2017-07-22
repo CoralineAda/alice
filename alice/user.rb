@@ -43,7 +43,6 @@ class User
   PROPERTIES = [
     :can_brew?,
     :can_forge?,
-    :last_seen,
     :can_play_games?,
     :dazed?,
     :disoriented?,
