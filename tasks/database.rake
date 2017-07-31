@@ -1,5 +1,23 @@
 namespace :database do
 
+  desc "Dump all data as json"
+  task :dump_to_json do
+    Actor.all.each{ |actor| p actor.to_json }
+    Beverage.all.each{ |actor| p actor.to_json }
+    Bio.all.each{ |actor| p actor.to_json }
+    Catchphrase.all.each{ |actor| p actor.to_json }
+    Context.all.each{ |actor| p actor.to_json }
+    Door.all.each{ |actor| p actor.to_json }
+    Factoid.all.each{ |actor| p actor.to_json }
+    Item.all.each{ |actor| p actor.to_json }
+    Message::Command.all.each{ |actor| p actor.to_json }
+    OH.all.each{ |actor| p actor.to_json }
+    Place.all.each{ |actor| p actor.to_json }
+    Place.all.each{ |actor| p actor.to_json }
+    User.all.each{ |actor| p actor.to_json }
+    Wand.all.each{ |actor| p actor.to_json }
+  end
+
   desc "Copy production database to local"
   task :sync_to_local do
     system "mongodump -h #{ENV['DB_HOST']} -d alicebot -u #{ENV['DB_USER']} -p #{ENV['DB_PASS']} -o db/backups/"

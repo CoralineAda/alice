@@ -295,7 +295,7 @@ class User
   end
 
   def pronouns
-    "Preferred pronouns: #{self.pronoun_primary}/#{pronoun_objective}/#{pronoun_possessive}/#{pronoun_predicate}. "
+    "Pronouns: #{self.pronoun_primary}/#{pronoun_objective}/#{pronoun_possessive}/#{pronoun_predicate}. "
   end
 
   def name
