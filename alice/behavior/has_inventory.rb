@@ -3,8 +3,8 @@ module Behavior
   module HasInventory
 
     def inventory
-      message = [inventory_of_items, inventory_of_wands, inventory_of_beverages]
-      message.flatten.empty? ? "#{self.proper_name} sadly has no possessions." : "#{message.compact.join(". ")}."
+      message = [inventory_of_items, inventory_of_wands, inventory_of_beverages].flatten.compact
+      message.empty? ? "#{self.proper_name} sadly has no possessions." : "#{message.compact.join(". ")}."
     end
 
     def inventory_of_beverages
