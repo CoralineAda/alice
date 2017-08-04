@@ -66,9 +66,7 @@ module Message
       elsif match = Parser::Mash.parse(command_string)
         match[:command].message = message
       else
-        command = find_verb(trigger) if (trigger.include?("++") || trigger.downcase.include?(ENV['BOT_SHORT_NAME'].downcase))
-        command.message = message if command
-        match = { command: command || default }
+        match = { command: default }
       end
       Alice::Util::Logger.info "*** Executing #{match[:command].name} with \"#{trigger}\" with context #{Context.current && Context.current.topic || "none"} ***"
       match

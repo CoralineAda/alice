@@ -14,12 +14,13 @@
 
     def initialize(command_string)
       @command_string = command_string
-      @to_parse = command_string.content.downcase.gsub(/[\?\,\!]+/, '')
+      @to_parse = command_string.content.downcase#.gsub(/[\?\,\!]+/, '')
       @words = to_parse.split(' ')
     end
 
     def parse
       return unless has_alice?
+      return if self.words.find{|word| word =~ /^\!/}
       command
     end
 
