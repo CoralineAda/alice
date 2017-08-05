@@ -67,5 +67,7 @@ post '/' do
 end
 
 get "/map" do
-  "heya"
+  content_type = "image/svg+xml"
+  headers 'Content-Type' => "image/svg+xml"
+  Util::Mapper.new.map
 end

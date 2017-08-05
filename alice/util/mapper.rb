@@ -2,21 +2,11 @@ module Util
 
   class Mapper
 
-    def create
+    def map
       content = ::Place.all.map do |place|
         room(place.x, place.y, place.is_current, place.describe, place.exits)
       end
-      write_file(content)
-    end
-
-    def path_to_file
-      "/var/www/images/map.svg"
-    end
-
-    def write_file(content)
-      File.open(path_to_file, "w+") do |file|
-        file.puts document(content)
-      end
+      content
     end
 
     def room(x, y, is_current, desc, exits=[])
