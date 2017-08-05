@@ -88,12 +88,11 @@ class Place
   end
 
   def self.random_description
-    description = [
+    [
       Util::Randomizer.room_adjective,
       Util::Randomizer.room_type,
       Util::Randomizer.room_description
-    ].join(' ') + "."
-    description
+    ].join(' ')
   end
 
   def self.set_current_room(room)

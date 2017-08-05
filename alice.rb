@@ -69,5 +69,5 @@ end
 get "/map" do
   content_type = "image/svg+xml"
   headers 'Content-Type' => "image/svg+xml"
-  Util::Mapper.new.map
+  Util::Mapper.map!
 end

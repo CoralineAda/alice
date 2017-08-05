@@ -2,11 +2,40 @@ module Util
 
   class Mapper
 
-    def map
-      content = ::Place.all.map do |place|
-        room(place.x, place.y, place.is_current, place.describe, place.exits)
+    def self.map!
+      mapper = new
+      content = []
+      ::Place.includes(:actors, :beverages, :items).each do |place|
+        content << mapper.room(place.x, place.y, place.is_current, place.describe, place.exits)
       end
-      content
+      mapper.document(content.join('\r'))
+    end
+
+    # def path_to_file
+    #   "/Users/coraline/Documents/projects/alice/map.svg"
+    # end
+    #
+    # def write_file(content)
+    #   File.open(path_to_file, "w+") do |file|
+    #     file.puts document(content)
+    #   end
+    # end
+
+    def document(content)
+      lines = []
+      lines << %{<?xml version="1.0" standalone="no"?>}
+      lines << %{<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">}
+      lines << %{<svg width="#{width}" height="#{height}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">}
+      lines << %{<defs>}
+      lines << %{<filter color-interpolation-filters='sRGB' id='filter3001'>}
+      lines << %{<feTurbulence type='fractalNoise' baseFrequency='100 .85' numOctaves='1'/>}
+      lines << %{</filter>}
+      lines << %{</defs>}
+      lines << %{<rect height='200%' width='200%' style='filter:url(#filter3001)' />}
+      lines << %{<rect height='200%' width='200%' style='fill:#c4c452;fill-opacity:0.25;'/>}
+      lines << content
+      lines << %{</svg>}
+      lines.join("\r\n")
     end
 
     def room(x, y, is_current, desc, exits=[])
@@ -57,23 +86,6 @@ module Util
     def width
       calculated = (Place.min(:x).abs + Place.max(:x).abs) * 100 + 250
       calculated > 100 ? calculated : 100
-    end
-
-    def document(content)
-      lines = []
-      lines << %{<?xml version="1.0" standalone="no"?>}
-      lines << %{<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">}
-      lines << %{<svg width="#{width}" height="#{height}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">}
-      lines << %{<defs>}
-      lines << %{<filter color-interpolation-filters='sRGB' id='filter3001'>}
-      lines << %{<feTurbulence type='fractalNoise' baseFrequency='100 .85' numOctaves='1'/>}
-      lines << %{</filter>}
-      lines << %{</defs>}
-      lines << %{<rect height='200%' width='200%' style='filter:url(#filter3001)' />}
-      lines << %{<rect height='200%' width='200%' style='fill:#c4c452;fill-opacity:0.25;'/>}
-      lines << content
-      lines << %{</svg>}
-      lines.join("\r\n")
     end
 
   end
