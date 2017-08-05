@@ -12,6 +12,18 @@ module Util
       user.primary_nick
     end
 
+    def self.attack
+      [
+        "That's not very nice.",
+        "What kind of dungeon do you think this is?",
+        "You can't just go attacking things willy-nilly!",
+        "Attacking will only put them on the defensive, and you don't really want that, do you?",
+        "Hang on, let me calculate the THAC0",
+        "With that weapon? Yeah, right.",
+        "Why so aggressive?"
+      ].sample
+    end
+
     def self.quirky_response
       [
         "Admit it: that's what you love about me.",
