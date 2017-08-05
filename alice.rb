@@ -65,3 +65,7 @@ post '/' do
     end
   end
 end
+
+get "/map" do
+  "heya"
+end
