@@ -35,7 +35,7 @@ module Handlers
     end
 
     def map
-      message.response = "#{ENV['MAP_URL']}"
+      message.response = "You can find an up-to-date map of the dungeon at #{ENV['MAP_URL']}. Your current location is highlighted in red. Be sure to mouse over the rooms!"
     end
 
     def xyzzy

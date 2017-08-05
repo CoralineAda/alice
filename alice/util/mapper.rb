@@ -11,16 +11,6 @@ module Util
       mapper.document(content.join('\r'))
     end
 
-    # def path_to_file
-    #   "/Users/coraline/Documents/projects/alice/map.svg"
-    # end
-    #
-    # def write_file(content)
-    #   File.open(path_to_file, "w+") do |file|
-    #     file.puts document(content)
-    #   end
-    # end
-
     def document(content)
       lines = []
       lines << %{<?xml version="1.0" standalone="no"?>}
