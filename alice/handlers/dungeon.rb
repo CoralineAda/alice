@@ -54,7 +54,7 @@ module Handlers
         response << reset_maze
         message.response = response
       else
-        message.response = "That's not very nice."
+        message.response = "That's not very nice. What kind of dungeon do you think this is?"
       end
     end
 
