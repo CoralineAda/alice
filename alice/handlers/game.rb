@@ -8,7 +8,7 @@ module Handlers
     def number_wang
       return unless message.sender.can_play_games?
       response = ""
-      if Util::Randomizer.one_chance_in(24)
+      if Util::Randomizer.one_chance_in(16)
         3.times{message.sender.score_points}
         response << "That's the Number Wang triple bonus! "
         response << "The points go to #{message.sender_nick}. "
