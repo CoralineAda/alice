@@ -190,7 +190,14 @@ class Context
   end
 
   def is_was_sort_value(element)
-    (position_of("is", element) || position_of("was", element) || 100) - 100
+    (
+      position_of("is", element) ||
+      position_of("was", element) ||
+      position_of("are", element) ||
+      position_of("were", element) ||
+      position_of("be", element) ||
+      100
+    ) - 100
   end
 
   def near_match(subject, sentence)
