@@ -92,11 +92,10 @@ class Context
         .map{|s| Grammar::LanguageHelper.to_third_person(s.gsub(/^\**/, "")) }
         .uniq
       sanitized || []
-    rescue Exception => e
-      Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
-      Alice::Util::Logger.info e.backtrace
-    ensure
-      []
+    # rescue Exception => e
+    #   Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
+    #   Alice::Util::Logger.info e.backtrace
+    #   []
     end
   end
 
@@ -163,9 +162,10 @@ class Context
 
   def extract_keywords
     self.keywords += begin
-      candidates = Grammar::LanguageHelper.probable_nouns_from(corpus.join(" "))
+      parsed_corpus = Grammar::SentenceParser.parse(corpus.join(' '))
+      candidates = parsed_corpus.nouns + parsed_corpus.adjectives
       candidates = candidates.inject(Hash.new(0)) {|h,i| h[i] += 1; h }
-      candidates.select{|k,v| v > 1}.map(&:first).uniq
+      candidates.select{|k,v| v > 1}.map(&:first).map(&:downcase).uniq
     rescue
       []
     end
@@ -183,9 +183,10 @@ class Context
       return @content
     end
     @content ||= Parser::Wikipedia.fetch_all(topic)
-    @content << Parser::Google.fetch(topic).to_s
+    @content << Parser::Google.fetch_all("facts about #{topic}")
     @content << Parser::Alpha.fetch(topic).to_s
-    @content = @content.map{ |fact| Sanitize.clean(fact).strip }.join('. ').uniq
+    @content = @content.flatten.map{ |fact| Sanitize.clean(fact).strip }.uniq
+    @content = @content.reject{ |fact| fact =~ /click/i }.join(' ').gsub("\n", "")
   end
 
   def is_was_sort_value(element)

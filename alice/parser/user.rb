@@ -9,7 +9,7 @@ module Parser
         return unless content.any?
         content.flatten.join('. ').gsub('.. ', '. ')
       else
-        ""
+        nil
       end
     end
 

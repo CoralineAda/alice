@@ -9,6 +9,10 @@ module Parser
       new(topic).answer
     end
 
+    def self.fetch_all(topic)
+      new(topic).all_answers
+    end
+
     def initialize(question)
       @question = question.gsub("+", "plus").gsub(" ", "+")
     end
@@ -49,7 +53,8 @@ module Parser
     end
 
     def simplified_question
-      Grammar::LanguageHelper.probable_nouns_from(question)
+      parsed_question = Grammar::SentenceParser.parse(question)
+      parsed_question.nouns.join(' ')
     end
 
     def declarative_index(answer)
