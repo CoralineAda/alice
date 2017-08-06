@@ -28,10 +28,8 @@ module Behavior
 
     def converse
       context = Context.current
-      context ||= Context.all.sample
-      to_speak = context.describe
-      converse if to_speak == ""
-      to_speak
+      context = Context.all.sample
+      context && context.describe
     end
 
     def seed_text
@@ -48,16 +46,8 @@ module Behavior
       prepare && dictionary.generate_1_sentence
     end
 
-    def random_message
-      self.catchphrases.present? && self.catchphrases.sample.text || speak
-    end
-
     def speak
-      case rand(5)
-      when 0; random_message
-      when 1; generated_message
-      when 2..4; converse
-      end
+      converse || generated_message
     end
 
   end
