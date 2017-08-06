@@ -51,7 +51,7 @@ module Message
       return unless self.handler_class
       return unless meets_odds?
       if needs_cooldown?
-        self.message.response = ""
+        self.message.response = Util::Randomizer.too_soon
         return self.message
       end
       self.update_attribute(:last_said_at, Time.now)

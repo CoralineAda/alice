@@ -24,6 +24,18 @@ module Util
       ].sample
     end
 
+    def self.too_soon
+      [
+        "Too soon, too soon!",
+        "Not so fast there cowboy!",
+        "You need to wait awhile before trying that again.",
+        "Cool your heels for a bit first.",
+        "You've reached your limit for that for the time being.",
+        "Sorry Dave, I can't let you do that.",
+        "Try again in a little while."
+      ].sample
+    end
+
     def self.quirky_response
       [
         "Admit it: that's what you love about me.",
