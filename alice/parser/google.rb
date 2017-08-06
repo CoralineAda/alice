@@ -54,7 +54,7 @@ module Parser
 
     def simplified_question
       parsed_question = Grammar::SentenceParser.parse(question)
-      parsed_question.nouns.join(' ')
+      (parsed_question.nouns + parsed_question.adjectives).join(' ')
     end
 
     def declarative_index(answer)

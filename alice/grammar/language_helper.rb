@@ -27,7 +27,8 @@ module Grammar
       "was",
       "wrote",
       "do",
-      "does"
+      "does",
+      "were"
     ]
 
     RELATION_VERBS = [
@@ -195,17 +196,6 @@ module Grammar
       text = text.split(/[\.\?\!] /)
       text = text.map{|t| t.split(/[\r\n]/)}.flatten
       text = text.map{|t| t.gsub('@@@', '')}
-    end
-
-    def self.probable_nouns_from(text)
-      text = text.to_s
-      re = Regexp.union((PREDICATE_INDICATORS).flatten.map{|w| /\b#{Regexp.escape(w)}\b/i})
-      candidates = text.split(re).map(&:split).flatten
-      candidates = candidates.reject{|c| NOUN_INDICATORS.include?(c.downcase)}
-      candidates = candidates.reject{|c| CONJUNCTIONS.include?(c.downcase)}
-      candidates = candidates.reject{|c| PREPOSITIONS.include?(c.downcase)}
-      candidates = candidates.map{|candidate| candidate.gsub(/[^a-zA-Z0-9]/x, " ")}.compact
-      candidates = candidates.map(&:split).flatten.compact.map(&:downcase)
     end
 
     def self.to_third_person(text)
