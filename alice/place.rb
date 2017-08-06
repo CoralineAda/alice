@@ -47,7 +47,6 @@ class Place
       description: description || random_description,
       is_dark: x == 0 && y == 0 || Util::Randomizer.one_chance_in(5)
     )
-#    Util::Mapper.new.create
     room
   end
 
@@ -241,7 +240,7 @@ class Place
   def place_grue
     return false if self.origin_square?
     return true if has_grue?
-    odds = self.is_dark? ? 7 : 20
+    odds = self.is_dark? ? 4 : 20
     if Util::Randomizer.one_chance_in(odds) && actor = Actor.unplaced.grue
       actor.update_attribute(:place_id, self.id)
     end
