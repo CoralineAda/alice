@@ -86,7 +86,7 @@ module Handlers
     end
 
     def predicate
-      @predicate ||= command.predicate
+      @predicate ||= command.predicate.gsub("@", "")
     end
 
     def set_context_from_subject_or_predicate
