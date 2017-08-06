@@ -13,7 +13,7 @@ module Handlers
       if subject
         message.response = "#{subject.proper_name} says, \"#{subject.speak}\""
       else
-        context = Context.current
+        context = Context.from(command.predicate)
         context ||= Context.with_keywords.sample
         if context
           message.response = context.describe
@@ -25,7 +25,7 @@ module Handlers
 
     def subject
       Alice::Util::Logger.info "*** Command subject is #{command.subject}"
-      @actor ||= command.subject unless command.subject.is_bot?
+      @actor ||= ::Actor.from(command.subject.is_a?(User) ? command.subject.primary_nick : command.subject)
     end
 
   end
