@@ -29,8 +29,8 @@
     end
 
     def command
-      @command = Message::Command.any_in(verbs: (verbs + [property]).compact).first
-      @command ||= Message::Command.any_in(indicators: (verbs + adjectives + [greeting] + [thanks] + [pronoun].compact)).first
+      @command = Message::Command.any_in(verbs: (verbs + [property])).not_in(stop_words: self.words).first
+      @command ||= Message::Command.any_in(indicators: (verbs + adjectives + [greeting] + [thanks] + [pronoun].compact)).not_in(stop_words: self.words).first
       @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
       if @command
         @command.subject = subject || subject_from_context
