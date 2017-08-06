@@ -52,9 +52,10 @@ module Behavior
     end
 
     def speak
-      case rand(2)
+      case rand(5)
       when 0; random_message
       when 1; generated_message
+      when > 1; converse
       end
     end
 
