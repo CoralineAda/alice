@@ -53,6 +53,7 @@ class User
     :check_score,
     :check_points,
     :points,
+    :formatted_pronouns,
     :formatted_twitter_handle
   ]
 
@@ -311,6 +312,10 @@ class User
   def formatted_twitter_handle
     return unless self.twitter_handle
     "#{proper_name} is on Twitter as @#{self.twitter_handle.gsub('@','')}. Find #{self.pronoun_objective} at #{twitter_url}"
+  end
+
+  def formatted_pronouns
+    [pronoun_primary, pronoun_objective, pronoun_possessive, pronoun_predicate].join('/')
   end
 
   def twitter_url

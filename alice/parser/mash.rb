@@ -15,7 +15,7 @@
     def initialize(command_string)
       @command_string = command_string
       @to_parse = command_string.content.downcase
-      @words = to_parse.split(' ')
+      @words = to_parse.gsub(/[\?\!]*/, '').split(' ')
     end
 
     def parse
@@ -30,7 +30,7 @@
 
     def command
       @command = Message::Command.any_in(verbs: (verbs + [property])).not_in(stop_words: self.words).first
-      @command ||= Message::Command.any_in(indicators: (verbs + adjectives + [greeting] + [thanks] + [pronoun].compact)).not_in(stop_words: self.words).first
+      @command ||= Message::Command.any_in(indicators: (verbs + adjectives + [property] + [greeting] + [thanks] + [pronoun].compact)).not_in(stop_words: self.words).first
       @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
       if @command
         @command.subject = subject || subject_from_context
@@ -82,7 +82,7 @@
     end
 
     def subject
-      @subject ||= sentence.nouns.map{ |noun| ::User.from(noun) }.compact.last
+      @subject ||= sentence.nouns.reject{ |noun| noun.downcase == ENV['BOT_NAME'].downcase }.map{ |noun| ::User.from(noun) }.compact.last
       @subject ||= ::User.from(subject_from_context)
     end
 
