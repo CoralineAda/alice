@@ -55,7 +55,7 @@ module Behavior
       case rand(5)
       when 0; random_message
       when 1; generated_message
-      when [2..4]; converse
+      when 2..4; converse
       end
     end
 
