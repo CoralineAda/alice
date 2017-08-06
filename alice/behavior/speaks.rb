@@ -29,7 +29,9 @@ module Behavior
     def converse
       context = Context.current
       context ||= Context.all.sample
-      context.describe
+      to_speak = context.describe
+      converse if to_speak == ""
+      to_speak
     end
 
     def seed_text
