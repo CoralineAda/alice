@@ -16,7 +16,7 @@ module Handlers
         context = Context.current
         context ||= Context.with_keywords.sample
         if context
-          message.response = "Hmm. Today's topic is '#{context.topic}'."
+          message.response = context.describe
         end
       end
     end
