@@ -82,7 +82,7 @@ module Handlers
     end
 
     def subject
-      @subject ||= command.subject
+      @subject ||= command.subject unless command.subject.is_bot?
     end
 
     def predicate
@@ -97,12 +97,14 @@ module Handlers
       return unless predicate.present?
       return if (command_string.components & Grammar::LanguageHelper::PRONOUNS).count > 0
       update_context(context_from(predicate.respond_to?(:downcase) && predicate.downcase || predicate.name.downcase))
+      true
     end
 
     def set_context_from_subject
       return unless subject
       return if (command_string.components & Grammar::LanguageHelper::PRONOUNS).any?
       update_context(context_from(subject.respond_to?(:downcase) && subject.downcase || subject.name.downcase))
+      true
     end
 
     def set_response(text)
