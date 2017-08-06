@@ -86,7 +86,8 @@ module Handlers
     end
 
     def predicate
-      @predicate ||= command.predicate.gsub("@", "")
+      @predicate = User.from(command.predicate)
+      @predicate ||= command.predicate
     end
 
     def set_context_from_subject_or_predicate
