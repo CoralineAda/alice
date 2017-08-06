@@ -55,6 +55,10 @@ class Place
     place_to(direction, true)
   end
 
+  def self.at(x,y)
+    where(x: x, y: y).first
+  end
+
   def self.place_to(direction, party_moving=false, create_place=true)
     if direction == 'north'
       y = current.y - 1
@@ -229,6 +233,10 @@ class Place
     update_attributes(is_dark: false)
   end
 
+  def last_room?
+    Door.all.map{ |door| Place.at(door.to_coords[0], door.to_coords[1]) }.select{ |place| place.nil? }.count == 0
+  end
+
   def lights_out
     update_attributes(is_dark: true)
   end
@@ -240,7 +248,8 @@ class Place
   def place_grue
     return false if self.origin_square?
     return true if has_grue?
-    odds = self.is_dark? ? 4 : 20
+    return true if last_room?
+    odds = self.is_dark? ? 7 : 20
     if Util::Randomizer.one_chance_in(odds) && actor = Actor.unplaced.grue
       actor.update_attribute(:place_id, self.id)
     end
