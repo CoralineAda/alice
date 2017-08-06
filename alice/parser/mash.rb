@@ -14,7 +14,7 @@
 
     def initialize(command_string)
       @command_string = command_string
-      @to_parse = command_string.content.downcase#.gsub(/[\?\,\!]+/, '')
+      @to_parse = command_string.content.downcase
       @words = to_parse.split(' ')
     end
 
@@ -105,9 +105,7 @@
     end
 
     def verbs
-      verbs = (Grammar::LanguageHelper::VERBS & sentence.verbs)
-      verbs = ["is"] if sentence.interrogatives.any? || sentence.contains_possessive
-      verbs
+      sentence.verbs
     end
 
   end

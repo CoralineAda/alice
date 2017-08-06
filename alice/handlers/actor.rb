@@ -25,7 +25,7 @@ module Handlers
 
     def subject
       Alice::Util::Logger.info "*** Command subject is #{command.subject}"
-      @actor ||= ::Actor.from(command.subject)
+      @actor ||= command.subject unless command.subject.is_bot?
     end
 
   end
