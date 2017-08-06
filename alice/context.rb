@@ -59,7 +59,10 @@ class Context
 
   def self.from(*topic)
     topic.join(' ') if topic.respond_to?(:join)
-    with_topic_matching(topic) || with_keywords_matching(topic) || new(topic: topic.first.dup)
+    context = with_topic_matching(topic)
+    context ||= with_keywords_matching(topic)
+    context ||= create(topic: topic.first.dup)
+    context
   end
 
   def ambiguous?
@@ -92,10 +95,10 @@ class Context
         .map{|s| Grammar::LanguageHelper.to_third_person(s.gsub(/^\**/, "")) }
         .uniq
       sanitized || []
-    # rescue Exception => e
-    #   Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
-    #   Alice::Util::Logger.info e.backtrace
-    #   []
+    rescue Exception => e
+      Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
+      Alice::Util::Logger.info e.backtrace
+      []
     end
   end
 

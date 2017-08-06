@@ -190,6 +190,7 @@ module Grammar
     end
 
     def self.sentences_from(text)
+      return [] unless text
       text = text.gsub(/(#{WORDS_WITH_PERIODS * '|'})/i, '\1@@@')
       text = text.split(/[\.\?\!] /)
       text = text.map{|t| t.split(/[\r\n]/)}.flatten
@@ -208,10 +209,10 @@ module Grammar
     end
 
     def self.to_third_person(text)
-      text.gsub("I ", "they ")
-          .gsub("am ", "are ")
-          .gsub("have ", "has ")
-          .gsub("my ", "their ")
+      text.gsub(/\wI\w/, "they")
+          .gsub(/\wam\w/, "are")
+          .gsub(/\whave\w/, "has")
+          .gsub(/\wmy\w/, "their ")
     end
 
   end

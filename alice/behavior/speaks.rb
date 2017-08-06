@@ -28,7 +28,6 @@ module Behavior
 
     def converse
       context = Context.current
-      context ||= Context.find_or_create(seed_word)
       context ||= Context.all.sample
       context.describe
     end
