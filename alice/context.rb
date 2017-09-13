@@ -54,7 +54,6 @@ class Context
   end
 
   def self.with_topic_matching(topic)
-    binding.pry
     ngrams = Grammar::NgramFactory.new(topic).omnigrams
     ngrams = ngrams.map{|g| g.join(' ')}
     if exact_match = any_in(topic: ngrams).first
