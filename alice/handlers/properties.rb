@@ -36,7 +36,7 @@ module Handlers
 
     def subject
       @subject ||= parser.subject
-      @subject ||= User.from(Context.current.topic)
+#      @subject ||= User.from(Context.current.topic)
     end
 
     def property

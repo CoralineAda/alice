@@ -6,21 +6,22 @@ class Context
   field :keywords, type: Array, default: []
   field :corpus
   field :expires_at, type: DateTime
+  field :has_user, type: Boolean, default: false
   field :is_current, type: Boolean
   field :is_ephemeral, type: Boolean, default: false
   field :spoken, type: Array, default: []
   field :created_at, type: DateTime
 
-  AMBIGUOUS = "That may refer to several different things. Can you clarify?"
-  MINIMUM_FACT_LENGTH = 15
-  TTL = 30
-
-  before_save :downcase_topic, :define_corpus, :extract_keywords
+  before_save :downcase_topic, :define_corpus, :extract_keywords, :set_user
   before_create :set_expiry
 
   validates_uniqueness_of :topic, case_sensitive: false
 
   store_in collection: "alice_contexts"
+
+  AMBIGUOUS = "That may refer to several different things. Can you clarify?"
+  MINIMUM_FACT_LENGTH = 15
+  TTL = 30
 
   attr_accessor :corpus_from_user
 
@@ -40,6 +41,15 @@ class Context
 
   def self.find_or_create(topic)
     from(topic) || create(topic: topic)
+  end
+
+  def self.with_pronouns_matching(pronouns)
+    candidates = Context.where(:has_user => true).order_by(:created_at => 'desc')
+    candidates.each do |candidate|
+      return candidate if (["they", "them", "their"] & pronouns).any?
+      return candidate if (candidate.context_user.pronouns_enumerated & pronouns).any?
+    end
+    return nil
   end
 
   def self.with_topic_matching(topic)
@@ -67,6 +77,10 @@ class Context
 
   def ambiguous?
     self.corpus && self.corpus.map{|fact| fact.include?("may refer to") || fact.include?("disambiguation") }.any?
+  end
+
+  def context_user
+    @context_user ||= User.from(self.topic)
   end
 
   def corpus_accessor
@@ -229,6 +243,10 @@ class Context
 
   def set_expiry
     self.expires_at = DateTime.now + TTL.minutes
+  end
+
+  def set_user
+    self.has_user = !!User.from(self.topic)
   end
 
   def targeted_fact_candidates(subtopic)

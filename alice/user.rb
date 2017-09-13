@@ -178,35 +178,6 @@ class User
     self.items.count < 10
   end
 
-  def last_seen
-    secs  = (Time.now - self.updated_at).to_i
-    minutes = secs / 60
-    hours = minutes / 60
-    days  = hours / 24
-
-    minutes_string = minutes % 60 == 1 ? "minute" : "minutes"
-    hours_string = hours == 1 ? "hour" : "hours"
-    days_string = days == 1 ? "day" : "days"
-
-    if hours < 1 && minutes < 10
-      string = "just now"
-    elsif hours < 1 && minutes < 60
-      string = "just #{minutes_string} ago"
-    elsif days < 1
-      string = "about #{hours} #{hours_string}"
-      string << " and #{minutes % 60} #{minutes_string}" if (minutes % 60) < 60
-      string << " ago"
-    else
-      string = "about #{days} #{days_string} ago"
-    end
-
-  end
-
-  def play!(points)
-    self.score_point(points)
-    update_attribute(:last_game, DateTime.now)
-  end
-
   def can_play_games?
     self.last_game ||= DateTime.now - 1.day
     self.last_game <= DateTime.now - 13.minutes
@@ -243,20 +214,80 @@ class User
     nicks.include?(nick.downcase)
   end
 
-  def is_online?
-    true
+  def info_factoids
+    factoids.map(&:text)
   end
 
-  def formatted_bio
-    bio && bio.formatted || nil
+  def is_online?
+    true
   end
 
   def filter_applied_date
     self.filter_applied || DateTime.now - 1.day
   end
 
-  def nicks
-    (self.alt_nicks | [self.primary_nick]).map(&:downcase)
+  def formatted_bio
+    bio && bio.formatted || nil
+  end
+
+  def formatted_last_seen
+    "Last seen #{last_seen}."
+  end
+
+  def formatted_pronouns
+    [pronoun_primary, pronoun_objective, pronoun_possessive, pronoun_predicate].join('/')
+  end
+
+  def formatted_twitter_handle
+    return unless self.twitter_handle
+    "#{proper_name} is on Twitter as @#{self.twitter_handle.gsub('@','')}. Find #{self.pronoun_objective} at #{twitter_url}"
+  end
+
+  def last_seen
+    secs  = (Time.now - self.updated_at).to_i
+    minutes = secs / 60
+    hours = minutes / 60
+    days  = hours / 24
+
+    minutes_string = minutes % 60 == 1 ? "minute" : "minutes"
+    hours_string = hours == 1 ? "hour" : "hours"
+    days_string = days == 1 ? "day" : "days"
+
+    if hours < 1 && minutes < 10
+      string = "just now"
+    elsif hours < 1 && minutes < 60
+      string = "just #{minutes_string} ago"
+    elsif days < 1
+      string = "about #{hours} #{hours_string}"
+      string << " and #{minutes % 60} #{minutes_string}" if (minutes % 60) < 60
+      string << " ago"
+    else
+      string = "about #{days} #{days_string} ago"
+    end
+
+  end
+
+  def name
+    self.proper_name
+  end
+
+  def play!(points)
+    self.score_point(points)
+    update_attribute(:last_game, DateTime.now)
+  end
+
+  def pronoun_contraction
+    return "she's" if pronoun_objective == "her"
+    return "he's" if pronoun_objective == "his"
+    "they're"
+  end
+
+  def pronouns
+    "Pronouns: #{self.pronoun_primary}/#{pronoun_objective}/#{pronoun_possessive}/#{pronoun_predicate}. "
+  end
+
+  def pronouns_enumerated
+    [self.pronoun_primary, self.pronoun_objective, self.pronoun_possessive, self.pronoun_predicate, pronoun_contraction]
   end
 
   def proper_name
@@ -279,11 +310,6 @@ class User
     self.factoids.create(text: text)
   end
 
-  def set_twitter_handle(handle)
-    handle = handle.split[0].gsub("@", "")
-    update_attribute(:twitter_handle, handle)
-  end
-
   def set_pronouns(pronouns)
     pronouns = pronouns.split("/")
     Alice::Util::Logger.info "*** New pronouns for #{primary_nick} now #{pronouns}"
@@ -295,27 +321,9 @@ class User
     )
   end
 
-  def pronouns
-    "Pronouns: #{self.pronoun_primary}/#{pronoun_objective}/#{pronoun_possessive}/#{pronoun_predicate}. "
-  end
-
-  def name
-    self.proper_name
-  end
-
-  def pronoun_contraction
-    return "she's" if pronoun_objective == "she"
-    return "he's" if pronoun_objective == "he"
-    "they're"
-  end
-
-  def formatted_twitter_handle
-    return unless self.twitter_handle
-    "#{proper_name} is on Twitter as @#{self.twitter_handle.gsub('@','')}. Find #{self.pronoun_objective} at #{twitter_url}"
-  end
-
-  def formatted_pronouns
-    [pronoun_primary, pronoun_objective, pronoun_possessive, pronoun_predicate].join('/')
+  def set_twitter_handle(handle)
+    handle = handle.split[0].gsub("@", "")
+    update_attribute(:twitter_handle, handle)
   end
 
   def twitter_url
@@ -334,20 +342,11 @@ class User
     update_attribute(:alt_nicks, [self.alt_nicks, new_nick.downcase].flatten.uniq)
   end
 
-  def info_factoids
-    factoids.map(&:text)
-  end
-
-  def formatted_last_seen
-    "Last seen #{last_seen}."
-  end
-
   alias_method :description, :describe
   alias_method :formatted_name, :proper_name
   alias_method :info_formatted_bio, :formatted_bio
   alias_method :info_formatted_last_seen, :formatted_last_seen
 
-# Informational methods
   PROPERTIES.each do |property|
     alias_method property.to_s.sub(/^/, 'info_').to_sym, property
   end

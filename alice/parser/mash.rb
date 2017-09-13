@@ -16,6 +16,10 @@
       @command_string = command_string
       @to_parse = command_string.content.downcase
       @words = to_parse.gsub(/[\?\!]*/, '').split(' ')
+      if subject
+        context = Context.find_or_create(subject.primary_nick)
+        context.current!
+      end
     end
 
     def parse
@@ -32,7 +36,7 @@
       @command = Message::Command.any_in(verbs: (verbs + [property])).not_in(stop_words: self.words).first
       @command ||= Message::Command.any_in(indicators: (verbs + adjectives + [property] + [greeting] + [thanks] + [pronoun].compact)).not_in(stop_words: self.words).first
       @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
-      if @command
+      if @command && @command.subject.nil?
         @command.subject = subject || subject_from_context
         @command.predicate = object || topic
       end
@@ -83,12 +87,12 @@
 
     def subject
       @subject ||= sentence.nouns.reject{ |noun| noun.downcase == ENV['BOT_NAME'].downcase }.map{ |noun| ::User.from(noun) }.compact.last
-      @subject ||= ::User.from(subject_from_context)
     end
 
     def subject_from_context
-      return unless context = Context.current
-      @subject_from_context ||= sentence.nominative_pronouns.any? ? Context.current.topic : nil
+      return unless sentence.nominative_pronouns.any?
+      context = Context.with_pronouns_matching(sentence.nominative_pronouns)
+      @subject_from_context ||= context ? context.context_user : nil
     end
 
     def thanks
