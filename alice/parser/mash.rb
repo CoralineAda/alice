@@ -36,7 +36,7 @@
       @command = Message::Command.any_in(verbs: (verbs + [property])).not_in(stop_words: self.words).first
       @command ||= Message::Command.any_in(indicators: (verbs + adjectives + [property] + [greeting] + [thanks] + [pronoun].compact)).not_in(stop_words: self.words).first
       @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
-      if @command
+      if @command && @command.subject.nil?
         @command.subject = subject || subject_from_context
         @command.predicate = object || topic
       end
@@ -87,13 +87,12 @@
 
     def subject
       @subject ||= sentence.nouns.reject{ |noun| noun.downcase == ENV['BOT_NAME'].downcase }.map{ |noun| ::User.from(noun) }.compact.last
-      @subject ||= ::User.from(subject_from_context)
     end
 
     def subject_from_context
-      return unless context = Context.current
       return unless sentence.nominative_pronouns.any?
-      @subject_from_context ||= Context.with_pronouns_matching(sentence.nominative_pronouns)
+      context = Context.with_pronouns_matching(sentence.nominative_pronouns)
+      @subject_from_context ||= context ? context.context_user : nil
     end
 
     def thanks

@@ -18,7 +18,7 @@ module Handlers
     private
 
     def subject
-      ::User.from(command.subject) || ::User.from(Context.current.topic)
+      ::User.from(command.subject)# || ::User.from(Context.current.topic)
     end
 
   end

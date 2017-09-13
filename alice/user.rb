@@ -31,7 +31,6 @@ class User
   index({ slack_id: 1 },      { unique: true })
   index({ alt_nicks: 1 },     { unique: true })
 
-  has_many :contexts
   has_one  :bio
   has_many :factoids
   has_many :items

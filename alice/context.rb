@@ -6,6 +6,7 @@ class Context
   field :keywords, type: Array, default: []
   field :corpus
   field :expires_at, type: DateTime
+  field :has_user, type: Boolean, default: false
   field :is_current, type: Boolean
   field :is_ephemeral, type: Boolean, default: false
   field :spoken, type: Array, default: []
@@ -15,8 +16,6 @@ class Context
   before_create :set_expiry
 
   validates_uniqueness_of :topic, case_sensitive: false
-
-  belongs_to :user
 
   store_in collection: "alice_contexts"
 
@@ -45,10 +44,10 @@ class Context
   end
 
   def self.with_pronouns_matching(pronouns)
-    candidates = Context.where(:user_id.exists => true).order_by(:created_at => 'desc')
+    candidates = Context.where(:has_user => true).order_by(:created_at => 'desc')
     candidates.each do |candidate|
       return candidate if (["they", "them", "their"] & pronouns).any?
-      return candidate if (candidate.user.pronouns_enumerated & pronouns).any?
+      return candidate if (candidate.context_user.pronouns_enumerated & pronouns).any?
     end
     return nil
   end
@@ -247,8 +246,7 @@ class Context
   end
 
   def set_user
-    return unless user = User.from(self.topic)
-    self.user = user
+    self.has_user = !!User.from(self.topic)
   end
 
   def targeted_fact_candidates(subtopic)
