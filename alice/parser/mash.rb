@@ -16,6 +16,10 @@
       @command_string = command_string
       @to_parse = command_string.content.downcase
       @words = to_parse.gsub(/[\?\!]*/, '').split(' ')
+      if subject
+        context = Context.find_or_create(subject.primary_nick)
+        context.current!
+      end
     end
 
     def parse
@@ -88,7 +92,8 @@
 
     def subject_from_context
       return unless context = Context.current
-      @subject_from_context ||= sentence.nominative_pronouns.any? ? Context.current.topic : nil
+      return unless sentence.nominative_pronouns.any?
+      @subject_from_context ||= Context.with_pronouns_matching(sentence.nominative_pronouns)
     end
 
     def thanks

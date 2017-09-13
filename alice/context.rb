@@ -11,16 +11,18 @@ class Context
   field :spoken, type: Array, default: []
   field :created_at, type: DateTime
 
-  AMBIGUOUS = "That may refer to several different things. Can you clarify?"
-  MINIMUM_FACT_LENGTH = 15
-  TTL = 30
-
-  before_save :downcase_topic, :define_corpus, :extract_keywords
+  before_save :downcase_topic, :define_corpus, :extract_keywords, :set_user
   before_create :set_expiry
 
   validates_uniqueness_of :topic, case_sensitive: false
 
+  belongs_to :user
+
   store_in collection: "alice_contexts"
+
+  AMBIGUOUS = "That may refer to several different things. Can you clarify?"
+  MINIMUM_FACT_LENGTH = 15
+  TTL = 30
 
   attr_accessor :corpus_from_user
 
@@ -42,7 +44,17 @@ class Context
     from(topic) || create(topic: topic)
   end
 
+  def self.with_pronouns_matching(pronouns)
+    candidates = Context.where(:user_id.exists => true).order_by(:created_at => 'desc')
+    candidates.each do |candidate|
+      return candidate if (["they", "them", "their"] & pronouns).any?
+      return candidate if (candidate.user.pronouns_enumerated & pronouns).any?
+    end
+    return nil
+  end
+
   def self.with_topic_matching(topic)
+    binding.pry
     ngrams = Grammar::NgramFactory.new(topic).omnigrams
     ngrams = ngrams.map{|g| g.join(' ')}
     if exact_match = any_in(topic: ngrams).first
@@ -67,6 +79,10 @@ class Context
 
   def ambiguous?
     self.corpus && self.corpus.map{|fact| fact.include?("may refer to") || fact.include?("disambiguation") }.any?
+  end
+
+  def context_user
+    @context_user ||= User.from(self.topic)
   end
 
   def corpus_accessor
@@ -229,6 +245,11 @@ class Context
 
   def set_expiry
     self.expires_at = DateTime.now + TTL.minutes
+  end
+
+  def set_user
+    return unless user = User.from(self.topic)
+    self.user = user
   end
 
   def targeted_fact_candidates(subtopic)
