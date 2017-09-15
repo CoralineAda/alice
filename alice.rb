@@ -6,6 +6,14 @@ require 'require_all'
 require 'slackbotsy'
 require 'sinatra'
 require 'open-uri'
+require 'neo4j'
+require 'neo4j/core/cypher_session/adaptors/http'
+require 'neo4j/core/cypher_session/adaptors/bolt'
+
+adaptor = Neo4j::Core::CypherSession::Adaptors::HTTP.new("http://neo4j:#{ENV['NEO4J_PASSWORD']}@localhost:7474", wrap_level: :proc)
+session = Neo4j::Core::CypherSession.new(adaptor)
+Neo4j::ActiveBase.current_session = session
+Neo4j::ActiveBase.current_adaptor = adaptor
 
 Dotenv.load
 Bundler.require

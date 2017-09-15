@@ -199,7 +199,7 @@ class Context
       self.is_ephemeral = true
       return @content
     end
-    @content ||= Parser::Wikipedia.fetch_all(topic)
+    @content ||= Parser::Wikipedia.fetch_all(topic).map{|sentence| "#{sentence}."}
     @content << Parser::Google.fetch_all("facts about #{topic}")
     @content << Parser::Alpha.fetch(topic).to_s
     @content = @content.flatten.map{ |fact| Sanitize.clean(fact).strip }.uniq
@@ -219,6 +219,12 @@ class Context
 
   def near_match(subject, sentence)
     (sentence.downcase.split & subject.split).size > 0
+  end
+
+  def parse_corpus
+    Grammar::LanguageHelper.sentences_from(fetch_content_from_sources)[0..2].each do |sentence|
+      IsA::Parser.new(sentence).parse
+    end
   end
 
   def position_of(word, sentence)
@@ -247,6 +253,7 @@ class Context
 
   def set_user
     self.has_user = !!User.from(self.topic)
+    return true
   end
 
   def targeted_fact_candidates(subtopic)
