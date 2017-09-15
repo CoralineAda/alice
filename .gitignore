@@ -1,4 +1,5 @@
 db/backups/*/**
+db/neo4j/development/data/*/**
 .env
 .env.production
 .console_history
