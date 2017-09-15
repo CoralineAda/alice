@@ -12,7 +12,7 @@ class Context
   field :spoken, type: Array, default: []
   field :created_at, type: DateTime
 
-  before_save :downcase_topic, :define_corpus, :extract_keywords, :set_user
+  before_save :downcase_topic, :define_corpus, :parse_corpus, :extract_keywords, :set_user
   before_create :set_expiry
 
   validates_uniqueness_of :topic, case_sensitive: false
@@ -223,7 +223,7 @@ class Context
 
   def parse_corpus
     Grammar::LanguageHelper.sentences_from(fetch_content_from_sources)[0..2].each do |sentence|
-      IsA::Parser.new(sentence).parse
+      IsA::Parser.parse(sentence)
     end
   end
 

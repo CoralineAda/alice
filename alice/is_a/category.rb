@@ -9,6 +9,8 @@ module IsA
     has_many :in, :children, type: :child_of, model_class: "::IsA::Category"
     has_many :in, :characteristics, type: :described_by, model_class: "IsA::Characteristic"
 
+    validates_uniqueness_of :name
+
     before_create :singularize_word
 
     def singularize_word
@@ -16,9 +18,9 @@ module IsA
     end
 
     def is?(thing=self, classification)
-      return true if thing.parents.include? classification
       return false if thing.parents.empty?
-      thing.parents.map{ |parent| is_a?(parent, classification)}.select{ |response| response }.any?
+      return true if thing.parents.include? classification
+      thing.parents.uniq.map{ |parent| is?(parent, classification)}.select{ |response| response }.any?
     end
 
     def has_a?(classification=self, thing)
@@ -38,6 +40,7 @@ module IsA
     end
 
     def is!(category)
+      return if self.parents.include? category
       parents << category
       category.children << self
     end
@@ -51,6 +54,7 @@ module IsA
     end
 
     def has!(characteristic)
+      return if has?(characteristic)
       self.characteristics << characteristic
     end
 

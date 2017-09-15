@@ -7,20 +7,23 @@ module IsA
       new(question).response
     end
 
+    def self.parse(statement)
+      new(statement).parse
+    end
+
     def initialize(text)
-      @text = text.downcase
+      @text = text.downcase.gsub(/\(.*?\)/,'')
     end
 
     def parse
       return unless subject
-      this_subject = IsA::Category.find_or_create_by(name: subject)
       characteristics.each do |characteristic|
         this_characteristic = IsA::Characteristic.find_or_create_by(name: characteristic)
-        this_subject.has! this_characteristic
+        subject.has!(this_characteristic)
       end
       definitions.each do |definition|
         this_definition = IsA::Category.find_or_create_by(name: definition)
-        this_subject.is! this_definition
+        subject.is!(this_definition)
       end
     end
 
@@ -47,7 +50,7 @@ module IsA
       return "No, but they are both #{category.shared_parent(subject).plural_name}." if category.is_sibling?(subject)
       return "Yes." if subject.is?(category)
       return "#{subject.plural_name} can sometimes be #{category.plural_name}." if category.has?(subject)
-      return "I don't know anything about #{category.plural_name}." unless category.categories.any?
+      return "I don't know anything about #{category.plural_name}." unless category.children.any?
       return "Some #{subject.plural_name} are #{category.plural_name}." if subject.has?(category)
       "I don't think so."
     end
@@ -62,7 +65,7 @@ module IsA
     end
 
     def definitions
-      sentence.tokens.select{ |token| token.label == :ATTR || token.label == :CONJ }.map(&:lemma)
+      sentence.tokens.select{ |token| token.label == :ATTR }.map(&:lemma)
     end
 
     def characteristic_answer
@@ -73,15 +76,15 @@ module IsA
     end
 
     def is_characteristic_question?
-      text =~ /^does.+\?$/
+      text =~ /^does.+\?$/ || text =~ /^did.+\?$/
     end
 
     def is_characteristic_definition?
-      text =~ /\bhas\b/
+      text =~ /\bhas\b/ || text =~ /\bhave\b/
     end
 
     def is_category_question?
-      text =~ /^is.+\?$/
+      text =~ /^is.+\?$/ || text =~ /^was.+\?$/
     end
 
     def is_category_definition?
@@ -105,7 +108,10 @@ module IsA
     end
 
     def subject
-      IsA::Category.find_or_create_by(name: grammatical_subject)
+      return @subject if @subject
+      if this_subject = sentence.subject
+        @subject = IsA::Category.find_or_create_by(name: this_subject)
+      end
     end
 
     def set_category
@@ -114,11 +120,6 @@ module IsA
 
     def set_characteristic
       subject.has! characteristic
-    end
-
-    def grammatical_subject
-      sentence.tokens.find{ |token| token.label == :NSUBJ }.lemma
-      # Category.find_or_create_by(name: singularized_nouns.first)
     end
 
   end

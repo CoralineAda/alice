@@ -63,6 +63,10 @@ module Grammar
       tokens.select{|token| token.part_of_speech.tag == :PRON}.map(&:text)
     end
 
+    def subject
+      tokens.select{ |token| token.label == :NSUBJ }.map(&:lemma).first
+    end
+
     def verbs
       @verbs ||= tokens.select{|token| token.part_of_speech.tag == :VERB}.map(&:text)
     end
