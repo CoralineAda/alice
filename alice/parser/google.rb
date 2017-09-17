@@ -23,7 +23,8 @@ module Parser
 
     def all_answers
       answers = full_search + reductivist_search
-      answers.reject!{|a| a.include?("...")}
+      answers.reject!{|a| a =~ /\.\.\.$/}
+      answers.reject!{|a| a.empty? }
       answers
     end
 
@@ -31,25 +32,42 @@ module Parser
 
     def results
       answers = full_search + reductivist_search
-      answers.reject!{|a| a.include?("...")}
+      answers.reject!{|a| a =~ /\.\.\.$/}
+      answers.reject!{|a| a.empty? }
       sorted_answers = answers.sort{|a,b| declarative_index(a) <=> declarative_index(b)}
       best_answer = sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
-      Alice::Util::Logger.info "*** Parser::Google: Answered \"#{self.question}\" with #{best_answer}"
+      Alice::Util::Logger.info "*** Parser::Evi: Answered \"#{self.question}\" with #{best_answer}"
       return best_answer
     rescue Exception => e
-      Alice::Util::Logger.info "*** Parser::Google: Unable to process \"#{self.question}\": #{e}"
+      Alice::Util::Logger.info "*** Parser::Evi: Unable to process \"#{self.question}\": #{e}"
       Alice::Util::Logger.info e.backtrace
       ""
     end
 
     def full_search
       doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{question}"))
-      doc.css("div span.st").map(&:text)
+      responses = doc.css("div span.st").map(&:text)
+      results = []
+      responses.each do |response|
+        if response =~ /\.\.\./
+          response = response.split("...")[1..-1].join(' ')
+        end
+        results << response.strip
+      end
+      results.compact
     end
 
     def reductivist_search
       doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{simplified_question}"))
-      doc.css("div span.st").map(&:text)
+      responses = doc.css("div span.st").map(&:text)
+      results = []
+      responses.each do |response|
+        if response =~ /\.\.\./
+          response = response.split("...")[1..-1].join(' ')
+        end
+        results << response.strip
+      end
+      results.compact
     end
 
     def simplified_question
