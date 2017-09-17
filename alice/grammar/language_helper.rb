@@ -18,7 +18,7 @@ module Grammar
       "hid",
       "inspect",
       "is",
-      "know",
+      # "know",
       "look",
       "made",
       "set",
@@ -26,8 +26,8 @@ module Grammar
       "think",
       "was",
       "wrote",
-      "do",
-      "does",
+      # "do",
+      # "does",
       "were"
     ]
 
@@ -196,6 +196,7 @@ module Grammar
       text = text.split(/[\.\?\!] /)
       text = text.map{|t| t.split(/[\r\n]/)}.flatten
       text = text.map{|t| t.gsub('@@@', '')}
+      text
     end
 
     def self.to_third_person(text)

@@ -19,6 +19,9 @@
       if subject
         context = Context.find_or_create(subject.primary_nick)
         context.current!
+      elsif topic
+        context = Context.find_or_create(topic)
+        context.current!
       end
     end
 

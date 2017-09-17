@@ -12,7 +12,7 @@ class Context
   field :spoken, type: Array, default: []
   field :created_at, type: DateTime
 
-  before_save :downcase_topic, :define_corpus, :parse_corpus, :extract_keywords, :set_user
+  before_create :downcase_topic, :define_corpus, :parse_corpus, :extract_keywords, :set_user
   before_create :set_expiry
 
   validates_uniqueness_of :topic, case_sensitive: false
@@ -58,13 +58,15 @@ class Context
     if exact_match = any_in(topic: ngrams).first
       return exact_match
     end
+    return nil
   end
 
   def self.with_keywords_matching(topic)
     topic_keywords = keywords_from(topic)
-    any_in(keywords: topic_keywords + [topic_keywords.join(" ")]).sort do |a,b|
+    context = any_in(keywords: topic_keywords + [topic_keywords.join(" ")]).sort do |a,b|
       (a.keywords & topic_keywords).count <=> (b.keywords & topic_keywords).count
     end.last
+    return context
   end
 
   def self.from(*topic)
@@ -117,17 +119,18 @@ class Context
   end
 
   def declarative_fact(subtopic, spoken=true)
+    return @fact if @fact
     return AMBIGUOUS if ambiguous?
-    facts = relational_facts(subtopic).select do |sentence|
+    facts = (relational_facts(subtopic) + targeted_fact_candidates(subtopic)).select do |sentence|
       has_info_verb = sentence =~ /\b#{Grammar::LanguageHelper::INFO_VERBS * '|\b'}/ix
       placement = position_of(subtopic.downcase, sentence.downcase)
       has_info_verb && placement && placement.to_i < 100
     end
     factogram = Hash.new([])
     facts.each{|fact| factogram[declarative_index(fact)] << fact }
-    fact = factogram[factogram.keys.sort.first].sample
-    record_spoken(fact) if spoken
-    fact
+    @fact = factogram[factogram.keys.sort.first].sample
+    record_spoken(@fact) if spoken
+    @fact
   end
 
   def expire
@@ -138,10 +141,6 @@ class Context
     corpus_accessor.to_a.reject{|sentence| spoken.include? sentence}.sort do |a,b|
       is_was_sort_value(a) <=> is_was_sort_value(b)
     end.uniq
-  end
-
-  def has_spoken_about?(topic)
-    self.spoken.to_s.downcase.include?(topic.downcase)
   end
 
   def inspect
@@ -241,10 +240,10 @@ class Context
     subtopic_ngrams = Grammar::NgramFactory.new(subtopic).omnigrams
     subtopic_ngrams = subtopic_ngrams.map{|g| g.join(' ')}.reverse
     candidates = subtopic_ngrams.map{ |ngram| facts.select{|fact| fact =~ /#{ngram}/i} }.compact.flatten
-    candidates.select do |sentence|
-      placement = position_of(subtopic.downcase, sentence.downcase)
-      placement && placement.to_i < 100
-    end
+    # candidates.select do |sentence|
+    #   placement = position_of(subtopic.downcase, sentence.downcase)
+    #   placement && placement.to_i < 100
+    # end
   end
 
   def set_expiry

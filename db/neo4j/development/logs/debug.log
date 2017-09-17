@@ -991,3 +991,115 @@ BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.Thre
 2017-09-15 05:04:09.173+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2487]:  Check pointing completed
 2017-09-15 05:04:09.173+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Starting log pruning.
 2017-09-15 05:04:09.173+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Log pruning complete.
+2017-09-15 06:59:41.003+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1854ms.
+2017-09-15 08:47:45.002+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1300ms.
+2017-09-15 10:35:50.004+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1310ms.
+2017-09-15 12:23:55.003+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1336ms.
+2017-09-15 14:12:00.003+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1301ms.
+2017-09-15 14:14:49.056+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1437ms.
+2017-09-15 14:20:49.082+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2541]:  Starting check pointing...
+2017-09-15 14:20:49.083+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2541]:  Starting store flush...
+2017-09-15 14:20:49.090+0000 INFO [o.n.k.i.s.c.CountsTracker] About to rotate counts store at transaction 2541 to [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.a], from [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.b].
+2017-09-15 14:20:49.094+0000 INFO [o.n.k.i.s.c.CountsTracker] Successfully rotated counts store at transaction 2541 to [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.a], from [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.b].
+2017-09-15 14:20:49.097+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2541]:  Store flush completed
+2017-09-15 14:20:49.097+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2541]:  Starting appending check point entry into the tx log...
+2017-09-15 14:20:49.097+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2541]:  Appending check point entry into the tx log completed
+2017-09-15 14:20:49.097+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2541]:  Check pointing completed
+2017-09-15 14:20:49.097+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Starting log pruning.
+2017-09-15 14:20:49.097+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Log pruning complete.
+2017-09-15 14:21:45.058+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (n:`IsA::Category`) WHERE (n.name = {n_name}) RETURN n LIMIT {limit_1}
+2017-09-15 14:21:45.060+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (n:`IsA::Category`) WHERE (n.name = {n_name}) RETURN n LIMIT {limit_1}
+2017-09-15 14:21:45.067+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (result:`IsA::Category`) WHERE (result.name = {result_name}) RETURN ID(result) AS proof_of_life LIMIT 1
+2017-09-15 14:21:45.068+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (result:`IsA::Category`) WHERE (result.name = {result_name}) RETURN ID(result) AS proof_of_life LIMIT 1
+2017-09-15 14:21:45.074+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: CREATE (n:`IsA::Category`) SET n = {props} RETURN n
+2017-09-15 14:21:45.075+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: CREATE (n:`IsA::Category`) SET n = {props} RETURN n
+2017-09-15 14:21:45.082+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (n:`IsA::Characteristic`) WHERE (n.name = {n_name}) RETURN n LIMIT {limit_1}
+2017-09-15 14:21:45.082+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (n:`IsA::Characteristic`) WHERE (n.name = {n_name}) RETURN n LIMIT {limit_1}
+2017-09-15 14:21:45.088+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: CREATE (n:`IsA::Characteristic`) SET n = {props} RETURN n
+2017-09-15 14:21:45.088+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: CREATE (n:`IsA::Characteristic`) SET n = {props} RETURN n
+2017-09-15 14:21:45.106+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (from_node), (to_node) WHERE (ID(from_node) = {ID_from_node}) AND (ID(to_node) = {ID_to_node}) CREATE (from_node)-[rel:`described_by` {rel_create_props}]->(to_node)
+2017-09-15 14:21:45.106+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (from_node), (to_node) WHERE (ID(from_node) = {ID_from_node}) AND (ID(to_node) = {ID_to_node}) CREATE (from_node)-[rel:`described_by` {rel_create_props}]->(to_node)
+2017-09-15 14:21:55.279+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (n:`IsA::Category`) WHERE (n.name = {n_name}) RETURN n LIMIT {limit_1}
+2017-09-15 14:21:55.281+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (n:`IsA::Category`) WHERE (n.name = {n_name}) RETURN n LIMIT {limit_1}
+2017-09-15 14:21:55.287+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (result:`IsA::Category`) WHERE (result.name = {result_name}) RETURN ID(result) AS proof_of_life LIMIT 1
+2017-09-15 14:21:55.288+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (result:`IsA::Category`) WHERE (result.name = {result_name}) RETURN ID(result) AS proof_of_life LIMIT 1
+2017-09-15 14:21:55.293+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: CREATE (n:`IsA::Category`) SET n = {props} RETURN n
+2017-09-15 14:21:55.293+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: CREATE (n:`IsA::Category`) SET n = {props} RETURN n
+2017-09-15 14:21:55.300+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (n:`IsA::Characteristic`) WHERE (n.name = {n_name}) RETURN n LIMIT {limit_1}
+2017-09-15 14:21:55.301+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (n:`IsA::Characteristic`) WHERE (n.name = {n_name}) RETURN n LIMIT {limit_1}
+2017-09-15 14:21:55.306+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: CREATE (n:`IsA::Characteristic`) SET n = {props} RETURN n
+2017-09-15 14:21:55.306+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: CREATE (n:`IsA::Characteristic`) SET n = {props} RETURN n
+2017-09-15 14:21:55.324+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (from_node), (to_node) WHERE (ID(from_node) = {ID_from_node}) AND (ID(to_node) = {ID_to_node}) CREATE (from_node)-[rel:`described_by` {rel_create_props}]->(to_node)
+2017-09-15 14:21:55.324+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (from_node), (to_node) WHERE (ID(from_node) = {ID_from_node}) AND (ID(to_node) = {ID_to_node}) CREATE (from_node)-[rel:`described_by` {rel_create_props}]->(to_node)
+2017-09-15 14:22:07.568+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (isa_category631) WHERE (ID(isa_category631) = {ID_isa_category631}) MATCH (isa_category631)-[rel1:`parent_of`]->(result_parents:`IsA::Category`) WHERE (ID(result_parents) = {other_node_id}) RETURN count(result_parents) as count
+2017-09-15 14:22:07.569+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (isa_category631) WHERE (ID(isa_category631) = {ID_isa_category631}) MATCH (isa_category631)-[rel1:`parent_of`]->(result_parents:`IsA::Category`) WHERE (ID(result_parents) = {other_node_id}) RETURN count(result_parents) as count
+2017-09-15 14:22:18.066+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (isa_category616) WHERE (ID(isa_category616) = {ID_isa_category616}) MATCH (isa_category616)<-[rel1:`described_by`]-(result_characteristics:`IsA::Characteristic`) WHERE (ID(result_characteristics) = {other_node_id}) RETURN count(result_characteristics) as count
+2017-09-15 14:22:18.068+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (isa_category616) WHERE (ID(isa_category616) = {ID_isa_category616}) MATCH (isa_category616)<-[rel1:`described_by`]-(result_characteristics:`IsA::Characteristic`) WHERE (ID(result_characteristics) = {other_node_id}) RETURN count(result_characteristics) as count
+2017-09-15 14:22:18.103+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (isa_category616) WHERE (ID(isa_category616) = {ID_isa_category616}) MATCH (isa_category616)-[rel1:`parent_of`]->(result_parents:`IsA::Category`) WHERE (ID(result_parents) = {other_node_id}) RETURN count(result_parents) as count
+2017-09-15 14:22:18.103+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (isa_category616) WHERE (ID(isa_category616) = {ID_isa_category616}) MATCH (isa_category616)-[rel1:`parent_of`]->(result_parents:`IsA::Category`) WHERE (ID(result_parents) = {other_node_id}) RETURN count(result_parents) as count
+2017-09-15 14:35:49.297+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2739]:  Starting check pointing...
+2017-09-15 14:35:49.299+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2739]:  Starting store flush...
+2017-09-15 14:35:49.312+0000 INFO [o.n.k.i.s.c.CountsTracker] About to rotate counts store at transaction 2739 to [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.b], from [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.a].
+2017-09-15 14:35:49.314+0000 INFO [o.n.k.i.s.c.CountsTracker] Successfully rotated counts store at transaction 2739 to [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.b], from [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.a].
+2017-09-15 14:35:49.316+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2739]:  Store flush completed
+2017-09-15 14:35:49.316+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2739]:  Starting appending check point entry into the tx log...
+2017-09-15 14:35:49.316+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2739]:  Appending check point entry into the tx log completed
+2017-09-15 14:35:49.316+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2739]:  Check pointing completed
+2017-09-15 14:35:49.316+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Starting log pruning.
+2017-09-15 14:35:49.316+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Log pruning complete.
+2017-09-15 14:50:36.003+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1691ms.
+2017-09-15 14:58:28.003+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1387ms.
+2017-09-15 15:18:42.003+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1454ms.
+2017-09-16 08:08:24.097+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1781ms.
+2017-09-16 09:35:03.002+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1298ms.
+2017-09-16 11:23:09.562+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 35957ms.
+2017-09-16 13:11:16.170+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 28469ms.
+2017-09-16 14:59:23.409+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 25270ms.
+2017-09-16 15:00:01.065+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 4311ms.
+2017-09-16 15:44:00.018+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1774ms.
+2017-09-16 16:16:12.004+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1820ms.
+2017-09-16 16:19:45.100+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1461ms.
+2017-09-16 19:12:52.003+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1753ms.
+2017-09-16 19:17:30.011+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1388ms.
+2017-09-16 20:23:41.002+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1792ms.
+2017-09-16 22:56:49.005+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1821ms.
+2017-09-16 23:26:59.004+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1676ms.
+2017-09-17 00:03:48.092+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1821ms.
+2017-09-17 01:04:34.005+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1684ms.
+2017-09-17 01:45:29.085+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1822ms.
+2017-09-17 02:26:44.003+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1769ms.
+2017-09-17 02:52:36.008+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1764ms.
+2017-09-17 04:52:12.230+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1801ms.
+2017-09-17 06:41:53.002+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1697ms.
+2017-09-17 08:08:36.006+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1348ms.
+2017-09-17 09:56:43.910+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 42803ms.
+2017-09-17 09:57:24.142+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 7328ms.
+2017-09-17 11:45:32.110+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1870ms.
+2017-09-17 12:58:01.003+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1482ms.
+2017-09-17 14:46:08.387+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 31480ms.
+2017-09-17 14:46:46.124+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 4516ms.
+2017-09-17 15:00:21.006+0000 WARN [o.n.k.i.c.MonitorGc] GC Monitor: Application threads blocked for 1630ms.
+2017-09-17 15:33:01.830+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (isa_category635) WHERE (ID(isa_category635) = {ID_isa_category635}) MATCH (isa_category635)-[rel1:`parent_of`]->(result_parents:`IsA::Category`) WHERE (ID(result_parents) = {other_node_id}) RETURN count(result_parents) as count
+2017-09-17 15:33:01.859+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (isa_category635) WHERE (ID(isa_category635) = {ID_isa_category635}) MATCH (isa_category635)-[rel1:`parent_of`]->(result_parents:`IsA::Category`) WHERE (ID(result_parents) = {other_node_id}) RETURN count(result_parents) as count
+2017-09-17 15:33:06.155+0000 INFO [o.n.c.i.ExecutionEngine] Discarded stale query from the query cache: MATCH (isa_category643) WHERE (ID(isa_category643) = {ID_isa_category643}) MATCH (isa_category643)-[rel1:`parent_of`]->(result_parents:`IsA::Category`) WHERE (ID(result_parents) = {other_node_id}) RETURN count(result_parents) as count
+2017-09-17 15:33:06.156+0000 INFO [o.n.c.i.CommunityCompatibilityFactory] Discarded stale query from the query cache: MATCH (isa_category643) WHERE (ID(isa_category643) = {ID_isa_category643}) MATCH (isa_category643)-[rel1:`parent_of`]->(result_parents:`IsA::Category`) WHERE (ID(result_parents) = {other_node_id}) RETURN count(result_parents) as count
+2017-09-17 15:59:55.215+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2765]:  Starting check pointing...
+2017-09-17 15:59:55.215+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2765]:  Starting store flush...
+2017-09-17 15:59:55.227+0000 INFO [o.n.k.i.s.c.CountsTracker] About to rotate counts store at transaction 2765 to [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.a], from [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.b].
+2017-09-17 15:59:55.231+0000 INFO [o.n.k.i.s.c.CountsTracker] Successfully rotated counts store at transaction 2765 to [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.a], from [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.b].
+2017-09-17 15:59:55.234+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2765]:  Store flush completed
+2017-09-17 15:59:55.234+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2765]:  Starting appending check point entry into the tx log...
+2017-09-17 15:59:55.234+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2765]:  Appending check point entry into the tx log completed
+2017-09-17 15:59:55.234+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2765]:  Check pointing completed
+2017-09-17 15:59:55.234+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Starting log pruning.
+2017-09-17 15:59:55.234+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Log pruning complete.
+2017-09-17 16:33:25.702+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2778]:  Starting check pointing...
+2017-09-17 16:33:25.702+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2778]:  Starting store flush...
+2017-09-17 16:33:25.722+0000 INFO [o.n.k.i.s.c.CountsTracker] About to rotate counts store at transaction 2778 to [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.b], from [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.a].
+2017-09-17 16:33:25.725+0000 INFO [o.n.k.i.s.c.CountsTracker] Successfully rotated counts store at transaction 2778 to [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.b], from [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.a].
+2017-09-17 16:33:25.727+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2778]:  Store flush completed
+2017-09-17 16:33:25.727+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2778]:  Starting appending check point entry into the tx log...
+2017-09-17 16:33:25.727+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2778]:  Appending check point entry into the tx log completed
+2017-09-17 16:33:25.727+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2778]:  Check pointing completed
+2017-09-17 16:33:25.727+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Starting log pruning.
+2017-09-17 16:33:25.727+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Log pruning complete.
