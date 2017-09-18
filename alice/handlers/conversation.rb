@@ -91,7 +91,7 @@ module Handlers
     end
 
     def set_context_from_subject_or_predicate
-      set_context_from_predicate || set_context_from_subject || Context.most_recent&.current!
+      set_context_from_predicate || set_context_from_subject
     end
 
     def set_context_from_predicate
