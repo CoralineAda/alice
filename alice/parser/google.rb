@@ -10,7 +10,7 @@ module Parser
     end
 
     def self.fetch_all(topic)
-      new(topic).all_answers
+      new(topic).answers
     end
 
     def initialize(question)
@@ -18,12 +18,12 @@ module Parser
     end
 
     def answer
-      results
+      results.first
     end
 
     def all_answers
       answers = full_search + reductivist_search
-      answers.reject!{|a| a.include?("...")}
+      answers.reject!{ |a| a =~ /\.\.\.$/}
       answers
     end
 
@@ -31,9 +31,9 @@ module Parser
 
     def results
       answers = full_search + reductivist_search
-      answers.compact.map!{|a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')}
-      answers.reject!{|a| a.include?("...")}
-      sorted_answers = answers.sort{|a,b| declarative_index(a) <=> declarative_index(b)}
+      answers.compact.map!{ |a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
+      answers.reject!{ |a| a =~ /\.\.\.$/}
+      sorted_answers = answers.sort{ |a,b| declarative_index(a) <=> declarative_index(b) }
       best_answer = sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
       Alice::Util::Logger.info "*** Parser::Google: Answered \"#{self.question}\" with #{best_answer}"
       return best_answer
