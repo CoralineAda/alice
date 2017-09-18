@@ -172,15 +172,15 @@ module Grammar
 
     VERBS = TRANSFER_VERBS + INFO_VERBS + ACTION_VERBS + RELATION_VERBS
 
-    DECLARATIVE_DETECTOR = /\b#{INFO_VERBS * '|\b'}/ix
+    PRONOUNS = %w{ him her his him hers they their their them he she it its this those these that }
+
+    DECLARATIVE_DETECTOR = /\b#{(INFO_VERBS + PRONOUNS)* '\b|\b'}/ix
 
     NOUN_INDICATORS = %w{ the a an this about }
 
     IDENTIFIERS = NUMBERS.keys + NUMBERS.values + ARTICLES
 
     PREDICATE_INDICATORS = PREPOSITIONS + NOUN_INDICATORS + INFO_VERBS + ACTION_VERBS + TRANSFER_VERBS + RELATION_VERBS
-
-    PRONOUNS = %w{ him her his him hers they their their them he she its this those these that }
 
     WORDS_WITH_PERIODS = ["dr.", "mr.", "ms.", "phd.", "mrs."]
 

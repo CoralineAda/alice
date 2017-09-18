@@ -13,7 +13,7 @@ module Handlers
       if subject
         message.response = "#{subject.proper_name} says, \"#{subject.speak}\""
       else
-        context = Context.from(command.predicate)
+        context = Context.find_or_create(command.predicate)
         context ||= Context.with_keywords.sample
         if context
           message.response = context.describe

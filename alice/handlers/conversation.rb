@@ -30,7 +30,7 @@ module Handlers
     private
 
     def context_stack
-      @context_stack ||= Array.new([global_context])
+      @context_stack ||= Array.new([current_context])
     end
 
     def current_context
@@ -38,9 +38,8 @@ module Handlers
     end
 
     def context_from(topic, subtopic=nil)
-      new_context = Context.from(topic.downcase, subtopic)
-      new_context ||= Context.find_or_create(topic.downcase)
-      new_context ||= global_context
+      new_context = Context.find_or_create(topic.downcase, self.message.trigger.gsub(ENV['BOT_NAME'], ""))
+      new_context ||= current_context
       update_context(new_context)
     end
 
@@ -73,8 +72,8 @@ module Handlers
       fact ||= current_context.relational_fact(topic.singularize, speak)
     end
 
-    def global_context
-      @global_context ||= Context.current
+    def current_context
+      @current_context ||= Context.current
     end
 
     def subject_or_predicate

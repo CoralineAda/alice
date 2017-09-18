@@ -12,7 +12,7 @@ module Handlers
 
     def get
       factoid = ::Factoid.about(command.predicate).try(:formatted)
-      if context = Context.find_or_create(command.predicate)
+      if context = Context.find_or_create(command.predicate, command_string.fragment)
         context.current!
       end
       if factoid

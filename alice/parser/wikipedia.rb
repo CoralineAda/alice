@@ -20,12 +20,10 @@ module Parser
     end
 
     def results
-      if result = ::Wikipedia.find(topic)
-        content = Grammar::LanguageHelper.sentences_from(result.sanitized_content)
-      else
-        content = []
-      end
-      content[0..10]
+      return [] unless result = ::Wikipedia.find(topic)
+      content = Grammar::LanguageHelper.sentences_from(result.sanitized_content).compact
+      content = content.map{|datum| datum.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
+      return content[0..20]
     end
 
   end

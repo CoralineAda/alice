@@ -17,7 +17,7 @@
       @to_parse = command_string.content.downcase
       @words = to_parse.gsub(/[\?\!]*/, '').split(' ')
       if subject
-        context = Context.find_or_create(subject.primary_nick)
+        context = Context.find_or_create(subject.primary_nick, @words.join(" "))
         context.current!
       end
     end
