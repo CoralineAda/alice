@@ -21,7 +21,7 @@ module Parser
     end
 
     def parse!
-      if (has_bang? || has_plusplus? || has_thirteen?) && (known_verb? || known_person? || object) && command
+      if (has_bang? || has_plusplus? || has_thirteen? || has_nice?) && (known_verb? || known_person? || object) && command
         Alice::Util::Logger.info "*** Command is  \"#{command.inspect}\" "
         return command
       else
@@ -31,6 +31,10 @@ module Parser
 
     def has_bang?
       self.command_string.content =~ /^\!/
+    end
+
+    def has_nice?
+      self.command_string.content == /nice/
     end
 
     # Handle points
@@ -61,8 +65,9 @@ module Parser
     def command
       return @command if @command
       verb = command_string.content.gsub("!", "").split(' ').first
-      verb = "++" if command_string.content.include?("++")
-      verb = "13" if command_string.content == "!13"
+      verb = "++" if has_plusplus?
+      verb = "13" if has_thirteen?
+      verb = "nice" if has_nice?
       if @command = Message::Command.any_in(verbs: verb).first
         @command.subject = (sentence.nouns - [verb]).first
         @command.predicate = (sentence.nouns - [">"]).last
