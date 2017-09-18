@@ -10,6 +10,7 @@ module Handlers
 
     def converse
       set_context_from_subject_or_predicate
+      return unless current_context
       unless text = fact_from(current_context.topic) || description_from_context
         context_stack.pop
         text = default_response(current_context.topic)
@@ -90,7 +91,7 @@ module Handlers
     end
 
     def set_context_from_subject_or_predicate
-      set_context_from_predicate || set_context_from_subject
+      set_context_from_predicate || set_context_from_subject || Context.most_recent&.current!
     end
 
     def set_context_from_predicate

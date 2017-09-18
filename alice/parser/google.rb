@@ -10,7 +10,7 @@ module Parser
     end
 
     def self.fetch_all(topic)
-      new(topic).answers
+      new(topic).all_answers
     end
 
     def initialize(question)

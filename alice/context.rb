@@ -51,6 +51,10 @@ class Context
     context
   end
 
+  def self.most_recent
+    Context.all.order_by(updated_at: 'desc').first
+  end
+
   def self.with_pronouns_matching(pronouns)
     candidates = Context.where(:has_user => true).order_by(:updated_at => 'desc')
     candidates.each do |candidate|
