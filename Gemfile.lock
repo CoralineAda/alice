@@ -263,7 +263,7 @@ GEM
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uber (0.0.15)
-    wikipedia-client (1.6.3)
+    wikipedia-client (1.7.0)
     wolfram-alpha (0.3.1)
       nokogiri
     yummly (0.0.13)
@@ -299,7 +299,7 @@ DEPENDENCIES
   sanitize (>= 3.0.2)
   sinatra
   slackbotsy
-  wikipedia-client (>= 1.4.0)
+  wikipedia-client (>= 1.7.0)
   wolfram-alpha
   yummly
 

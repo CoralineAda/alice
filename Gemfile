@@ -23,6 +23,6 @@ gem 'rubyfish'
 gem 'sanitize', '>= 3.0.2'
 gem 'sinatra'
 gem 'slackbotsy'
-gem 'wikipedia-client', ">= 1.4.0"
+gem 'wikipedia-client', ">= 1.7.0"
 gem 'wolfram-alpha'
 gem 'yummly'
