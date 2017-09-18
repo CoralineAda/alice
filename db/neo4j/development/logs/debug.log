@@ -1103,3 +1103,61 @@ BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.Thre
 2017-09-17 16:33:25.727+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2778]:  Check pointing completed
 2017-09-17 16:33:25.727+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Starting log pruning.
 2017-09-17 16:33:25.727+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Log pruning complete.
+2017-09-17 18:43:06.516+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population started: [:Sophia::Meta::Context(uuid) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.542+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Completed node store scan. Flushing all pending updates.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@4282c544[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.542+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Shutting down executor.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@4282c544[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.561+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population completed. Index is now online: [:Sophia::Meta::Context(uuid) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.665+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population started: [:Sophia::Meta::Context(name) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.670+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Completed node store scan. Flushing all pending updates.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@1e9e5a13[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.670+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Shutting down executor.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@1e9e5a13[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.685+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population started: [:Sophia::Meta::Root(uuid) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.689+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Completed node store scan. Flushing all pending updates.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@40341f15[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.689+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Shutting down executor.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@40341f15[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.696+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population completed. Index is now online: [:Sophia::Meta::Context(name) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.704+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population completed. Index is now online: [:Sophia::Meta::Root(uuid) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.729+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population started: [:Sophia::Meta::Root(base_form) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.734+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Completed node store scan. Flushing all pending updates.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@5ea82934[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.734+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Shutting down executor.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@5ea82934[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.757+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population started: [:Sophia::PartOfSpeech::Generic(uuid) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.758+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population completed. Index is now online: [:Sophia::Meta::Root(base_form) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.762+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Completed node store scan. Flushing all pending updates.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@7cf80ce3[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.762+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Shutting down executor.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@7cf80ce3[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.777+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population completed. Index is now online: [:Sophia::PartOfSpeech::Generic(uuid) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.793+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population started: [:Sophia::PartOfSpeech::Generic(base_form) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.795+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Completed node store scan. Flushing all pending updates.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@2b0203ec[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.795+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Shutting down executor.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@2b0203ec[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.803+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population started: [:Sophia::PartOfSpeech::Property(uuid) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.805+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Completed node store scan. Flushing all pending updates.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@645123ab[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.805+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Shutting down executor.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@645123ab[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.809+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population completed. Index is now online: [:Sophia::PartOfSpeech::Generic(base_form) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.815+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population completed. Index is now online: [:Sophia::PartOfSpeech::Property(uuid) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.829+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population started: [:Sophia::PartOfSpeech::Property(name) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:06.832+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Completed node store scan. Flushing all pending updates.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@12b2e77e[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.832+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Shutting down executor.
+BatchingMultipleIndexPopulator{activeTasks=0, executor=java.util.concurrent.ThreadPoolExecutor@12b2e77e[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], batchedUpdates = [], queuedUpdates = 0}
+2017-09-17 18:43:06.841+0000 INFO [o.n.k.i.a.i.IndexPopulationJob] Index population completed. Index is now online: [:Sophia::PartOfSpeech::Property(name) [provider: {key=lucene, version=1.0}]]
+2017-09-17 18:43:07.400+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2795]:  Starting check pointing...
+2017-09-17 18:43:07.400+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2795]:  Starting store flush...
+2017-09-17 18:43:07.414+0000 INFO [o.n.k.i.s.c.CountsTracker] About to rotate counts store at transaction 2795 to [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.a], from [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.b].
+2017-09-17 18:43:07.418+0000 INFO [o.n.k.i.s.c.CountsTracker] Successfully rotated counts store at transaction 2795 to [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.a], from [/Users/coraline/Documents/projects/alice/db/neo4j/DEVELOPMENT/data/databases/graph.db/neostore.counts.db.b].
+2017-09-17 18:43:07.420+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2795]:  Store flush completed
+2017-09-17 18:43:07.420+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2795]:  Starting appending check point entry into the tx log...
+2017-09-17 18:43:07.421+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2795]:  Appending check point entry into the tx log completed
+2017-09-17 18:43:07.421+0000 INFO [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by scheduler for time threshold [2795]:  Check pointing completed
+2017-09-17 18:43:07.421+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Starting log pruning.
+2017-09-17 18:43:07.421+0000 INFO [o.n.k.i.t.l.p.LogPruningImpl] Log Rotation [0]:  Log pruning complete.

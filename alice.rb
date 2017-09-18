@@ -45,7 +45,7 @@ bot = bot_interface_handler.new(config) do
   hear /(.+)/ do |mdata|
     begin
       name = User.ensure_user(user_name, user_id).primary_nick
-      if message = Pipeline::Listener.new.route(name, mdata[1])
+      if message = Pipeline::Listener.new(name, mdata[1]).route
         {
           content: message.response.content,
           response_type: message.response_type
