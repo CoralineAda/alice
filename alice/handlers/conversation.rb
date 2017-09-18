@@ -73,7 +73,7 @@ module Handlers
     end
 
     def current_context
-      @current_context ||= Context.current
+      Context.current
     end
 
     def subject_or_predicate
