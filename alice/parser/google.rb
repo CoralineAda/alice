@@ -28,8 +28,7 @@ module Parser
     private
 
     def answers
-      answers = full_search + reductivist_search
-      answers.compact.map!{ |a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
+      answers = (full_search + reductivist_search).compact.map{ |a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
       answers.reject!{ |a| a =~ /\.\.\.$/}
     end
 
