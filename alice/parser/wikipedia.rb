@@ -21,7 +21,7 @@ module Parser
 
     def results
       if result = ::Wikipedia.find(topic)
-        content = Grammar::LanguageHelper.sentences_from(result.sanitized_content.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: ''))
+        content = Grammar::LanguageHelper.sentences_from(result.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').sanitized_content)
       else
         content = []
       end
