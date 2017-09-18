@@ -23,30 +23,30 @@ module Pipeline
     end
 
     def process_number
-      Pipeline::Processor.process(message(self.username, "!13"), :respond)
+      Pipeline::Processor.process(message("!13"), :respond)
     end
 
     def process_kindness
-      Pipeline::Processor.process(message(self.username, "nice"), :respond)
+      Pipeline::Processor.process(message("nice"), :respond)
     end
 
     def process_points
-      Pipeline::Processor.process(message, :respond)
+      Pipeline::Processor.process(message(self.trigger), :respond)
     end
 
     def process_text
       return unless self.trigger[0] =~ /[a-zA-Z\!]/x
-      message = Pipeline::Processor.process(new_message, :respond)
+      message = Pipeline::Processor.process(message(self.trigger), :respond)
       if message.response.content.empty? && self.trigger =~ /nice|good|kind|sweet|cool|great/i
-        message = Pipeline::Processor.process(message(self.username, "nice"), :respond)
+        message = Pipeline::Processor.process(message("nice"), :respond)
       end
       message
     end
 
     private
 
-    def new_message
-      Message::Message.new(self.username, self.trigger.gsub('@', ''))
+    def message(content)
+      Message::Message.new(self.username, content.gsub('@', ''))
     end
 
   end
