@@ -10,7 +10,7 @@ module Parser
     end
 
     def initialize(question)
-      @question = question.downcase.gsub(" ", "_")
+      @question = question.downcase.gsub(" ", "_").encode("ASCII", invalid: :replace, undef: :replace, replace: '')
     end
 
     def answer
