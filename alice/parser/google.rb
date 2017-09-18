@@ -22,17 +22,18 @@ module Parser
     end
 
     def all_answers
-      answers = full_search + reductivist_search
-      answers.reject!{ |a| a =~ /\.\.\.$/}
       answers
     end
 
     private
 
-    def results
+    def answers
       answers = full_search + reductivist_search
       answers.compact.map!{ |a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
       answers.reject!{ |a| a =~ /\.\.\.$/}
+    end
+
+    def results
       sorted_answers = answers.sort{ |a,b| declarative_index(a) <=> declarative_index(b) }
       best_answer = sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
       Alice::Util::Logger.info "*** Parser::Google: Answered \"#{self.question}\" with #{best_answer}"
