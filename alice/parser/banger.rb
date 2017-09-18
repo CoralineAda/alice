@@ -34,7 +34,7 @@ module Parser
     end
 
     def has_nice?
-      self.command_string.content == /nice/
+      self.command_string.content == "nice"
     end
 
     # Handle points
