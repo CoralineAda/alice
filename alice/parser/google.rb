@@ -14,7 +14,7 @@ module Parser
     end
 
     def initialize(question)
-      @question = question.gsub("+", "plus").gsub(" ", "+")
+      @question = question.gsub("+", "plus").gsub(" ", "+").encode("ASCII", invalid: :replace, undef: :replace, replace: '')
     end
 
     def answer
