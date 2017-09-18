@@ -31,7 +31,7 @@ module Parser
 
     def results
       answers = full_search + reductivist_search
-      answers.map!{|a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')}
+      answers.compact.map!{|a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')}
       answers.reject!{|a| a.include?("...")}
       sorted_answers = answers.sort{|a,b| declarative_index(a) <=> declarative_index(b)}
       best_answer = sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
