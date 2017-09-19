@@ -42,6 +42,21 @@ class Actor
     :talk
   ]
 
+  def self.from(string)
+    return unless string.present?
+    names = Grammar::NgramFactory.new(string).omnigrams
+    names = names.map{|g| g.join ' '} << string
+    names = names.uniq - Grammar::LanguageHelper::IDENTIFIERS
+    objects = names.map do |name|
+      name = (name.split(/\s+/) - Grammar::LanguageHelper::IDENTIFIERS).compact.join(' ')
+      if name.present? && found = Actor.where(name: /#{name}/i).first
+        SearchResult.new(term: name, result: found)
+      end
+    end.compact
+    objects = objects.select{|obj| obj.result.present?}.uniq || []
+    objects.sort{|b,a| b.term.length <=> a.term.length}.map(&:result).last
+  end
+
   def self.ensure_grue
     Actor.grue || Actor.create(name: 'Grue', description: "Fearsome! Loathsome! But cuddly!", is_grue: true)
   end
@@ -77,6 +92,10 @@ class Actor
     grue.put_in_play
   end
 
+  def accepts_gifts?
+    true
+  end
+
   def add_catchphrase(text)
     self.catchphrases.create(text: text)
   end
@@ -96,7 +115,7 @@ class Actor
     message << self.inventory_of_items
     message << self.inventory_of_beverages
     message << check_score
-    message.compact.join(". ").gsub(/\.\. /, '. ')
+    message.compact.reject(&:empty?).join(". ").gsub("..", ".")
   end
 
   def do_something
@@ -146,6 +165,10 @@ class Actor
     else
       "#{proper_name} looks around slyly."
     end
+  end
+
+  def primary_nick
+    self.name
   end
 
   def proper_name

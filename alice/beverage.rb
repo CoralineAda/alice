@@ -64,6 +64,10 @@ class Beverage
     where(user_id: user.id)
   end
 
+  def self.for_actor(actor)
+    where(actor_id: actor.id)
+  end
+
   def self.inventory_from(owner, list)
     stuff = list.present? && list.map(&:name_with_article).to_sentence || "no drinks."
     "#{owner.proper_name}'s cooler is stocked with #{stuff}"

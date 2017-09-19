@@ -21,7 +21,13 @@ module Behavior
 
     def change_owner(recipient)
       return unless recipient
-      self.user_id = recipient.id
+      if recipient.is_a?(User)
+        self.user_id = recipient.id
+        self.actor_id = nil
+      else
+        self.actor_id = recipient.id
+        self.user_id = nil
+      end
       self.place_id = nil
       self.picked_up_at = DateTime.now
       self.is_hidden = false
@@ -30,7 +36,7 @@ module Behavior
 
     def transfer_to(recipient)
       return unless recipient
-      original_owner = self.user
+      original_owner = self.user || self.actor
       change_owner(recipient)
       if original_owner && original_owner != recipient
         Util::Randomizer.give_message(original_owner.primary_nick, recipient.primary_nick, self.name_with_article)

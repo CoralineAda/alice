@@ -43,7 +43,8 @@ module Handlers
     private
 
     def subject
-      ::User.from(command_string.components.map{|c| c.gsub("++", "")}.join(' '))
+      find_string = command_string.components.map{|c| c.gsub("++", "")}.join(' ')
+      subject = ::User.from(find_string) || ::Actor.from(find_string)
     end
 
   end

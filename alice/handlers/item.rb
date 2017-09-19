@@ -43,7 +43,7 @@ module Handlers
     def set
       return unless this_item = item_for_user
       if this_item.set_property(AttributeParser.new(command_string.content))
-        message.response = "Got it! It's set."
+        message.response = "Oh, nice."
       end
     end
 
@@ -52,7 +52,7 @@ module Handlers
     end
 
     def give
-      if recipient = User.from(command.predicate)
+      if recipient = ::User.from(command.predicate) || ::Actor.from(command.predicate)
         thing = beverage_for_user || item_for_user
         if recipient.accepts_gifts?
           message.response = thing.transfer_to(recipient)
@@ -77,7 +77,7 @@ module Handlers
     end
 
     class AttributeParser
-      PATTERN = /^.+\s(?<key>\S+) of .+ to (?<value>.+)$/
+      PATTERN = /^.+?\s(?<key>\S+) of .+ to (?<value>.+)$/
 
       attr_reader :string
 

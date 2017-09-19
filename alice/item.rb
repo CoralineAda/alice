@@ -64,6 +64,10 @@ class Item
     where(user_id: user.id)
   end
 
+  def self.for_actor(actor)
+    where(actor_id: actor.id)
+  end
+
   def self.create_defaults
     create(name: Util::Randomizer.game, is_game: true)
     (rand(10) + 2).times {|i| create(name: Util::Randomizer.item) }
@@ -169,7 +173,7 @@ class Item
   def creator
     User.find(self.creator_id)
   rescue
-    User.new(primary_nick: "nobody")
+    User.new(primary_nick: "Aunt Trudy")
   end
 
   def describe
