@@ -43,13 +43,13 @@ class Actor
   ]
 
   def self.from(string)
-    return unless string.present?
+    return if string.nil? || string.empty?
     names = Grammar::NgramFactory.new(string).omnigrams
     names = names.map{|g| g.join ' '} << string
     names = names.uniq - Grammar::LanguageHelper::IDENTIFIERS
     objects = names.map do |name|
       name = (name.split(/\s+/) - Grammar::LanguageHelper::IDENTIFIERS).compact.join(' ')
-      if name.present? && found = Actor.where(name: /#{name}/i).first
+      if name.present? && found = Actor.where(name: /\b#{name}\b/i).first
         SearchResult.new(term: name, result: found)
       end
     end.compact

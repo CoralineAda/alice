@@ -49,8 +49,8 @@ module Handlers
     def attack
       if command.subject =~ /darkness/ && Place.current.is_dark?
         message.response = "You attack the darkness! A voice to the east whines, 'Where is the Mountain Dew?'"
-      elsif command.subject =~ /gazebo/ && Place.current.description =~ /gazebo/
-        response = "The gazebo kills you all!\n\r"
+      elsif command.subject =~ /gazebo/# && Place.current.description =~ /gazebo/
+        response = "The dread gazebo kills you all!\n\r"
         response << reset_maze
         message.response = response
       else
@@ -82,7 +82,11 @@ module Handlers
     end
 
     def extant_object(name)
-      (::User.from(name) || ::Item.from(name) || ::Beverage.from(name) || ::Actor.from(name))
+      return if name.empty?
+      if actor = ::Actor.from(name)
+        actor = Place.current.actors.include?(actor) ? actor : nil
+      end
+      (::User.from(name) || ::Item.from(name) || ::Beverage.from(name) || actor)
     end
 
     def reset_maze

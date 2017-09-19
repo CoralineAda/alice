@@ -17,7 +17,9 @@ module Message
     end
 
     def predicate
-      self.content.split[1..-1].join(' ')
+      words = self.content.split
+      return "" if words.count == 1
+      words[1..-1].join(' ')
     end
 
     def verb
