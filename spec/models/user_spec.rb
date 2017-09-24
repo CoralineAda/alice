@@ -53,22 +53,6 @@ describe User do
 
   end
 
-  describe "#has_nick?" do
-
-    before do
-      jill.alt_nicks = ["jilla", "jilly"]
-    end
-
-    it "finds based on primary nick" do
-      expect(jill.has_nick?("jill")).to be_truthy
-    end
-
-    it "finds based on alt nicks" do
-      expect(jill.has_nick?("jilla")).to be_truthy
-    end
-
-  end
-
   describe "#remove_filter?" do
 
     it "returns true if the last filter was applied more than 90 minutes ago" do
@@ -79,24 +63,6 @@ describe User do
     it "returns false if the last filter was applied within the last 90 minutes" do
       jack.filter_applied = DateTime.now - 11.minutes
       expect(jack.remove_expired_filters).to be_falsey
-    end
-
-  end
-
-  describe "#update_nick" do
-
-    before do
-      jill.alt_nicks = ["jilla", "jilly"]
-    end
-
-    it "does not duplicate a nick" do
-      expect(jill).to_not receive(:update_attribute)
-      jill.update_nick("jilly")
-    end
-
-    it "adds a new nick" do
-      expect(jill).to receive(:update_attribute).with(:alt_nicks, ["jilla", "jilly", "nancy"])
-      jill.update_nick("Nancy")
     end
 
   end

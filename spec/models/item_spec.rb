@@ -14,7 +14,7 @@ describe Item do
     end
 
     it "defaults to a blank user" do
-      expect(item_2.creator.primary_nick).to eq("nobody")
+      expect(item_2.creator.primary_nick).to eq("Aunt Trudy")
     end
 
   end
