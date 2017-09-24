@@ -231,22 +231,22 @@ class Context
     mutex = Mutex.new
     threads = []
 
-    threads << Thread.new(@content) do
+    threads << Thread.new() do
       c = Parser::Alpha.fetch(topic).to_s
       mutex.synchronize { @content << c }
     end
 
-    threads << Thread.new(@content) do
+    threads << Thread.new() do
       c = Parser::Google.fetch_all(self.query) unless self.query.nil? || self.query.empty? || self.query == self.topic
       mutex.synchronize { @content << c }
     end
 
-    threads << Thread.new(@content) do
+    threads << Thread.new() do
       c = Parser::Google.fetch_all("facts about #{topic}")
       mutex.synchronize { @content << c }
     end
 
-    threads << Thread.new(@content) do
+    threads << Thread.new() do
       c = Parser::Wikipedia.fetch_all(topic)
       mutex.synchronize { @content << c }
     end
