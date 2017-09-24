@@ -214,10 +214,6 @@ class User
     nicks.include?(nick.downcase)
   end
 
-  def info_factoids
-    factoids.map(&:text)
-  end
-
   def is_online?
     true
   end

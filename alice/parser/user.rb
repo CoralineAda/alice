@@ -3,13 +3,13 @@ module Parser
     def self.fetch(topic)
       if user = ::User.from(topic)
         content = user_methods(user).map do |method|
-          string_from_user_info(user, method)
+          string_from_user_info(user, method).gsub('.. ', '. ')
         end.flatten.compact.reject(&:empty?)
         content << user.factoids.map(&:text)
-        return unless content.any?
-        content.flatten.join('. ').gsub('.. ', '. ')
+        return [] unless content.any?
+        content.flatten
       else
-        nil
+        []
       end
     end
 
