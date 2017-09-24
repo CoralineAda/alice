@@ -49,6 +49,7 @@ class Actor
     names = names.uniq - Grammar::LanguageHelper::IDENTIFIERS
     objects = names.map do |name|
       name = (name.split(/\s+/) - Grammar::LanguageHelper::IDENTIFIERS).compact.join(' ')
+      name = Regexp.escape(name)
       if name.present? && found = Actor.where(name: /\b#{name}\b/i).first
         SearchResult.new(term: name, result: found)
       end
