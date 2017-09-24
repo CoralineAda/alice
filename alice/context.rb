@@ -1,5 +1,5 @@
 class Context
-
+  require 'thread'
   include Mongoid::Document
 
   field :topic
@@ -225,10 +225,33 @@ class Context
       self.is_ephemeral = true
       return @content
     end
-    @content ||= [Parser::Alpha.fetch(topic).to_s]
-    @content << Parser::Google.fetch_all(self.query) unless self.query.nil? || self.query.empty? || self.query == self.topic
-    @content << Parser::Google.fetch_all("facts about #{topic}")
-    @content << Parser::Wikipedia.fetch_all(topic)
+
+    @content ||= []
+
+    mutex = Mutex.new
+    threads = []
+
+    threads << Thread.new(@content) do
+      c = Parser::Alpha.fetch(topic).to_s
+      mutex.synchronize { @content << c }
+    end
+
+    threads << Thread.new(@content) do
+      c = Parser::Google.fetch_all(self.query) unless self.query.nil? || self.query.empty? || self.query == self.topic
+      mutex.synchronize { @content << c }
+    end
+
+    threads << Thread.new(@content) do
+      c = Parser::Google.fetch_all("facts about #{topic}")
+      mutex.synchronize { @content << c }
+    end
+
+    threads << Thread.new(@content) do
+      c = Parser::Wikipedia.fetch_all(topic)
+      mutex.synchronize { @content << c }
+    end
+
+    threads.each(&:join)
     @content = @content.flatten.map{ |fact| Sanitize.clean(fact.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')).strip }.uniq
     @content = @content.reject{ |fact| Grammar::SentenceParser.parse(fact).verbs.empty? }
     @content = @content.reject{ |fact| fact =~ /click/i || fact =~ /website/i }
