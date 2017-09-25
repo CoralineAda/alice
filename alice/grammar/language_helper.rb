@@ -4,9 +4,8 @@ module Grammar
     ARTICLES = %w{a the of an to and}
 
     INFO_VERBS = [
-      "are",
       "created",
-      "delete",
+      "creates",
       "describe",
       "did",
       "examine",
@@ -17,14 +16,16 @@ module Grammar
       "hearing",
       "hid",
       "inspect",
-      "is",
       "know",
       "look",
       "made",
+      "make",
+      "makes",
+      "seem",
+      "seems",
       "set",
       "tell",
       "think",
-      "was",
       "wrote",
       "do",
       "does",
@@ -174,7 +175,7 @@ module Grammar
 
     PRONOUNS = %w{ him her his him hers they their their them he she it its this those these that }
 
-    DECLARATIVE_DETECTOR = /\b#{(INFO_VERBS + PRONOUNS)* '\b|\b'}/ix
+    DECLARATIVE_VERB_DETECTOR = /\b#{(INFO_VERBS)* '\b|\b'}/ix
 
     NOUN_INDICATORS = %w{ the a an this about }
 

@@ -136,7 +136,7 @@ class Context
       has_info_verb && placement && placement.to_i < 100
     end
     factogram = fact_candidates.inject({}) do |histogram, fact|
-      index = declarative_index(fact) + relevance_sort_value(fact)
+      index = Grammaer::SentenceParser.declarative_index(fact) + relevance_sort_value(fact)
       histogram[index] ||= []
       histogram[index] << fact
       histogram
@@ -195,10 +195,6 @@ class Context
   end
 
   private
-
-  def declarative_index(sentence)
-    sentence =~ Grammar::LanguageHelper::DECLARATIVE_DETECTOR || 1000
-  end
 
   def downcase_topic
     self.topic.downcase!

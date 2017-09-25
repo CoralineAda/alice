@@ -9,6 +9,10 @@ module Grammar
       new(sentence).parse
     end
 
+    def self.declarative_index(sentence)
+      new(sentence).parse.declarative_index
+    end
+
     def initialize(sentence)
       @sentence = sentence
     end
@@ -39,6 +43,20 @@ module Grammar
       tokens.select{|token| token.part_of_speech.tag == :ADVMOD}.map(&:text)
     end
 
+    def declarative_index
+      return 500 if sentence.include?("?")
+      words.inject([]) do |scores, word|
+        pr = pronouns.include?(word) && words.index(word) + 2 * 2 || 100
+        iv = Grammar::LanguageHelper::INFO_VERBS.include?(word) && words.index(word) + 1 * 1.1 || 100
+        be = declarative_verbs.any? && words.index(word) || 100
+        scores << [pr, iv, be].min
+      end.min
+    end
+
+    def declarative_verbs
+      tokens.select{|token| token.part_of_speech.tag == :VERB && token.lemma == "be"}.map(&:text)
+    end
+
     def interrogatives
       tokens.select{|token| Grammar::LanguageHelper::INTERROGATIVES.include? token}.map(&:text)
     end
@@ -65,6 +83,10 @@ module Grammar
 
     def verbs
       @verbs ||= tokens.select{|token| token.part_of_speech.tag == :VERB}.map(&:text)
+    end
+
+    def words
+      @words ||= sentence.split(" ")
     end
 
   end
