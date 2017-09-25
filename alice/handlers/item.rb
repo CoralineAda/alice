@@ -121,11 +121,16 @@ module Handlers
     end
 
     def item
-      @item ||= ::Item.from(command.subject) ||
-                  ::Item.from(command.subject.split(':')[0]) ||
-                  ::Item.from(command.predicate)
-                  ::Item.from(command_string.fragment) ||
-                  ::Item.ephemeral
+      return @item if @item
+      if command.subject
+        @item = ::Item.from(command.subject) || ::Item.from(command.subject.split(':')[0])
+      end
+      if @item.nil? && command.predicate
+        @item = ::Item.from(command.predicate)
+      end
+      if @item.nil?
+        @item = ::Item.from(command_string.fragment) || ::Item.ephemeral
+      end
     end
 
   end

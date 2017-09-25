@@ -24,7 +24,7 @@ module Parser
     end
 
     def contributors
-      Octokit::Client.new.contributors_stats(repo_path).map{|c| c[:author][:login]}
+      stats = Octokit::Client.new.contributors_stats(repo_path).map(&:author).map(&:login)
     end
 
     private

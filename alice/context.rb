@@ -1,5 +1,5 @@
 class Context
-
+  require 'thread'
   include Mongoid::Document
 
   field :topic
@@ -114,18 +114,17 @@ class Context
   end
 
   def define_corpus
-    self.corpus = begin
-      fetch_content_from_sources.compact
-        .reject{ |s| s.empty? }
-        .reject{ |s| s.include?("may refer to") || s.include?("disambiguation") }
-        .reject{ |s| s.size < (self.corpus_from_user ? self.topic.length + 1 : MINIMUM_FACT_LENGTH)}
-        .map{ |s| Grammar::LanguageHelper.to_third_person(s.gsub(/^\**/, "")) }
-        .uniq || []
+    self.corpus ||= []
+    self.corpus << begin
+      content = fetch_content_from_sources
+      content.reject!{ |s| s.size < (self.corpus_from_user ? self.topic.length + 1 : MINIMUM_FACT_LENGTH)}
+      content
     rescue Exception => e
       Alice::Util::Logger.info "*** Unable to fetch corpus for \"#{self.topic}\": #{e}"
       Alice::Util::Logger.info e.backtrace
-      []
+      nil
     end
+    self.corpus.flatten!.compact!
   end
 
   def declarative_fact(subtopic, speak=true)
@@ -219,15 +218,43 @@ class Context
     if @content = Parser::User.fetch(topic)
       self.corpus_from_user = true
       self.is_ephemeral = true
-      return @content
+      return @content.flatten
     end
-    @content ||= [Parser::Alpha.fetch(topic).to_s]
-    @content << Parser::Google.fetch_all(self.query) unless self.query.nil? || self.query.empty? || self.query == self.topic
-    @content << Parser::Google.fetch_all("facts about #{topic}")
-    @content << Parser::Wikipedia.fetch_all(topic)
-    @content = @content.flatten.map{ |fact| Sanitize.clean(fact.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')).strip }.uniq
+
+    @content ||= []
+
+    mutex = Mutex.new
+    threads = []
+
+    search_string = (self.query && !self.query.empty?) ? self.query : self.topic
+    threads << Thread.new() do
+      c = Parser::Alpha.fetch_all(search_string) # TODO should this be query?
+      mutex.synchronize { @content << c }
+    end
+
+    threads << Thread.new() do
+      c = Parser::Google.fetch_all(search_string)
+      mutex.synchronize { @content << c }
+    end
+
+    threads << Thread.new() do
+      c = Parser::Google.fetch_all("facts about #{topic}")
+      mutex.synchronize { @content << c }
+    end
+
+    threads << Thread.new() do
+      c = Parser::Wikipedia.fetch_all(topic)
+      mutex.synchronize { @content << c }
+    end
+
+    threads.each(&:join)
+    @content = @content.flatten.compact.reject(&:empty?)
+    @content = @content.map{ |fact| Sanitize.clean(fact.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')).strip }.uniq
     @content = @content.reject{ |fact| Grammar::SentenceParser.parse(fact).verbs.empty? }
     @content = @content.reject{ |fact| fact =~ /click/i || fact =~ /website/i }
+    @content = @content.reject{ |s| s.include?("may refer to") || s.include?("disambiguation") }
+    @content = @content.map{ |s| Grammar::LanguageHelper.to_third_person(s.gsub(/^\**/, "")) }
+    @content = @content.uniq!
     @content
   end
 

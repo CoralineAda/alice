@@ -3,9 +3,9 @@ require 'spec_helper'
 describe Context do
 
   before do
-    allow(Parser::Wikipedia).to receive(:fetch) { "" }
-    allow(Parser::Google).to receive(:fetch) { "" }
-    allow(Parser::Alpha).to receive(:fetch) { "" }
+    allow(Parser::Wikipedia).to receive(:fetch_all) { [""] }
+    allow(Parser::Google).to receive(:fetch_all) { [""] }
+    allow(Parser::Alpha).to receive(:fetch_all) { [""] }
 
     Context.destroy_all
 
@@ -53,12 +53,12 @@ describe Context do
       end
 
       it "including bio" do
-        expected = "Nickcave is a musician, songwriter, author, screenwriter, composer and occasional film actor"
+        expected = "Nickcave is a musician, songwriter, author, screenwriter, composer and occasional film actor. "
         expect(@context.corpus.include?(expected)).to be_truthy
       end
 
       it "including attributes" do
-        expect(@context.corpus.include?("Nickcave is on Twitter as @nickcave")).to be_truthy
+        expect(@context.corpus.include?("Nickcave is on Twitter as @nickcave. Find them at https://twitter.com/nickcave")).to be_truthy
       end
 
     end
@@ -81,7 +81,7 @@ describe Context do
     before do
       allow_any_instance_of(Context).to receive(:define_corpus) { true }
       allow_any_instance_of(Context).to receive(:extract_keywords) { true }
-      allow_any_instance_of(Context).to receive(:fetch_content_from_sources) { "" }
+      allow_any_instance_of(Context).to receive(:fetch_content_from_sources) { [] }
     end
 
     it "returns an exact topic match" do
@@ -144,14 +144,13 @@ describe Context do
       context = Context.new
       allow(context).to receive(:fetch_content_from_sources) {
         [
-          "Tom Waits may refer to whatever.",
           "He is amazing.",
           "Waits' lyrics frequently present <em>atmospheric portraits</em> of grotesque, often seedy characters and places—although he has also shown a penchant for more conventional ballads.",
           "He has a cult following and has influenced subsequent songwriters despite having little radio or music video support.",
           "Although Waits' albums have met with mixed commercial success in his native United States, they have occasionally achieved gold album sales status in other countries.",
           "He has been nominated for a number of major music awards and has won Grammy Awards for two albums, Bone Machine and Mule Variations.",
           "In 2011, Waits was inducted into the Rock and Roll Hall of Fame.[3][4]"
-        ].join("\n")
+        ]
       }
       context.define_corpus
       @corpus = context.corpus
@@ -161,13 +160,9 @@ describe Context do
       expect(@corpus.include?("He is amazing.")).to be_falsey
     end
 
-    it "rejects disambiguation sentences" do
-      expect(@corpus.include?("Tom Waits may refer to whatever.")).to be_falsey
-    end
   end
 
-  describe ".extract_keywords" do
-
+  describe ".facts" do
     let(:context) { Context.new }
     let(:corpus) {
       [
@@ -175,7 +170,9 @@ describe Context do
         "the quick brown fox",
         "ran into trouble with",
         "the dish and the spoon are in love",
-        "the dish ran away with the spoon."
+        "the dish ran away with the spoon.",
+        "the spoon is shiny",
+        "the dish, definitely not what it is"
       ]
     }
 
@@ -183,36 +180,9 @@ describe Context do
       allow(context).to receive(:corpus) { corpus }
     end
 
-    it "finds and returns a list of high-frequency probable nouns" do
-      context.send(:extract_keywords)
-      expect(context.keywords).to match_array(
-        ["fox", "dish", "spoon", "ran"]
-      )
+    it "favors a sentence with an early instance of is/was" do
+      expect(context.facts.first).to eq("the spoon is shiny")
     end
-
-    describe ".facts" do
-      let(:context) { Context.new }
-      let(:corpus) {
-        [
-          "the fox and the dog",
-          "the quick brown fox",
-          "ran into trouble with",
-          "the dish and the spoon are in love",
-          "the dish ran away with the spoon.",
-          "the spoon is shiny",
-          "the dish, definitely not what it is"
-        ]
-      }
-
-      before do
-        allow(context).to receive(:corpus) { corpus }
-      end
-
-      it "favors a sentence with an early instance of is/was" do
-        expect(context.facts.first).to eq("the spoon is shiny")
-      end
-    end
-
   end
 
 end

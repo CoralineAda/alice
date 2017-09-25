@@ -33,8 +33,8 @@
     end
 
     def command
-      @command = Message::Command.any_in(verbs: (verbs + [property])).not_in(stop_words: self.words).first
-      @command ||= Message::Command.any_in(indicators: (verbs + adjectives + [property] + [greeting] + [thanks] + [pronoun].compact)).not_in(stop_words: self.words).first
+      @command = Message::Command.any_in(verbs: (verbs + [property])).not.in(stop_words: self.words).first
+      @command ||= Message::Command.any_in(indicators: (verbs + adjectives + [property] + [greeting] + [thanks] + [pronoun].compact)).not.in(stop_words: self.words).first
       @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
       if @command && @command.subject.nil?
         @command.subject = subject || subject_from_context

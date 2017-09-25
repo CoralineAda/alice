@@ -52,6 +52,7 @@ module Parser
     end
 
     def known_person?
+      return false unless command.predicate
       User.like(command.predicate) || User.like(command.subject)
     end
 

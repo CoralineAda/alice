@@ -12,7 +12,7 @@ module Behavior
     end
 
     def owner
-      self.user || (self.actor && self.actor.proper_name) || Actor.new(name: "Edwina Nobody")
+      self.user || self.actor || Actor.new(name: "Edwina Nobody")
     end
 
     def owner_name
