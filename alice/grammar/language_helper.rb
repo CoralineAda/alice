@@ -4,6 +4,7 @@ module Grammar
     ARTICLES = %w{a the of an to and}
 
     INFO_VERBS = [
+      "are",
       "created",
       "creates",
       "describe",
@@ -15,6 +16,7 @@ module Grammar
       "heard",
       "hearing",
       "hid",
+      "is",
       "inspect",
       "know",
       "look",
@@ -26,6 +28,7 @@ module Grammar
       "set",
       "tell",
       "think",
+      "was",
       "wrote",
       "do",
       "does",
