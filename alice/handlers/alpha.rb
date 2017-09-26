@@ -14,7 +14,7 @@ module Handlers
       if result = Parser::Alpha.new(sentence).answer
         result
       else
-        sorted_answers = answers.sort{|a,b| Grammaer::SentenceParser.declarative_index(a) <=> Grammaer::SentenceParser.declarative_index(b)}.map{|a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
+        sorted_answers = answers.sort{|a,b| ::Grammar::SentenceParser.declarative_index(a) <=> ::Grammar::SentenceParser.declarative_index(b)}.map{|a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
         sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
       end
     end

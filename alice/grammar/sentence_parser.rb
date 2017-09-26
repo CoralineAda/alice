@@ -50,7 +50,7 @@ module Grammar
         iv = Grammar::LanguageHelper::INFO_VERBS.include?(word) && words.index(word) + 1 * 1.1 || 100
         be = declarative_verbs.any? && words.index(word) || 100
         scores << [pr, iv, be].min
-      end.min
+      end
     end
 
     def declarative_verbs

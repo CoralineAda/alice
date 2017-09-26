@@ -33,7 +33,7 @@ module Parser
     end
 
     def results
-      sorted_answers = answers.sort{ |a,b| Grammaer::SentenceParser.declarative_index(a) <=> Grammaer::SentenceParser.declarative_index(b) }
+      sorted_answers = answers.sort{ |a,b| Grammar::SentenceParser.declarative_index(a) <=> Grammar::SentenceParser.declarative_index(b) }
       best_answer = sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
       Alice::Util::Logger.info "*** Parser::Google: Answered \"#{self.question}\" with #{best_answer}"
       return best_answer
