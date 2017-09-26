@@ -11,7 +11,7 @@ module Handlers
     private
 
     def answer
-      if result = Parser::Alpha.new(sentence).answer
+      if result = Parser::Alpha.new(sentence).answer.first
         result
       else
         return nil unless answers.any?
