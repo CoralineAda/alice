@@ -45,16 +45,18 @@ module Grammar
 
     def declarative_index
       return 500 if sentence.include?("?")
-      words.inject([]) do |scores, word|
-        pr = pronouns.include?(word) && words.index(word) + 2 * 2 || 100
-        iv = Grammar::LanguageHelper::INFO_VERBS.include?(word) && words.index(word) + 1 * 1.1 || 100
-        be = declarative_verbs.any? && words.index(word) || 100
-        scores << [pr, iv, be].min
-      end
+      pr = pronouns.any? ? pronouns.map{ |pronoun| words.index(pronoun) || 100}.min + 2 * 2 : 100
+      iv = info_verbs.any? ? info_verbs.map{ |verb| words.index(verb) || 100 }.min + 1 * 1.1 : 100
+      be = declarative_verbs.any? ? declarative_verbs.map{ |verb| words.index(verb) || 100 }.min : 100
+      [pr, iv, be].min
     end
 
     def declarative_verbs
-      tokens.select{|token| token.part_of_speech.tag == :VERB && token.lemma == "be"}.map(&:text)
+      @declarative_verbs ||= tokens.select{|token| token.part_of_speech.tag == :VERB && token.lemma == "be"}.map(&:text)
+    end
+
+    def info_verbs
+      @info_verbs ||= words.select{|word| Grammar::LanguageHelper::INFO_VERBS.include?(word)}
     end
 
     def interrogatives
@@ -78,7 +80,7 @@ module Grammar
     end
 
     def pronouns
-      tokens.select{|token| token.part_of_speech.tag == :PRON}.map(&:text)
+      @pronouns ||= tokens.select{|token| token.part_of_speech.tag == :PRON}.map(&:text)
     end
 
     def verbs
