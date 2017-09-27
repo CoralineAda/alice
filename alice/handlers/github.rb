@@ -14,11 +14,19 @@ module Handlers
     end
 
     def commits
-      message.response = parser.commits.take(5).join("\n")
+      if commits = parser.commits
+        message.response = commits.take(5).join("\n")
+      else
+        message.response = "The GitHub API is being ornery again, sorry."
+      end
     end
 
     def contributors
-      message.response = "My contributors include #{parser.contributors.to_sentence}."
+      if contributors = parser.contributors
+        message.response = "My contributors include #{contributors.to_sentence}."
+      else
+        message.response = "GitHub and I aren't talking right now. Their API hates me, I think."
+      end
     end
 
     private
