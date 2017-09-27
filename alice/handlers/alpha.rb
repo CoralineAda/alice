@@ -36,7 +36,7 @@ module Handlers
     end
 
     def sentence
-      @sentence ||= message.trigger.downcase.gsub(/#{ENV[BOT_NAME]}/i, "").gsub(",", "").strip
+      @sentence ||= message.trigger.downcase.gsub(/#{ENV['BOT_NAME']}/i, "").gsub(",", "").strip
     end
 
   end
