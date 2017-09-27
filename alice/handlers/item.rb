@@ -131,6 +131,7 @@ module Handlers
       if @item.nil?
         @item = ::Item.from(command_string.fragment) || ::Item.ephemeral
       end
+      @item
     end
 
   end
