@@ -11,8 +11,8 @@ module Handlers
     private
 
     def answer
-      if result = Parser::Alpha.new(sentence).answer.first
-        result
+      if result = Parser::Alpha.new(sentence).answer
+        result.first
       else
         return nil unless answers.any?
         answers_with_indices = answers.map do |answer|
