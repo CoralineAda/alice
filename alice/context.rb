@@ -255,7 +255,7 @@ class Context
     @content = @content.flatten.compact.reject(&:empty?)
     @content = @content.map{ |fact| Sanitize.clean(fact.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')).strip }.uniq
     @content = @content.reject{ |fact| Grammar::SentenceParser.parse(fact).verbs.empty? }
-    @content = @content.reject{ |fact| fact =~ /click/i || fact =~ /website/i }
+    @content = @content.reject{ |fact| fact =~ /click/i || fact =~ /website/i || fact =~ /quiz/i }
     @content = @content.reject{ |s| s.include?("may refer to") || s.include?("disambiguation") }
     @content = @content.map{ |s| Grammar::LanguageHelper.to_third_person(s.gsub(/^\**/, "")) }
     @content = @content.uniq
