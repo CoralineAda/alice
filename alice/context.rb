@@ -97,8 +97,10 @@ class Context
 
   def corpus_accessor
     return corpus unless is_ephemeral
-    self.corpus = nil
-    define_corpus
+    if self.corpus == nil
+      define_corpus
+    end
+    corpus
   end
 
   def current!
@@ -135,7 +137,7 @@ class Context
       has_info_verb && placement && placement.to_i < 100
     end
     factogram = fact_candidates.inject({}) do |histogram, fact|
-      index = Grammaer::SentenceParser.declarative_index(fact) + relevance_sort_value(fact)
+      index = Grammar::SentenceParser.declarative_index(fact) + relevance_sort_value(fact)
       histogram[index] ||= []
       histogram[index] << fact
       histogram
@@ -215,7 +217,9 @@ class Context
   end
 
   def fetch_content_from_sources
-    if @content = Parser::User.fetch(topic)
+    user_content = Parser::User.fetch(topic)
+    if user_content.any?
+      @content = user_content
       self.corpus_from_user = true
       self.is_ephemeral = true
       return @content.flatten
@@ -254,7 +258,7 @@ class Context
     @content = @content.reject{ |fact| fact =~ /click/i || fact =~ /website/i }
     @content = @content.reject{ |s| s.include?("may refer to") || s.include?("disambiguation") }
     @content = @content.map{ |s| Grammar::LanguageHelper.to_third_person(s.gsub(/^\**/, "")) }
-    @content = @content.uniq!
+    @content = @content.uniq
     @content
   end
 

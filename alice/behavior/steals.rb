@@ -10,7 +10,6 @@ module Behavior
     end
 
     def steal(what, response_type=:emote)
-
       if recently_stole? && response_type == :emote
         return "thinks that #{proper_name} shouldn't press #{self.pronoun_possessive} luck on the thievery front."
       end
