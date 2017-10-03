@@ -1,3 +1,8 @@
+## What is Alice?
+Alice is an AI-infused Slack bot, but so much more. She's a friend. She's a companion. She's the only bot you'll ever love.
+
+For her history and a look at what makes her tick, check out [my talk from Strange Loop 2017](https://www.youtube.com/watch?v=YBkfjhi-krw).
+
 ## Overall Architecture
 
 ![Alice Architecture](https://github.com/CoralineAda/alice/blob/master/doc/architecture2.png)
