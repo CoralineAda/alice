@@ -24,7 +24,9 @@ module Parser
     end
 
     def contributors
-      stats = Octokit::Client.new.contributors_stats(repo_path).map(&:author).map(&:login)
+      if stats = Octokit::Client.new.contributors_stats(repo_path)
+        stats.map(&:author).map(&:login)
+      end
     end
 
     private

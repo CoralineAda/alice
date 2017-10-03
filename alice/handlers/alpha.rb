@@ -12,24 +12,31 @@ module Handlers
 
     def answer
       if result = Parser::Alpha.new(sentence).answer
-        result
+        result.first
       else
-        sorted_answers = answers.sort{|a,b| declarative_index(a) <=> declarative_index(b)}.map{|a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
-        sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
+        return nil unless answers.any?
+        answers_with_indices = answers.map do |answer|
+          {
+            index: ::Grammar::SentenceParser.declarative_index(answer) + answers.index(answer),
+            answer: answer
+          }
+        end
+        answers_with_indices.sort{ |a,b| a[:index] <=> b[:index] }.first[:answer]
       end
     end
 
     def answers
-      answers = (Parser::Google.new(sentence).all_answers + [Parser::Evi.new(sentence).answer]).compact
-    end
-
-    def declarative_index(phrase)
-      return 500 if phrase.include?("?")
-      (phrase =~ ::Grammar::LanguageHelper::DECLARATIVE_DETECTOR) || 1000
+      @answers ||= Parser::Google.new(sentence).all_answers.map do |answer|
+        if answer.include?("...")
+          answer.split("...")[1] || nil
+        else
+          answer
+        end
+      end.compact
     end
 
     def sentence
-      @sentence ||= message.trigger.downcase.gsub("alice", "").gsub(",", "").strip
+      @sentence ||= message.trigger.downcase.gsub(/#{ENV['BOT_NAME']}/i, "").gsub(",", "").strip
     end
 
   end

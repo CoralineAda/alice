@@ -60,7 +60,7 @@
     end
 
     def object
-      @object ||= sentence.nouns.map do |noun|
+      @object ||= sentence.nouns.select do |noun|
         ::Item.from(noun) || ::Beverage.from(noun) || ::Wand.from(noun)
       end.compact.last
     end
@@ -72,6 +72,7 @@
     def property
       return @property if @property
       return unless thing = subject || object
+      return unless defined? thing.class::PROPERTIES
       properties = thing.class::PROPERTIES.inject({}) do |hash, property|
         hash[property.to_s] = property.to_s.split("_").reject{ |value| value == "can" }.map{|w| w.gsub("?","")}
         hash

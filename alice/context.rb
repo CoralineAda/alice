@@ -97,8 +97,10 @@ class Context
 
   def corpus_accessor
     return corpus unless is_ephemeral
-    self.corpus = nil
-    define_corpus
+    if self.corpus == nil
+      define_corpus
+    end
+    corpus
   end
 
   def current!
@@ -135,7 +137,7 @@ class Context
       has_info_verb && placement && placement.to_i < 100
     end
     factogram = fact_candidates.inject({}) do |histogram, fact|
-      index = declarative_index(fact) + relevance_sort_value(fact)
+      index = Grammar::SentenceParser.declarative_index(fact) + relevance_sort_value(fact)
       histogram[index] ||= []
       histogram[index] << fact
       histogram
@@ -195,10 +197,6 @@ class Context
 
   private
 
-  def declarative_index(sentence)
-    sentence =~ Grammar::LanguageHelper::DECLARATIVE_DETECTOR || 1000
-  end
-
   def downcase_topic
     self.topic.downcase!
   end
@@ -219,7 +217,9 @@ class Context
   end
 
   def fetch_content_from_sources
-    if @content = Parser::User.fetch(topic)
+    user_content = Parser::User.fetch(topic)
+    if user_content.any?
+      @content = user_content
       self.corpus_from_user = true
       self.is_ephemeral = true
       return @content.flatten
@@ -255,10 +255,10 @@ class Context
     @content = @content.flatten.compact.reject(&:empty?)
     @content = @content.map{ |fact| Sanitize.clean(fact.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')).strip }.uniq
     @content = @content.reject{ |fact| Grammar::SentenceParser.parse(fact).verbs.empty? }
-    @content = @content.reject{ |fact| fact =~ /click/i || fact =~ /website/i }
+    @content = @content.reject{ |fact| fact =~ /click/i || fact =~ /website/i || fact =~ /quiz/i }
     @content = @content.reject{ |s| s.include?("may refer to") || s.include?("disambiguation") }
     @content = @content.map{ |s| Grammar::LanguageHelper.to_third_person(s.gsub(/^\**/, "")) }
-    @content = @content.uniq!
+    @content = @content.uniq
     @content
   end
 
