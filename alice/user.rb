@@ -71,7 +71,12 @@ class User
     params = { token: ENV['API_TOKEN'], user: slack_id }
     uri.query = URI.encode_www_form(params)
     response = Net::HTTP.get_response(uri)
-    JSON.parse(response.body)['user']['profile']['display_name']
+    json = JSON.parse(response.body)
+    display_name = json['user']['profile']['display_name']
+    if display_name.empty?
+      display_name = json['user']['profile']['real_name']
+    end
+    display_name
   end
 
   def self.from(string)
