@@ -22,7 +22,7 @@ gem 'ruby-stemmer', '>=0.8.3', require: 'lingua/stemmer'
 gem 'rubyfish'
 gem 'sanitize', '>= 3.0.2'
 gem 'sinatra'
-gem 'slackbotsy'
+gem 'slackbotsy', git: "https://github.com/CoralineAda/slackbotsy", branch: "add-display-name-support"
 gem 'wikipedia-client', ">= 1.7.0"
 gem 'wolfram-alpha'
 gem 'yummly'
