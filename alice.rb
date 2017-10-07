@@ -35,7 +35,7 @@ end
 
 bot = bot_interface_handler.new(config) do
   hear /(.+)/ do |mdata|
-    Alice::Util::Logger.info "*** display_name: #{display_name}"
+    Alice::Util::Logger.info "*** display name #{display_name}"
     begin
       name = User.ensure_user(user_name, user_id).primary_nick
       if message = Pipeline::Listener.new(name, mdata[1]).route
