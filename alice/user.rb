@@ -68,7 +68,7 @@ class User
 
   def self.get_display_name(slack_id)
     uri = URI('https://slack.com/api/users.info')
-    params = { token: ENV['API_TOKEN'], user: user_id }
+    params = { token: ENV['API_TOKEN'], user: slack_id }
     uri.query = URI.encode_www_form(params)
     response = Net::HTTP.get_response(uri)
     JSON.parse(response.body)['profile']['display_name']
