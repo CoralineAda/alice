@@ -33,22 +33,14 @@ if ENV['SLACK_API_TOKEN'] == 'xxx' || ENV['USE_TESTBOTSY'] == 'true'
   bot_interface_handler = Testbotsy
 end
 
-module Slackbotsy
-  class Message < Hash
-    def initialize(caller, msg)
-      super()
-      Alice::Util::Logger.info "*** msg #{msg}"
-      self.update(msg)
-      @caller = caller          # bot object
-      @bot    = caller          # alias for bot object
-    end
-  end
-end
-
 bot = bot_interface_handler.new(config) do
   hear /(.+)/ do |mdata|
-    Alice::Util::Logger.info "*** display name #{display_name}"
-    Alice::Util::Logger.info "*** display name #{display_name}"
+    uri = URI('https://slack.com/api/users.info')
+    params = { token: ENV['SLACK_API_TOKEN'], user: user_id }
+    uri.query = URI.encode_www_form(params)
+
+    res = Net::HTTP.get_response(uri)
+    Alice::Util::Logger.info res.body
     begin
       name = User.ensure_user(user_name, user_id).primary_nick
       if message = Pipeline::Listener.new(name, mdata[1]).route

@@ -60,9 +60,13 @@ class User
   INACTIVITY_THRESHOLD = 13
 
   def self.ensure_user(user_name, slack_id)
+    # get_display_name(slack_id)
     user = find_or_create(user_name)
     user.update_attribute(:slack_id, slack_id) unless user.slack_id
     user
+  end
+
+  def self.get_display_name(slack_id)
   end
 
   def self.from(string)
