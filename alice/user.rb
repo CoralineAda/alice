@@ -74,7 +74,7 @@ class User
     json = JSON.parse(response.body)
     display_name = json['user']['profile']['display_name']
     if display_name.empty?
-      display_name = json['user']['profile']['real_name']
+      display_name = json['user']['user_name']
     end
     display_name
   end
