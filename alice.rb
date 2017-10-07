@@ -33,6 +33,18 @@ if ENV['SLACK_API_TOKEN'] == 'xxx' || ENV['USE_TESTBOTSY'] == 'true'
   bot_interface_handler = Testbotsy
 end
 
+module Slackbotsy
+  class Message < Hash
+    def initialize(caller, msg)
+      super()
+      Alice::Util::Logger.info "*** msg #{msg}"
+      self.update(msg)
+      @caller = caller          # bot object
+      @bot    = caller          # alias for bot object
+    end
+  end
+end
+
 bot = bot_interface_handler.new(config) do
   hear /(.+)/ do |mdata|
     Alice::Util::Logger.info "*** display name #{display_name}"
