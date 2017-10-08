@@ -60,6 +60,9 @@ class User
   INACTIVITY_THRESHOLD = 13
 
   def self.ensure_user(user_name, slack_id)
+    if user = where(slack_id: slack_id).first
+      return user
+    end
     display_name = get_display_name(slack_id)
     user = find_or_create(display_name)
     user.update_attribute(:slack_id, slack_id) unless user.slack_id
@@ -142,7 +145,7 @@ class User
   end
 
   def self.find_or_create(nick)
-    by_nick(nick) || create(primary_nick: nick.downcase, alt_nicks: ["#{nick.downcase}_"])
+    by_nick(nick) || create(primary_nick: nick.downcase)
   end
 
   def self.non_bot
