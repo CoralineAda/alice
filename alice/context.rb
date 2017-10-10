@@ -59,7 +59,7 @@ class Context
     candidates = Context.where(:has_user => true).order_by(:updated_at => 'desc')
     candidates.each do |candidate|
       return candidate if (["they", "them", "their"] & pronouns).any?
-      return candidate if (candidate.context_user.pronouns_enumerated & pronouns).any?
+      return candidate if candidate.context_user && (candidate.context_user.pronouns_enumerated & pronouns).any?
     end
     return nil
   end
