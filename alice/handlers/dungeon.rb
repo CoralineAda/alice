@@ -90,7 +90,7 @@ module Handlers
     end
 
     def reset_maze
-      message.response = Dungeon.reset_maze
+      message.response = Dungeon.reset!
     end
 
   end
