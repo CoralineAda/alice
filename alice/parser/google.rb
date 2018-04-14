@@ -33,7 +33,7 @@ module Parser
     rescue Exception => e
       Alice::Util::Logger.info "*** Parser::Google: Unable to process \"#{self.question}\": #{e}"
       Alice::Util::Logger.info e.backtrace
-      return ["Hmm, that part of my brain is returning a #{e}"]
+      return ["Hmm, that part of my brain is returning a #{e}. Google is getting suspicious. You should probably rotate my IP address again."]
     end
 
     def results
