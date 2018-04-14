@@ -30,6 +30,10 @@ module Parser
     def answers
       answers = (full_search + reductivist_search).compact.map{ |a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
       answers.reject!{ |a| a =~ /\.\.\.$/}
+    rescue Exception => e
+      Alice::Util::Logger.info "*** Parser::Google: Unable to process \"#{self.question}\": #{e}"
+      Alice::Util::Logger.info e.backtrace
+      return ["Hmm, that part of my brain is returning a #{e}"]
     end
 
     def results
@@ -40,7 +44,7 @@ module Parser
     rescue Exception => e
       Alice::Util::Logger.info "*** Parser::Google: Unable to process \"#{self.question}\": #{e}"
       Alice::Util::Logger.info e.backtrace
-      ""
+      return ["Hmm, that part of my brain is returning a #{e}"]
     end
 
     def full_search
