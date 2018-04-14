@@ -26,7 +26,7 @@ module Parser
     rescue Exception => e
       Alice::Util::Logger.info "*** Parser::Alpha: Unable to process \"#{self.question}\": #{e}"
       Alice::Util::Logger.info e.backtrace
-      nil
+      return ["Hmm, that part of my brain is returning a #{e}"]
     end
 
     private
