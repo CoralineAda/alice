@@ -7,8 +7,7 @@ module Handlers
 
     def get_property
       parser.parse
-      sanitized_property = property.to_s.gsub("_", " ").split.last
-      response = result(sanitized_property)
+      response = result(property.to_s)
       if response.present?
         message.response = response ? "#{response}." : "no."
       elsif subject
