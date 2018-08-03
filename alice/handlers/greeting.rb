@@ -6,11 +6,7 @@ module Handlers
     include Behavior::HandlesCommands
 
     def greet_sender
-      greetee = subject.primary_nick
-      if command_string.fragment.include?("to")
-        greetee = command_string.fragment.split("to")[1]
-      end
-      message.response = Util::Randomizer.greeting(greetee)
+      message.response = Util::Randomizer.greeting(subject.primary_nick)
     end
 
     private
