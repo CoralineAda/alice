@@ -3,18 +3,19 @@ require "google/cloud/language"
 module Grammar
   class SentenceParser
 
-    attr_reader :sentence, :tokens
+    attr_reader :sentence, :tokens, :keywords
 
-    def self.parse(sentence)
-      new(sentence).parse
+    def self.parse(sentence, keywords: keywords)
+      new(sentence, keywords: keywords).parse
     end
 
     def self.declarative_index(sentence)
       new(sentence).parse.declarative_index
     end
 
-    def initialize(sentence)
+    def initialize(sentence, keywords: keywords)
       @sentence = sentence
+      @keywords = keywords
     end
 
     def parse
@@ -48,14 +49,18 @@ module Grammar
       pr = pronouns.any? ? pronouns.map{ |pronoun| words.index(pronoun) || 100}.min : 100
       iv = info_verbs.any? ? info_verbs.map{ |verb| words.index(verb) || 100 }.min : 100
       be = declarative_verbs.any? ? declarative_verbs.map{ |verb| words.index(verb) || 100 }.min : 100
-      if pr < 3 && iv < 3
+      ke = (nouns + objects).to_a & keywords.to_a
+      subj = ke.any? ? ke.map{|word| words.index(word) || 100}.min : 100
+      if subj < 3 && be < 3
+        return subj
+      elsif pr < 3 && iv < 3
         return pr + iv
       elsif pr < 3 && be < 3
         return pr + be
       elsif be == 100
         return iv + 1 * 1.1
       end
-      [pr + 2 * 2, iv + 1 * 1.1, be].min
+      [pr + 2 * 2, iv + 1 * 1.1, be, subj].min
     end
 
     def declarative_verbs

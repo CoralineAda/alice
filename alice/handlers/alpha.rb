@@ -28,7 +28,10 @@ module Handlers
     def answers
       @answers ||= Parser::Google.new(sentence).all_answers.map do |answer|
         if answer.include?("...")
-          answer.split("...")[1] || nil
+          answer = answer.split("...")[1] || ""
+        end
+        if answer.scan(/\. [a-zA-Z]+/).any?
+          answer.split('.')[0..-2].join(' ')
         else
           answer
         end

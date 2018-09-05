@@ -83,7 +83,7 @@
     end
 
     def sentence
-      @sentence ||= Grammar::SentenceParser.parse(to_parse)
+      @sentence ||= Grammar::SentenceParser.parse(to_parse, keywords: nil)
     end
 
     def subject
