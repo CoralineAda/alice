@@ -6,7 +6,12 @@ module Handlers
     include Behavior::HandlesCommands
 
     def greet_sender
-      message.response = Util::Randomizer.greeting(subject.primary_nick)
+      if subject
+        greetee = subject.primary_nick
+      elsif command_string.fragment.include?("to")
+        greetee = command_string.fragment.split("to")[1]
+      end
+      message.response = Util::Randomizer.greeting(greetee)
     end
 
     private
@@ -15,7 +20,7 @@ module Handlers
       if command.subject.is_a?(::User)
         !command.subject.is_bot? && command.subject || message.sender
       else
-        command.subject != ENV['BOT_NAME'] && ::User.from(command.subject) || message.sender
+        command.subject != ENV['BOT_NAME'] && ::User.from(command.subject)
       end
     end
 
