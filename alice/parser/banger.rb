@@ -80,7 +80,7 @@ module Parser
     private
 
     def sentence
-      @sentence ||= Grammar::SentenceParser.parse(command_string.content)
+      @sentence ||= Grammar::SentenceParser.parse(command_string.content, keywords: nil)
     end
 
   end

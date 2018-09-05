@@ -28,7 +28,8 @@ module Parser
     private
 
     def answers
-      answers = (full_search + reductivist_search).compact.map{ |a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
+#      answers = (full_search + reductivist_search).compact.map{ |a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
+      answers = (reductivist_search).compact.map{ |a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
       answers.reject!{ |a| a =~ /\.\.\.$/}
     rescue Exception => e
       Alice::Util::Logger.info "*** Parser::Google: Unable to process \"#{self.question}\": #{e}"
@@ -58,8 +59,8 @@ module Parser
     end
 
     def simplified_question
-      parsed_question = Grammar::SentenceParser.parse(question)
-      (parsed_question.nouns + parsed_question.adjectives).join(' ')
+      parsed_question = Grammar::SentenceParser.parse(question, keywords: nil)
+      "wikipedia what is #{(parsed_question.nouns + parsed_question.adjectives).join(' ')}"
     end
 
   end

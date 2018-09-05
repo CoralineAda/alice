@@ -203,7 +203,7 @@ class Context
 
   def extract_keywords
     self.keywords += begin
-      parsed_corpus = Grammar::SentenceParser.parse(corpus.join(' '))
+      parsed_corpus = Grammar::SentenceParser.parse(corpus.join(' '), keywords: nil)
       candidates = parsed_corpus.nouns + parsed_corpus.adjectives
       candidates = candidates.inject(Hash.new(0)) {|h,i| h[i] += 1; h }
       candidates.select{|k,v| v > 1}.map(&:first).map(&:downcase).uniq
