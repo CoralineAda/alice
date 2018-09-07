@@ -79,49 +79,5 @@ module Grammar
       @parsed_sentences ||= corpus.map{ |sentence| Grammar::SentenceParser.new(sentence).parse }
     end
 
-    def adjectives
-      tokens.select{|token| token.part_of_speech.tag == :ADJ}.map(&:text)
-    end
-
-    def adverbs
-      tokens.select{|token| token.part_of_speech.tag == :ADVMOD}.map(&:text)
-    end
-
-    def declarative_verbs
-      @declarative_verbs ||= tokens.select{|token| token.part_of_speech.tag == :VERB && token.lemma == "be"}.map(&:text)
-    end
-
-    def info_verbs
-      @info_verbs ||= words.select{|word| Grammar::LanguageHelper::INFO_VERBS.include?(word)}
-    end
-
-    def interrogatives
-      tokens.select{|token| Grammar::LanguageHelper::INTERROGATIVES.include? token}.map(&:text)
-    end
-
-    def nominative_pronouns
-      tokens.select{|token| token.part_of_speech.tag == :PRON && token.part_of_speech.case == :NOMINATIVE || token.part_of_speech.case == :GENITIVE}.map(&:text)
-    end
-
-    def nouns
-      tokens.select{|token| token.part_of_speech.tag == :NOUN || token.label == :ATTR || token.label == :POBJ || token.part_of_speech.tag == :X}.map(&:text)
-    end
-
-    def objects
-      tokens.select{|token| token.part_of_speech.tag == :NOUN && token.label == :DOBJ}.map(&:text)
-    end
-
-    def prepositions
-      tokens.select{|token| token.label == :PREP}.map(&:text)
-    end
-
-    def pronouns
-      @pronouns ||= tokens.select{|token| token.part_of_speech.tag == :PRON}.map(&:text)
-    end
-
-    def verbs
-      @verbs ||= tokens.select{|token| token.part_of_speech.tag == :VERB}.map(&:text)
-    end
-
   end
 end
