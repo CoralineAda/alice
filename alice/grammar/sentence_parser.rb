@@ -3,19 +3,14 @@ require "google/cloud/language"
 module Grammar
   class SentenceParser
 
-    attr_reader :sentence, :tokens, :keywords
+    attr_reader :sentence, :tokens
 
-    def self.parse(sentence, keywords: keywords)
-      new(sentence, keywords: keywords).parse
+    def self.parse(sentence)
+      new(sentence).parse
     end
 
-    def self.declarative_index(sentence)
-      new(sentence).parse.declarative_index
-    end
-
-    def initialize(sentence, keywords: keywords)
+    def initialize(sentence)
       @sentence = sentence
-      @keywords = keywords
     end
 
     def parse
@@ -42,25 +37,6 @@ module Grammar
 
     def adverbs
       tokens.select{|token| token.part_of_speech.tag == :ADVMOD}.map(&:text)
-    end
-
-    def declarative_index
-      return 500 if sentence.include?("?")
-      pr = pronouns.any? ? pronouns.map{ |pronoun| words.index(pronoun) || 100}.min : 100
-      iv = info_verbs.any? ? info_verbs.map{ |verb| words.index(verb) || 100 }.min : 100
-      be = declarative_verbs.any? ? declarative_verbs.map{ |verb| words.index(verb) || 100 }.min : 100
-      ke = (nouns + objects).to_a & keywords.to_a
-      subj = ke.any? ? ke.map{|word| words.index(word) || 100}.min : 100
-      if subj < 3 && be < 3
-        return subj
-      elsif pr < 3 && iv < 3
-        return pr + iv
-      elsif pr < 3 && be < 3
-        return pr + be
-      elsif be == 100
-        return iv + 1 * 1.1
-      end
-      [pr + 2 * 2, iv + 1 * 1.1, be, subj].min
     end
 
     def declarative_verbs

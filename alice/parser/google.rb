@@ -28,9 +28,9 @@ module Parser
     private
 
     def answers
-#      answers = (full_search + reductivist_search).compact.map{ |a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
-      answers = (reductivist_search).compact.map{ |a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
-      answers.reject!{ |a| a =~ /\.\.\.$/}
+      answers = (full_search + reductivist_search).compact.map{ |a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
+#      answers = (reductivist_search).compact.map{ |a| a.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') }
+      answers.reject!{ |a| a =~ /\.\.\./}
     rescue Exception => e
       Alice::Util::Logger.info "*** Parser::Google: Unable to process \"#{self.question}\": #{e}"
       Alice::Util::Logger.info e.backtrace
@@ -38,8 +38,7 @@ module Parser
     end
 
     def results
-      sorted_answers = answers.sort{ |a,b| Grammar::SentenceParser.declarative_index(a) <=> Grammar::SentenceParser.declarative_index(b) }
-      best_answer = sorted_answers.any? && sorted_answers.first.split.join(' ') || ""
+      best_answer = answers.any? ? Grammar::DeclarativeSorter.sort(query: question, corpus: answers).first : ""
       Alice::Util::Logger.info "*** Parser::Google: Answered \"#{self.question}\" with #{best_answer}"
       return best_answer
     rescue Exception => e
@@ -59,7 +58,7 @@ module Parser
     end
 
     def simplified_question
-      parsed_question = Grammar::SentenceParser.parse(question, keywords: nil)
+      parsed_question = Grammar::SentenceParser.parse(question)
       "wikipedia what is #{(parsed_question.nouns + parsed_question.adjectives).join(' ')}"
     end
 

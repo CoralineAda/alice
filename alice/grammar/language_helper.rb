@@ -199,10 +199,10 @@ module Grammar
     end
 
     def self.to_third_person(text)
-      text.gsub(/\wI\w/, "they")
-          .gsub(/\wam\w/, "are")
-          .gsub(/\whave\w/, "has")
-          .gsub(/\wmy\w/, "their ")
+      text.gsub(/\WI\W/, "they")
+          .gsub(/\Wam\W/, "are")
+          .gsub(/\Whave\W/, "has")
+          .gsub(/\Wmy\W/, "their ")
     end
 
   end

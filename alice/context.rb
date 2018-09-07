@@ -36,7 +36,7 @@ class Context
   end
 
   def self.keywords_from(topic)
-    topic.to_s.downcase.split - Grammar::LanguageHelper::PREDICATE_INDICATORS
+    topic.to_s.downcase.scan(/[a-zA-Z]+/) - Grammar::LanguageHelper::PREDICATE_INDICATORS
   end
 
   def self.find_or_create(topic, query="")
@@ -131,24 +131,15 @@ class Context
 
   def declarative_fact(subtopic, speak=true)
     return AMBIGUOUS if ambiguous?
-    fact_candidates = relational_facts(subtopic).select do |sentence|
-      has_info_verb = sentence =~ /\b#{(Grammar::LanguageHelper::INFO_VERBS + ["it", "they", "he", "she"])* '|\b'}/ix
-      placement = position_of(subtopic.downcase, sentence.downcase)
-      has_info_verb && placement && placement.to_i < 100
-    end
-    factogram = fact_candidates.inject({}) do |histogram, fact|
-      index = Grammar::SentenceParser.declarative_index(fact) + relevance_sort_value(fact)
-      histogram[index] ||= []
-      histogram[index] << fact
-      histogram
-    end
-    if final_candidates = factogram[factogram.keys.sort.first]
-      fact = final_candidates.sample
+    sorted_facts = Grammar::DeclarativeSorter.sort(query: subtopic, corpus: self.corpus)
+    unspoken_facts = sorted_facts - self.spoken
+    if unspoken_facts.any?
+      fact = unspoken_facts.first
       record_spoken(fact) if speak
-      fact
     else
-      nil
+      fact = sorted_facts.first
     end
+    fact
   end
 
   def expire
@@ -190,7 +181,7 @@ class Context
 
   def targeted_fact(subtopic, spoken=true)
     return AMBIGUOUS if ambiguous?
-    fact = targeted_fact_candidates(subtopic).first
+    unspoken_facts = self.spoken - targeted_fact_candidates(subtopic).first
     record_spoken(fact) if spoken
     fact
   end
@@ -203,7 +194,7 @@ class Context
 
   def extract_keywords
     self.keywords += begin
-      parsed_corpus = Grammar::SentenceParser.parse(corpus.join(' '), keywords: nil)
+      parsed_corpus = Grammar::SentenceParser.parse(corpus.join(' '))
       candidates = parsed_corpus.nouns + parsed_corpus.adjectives
       candidates = candidates.inject(Hash.new(0)) {|h,i| h[i] += 1; h }
       candidates.select{|k,v| v > 1}.map(&:first).map(&:downcase).uniq
@@ -262,27 +253,8 @@ class Context
     @content
   end
 
-  def is_was_sort_value(element)
-    (
-      position_of("is", element) ||
-      position_of("was", element) ||
-      position_of("are", element) ||
-      position_of("were", element) ||
-      position_of("be", element) ||
-      100
-    ) - 100
-  end
-
-  def relevance_sort_value(element)
-    facts.index(element) && facts.index(element) - 25 || 0
-  end
-
   def near_match(subject, sentence)
     (sentence.downcase.split & subject.split).size > 0
-  end
-
-  def position_of(word, sentence)
-    sentence =~ /\b#{word}/i
   end
 
   def record_spoken(fact)
