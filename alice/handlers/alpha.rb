@@ -13,15 +13,8 @@ module Handlers
     def answer
       if result = Parser::Alpha.new(sentence).answer
         result.first
-      else
-        return nil unless answers.any?
-        answers_with_indices = answers.map do |answer|
-          {
-            index: ::Grammar::SentenceParser.declarative_index(answer) + answers.index(answer),
-            answer: answer
-          }
-        end
-        answers_with_indices.sort{ |a,b| a[:index] <=> b[:index] }.first[:answer]
+      elsif answers.any?
+        Grammar::DeclarativeSorter.sort(query: sentence, corpus: answers).first
       end
     end
 
