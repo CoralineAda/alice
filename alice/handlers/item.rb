@@ -110,10 +110,10 @@ module Handlers
 
     def item_for_user
       user = message.sender
-      ::Item.for_user(user).from(command.subject) ||
-        ::Item.for_user(user).from(command.subject.split(':')[0]) ||
-        ::Item.for_user(user).from(command_string.fragment) ||
-        ::Item.ephemeral
+      available_items = ::Item.for_user(user).to_a
+      keywords = [command_string.fragment.split, command.subject, command.predicate].flatten.compact.uniq
+      potential_items = keywords.map{ |keyword| ::Item.like_all(keyword)}.flatten.compact
+      (present_items & potential_items).first
     end
 
     def beverage_for_user
