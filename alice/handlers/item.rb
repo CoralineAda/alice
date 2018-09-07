@@ -26,8 +26,8 @@ module Handlers
     end
 
     def take
-      if item = loose_item
-        message.response = item.transfer_to(message.sender)
+      if loose_item
+        message.response = loose_item.transfer_to(message.sender)
       elsif Place.current.description =~ /#{command.subject}/i
         message.response = Util::Randomizer.cant_pick_up(command.subject)
       else
@@ -102,7 +102,10 @@ module Handlers
     private
 
     def loose_item
-      item.place && item.place.items.include?(item) && item
+      present_items = ::Item.where(place_id: Place.current.id).to_a
+      keywords = [command_string.fragment.split, command.subject, command.predicate].flatten.compact.uniq
+      potential_items = keywords.map{ |keyword| ::Item.like_all(keyword)}.flatten.compact
+      (present_items & potential_items).sample
     end
 
     def item_for_user
@@ -122,16 +125,14 @@ module Handlers
 
     def item
       return @item if @item
+      @item = ::Item.from(command_string.fragment)
       if command.subject
-        @item = ::Item.from(command.subject) || ::Item.from(command.subject.split(':')[0])
+        @item ||= ::Item.from(command.subject) || ::Item.from(command.subject.split(':')[0])
       end
-      if @item.nil? && command.predicate
-        @item = ::Item.from(command.predicate)
+      if command.predicate
+        @item ||= ::Item.from(command.predicate)
       end
-      if @item.nil?
-        @item = ::Item.from(command_string.fragment) || ::Item.ephemeral
-      end
-      @item
+      @item || ::Item.ephemeral
     end
 
   end
