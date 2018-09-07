@@ -122,16 +122,14 @@ module Handlers
 
     def item
       return @item if @item
+      @item = ::Item.from(command_string.fragment)
       if command.subject
-        @item = ::Item.from(command.subject) || ::Item.from(command.subject.split(':')[0])
+        @item ||= ::Item.from(command.subject) || ::Item.from(command.subject.split(':')[0])
       end
-      if @item.nil? && command.predicate
-        @item = ::Item.from(command.predicate)
+      if command.predicate
+        @item ||= ::Item.from(command.predicate)
       end
-      if @item.nil?
-        @item = ::Item.from(command_string.fragment) || ::Item.ephemeral
-      end
-      @item
+      @item || ::Item.ephemeral
     end
 
   end
