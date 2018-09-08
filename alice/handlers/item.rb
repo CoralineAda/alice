@@ -69,7 +69,13 @@ module Handlers
     end
 
     def read
-      message.response = (loose_item || item_for_user).read
+      if readable = loose_item || item_for_user
+        message.response = readable.read
+      elsif readable = item && item.owner && item.owner.place_id
+        message.response = "You can't read that, it's in #{item.owner.primary_nick}'s backpack."
+      else
+        message.response = "There's nothing like that here. Did you forget your glasses maybe?"
+      end
     end
 
     def steal
