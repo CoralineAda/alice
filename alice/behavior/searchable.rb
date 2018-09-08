@@ -38,8 +38,8 @@ module Behavior
         matches = []
         matches << where("#{search_attr}" => /^#{Regexp.escape(name)}/i).to_a
         matches << where("#{search_attr}" => /^#{Regexp.escape(name)}$/i).to_a
-        matches << where("#{search_attr}" => /\W#{Regexp.escape(name)}\W/i).to_a
-        return matches
+        matches << where("#{search_attr}" => /\W#{Regexp.escape(name)}\W*/i).to_a
+        return matches.flatten
       end
 
     end
