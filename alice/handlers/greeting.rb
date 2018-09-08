@@ -11,6 +11,7 @@ module Handlers
       elsif command_string.fragment.include?("to")
         greetee = command_string.fragment.split("to")[1]
       end
+      greetee ||= message.sender.primary_nick
       message.response = Util::Randomizer.greeting(greetee)
     end
 
