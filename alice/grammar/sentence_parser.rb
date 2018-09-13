@@ -16,6 +16,7 @@ module Grammar
     def parse
       language = Google::Cloud::Language.new
       document = language.document(self.sentence)
+      document.language = "en"
       @tokens = document.syntax.tokens
       self
     end
