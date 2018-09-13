@@ -14,7 +14,7 @@ module Parser
     end
 
     def initialize(question)
-      @question = (question.gsub("+", "plus").gsub(" ", "+") + "&hl=lang_en").encode("ASCII", invalid: :replace, undef: :replace, replace: '')
+      @question = question.gsub("+", "plus").gsub(" ", "+").encode("ASCII", invalid: :replace, undef: :replace, replace: '')
     end
 
     def answer
@@ -47,12 +47,12 @@ module Parser
     end
 
     def full_search
-      doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{question}"))
+      doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{question}&hl=lang_en"))
       doc.css("div span.st").map(&:text)
     end
 
     def reductivist_search
-      doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{simplified_question}"))
+      doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{simplified_question}&hl=lang_en"))
       doc.css("div span.st").map(&:text)
     end
 
