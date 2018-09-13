@@ -149,13 +149,9 @@ class Context
   def facts
     spoken_facts = corpus_accessor.to_a.select{|sentence| spoken.include? sentence}
     if spoken_facts.count == corpus_accessor.to_a.count # We've said all we can, time to repeat ourselves
-      corpus_accessor.to_a.sort do |a,b|
-        is_was_sort_value(a) <=> is_was_sort_value(b)
-      end.uniq
+      corpus_accessor.to_a
     else
-      corpus_accessor.to_a.reject{|sentence| spoken.include? sentence}.sort do |a,b|
-        is_was_sort_value(a) <=> is_was_sort_value(b)
-      end.uniq
+      corpus_accessor.to_a.reject{|sentence| spoken.include? sentence}.uniq
     end
   end
 
