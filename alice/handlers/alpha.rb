@@ -15,12 +15,12 @@ module Handlers
       if results = Parser::Alpha.new(sentence).answer
         results.first
       elsif answers.any?
-        Grammar::DeclarativeSorter.sort(query: sentence, corpus: answers).first
+        answers.first
       end
     end
 
     def answers
-      @answers ||= Parser::Google.new(sentence).all_answers
+      @answers ||= Parser::Google.fetch_all(sentence)
     end
 
     def sentence
