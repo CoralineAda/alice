@@ -11,6 +11,7 @@ module Handlers
     private
 
     def answer
+      # Try Wolfram Alpha first, then fall back to Google
       if results = Parser::Alpha.new(sentence).answer
         results.first
       elsif answers.any?
@@ -19,16 +20,7 @@ module Handlers
     end
 
     def answers
-      @answers ||= Parser::Google.new(sentence).all_answers.map do |answer|
-        if answer.include?("...")
-          answer = answer.split("...")[1] || ""
-        end
-        if answer.scan(/\. [a-zA-Z]+/).any?
-          answer.split('.')[0..-2].join(' ')
-        else
-          answer
-        end
-      end.compact
+      @answers ||= Parser::Google.new(sentence).all_answers
     end
 
     def sentence
