@@ -5,9 +5,9 @@ module Pipeline
     attr_reader :username, :trigger
 
     METHOD_MAP = {
-      /^[0-9]+/                             => :process_number,
-      /(.+\+\+)/x                           => :process_points,
-      /(.+)/                                => :process_text
+      /^[0-9]+/       => :process_number,
+      /(.+\+\+)/x     => :process_points,
+      /(.+)/          => :process_text
     }
 
     def initialize(username, trigger)
@@ -37,8 +37,10 @@ module Pipeline
     def process_text
       return unless self.trigger[0] =~ /[a-zA-Z\!]/x
       message = Pipeline::Processor.process(message(self.trigger), :respond)
-      if message.response.nil? || (message.response.content && message.response.content.empty?) && self.trigger =~ /nice|good|kind|sweet|cool|great/i
-        message = Pipeline::Processor.process(message("nice"), :respond)
+      if message.response.nil? ||
+        (message.response.content && message.response.content.empty?) &&
+        self.trigger =~ /nice|good|kind|sweet|cool|great/i
+          message = Pipeline::Processor.process(message("nice"), :respond)
       end
       message
     end

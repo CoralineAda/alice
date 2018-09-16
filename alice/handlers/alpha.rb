@@ -11,8 +11,8 @@ module Handlers
     private
 
     def answer
-      if result = Parser::Alpha.new(sentence).answer
-        result.first
+      if results = Parser::Alpha.new(sentence).answer
+        results.first
       elsif answers.any?
         Grammar::DeclarativeSorter.sort(query: sentence, corpus: answers).first
       end
