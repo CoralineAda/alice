@@ -25,7 +25,7 @@ module Pipeline
     def should_respond?
       return true if self.trigger[0] == "!"
       return true if self.trigger =~ /\+\+/ && self.trigger !~ /\s*c\+\+/i
-      return true if self.trigger =~ /^[0-9\.\-]+$/
+      return true if self.trigger =~ /^[0-9\.\-]+/
       return false if self.trigger =~ /thank/i && self.trigger !~ /#{ENV['BOT_NAME']}/i
       return true if self.trigger =~ /#{ENV['BOT_NAME']}/i
       return true if self.trigger =~ /nice|good|kind|sweet|cool|great/i
