@@ -33,7 +33,7 @@ module Pipeline
     end
 
     def process_text
-      return unless self.trigger[0] =~ /[a-zA-Z\!]/x
+      return unless self.trigger[0] =~ /[a-zA-Z\!\<]/x
       message = Pipeline::Processor.process(message(self.trigger), :respond)
       if message.response.nil? ||
         (message.response.content && message.response.content.empty?) &&
