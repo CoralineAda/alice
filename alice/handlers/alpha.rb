@@ -21,7 +21,7 @@ module Handlers
     end
 
     def sentence
-      @sentence ||= message.trigger.downcase.gsub(/#{ENV['BOT_NAME']}/i, "").gsub(/\<\@#{::User.bot.slack_id}\>/i, "").gsub(",", "").strip
+      @sentence ||= message.trigger.downcase.gsub(/#{ENV['BOT_NAME']}/i, "").gsub(/\<#{::User.bot.slack_id}\>/i, "").gsub(",", "").strip
     end
 
   end
