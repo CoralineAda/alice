@@ -19,7 +19,7 @@ module Pipeline
 
     def react
       track_sender
-      Alice::Utils::Logger("!!! should_respond = #{should_respond?}")
+      Alice::Util::Logger("!!! should_respond = #{should_respond?}")
       should_respond? ? public_send(self.response_method) : message
     end
 
