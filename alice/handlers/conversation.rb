@@ -39,7 +39,7 @@ module Handlers
     end
 
     def context_from(topic, subtopic=nil)
-      new_context = Context.find_or_create(topic.downcase, self.message.trigger.gsub(ENV['BOT_NAME'], "").gsub(User.bot.slack_id))
+      new_context = Context.find_or_create(topic.downcase, self.message.trigger.gsub(ENV['BOT_NAME'], "").gsub(/\<\@#{User.bot.slack_id}\>/, ""))
       new_context ||= current_context
       update_context(new_context)
     end

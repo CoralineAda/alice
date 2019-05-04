@@ -14,13 +14,13 @@ module Handlers
       # Try Wolfram Alpha first, then fall back to Google
       if results = Parser::Alpha.new(sentence).answer
         results.first
-      elsif answers.any?
+      else
         Parser::Google.fetch(sentence)
       end
     end
 
     def sentence
-      @sentence ||= message.trigger.downcase.gsub(/#{ENV['BOT_NAME']}/i, "").gsub(/#{User.bot.slack_id}/i, "").gsub(",", "").strip
+      @sentence ||= message.trigger.downcase.gsub(/#{ENV['BOT_NAME']}/i, "").gsub(/\<\@#{User.bot.slack_id}\>/i, "").gsub(",", "").strip
     end
 
   end

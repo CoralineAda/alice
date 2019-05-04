@@ -42,7 +42,7 @@ class Context
   def self.find_or_create(topic, query="")
     context = from(topic) || new(topic: topic)
     unless query.empty?
-      context.query = query.downcase.gsub(ENV['BOT_NAME'], "").gsub(User.bot.slack_id, "")
+      context.query = query.downcase.gsub(ENV['BOT_NAME'], "").gsub(/\<\@#{User.bot.slack_id}\>/, "")
       if context.persisted?
         context.define_corpus
         context.save
