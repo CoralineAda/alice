@@ -34,9 +34,9 @@
 
     def command
       return @command if @command
-      @command = Message::Command.any_in(verbs: (verbs + [property])).not.in(stop_words: self.words).first
+      @command = Message::Command.any_in(indicators: "alpha").first if is_query?
+      @command ||= Message::Command.any_in(verbs: (verbs + [property])).not.in(stop_words: self.words).first
       @command ||= Message::Command.any_in(indicators: (verbs + adjectives + [property] + [greeting] + [thanks] + [pronoun].compact)).not.in(stop_words: self.words).first
-      @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
       if @command && @command.subject.nil?
         @command.subject = subject || subject_from_context
         @command.predicate = object || topic
@@ -53,7 +53,7 @@
     end
 
     def has_alice?
-      command_string.content =~ /\b#{ENV['BOT_NAME']}\b/i || command_string.content =~ /\b#{::User.bot.slack_id}\b/i
+      command_string.content =~ /\b#{ENV['BOT_NAME']}\b/i || command_string.content =~ /#{::User.bot.slack_id}/i
     end
 
     def is_query?

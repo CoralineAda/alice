@@ -12,6 +12,7 @@ module Handlers
 
     def answer
       # Try Wolfram Alpha first, then fall back to Google
+      require 'pry'; binding.pry
       if results = Parser::Alpha.new(sentence).answer
         results.first
       else
@@ -20,7 +21,7 @@ module Handlers
     end
 
     def sentence
-      @sentence ||= message.trigger.downcase.gsub(/#{ENV['BOT_NAME']}/i, "").gsub(/#{User.bot.slack_id}/i, "").gsub(",", "").strip
+      @sentence ||= message.trigger.downcase.gsub(/#{ENV['BOT_NAME']}/i, "").gsub(/\<\@#{User.bot.slack_id}\>/i, "").gsub(",", "").strip
     end
 
   end
