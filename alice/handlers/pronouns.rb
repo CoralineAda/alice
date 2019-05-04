@@ -21,14 +21,12 @@ module Handlers
 
     def get
       user = message.sender
-      response = "I have your  #{user.pronouns.downcase}. "
+      response = "I have your #{user.pronouns.downcase}. "
       response << "If this is incorrect, set them with !pronouns for whatever fits you best. "
-      response << "For example: they/them/their/theirs: "
+      response << "Please include all four forms! For example: they/them/their/theirs: "
       response << "/They/ are here. I see /them/. This is /their/ satchel and the wine is /theirs/."
       message.response = response
     end
-
-    private
 
   end
 

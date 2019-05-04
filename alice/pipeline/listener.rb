@@ -17,9 +17,7 @@ module Pipeline
 
     def route
       return unless tuple = METHOD_MAP.find{ |k,m| k.match(trigger) }
-      matching_method = tuple.last
-      captured_match = tuple.first.match(trigger).to_s
-      self.public_send(matching_method)
+      self.public_send(tuple.last)
     end
 
     def process_number

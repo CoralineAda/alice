@@ -28,6 +28,7 @@ module Pipeline
       return true if self.trigger =~ /^[0-9\.\-]+/
       return false if self.trigger =~ /thank/i && self.trigger !~ /#{ENV['BOT_NAME']}/i
       return true if self.trigger =~ /#{ENV['BOT_NAME']}/i
+      return true if self.trigger =~ /#{User.bot.slack_id}/i
       return true if self.trigger =~ /nice|good|kind|sweet|cool|great/i
       false
     end

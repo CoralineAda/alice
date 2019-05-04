@@ -15,12 +15,8 @@ module Handlers
       if results = Parser::Alpha.new(sentence).answer
         results.first
       elsif answers.any?
-        answers.first
+        Parser::Google.fetch(sentence)
       end
-    end
-
-    def answers
-      @answers ||= Parser::Google.fetch_all(sentence)
     end
 
     def sentence
