@@ -12,6 +12,7 @@ module Handlers
 
     def answer
       # Try Wolfram Alpha first, then fall back to Google
+      Alice::Util::Logger.info "*** sentence = #{sentence}"
       if results = Parser::Alpha.new(sentence).answer
         results.first
       else
