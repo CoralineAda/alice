@@ -65,6 +65,7 @@ post '/' do
         bot.say(processed_text, {channel: params['channel_name'], mrkdwn: 'true'})
       rescue
         Alice::Util::Logger.info "*** JSON parsing error! Output was #{output}"
+        Alice::Util::Logger.info "*** Params was #{params}"
       end
     end
   end
