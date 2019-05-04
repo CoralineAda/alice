@@ -33,6 +33,7 @@
     end
 
     def command
+      return @command if @command
       @command = Message::Command.any_in(verbs: (verbs + [property])).not.in(stop_words: self.words).first
       @command ||= Message::Command.any_in(indicators: (verbs + adjectives + [property] + [greeting] + [thanks] + [pronoun].compact)).not.in(stop_words: self.words).first
       @command ||= Message::Command.any_in(indicators: "alpha").first if is_query?
@@ -87,7 +88,13 @@
     end
 
     def subject
-      @subject ||= sentence.nouns.reject{ |noun| noun.downcase == ENV['BOT_NAME'].downcase }.map{ |noun| ::User.from(noun) }.compact.last
+      @subject ||= sentence
+        .nouns
+        .reject{ |noun| noun.downcase == ENV['BOT_NAME'].downcase }
+        .reject{ |noun| noun =~ /#{::User.bot.slack_id}/i }
+        .map{ |noun| ::User.from(noun) }
+        .compact
+        .last
     end
 
     def subject_from_context
