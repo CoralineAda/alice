@@ -53,7 +53,7 @@
     end
 
     def has_alice?
-      command_string.content =~ /\b#{ENV['BOT_NAME']}\b/i || command_string.content =~ /\<\@#{::User.bot.slack_id}\>/i
+      command_string.content =~ /\b#{ENV['BOT_NAME']}\b/i || command_string.content =~ /\b#{::User.bot.slack_id}\b/i
     end
 
     def is_query?
