@@ -12,7 +12,6 @@ module Handlers
 
     def answer
       # Try Wolfram Alpha first, then fall back to Google
-      require 'pry'; binding.pry
       if results = Parser::Alpha.new(sentence).answer
         results.first
       else
