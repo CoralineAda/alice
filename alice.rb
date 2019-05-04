@@ -54,14 +54,18 @@ post '/' do
   if output = bot.handle_item(params)
     response = JSON.parse(output)
     if response["text"]
-      parsed_response = JSON.parse(response["text"])
-      raw_text = parsed_response["content"]
-      if parsed_response["response_type"] == "emote"
-        processed_text = "_#{raw_text}_"
-      else
-        processed_text = raw_text
+      begin
+        parsed_response = JSON.parse(response["text"])
+        raw_text = parsed_response["content"]
+        if parsed_response["response_type"] == "emote"
+          processed_text = "_#{raw_text}_"
+        else
+          processed_text = raw_text
+        end
+        bot.say(processed_text, {channel: params['channel_name'], mrkdwn: 'true'})
+      rescue
+        Alice::Util::Logger.info "*** JSON parsing error! Response was #{response}"
       end
-      bot.say(processed_text, {channel: params['channel_name'], mrkdwn: 'true'})
     end
   end
 end
