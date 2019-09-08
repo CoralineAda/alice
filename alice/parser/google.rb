@@ -3,6 +3,8 @@ require 'nokogiri'
 module Parser
   class Google
 
+    include HTTParty
+
     attr_accessor :question
 
     def self.fetch(topic)
@@ -46,8 +48,8 @@ module Parser
     end
 
     def search(query)
-      doc = Nokogiri::HTML(open("https://www.google.com/search?q=#{query}&hl=lang_en"))
-      doc.css("div span.st").map(&:text)
+      doc = Nokogiri::HTML(self.class.get("https://www.google.com/search?q=#{query}&hl=lang_en"))
+      doc.css("div.BNeawe.AP7Wnd").map(&:text)
     rescue Exception => e
       Alice::Util::Logger.info "*** Parser::Google: Unable to process \"#{self.question}\": #{e}"
       Alice::Util::Logger.info e.backtrace
