@@ -85,6 +85,7 @@ module Util
         "If cartoon bluebirds were real, a bunch of them would be sitting on #{person}'s shoulders, singing, right now.",
         "#{person} is a great listener",
         "#{person} is cooler than any hipster",
+        "#{person} is cooler than any hipster, because #{person} is real and not imaginary.",
         "Hey #{person}... that thing you don't like about yourself is what makes you so interesting...",
         "#{person} has stunning hair",
         "I applaud your typing skills, #{person}",
