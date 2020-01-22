@@ -93,7 +93,9 @@ module Handlers
     end
 
     def say_something_nice
+      message.sender.score_points(5)
       message.response = Util::Randomizer.kindness(message.sender_nick)
+      message.response << "... 5 bonus points for you!"
     end
 
     def youre_welcome
