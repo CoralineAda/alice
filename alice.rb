@@ -11,6 +11,8 @@ Dotenv.load
 Bundler.require
 Mongoid.load!("config/mongoid.yml")
 
+# Look into replacing this with https://github.com/slack-ruby/slack-ruby-bot
+
 require_all 'alice'
 
 config = {
