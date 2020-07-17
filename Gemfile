@@ -15,6 +15,7 @@ gem 'nokogiri'
 gem 'octokit', '~> 3.0'
 gem 'poro_plus'
 gem 'pry'
+gem 'rack', ">= 2.1.6"
 gem 'rake'
 gem 'require_all'
 gem 'rspec', :group => :test
