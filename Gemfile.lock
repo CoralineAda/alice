@@ -195,8 +195,10 @@ GEM
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
-    mimemagic (0.3.5)
-    mini_portile2 (2.4.0)
+    mimemagic (0.4.3)
+      nokogiri (~> 1)
+      rake
+    mini_portile2 (2.6.1)
     minitest (5.14.1)
     mongo (2.4.1)
       bson (>= 4.2.1, < 5.0.0)
@@ -212,8 +214,9 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.0.0)
-    nokogiri (1.10.8)
-      mini_portile2 (~> 2.4.0)
+    nokogiri (1.12.5)
+      mini_portile2 (~> 2.6.1)
+      racc (~> 1.4)
     nokogumbo (1.5.0)
       nokogiri
     octokit (3.8.0)
@@ -225,6 +228,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    racc (1.5.2)
     rack (2.2.3)
     rack-protection (2.0.8.1)
       rack
