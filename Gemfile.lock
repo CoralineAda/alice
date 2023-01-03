@@ -175,8 +175,8 @@ GEM
       httparty (>= 0.7.3)
       mimemagic
       multipart-post
-    httparty (0.18.1)
-      mime-types (~> 3.0)
+    httparty (0.21.0)
+      mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     httpclient (2.8.3)
     hurley (0.2)
@@ -192,10 +192,13 @@ GEM
       msgpack
     memoist (0.16.0)
     method_source (0.8.2)
-    mime-types (3.1)
+    mime-types (3.4.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0521)
-    mimemagic (0.3.5)
+    mime-types-data (3.2022.0105)
+    mimemagic (0.4.3)
+      nokogiri (~> 1)
+      rake
+    mini_mime (1.1.2)
     mini_portile2 (2.4.0)
     minitest (5.14.1)
     mongo (2.4.1)
